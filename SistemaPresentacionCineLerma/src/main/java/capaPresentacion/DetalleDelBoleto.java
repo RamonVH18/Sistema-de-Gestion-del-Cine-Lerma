@@ -6,7 +6,7 @@ package capaPresentacion;
 
 /**
  *
- * @author Ramon Valencia
+ * @author Abraham Coronel Bringas
  */
 public class DetalleDelBoleto extends javax.swing.JFrame {
 
@@ -26,18 +26,129 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Titulo = new javax.swing.JLabel();
+        laberPelicula = new javax.swing.JLabel();
+        labelHora = new javax.swing.JLabel();
+        labelFecha1 = new javax.swing.JLabel();
+        labelSala = new javax.swing.JLabel();
+        labelAsiento = new javax.swing.JLabel();
+        textoPelicula = new javax.swing.JLabel();
+        textoHora = new javax.swing.JLabel();
+        textoSala = new javax.swing.JLabel();
+        textoAsiento = new javax.swing.JLabel();
+        textoFecha3 = new javax.swing.JLabel();
+        btnRegresoMenu = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 830));
+
+        Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
+        Titulo.setText("DETALLES DEL BOLETO");
+
+        laberPelicula.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        laberPelicula.setText("Pelicula: ");
+
+        labelHora.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        labelHora.setText("Hora:");
+
+        labelFecha1.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        labelFecha1.setText("Fecha:");
+
+        labelSala.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        labelSala.setText("Sala:");
+
+        labelAsiento.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        labelAsiento.setText("Asiento/s:");
+
+        textoPelicula.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+
+        textoHora.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+
+        textoSala.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+
+        textoAsiento.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+
+        textoFecha3.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+
+        btnRegresoMenu.setBackground(new java.awt.Color(162, 132, 94));
+        btnRegresoMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnRegresoMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresoMenu.setText("Volver al menu principal");
+        btnRegresoMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(86, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(Titulo)
+                        .addGap(82, 82, 82))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(labelFecha1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(textoFecha3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(labelSala)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(textoSala, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(labelHora)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(textoHora, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(laberPelicula)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(textoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(17, 17, 17))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(labelAsiento))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(textoAsiento, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(48, 48, 48))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(Titulo)
+                .addGap(60, 60, 60)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(laberPelicula)
+                    .addComponent(textoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelFecha1)
+                    .addComponent(textoFecha3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelHora)
+                            .addComponent(textoHora, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(33, 33, 33)
+                        .addComponent(labelSala))
+                    .addComponent(textoSala, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelAsiento, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(textoAsiento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
+                .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(105, 105, 105))
         );
+
+        textoPelicula.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -47,5 +158,17 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JButton btnRegresoMenu;
+    private javax.swing.JLabel labelAsiento;
+    private javax.swing.JLabel labelFecha1;
+    private javax.swing.JLabel labelHora;
+    private javax.swing.JLabel labelSala;
+    private javax.swing.JLabel laberPelicula;
+    private javax.swing.JLabel textoAsiento;
+    private javax.swing.JLabel textoFecha3;
+    private javax.swing.JLabel textoHora;
+    private javax.swing.JLabel textoPelicula;
+    private javax.swing.JLabel textoSala;
     // End of variables declaration//GEN-END:variables
 }
