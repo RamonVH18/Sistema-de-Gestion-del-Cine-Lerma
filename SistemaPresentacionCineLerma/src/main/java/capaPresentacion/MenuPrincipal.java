@@ -4,9 +4,12 @@
  */
 package capaPresentacion;
 
+import java.awt.Graphics;
+import javax.swing.JFrame;
+
 /**
  *
- * @author Ramon Valencia
+ * @author Sebastian Borquez
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 
@@ -15,6 +18,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public MenuPrincipal() {
         initComponents();
+        setSize(640, 830);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        g.drawLine(0, 150, getWidth(), 150); // Línea horizontal en el centro
+        g.drawLine(0, 720, getWidth(), 720);
     }
 
     /**
@@ -26,26 +39,163 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnRegresoMenu1 = new javax.swing.JButton();
+        Titulo = new javax.swing.JLabel();
+        btnCuentaMenu = new javax.swing.JButton();
+        btnCarteleraMenu = new javax.swing.JButton();
+        btnOpcionesMenu = new javax.swing.JButton();
+        btnSalirMenu = new javax.swing.JButton();
+        btnAlimentosMenu = new javax.swing.JButton();
+
+        btnRegresoMenu1.setBackground(new java.awt.Color(162, 132, 94));
+        btnRegresoMenu1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnRegresoMenu1.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresoMenu1.setText("Volver al menu principal");
+        btnRegresoMenu1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnRegresoMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresoMenu1ActionPerformed(evt);
+            }
+        });
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(640, 830));
+        setMinimumSize(new java.awt.Dimension(640, 830));
+        setPreferredSize(new java.awt.Dimension(640, 830));
+        setSize(new java.awt.Dimension(640, 830));
+
+        Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
+        Titulo.setText("CINEMA LERMA");
+
+        btnCuentaMenu.setBackground(new java.awt.Color(162, 132, 94));
+        btnCuentaMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnCuentaMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnCuentaMenu.setText("Cuenta");
+        btnCuentaMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnCuentaMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCuentaMenuActionPerformed(evt);
+            }
+        });
+
+        btnCarteleraMenu.setBackground(new java.awt.Color(162, 132, 94));
+        btnCarteleraMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnCarteleraMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnCarteleraMenu.setText("Cartelera");
+        btnCarteleraMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnCarteleraMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCarteleraMenuActionPerformed(evt);
+            }
+        });
+
+        btnOpcionesMenu.setBackground(new java.awt.Color(162, 132, 94));
+        btnOpcionesMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnOpcionesMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnOpcionesMenu.setText("Opciones");
+        btnOpcionesMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnOpcionesMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpcionesMenuActionPerformed(evt);
+            }
+        });
+
+        btnSalirMenu.setBackground(new java.awt.Color(162, 132, 94));
+        btnSalirMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnSalirMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnSalirMenu.setText("Salir");
+        btnSalirMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnSalirMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirMenuActionPerformed(evt);
+            }
+        });
+
+        btnAlimentosMenu.setBackground(new java.awt.Color(162, 132, 94));
+        btnAlimentosMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnAlimentosMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnAlimentosMenu.setText("Alimentos");
+        btnAlimentosMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnAlimentosMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlimentosMenuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(147, 147, 147)
+                .addComponent(Titulo)
+                .addContainerGap(150, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAlimentosMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOpcionesMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCarteleraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCuentaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(200, 200, 200))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(Titulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                .addComponent(btnCarteleraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnAlimentosMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCuentaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnOpcionesMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(251, 251, 251))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCuentaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCuentaMenuActionPerformed
+
+    private void btnRegresoMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegresoMenu1ActionPerformed
+
+    private void btnCarteleraMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarteleraMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCarteleraMenuActionPerformed
+
+    private void btnOpcionesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpcionesMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnOpcionesMenuActionPerformed
+
+    private void btnSalirMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalirMenuActionPerformed
+
+    private void btnAlimentosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlimentosMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlimentosMenuActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JButton btnAlimentosMenu;
+    private javax.swing.JButton btnCarteleraMenu;
+    private javax.swing.JButton btnCuentaMenu;
+    private javax.swing.JButton btnOpcionesMenu;
+    private javax.swing.JButton btnRegresoMenu1;
+    private javax.swing.JButton btnSalirMenu;
     // End of variables declaration//GEN-END:variables
 }

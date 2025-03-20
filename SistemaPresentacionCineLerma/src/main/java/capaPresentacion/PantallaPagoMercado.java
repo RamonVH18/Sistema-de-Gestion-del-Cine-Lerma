@@ -4,19 +4,30 @@
  */
 package capaPresentacion;
 
+import java.awt.Graphics;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+
 /**
  *
- * @author Ramon Valencia
+ * @author Sebastian Borquez
  */
 public class PantallaPagoMercado extends javax.swing.JDialog {
 
     /**
      * Creates new form PantallaPagoMercado
      */
-    public PantallaPagoMercado(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public PantallaPagoMercado() {
         initComponents();
     }
+    
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        g.drawLine(0, 510, getWidth(), 510);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,26 +38,141 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Titulo = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        textClienteID = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        textMontoAPagar = new javax.swing.JTextField();
+        btnPagar = new javax.swing.JButton();
+        btnRegresoMenu1 = new javax.swing.JButton();
+        labelimagen = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(514, 632));
+        setMinimumSize(new java.awt.Dimension(514, 632));
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(514, 632));
+
+        Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
+        Titulo.setText("MercadoPago");
+
+        jLabel1.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        jLabel1.setText("ClienteID:");
+
+        textClienteID.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        textClienteID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textClienteIDActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        jLabel2.setText("Monto a pagar:");
+
+        textMontoAPagar.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        textMontoAPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textMontoAPagarActionPerformed(evt);
+            }
+        });
+
+        btnPagar.setBackground(new java.awt.Color(255, 149, 0));
+        btnPagar.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnPagar.setForeground(new java.awt.Color(255, 255, 255));
+        btnPagar.setText("Pagar");
+        btnPagar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagarActionPerformed(evt);
+            }
+        });
+
+        btnRegresoMenu1.setBackground(new java.awt.Color(162, 132, 94));
+        btnRegresoMenu1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnRegresoMenu1.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresoMenu1.setText("<Volver");
+        btnRegresoMenu1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        labelimagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(114, 114, 114)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(textMontoAPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textClienteID, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(24, 24, 24))
+                        .addComponent(labelimagen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Titulo))
+                .addGap(103, 103, 103))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(Titulo)
+                .addGap(18, 18, 18)
+                .addComponent(labelimagen, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textClienteID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textMontoAPagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63)
+                .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80)
+                .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void textClienteIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textClienteIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textClienteIDActionPerformed
+
+    private void textMontoAPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMontoAPagarActionPerformed
+       
+    }//GEN-LAST:event_textMontoAPagarActionPerformed
+
+    private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
+        if(textClienteID.getText().trim().isEmpty() || textMontoAPagar.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(this, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }//GEN-LAST:event_btnPagarActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JButton btnPagar;
+    private javax.swing.JButton btnRegresoMenu1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel labelimagen;
+    private javax.swing.JTextField textClienteID;
+    private javax.swing.JTextField textMontoAPagar;
     // End of variables declaration//GEN-END:variables
 }
