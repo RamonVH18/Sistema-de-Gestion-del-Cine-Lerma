@@ -28,15 +28,6 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         super.paint(g);
         g.drawLine(0, 510, getWidth(), 510);
     }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            PantallaPagoMercado pantalla = new PantallaPagoMercado();
-            pantalla.setLocationRelativeTo(null); 
-            pantalla.setVisible(true);
-        });
-    }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
