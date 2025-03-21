@@ -100,7 +100,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         btnRegresoMenu1.setText("<Volver");
         btnRegresoMenu1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        labelimagen.setIcon(new javax.swing.ImageIcon("C:\\Users\\sonic\\OneDrive\\Documentos\\GitHub\\Sistema-de-Gestion-del-Cine-Lerma\\SistemaPresentacionCineLerma\\src\\mercadoPago.jpg")); // NOI18N
+        labelimagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/capaPresentacion/imagenes/mercadoPago.jpg"))); // NOI18N
         labelimagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
