@@ -4,14 +4,24 @@
  */
 package capaPresentacion;
 
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class ControlDeNavegacion {
     
-    public void mostrarMenuPrincipal() {
-        
+    public static void main(String args[]) {
+        mostrarMenuPrincipal();
+    }
+    
+    public static void mostrarMenuPrincipal() {
+        SwingUtilities.invokeLater(() -> {
+            PantallaPagoMercado pantalla = new PantallaPagoMercado();
+            pantalla.setLocationRelativeTo(null); 
+            pantalla.setVisible(true);
+        });
     }
     
     public void generarCartelera() {
