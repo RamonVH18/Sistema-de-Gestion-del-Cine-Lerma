@@ -4,10 +4,40 @@
  */
 package DTOs;
 
+import java.util.List;
+
 /**
  *
- * @author Ramon Valencia
+ * @author Abraham Coronel Bringas
  */
 public class FuncionesPorPeliculaDTO {
-    
+
+    private String nombrePelicula;
+
+    private List<FuncionDTO> listaFuncionesDelDia;
+
+    public FuncionesPorPeliculaDTO(String nombrePelicula, List<FuncionDTO> listaFuncionesDelDia) {
+        this.nombrePelicula = nombrePelicula;
+        this.listaFuncionesDelDia = listaFuncionesDelDia;
+    }
+
+    public FuncionesPorPeliculaDTO() {
+    }
+
+    public String getNombrePelicula() {
+        return nombrePelicula;
+    }
+
+    public void setNombrePelicula(String nombrePelicula) {
+        this.nombrePelicula = nombrePelicula;
+    }
+
+    public List<FuncionDTO> getListaFuncionesDelDia() {
+        return listaFuncionesDelDia;
+    }
+
+    public void setListaFuncionesDelDia(List<FuncionDTO> listaFuncionesDelDia) {
+        this.listaFuncionesDelDia = listaFuncionesDelDia;
+    }
+
 }
