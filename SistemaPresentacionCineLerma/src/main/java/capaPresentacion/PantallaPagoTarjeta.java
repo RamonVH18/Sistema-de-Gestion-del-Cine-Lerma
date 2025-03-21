@@ -4,9 +4,11 @@
  */
 package capaPresentacion;
 
+import javax.swing.JOptionPane;
+
 /**
  *
- * @author Ramon Valencia
+ * @author Daniel Miribe
  */
 public class PantallaPagoTarjeta extends javax.swing.JDialog {
 
@@ -27,26 +29,215 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Titulo = new javax.swing.JLabel();
+        fieldNumeroTarjeta = new javax.swing.JTextField();
+        txtNumeroTarjeta = new javax.swing.JLabel();
+        fieldFechaVencimiento = new javax.swing.JTextField();
+        txtFechaVencimiento = new javax.swing.JLabel();
+        fieldCVV = new javax.swing.JTextField();
+        txtCVV = new javax.swing.JLabel();
+        fieldPropietario = new javax.swing.JTextField();
+        txtPropietario = new javax.swing.JLabel();
+        fieldCorreoElectronico = new javax.swing.JTextField();
+        txtCorreoElectronico = new javax.swing.JLabel();
+        btnCompletarPago = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
+        Titulo.setText("Tarjeta");
+
+        fieldNumeroTarjeta.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        fieldNumeroTarjeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldNumeroTarjetaActionPerformed(evt);
+            }
+        });
+
+        txtNumeroTarjeta.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        txtNumeroTarjeta.setText("Numero de tarjeta:");
+
+        fieldFechaVencimiento.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        fieldFechaVencimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldFechaVencimientoActionPerformed(evt);
+            }
+        });
+
+        txtFechaVencimiento.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        txtFechaVencimiento.setText("Fecha de vencimiento:");
+
+        fieldCVV.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        fieldCVV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldCVVActionPerformed(evt);
+            }
+        });
+
+        txtCVV.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        txtCVV.setText("CVV:");
+
+        fieldPropietario.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        fieldPropietario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldPropietarioActionPerformed(evt);
+            }
+        });
+
+        txtPropietario.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        txtPropietario.setText("Propietario:");
+
+        fieldCorreoElectronico.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        fieldCorreoElectronico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldCorreoElectronicoActionPerformed(evt);
+            }
+        });
+
+        txtCorreoElectronico.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        txtCorreoElectronico.setText("Correo electrónico:");
+
+        btnCompletarPago.setBackground(new java.awt.Color(255, 149, 0));
+        btnCompletarPago.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnCompletarPago.setForeground(new java.awt.Color(255, 255, 255));
+        btnCompletarPago.setText("Completar pago");
+        btnCompletarPago.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnCompletarPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompletarPagoActionPerformed(evt);
+            }
+        });
+
+        btnVolver.setBackground(new java.awt.Color(162, 132, 94));
+        btnVolver.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
+        btnVolver.setText("Volver");
+        btnVolver.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(182, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtNumeroTarjeta)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(Titulo)
+                                .addGap(213, 213, 213))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtFechaVencimiento)
+                                        .addComponent(fieldFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtCVV)
+                                        .addComponent(fieldCVV, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtPropietario)
+                                        .addComponent(fieldPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtCorreoElectronico)
+                                        .addComponent(fieldCorreoElectronico, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(fieldNumeroTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(175, 175, 175))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnCompletarPago, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(207, 207, 207))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(Titulo)
+                .addGap(64, 64, 64)
+                .addComponent(txtNumeroTarjeta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldNumeroTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtFechaVencimiento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtCVV)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldCVV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtPropietario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtCorreoElectronico)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldCorreoElectronico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(75, 75, 75)
+                .addComponent(btnCompletarPago, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void fieldNumeroTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNumeroTarjetaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldNumeroTarjetaActionPerformed
+
+    private void fieldFechaVencimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldFechaVencimientoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldFechaVencimientoActionPerformed
+
+    private void fieldCVVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldCVVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldCVVActionPerformed
+
+    private void fieldPropietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPropietarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldPropietarioActionPerformed
+
+    private void fieldCorreoElectronicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldCorreoElectronicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldCorreoElectronicoActionPerformed
+
+    private void btnCompletarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompletarPagoActionPerformed
+        if(txtCVV.getText().trim().isEmpty() || txtCorreoElectronico.getText().trim().isEmpty() || txtFechaVencimiento.getText().trim().isEmpty()
+                || txtNumeroTarjeta.getText().trim().isEmpty() || txtPropietario.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(this, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }//GEN-LAST:event_btnCompletarPagoActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JButton btnCompletarPago;
+    private javax.swing.JButton btnVolver;
+    private javax.swing.JTextField fieldCVV;
+    private javax.swing.JTextField fieldCorreoElectronico;
+    private javax.swing.JTextField fieldFechaVencimiento;
+    private javax.swing.JTextField fieldNumeroTarjeta;
+    private javax.swing.JTextField fieldPropietario;
+    private javax.swing.JLabel txtCVV;
+    private javax.swing.JLabel txtCorreoElectronico;
+    private javax.swing.JLabel txtFechaVencimiento;
+    private javax.swing.JLabel txtNumeroTarjeta;
+    private javax.swing.JLabel txtPropietario;
     // End of variables declaration//GEN-END:variables
 }
