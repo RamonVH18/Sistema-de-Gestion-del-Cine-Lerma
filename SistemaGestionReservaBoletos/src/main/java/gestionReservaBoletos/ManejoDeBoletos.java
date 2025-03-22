@@ -8,6 +8,6 @@ package gestionReservaBoletos;
  *
  * @author Ramon Valencia
  */
-public class ManejoDeBoletos {
+public class ManejoDeBoletos implements IManejoDeBoletos{
     
 }
