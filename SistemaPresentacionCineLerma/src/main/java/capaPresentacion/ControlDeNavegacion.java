@@ -4,6 +4,10 @@
  */
 package capaPresentacion;
 
+import java.awt.Dimension;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 /**
@@ -12,76 +16,91 @@ import javax.swing.SwingUtilities;
  */
 public class ControlDeNavegacion {
     
-    public static void main(String args[]) {
-        mostrarMenuPrincipal();
+    public static void main(String[] args) {
+        // TODO code application logic here
+        ControlDeNavegacion.mostrarMenuPrincipal();
     }
     
     public static void mostrarMenuPrincipal() {
         SwingUtilities.invokeLater(() -> {
-            PantallaPagoMercado pantalla = new PantallaPagoMercado();
+            MenuPrincipal pantalla = new MenuPrincipal();
             pantalla.setLocationRelativeTo(null); 
             pantalla.setVisible(true);
         });
     }
     
-    public void generarCartelera() {
+    public static void generarCartelera() {
         
     }
     
-    public void mostrarSeleccionPelicula() {
+    public static JButton crearBotonImagen(JTable table) {
+        JButton boton = new JButton();
+        boton.setPreferredSize(new Dimension(25, 25));
+        //ImagenIcon() icono = new ImageIcon();
+        return boton;
+    }
+    
+    public static void mostrarSeleccionarPelicula() {
+        SwingUtilities.invokeLater(() -> {
+            SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
+            pantallaSeleccionarPelicula.setLocationRelativeTo(null); 
+            pantallaSeleccionarPelicula.setVisible(true);
+        });
+    }
+    
+    public static void mostrarSeleccionarAsientos() {
         
     }
     
-    public void recargarPaginaFunciones() {
+    public static void recargarPaginaFunciones() {
         
     }
     
-    public void generarTablaMetodosPago() {
+    public static void generarTablaMetodosPago() {
         
     }
     
-    public void mostrarSeleccionMetodoPago() {
+    public static void mostrarSeleccionarMetodoPago() {
         
     }
     
-    public void mostrarPagoTarjeta() {
+    public static void mostrarPagoTarjeta() {
         
     }
     
-    public void mostraPagoPaypal() {
+    public static void mostrarPagoPaypal() {
         
     }
     
-    public void mostrarPagoMercado() {
+    public static void mostrarPagoMercado() {
         
     }
     
-    public void mostrarDetalleBoleto() {
+    public static void mostrarDetalleBoleto() {
         
     }
     
-    public void mostrarErrorCamposVaciosPagoMercado() {
+    public static void mostrarErrorCamposVaciosPagoMercado() {
         
     }
     
-    public void mostrarErrorCamposVaciosPagoTarjeta() {
+    public static void mostrarErrorCamposVaciosPagoTarjeta() {
         
     }
     
-    public void mostrarErrorCamposVaciosPagoPaypal() {
+    public static void mostrarErrorCamposVaciosPagoPaypal() {
         
     }
     
-    public void mostrarErrorFaltaAsientosDisponibles() {
+    public static void mostrarErrorFaltaAsientosDisponibles() {
         
     }
     
-    public void mostrarErrorCampoAsientosVacios() {
+    public static void mostrarErrorCampoAsientosVacios() {
         
     }
     
-    public void mostrarPagoRechazado() {
+    public static void mostrarPagoRechazado() {
         
     }
-    
 }

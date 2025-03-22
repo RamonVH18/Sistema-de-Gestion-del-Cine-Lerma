@@ -9,7 +9,8 @@ package capaPresentacion;
  * @author Daniel Miribe
  */
 public class SeleccionarPelicula extends javax.swing.JFrame {
-
+    
+    private ControlDeNavegacion control = new ControlDeNavegacion();
     /**
      * Creates new form SeleccionarPelicula
      */
@@ -40,6 +41,11 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
         btnVolver.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnVolver.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVolverMouseClicked(evt);
+            }
+        });
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
@@ -81,6 +87,12 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
+        // TODO add your handling code here:
+        control.mostrarMenuPrincipal();
+        dispose();
+    }//GEN-LAST:event_btnVolverMouseClicked
 
     /**
      * @param args the command line arguments

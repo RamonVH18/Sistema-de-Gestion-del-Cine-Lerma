@@ -12,12 +12,14 @@ import javax.swing.JFrame;
  * @author Sebastian Borquez
  */
 public class MenuPrincipal extends javax.swing.JFrame {
-
+    
+    private ControlDeNavegacion control = new ControlDeNavegacion();
     /**
      * Creates new form MenuPrincipal
      */
     public MenuPrincipal() {
         initComponents();
+        
         setSize(640, 830);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -83,6 +85,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnCarteleraMenu.setForeground(new java.awt.Color(255, 255, 255));
         btnCarteleraMenu.setText("Cartelera");
         btnCarteleraMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnCarteleraMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCarteleraMenuMouseClicked(evt);
+            }
+        });
         btnCarteleraMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCarteleraMenuActionPerformed(evt);
@@ -184,6 +191,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void btnAlimentosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlimentosMenuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAlimentosMenuActionPerformed
+
+    private void btnCarteleraMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCarteleraMenuMouseClicked
+        // TODO add your handling code here:
+        control.mostrarSeleccionarPelicula();
+        dispose();
+    }//GEN-LAST:event_btnCarteleraMenuMouseClicked
 
     /**
      * @param args the command line arguments
