@@ -39,14 +39,5 @@ public class FuncionAsientosDTO {
     public void setFechaHora(Date fechaHora) {
         this.fechaHora = fechaHora;
     }
-
-    @Override
-    public String toString() {
-        return "FuncionAsientosDTO{" + 
-                "Asientos=" + Asientos + 
-                ", fechaHora=" + fechaHora + 
-                '}';
-    }
-    
     
 }

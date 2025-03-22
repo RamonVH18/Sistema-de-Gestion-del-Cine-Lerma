@@ -14,7 +14,7 @@ public class FuncionDTO {
 
     private Long id;
 
-    private Integer sala;
+    private String sala;
 
     private String nombre;
 
@@ -23,14 +23,14 @@ public class FuncionDTO {
     public FuncionDTO() {
     }
 
-    public FuncionDTO(Long id, Integer sala, String nombre, Date fechaHora) {
+    public FuncionDTO(Long id, String sala, String nombre, Date fechaHora) {
         this.id = id;
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
     }
 
-    public FuncionDTO(Integer sala, String nombre, Date fechaHora) {
+    public FuncionDTO(String sala, String nombre, Date fechaHora) {
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
@@ -44,11 +44,11 @@ public class FuncionDTO {
         this.id = id;
     }
 
-    public Integer getSala() {
+    public String getSala() {
         return sala;
     }
 
-    public void setSala(Integer sala) {
+    public void setSala(String sala) {
         this.sala = sala;
     }
 

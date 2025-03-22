@@ -4,10 +4,21 @@
  */
 package gestionReservaBoletos;
 
+import DTOs.FuncionDTO;
+import DTOs.PeliculaDTO;
+import Excepciones.GestionReservaException;
+import java.util.Date;
+import java.util.List;
+
 /**
  *
  * @author Ramon Valencia
  */
 public interface IManejoDeBoletos {
     
+    public List<PeliculaDTO> cargarPeliculasActivas() throws GestionReservaException;
+    
+    public List<FuncionDTO> cargarFuncionesDelDia(Date dia, String nombrePelicula) throws GestionReservaException;
+    
+    public boolean validarCampoAsiento(String campoAsiento) throws GestionReservaException;
 }

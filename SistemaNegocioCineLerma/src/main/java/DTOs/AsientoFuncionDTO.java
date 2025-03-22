@@ -55,17 +55,5 @@ public class AsientoFuncionDTO {
 
     public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
-    }
-
-    @Override
-    public String toString() {
-        return "AsientoFuncionDTO{" + 
-                "funcion=" + funcion + 
-                ", asiento=" + asiento + 
-                ", disponibilidad=" + disponibilidad + 
-                ", cliente=" + cliente + 
-                '}';
-    }
-    
-    
+    } 
 }
