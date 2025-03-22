@@ -11,13 +11,9 @@ package DTOs;
 public class CompraDTO {
     private PagoDTO pago;
     private String metodoPago;
-    private Cliente cliente;
+    private ClienteDTO cliente;
     
-    public class Cliente {
-        // Clase interna sin atributos ni métodos
-    }
-
-    public CompraDTO(PagoDTO pago, String metodoPago, Cliente cliente) {
+    public CompraDTO(PagoDTO pago, String metodoPago, ClienteDTO cliente) {
         this.pago = pago;
         this.metodoPago = metodoPago;
         this.cliente = cliente;
@@ -42,11 +38,11 @@ public class CompraDTO {
         this.metodoPago = metodoPago;
     }
 
-    public Cliente getCliente() {
+    public ClienteDTO getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
+    public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
     }
     
