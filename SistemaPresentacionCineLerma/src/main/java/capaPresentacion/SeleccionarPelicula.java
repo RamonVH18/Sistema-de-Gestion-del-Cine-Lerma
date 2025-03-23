@@ -121,7 +121,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     private javax.swing.JPanel panelCartelera;
     // End of variables declaration//GEN-END:variables
 
-    private ControlDeNavegacion control = new ControlDeNavegacion();
+    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form SeleccionarPelicula

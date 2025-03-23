@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
  */
 public class DetalleDelBoleto extends javax.swing.JFrame {
     
-    private ControlDeNavegacion control = new ControlDeNavegacion();
+    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     /**
      * Creates new form DetalleDelBoleto
      */

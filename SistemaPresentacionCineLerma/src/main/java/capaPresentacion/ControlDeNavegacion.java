@@ -44,10 +44,28 @@ import javax.swing.border.Border;
  */
 public class ControlDeNavegacion {
 
-    private IManejoDeBoletos manejoDeBoletos = new ManejoDeBoletos();
+    private IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
+    private PeliculaDTO peliculaFinal = new PeliculaDTO();
+    private FuncionDTO funcionFinal = new FuncionDTO();
+    private List<String> asientos = new ArrayList<>();
+    private int numAsientos = 0;
     private BoletoDTO boletoFinal;
     private ClienteDTO cliente = new ClienteDTO("Abrahama Coronel Garcia", "jaime@lerma.com.mx");
+    
     private static final Logger logger = Logger.getLogger(Logger.class.getName());
+    
+    private static ControlDeNavegacion instancia;
+    
+    private ControlDeNavegacion() { 
+        // Constructor privado para evitar múltiples instancias 
+    }
+    
+    public static ControlDeNavegacion getInstancia() {
+        if (instancia == null) {
+            instancia = new ControlDeNavegacion();
+        }
+        return instancia;
+    }
 
     public static void main(String[] args) {
         // TODO code application logic here
@@ -105,9 +123,10 @@ public class ControlDeNavegacion {
         imagen = new ImageIcon(scaledImage);
 
         JButton boton = new JButton(pelicula.getNombrePelicula(), imagen);
-        LocalDate dia = LocalDate.now();
         boton.addActionListener(e -> {
-            mostrarSeleccionarAsientos(pelicula, dia);
+            this.peliculaFinal = pelicula;
+            logger.info("Nombre de la pelicula seleccionada: " + peliculaFinal.getNombrePelicula());
+            mostrarSeleccionarAsientos(LocalDate.now());
             JFrame SeleccionarPelicula = (JFrame) SwingUtilities.getWindowAncestor(boton);
             SeleccionarPelicula.dispose();
 
@@ -166,7 +185,7 @@ public class ControlDeNavegacion {
         return panel;
     }
 
-    public JButton crearBotonFuncion(FuncionDTO funcion, JPanel panel) {
+    private JButton crearBotonFuncion(FuncionDTO funcion, JPanel panel) {
         JButton boton = new JButton();
         Date hora = funcion.getFechaHora();
         String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0"
@@ -180,6 +199,7 @@ public class ControlDeNavegacion {
             SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
             seleccionarAsientos.revalidate();
             seleccionarAsientos.repaint();
+            logger.info("Nombre de la pelicula seleccionada: " + peliculaFinal.getNombrePelicula());
             for (Component componente : panel.getComponents()) {
                 if (componente instanceof JButton) { // Verificamos si es un botón
                     componente.setEnabled(true);
@@ -188,6 +208,7 @@ public class ControlDeNavegacion {
             boton.setEnabled(false);
             int asientosDisponibles;
             try {
+                this.funcionFinal = funcion;
                 asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
                 seleccionarAsientos.cargarDatos(funcion, asientosDisponibles);
             } catch (GestionReservaException ex) {
@@ -198,11 +219,11 @@ public class ControlDeNavegacion {
         return boton;
     }
 
-    public void mostrarSeleccionarAsientos(PeliculaDTO pelicula, LocalDate dia) {
+    public void mostrarSeleccionarAsientos(LocalDate dia) {
         SwingUtilities.invokeLater(() -> {
             SeleccionarAsientos pantallaSeleccionarAsientos;
             try {
-                pantallaSeleccionarAsientos = new SeleccionarAsientos(pelicula, dia);
+                pantallaSeleccionarAsientos = new SeleccionarAsientos(peliculaFinal, dia);
                 pantallaSeleccionarAsientos.setLocationRelativeTo(null);
                 pantallaSeleccionarAsientos.setVisible(true);
             } catch (GestionReservaException ex) {
@@ -286,7 +307,7 @@ public class ControlDeNavegacion {
     public void recargarPaginaFunciones(LocalDate dia, JPanel panel, PeliculaDTO pelicula) {
         JFrame SeleccionarAsientos = (JFrame) SwingUtilities.getWindowAncestor(panel);
         SeleccionarAsientos.dispose();
-        mostrarSeleccionarAsientos(pelicula, dia);
+        mostrarSeleccionarAsientos(dia);
     }
 
     public void validarCamposAsientos(String texto, FuncionDTO funcion) throws GestionReservaException {
@@ -323,7 +344,7 @@ public class ControlDeNavegacion {
 
     }
 
-    public JButton crearBotonMetodoPago(String url, Border border, String nombreMetodo) {
+    private JButton crearBotonMetodoPago(String url, Border border, String nombreMetodo) {
         ImageIcon image = crearImagen(url, 50, 50);
         JButton boton = new JButton(image);
         boton.setPreferredSize(new Dimension(150, 50));
@@ -347,9 +368,10 @@ public class ControlDeNavegacion {
         return boton;
     }
 
-    public void mostrarSeleccionarMetodoPago(PeliculaDTO pelicula, FuncionDTO funcion, int numAsientos) {
+    public void mostrarSeleccionarMetodoPago(int numAsientos) {
+        this.numAsientos = numAsientos;
         SwingUtilities.invokeLater(() -> {
-            SeleccionarMetodoPago pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago(pelicula, funcion, numAsientos);
+            SeleccionarMetodoPago pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago();
             pantallaSeleccionarMetodoPago.setLocationRelativeTo(null);
             pantallaSeleccionarMetodoPago.setVisible(true);
         });
@@ -379,17 +401,18 @@ public class ControlDeNavegacion {
         });
     }
 
-    public List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws GestionReservaException {
+    private List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws GestionReservaException {
         List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
+        this.asientos = asientosReservados; 
         return asientosReservados;
     }
 
-    public BoletoDTO cargarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, int numAsientos) throws GestionReservaException {
+    public void cargarBoleto() throws GestionReservaException {
         System.out.println("Numero de asientos: " + numAsientos);
-        List<String> asientos = obtenerListaAsientosReservados(funcion, numAsientos);
-        System.out.println(asientos);
-        this.boletoFinal = manejoDeBoletos.generarBoleto(pelicula, funcion, asientos, cliente);
-        return boletoFinal;
+        List<String> asientosReservados = obtenerListaAsientosReservados(funcionFinal, numAsientos);
+        System.out.println(asientosReservados);
+        this.boletoFinal = manejoDeBoletos.generarBoleto(peliculaFinal, funcionFinal, asientosReservados, cliente);
+        logger.info("Boleto generado: " + boletoFinal.getNombreCliente() + "Pelicula: " + boletoFinal.getNombrePelicula());
     }
 
     public void mostrarDetalleBoleto() {

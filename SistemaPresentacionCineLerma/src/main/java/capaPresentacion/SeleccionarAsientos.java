@@ -24,7 +24,7 @@ import javax.swing.JPanel;
  */
 public class SeleccionarAsientos extends javax.swing.JFrame {
 
-    private ControlDeNavegacion control = new ControlDeNavegacion();
+    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     
     private FuncionDTO funcionFinal;
     private PeliculaDTO peliculaFinal;
@@ -289,7 +289,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             control.validarCamposAsientos(texto, funcionFinal);
             dispose();
             int numAsientos = Integer.valueOf(texto);
-            control.mostrarSeleccionarMetodoPago(peliculaFinal, funcionFinal, numAsientos);
+            control.mostrarSeleccionarMetodoPago(numAsientos);
         } catch (GestionReservaException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
         }

@@ -17,20 +17,14 @@ import java.util.logging.Logger;
  */
 public class SeleccionarMetodoPago extends javax.swing.JDialog {
     
-    private ControlDeNavegacion control = new ControlDeNavegacion();
-    private PeliculaDTO peliculaFinal;
-    private FuncionDTO funcionFinal;
-    private int numAsientos;
+    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     /**
      * Creates new form SeleccionarMetodoPago
      */
-    public SeleccionarMetodoPago(PeliculaDTO pelicula, FuncionDTO funcion, int numAsientos) {
+    public SeleccionarMetodoPago() {
         initComponents();
         panelMetodoPago = control.generarTablaMetodosPago(panelMetodoPago);
         panelMetodoPago.setVisible(true);
-        this.peliculaFinal = pelicula;
-        this.funcionFinal = funcion;
-        this.numAsientos = numAsientos;
         revalidate();
         repaint();
     }
@@ -135,7 +129,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
         // TODO add your handling code here:
-        control.mostrarSeleccionarAsientos(peliculaFinal, LocalDate.now());
+        control.mostrarSeleccionarAsientos(LocalDate.now());
         dispose();
     }//GEN-LAST:event_btnVolverMouseClicked
 
@@ -143,20 +137,19 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    private void btnPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPruebaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPruebaActionPerformed
+
     private void btnPruebaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPruebaMouseClicked
         try {
-            // TODO add your handling code here:
-            control.cargarBoleto(peliculaFinal, funcionFinal, numAsientos);
+            control.cargarBoleto();
         } catch (GestionReservaException ex) {
             Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
         }
         control.mostrarDetalleBoleto();
         dispose();
     }//GEN-LAST:event_btnPruebaMouseClicked
-
-    private void btnPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPruebaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPruebaActionPerformed
 
     /**
      * @param args the command line arguments

@@ -30,10 +30,24 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     List<FuncionDTO> funciones = new ArrayList<>();
     List<AsientoFuncionDTO> asientos = new ArrayList<>();
     
+    private static ManejoDeBoletos instancia;
+    
+    private ManejoDeBoletos() { 
+        // Constructor privado para evitar múltiples instancias 
+    }
+    
+    public static ManejoDeBoletos getInstancia() {
+        if (instancia == null) {
+            instancia = new ManejoDeBoletos();
+        }
+        return instancia;
+    }
+    
     
     
     //PELICULAS HARDCODEADAS, ESTE SERA RETIRADO EN LA VERSION FINAL
     public List<PeliculaDTO> peliculasHarcodeadas() {
+        if (peliculas.isEmpty()){
         PeliculaDTO pelicula1 = new PeliculaDTO("Batman El Caballero Loco",
                 "img/batman.jpg",
                 "Pelicula de las God");
@@ -49,6 +63,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         peliculas.add(pelicula4);
         peliculas.add(pelicula5);
         peliculas.add(pelicula6);
+        }
         return peliculas;
     }
 
@@ -86,7 +101,6 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             funciones.add(funcion11);
             funciones.add(funcion12);
         }
-        
 
         return funciones;
     }
