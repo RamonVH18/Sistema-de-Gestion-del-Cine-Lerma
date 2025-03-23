@@ -119,7 +119,6 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public List<PeliculaDTO> cargarPeliculasActivas() throws GestionReservaException {
         try {
             // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
-
             List<PeliculaDTO> peliculas = peliculasHarcodeadas();
             return peliculas;
 

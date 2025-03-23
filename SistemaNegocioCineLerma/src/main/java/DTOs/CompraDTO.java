@@ -13,15 +13,26 @@ public class CompraDTO {
     private String metodoPago;
     private ClienteDTO cliente;
     
+    /**
+     * 
+     */
+    public CompraDTO() {
+    }
+    
+    /**
+     * 
+     * @param pago
+     * @param metodoPago
+     * @param cliente 
+     */
     public CompraDTO(PagoDTO pago, String metodoPago, ClienteDTO cliente) {
         this.pago = pago;
         this.metodoPago = metodoPago;
         this.cliente = cliente;
     }
-
-    public CompraDTO() {
-    }
-
+    /**
+     * Getters y setters
+     */
     public PagoDTO getPago() {
         return pago;
     }

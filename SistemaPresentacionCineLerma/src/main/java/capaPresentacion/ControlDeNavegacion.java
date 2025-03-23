@@ -42,14 +42,15 @@ public class ControlDeNavegacion {
 
     private IManejoDeBoletos manejoDeBoletos = new ManejoDeBoletos();
     private BoletoDTO boletoFinal;
-    private ClienteDTO cliente = new ClienteDTO("Isabel Valenzuela Rocha", "jaime@lerma.com.mx");
+    private ClienteDTO cliente = new ClienteDTO("Abrahama Coronel Garcia", "jaime@lerma.com.mx");
     private static final Logger logger = Logger.getLogger(Logger.class.getName());
 
     public static void main(String[] args) {
         // TODO code application logic here
         ControlDeNavegacion.mostrarMenuPrincipalStatic();
     }
-
+    
+    //Este metodo sirve para inicializar el menu
     public static void mostrarMenuPrincipalStatic() {
         SwingUtilities.invokeLater(() -> {
             MenuPrincipal pantalla = new MenuPrincipal();
@@ -57,7 +58,7 @@ public class ControlDeNavegacion {
             pantalla.setVisible(true);
         });
     }
-    
+    //Este metodo sirve para regresar al menu Principal, se encontrara la forma de de fusionar
     public void mostrarMenuPrincipal() {
         SwingUtilities.invokeLater(() -> {
             MenuPrincipal pantalla = new MenuPrincipal();
@@ -65,13 +66,15 @@ public class ControlDeNavegacion {
             pantalla.setVisible(true);
         });
     }
-
+    
+    //Metodo para generar la Cartelera, se modificara un JPanel ya escrito y se le añadiran los JButton de cada respectiva pelicula
     public JPanel generarCartelera(JPanel panel) throws GestionReservaException {
         List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
         //Modificacion del JPanel para que sea 3 columnas de botones
         panel.setLayout(new GridLayout(0, 3, 10, 10));
         panel.setPreferredSize(new Dimension(600, Math.max(400, panel.getComponentCount() * 100)));
         panel.removeAll();
+        //En este for se crean los botones, se recorre el arreglo de lista y por cada pelicula se manda a llamar al metodo crear pelicula
         for (int i = 0; i < peliculas.size(); i++) {
             PeliculaDTO pelicula = peliculas.get(i);
             JButton boton = crearBotonImagen(pelicula);
@@ -83,7 +86,8 @@ public class ControlDeNavegacion {
         panel.repaint();
         return panel;
     }
-
+    
+    //
     public JButton crearBotonImagen(PeliculaDTO pelicula) {
         //Esto csera modificado una vez que implementemos el sistema de bases de datos
         URL imageUrl = getClass().getClassLoader().getResource(pelicula.getPeliculaImagen());

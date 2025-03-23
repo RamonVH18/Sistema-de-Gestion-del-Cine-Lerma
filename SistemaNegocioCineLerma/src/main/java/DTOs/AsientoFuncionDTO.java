@@ -15,16 +15,27 @@ public class AsientoFuncionDTO {
     private boolean disponibilidad;
     private ClienteDTO cliente;
 
+    /**
+     * Constructor vacio
+     */
     public AsientoFuncionDTO() {
     }
-    
+    /**
+     * Constructor con todos los metodos
+     * @param funcion
+     * @param asiento
+     * @param disponibilidad
+     * @param cliente 
+     */
     public AsientoFuncionDTO(FuncionDTO funcion, String asiento, boolean disponibilidad, ClienteDTO cliente) {
         this.funcion = funcion;
         this.asiento = asiento;
         this.disponibilidad = disponibilidad;
         this.cliente = cliente;
     }
-
+    /**
+     * Getters y setters
+     */
     public FuncionDTO getFuncion() {
         return funcion;
     }
