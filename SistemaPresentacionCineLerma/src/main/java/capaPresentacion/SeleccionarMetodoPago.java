@@ -13,8 +13,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
     /**
      * Creates new form SeleccionarMetodoPago
      */
-    public SeleccionarMetodoPago(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public SeleccionarMetodoPago() {
         initComponents();
     }
 

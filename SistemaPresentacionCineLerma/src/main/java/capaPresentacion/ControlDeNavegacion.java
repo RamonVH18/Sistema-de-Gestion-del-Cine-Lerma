@@ -10,6 +10,7 @@ import Excepciones.GestionReservaException;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -38,7 +39,6 @@ import javax.swing.SwingUtilities;
 public class ControlDeNavegacion {
 
     private IManejoDeBoletos manejoDeBoletos = new ManejoDeBoletos();
-    private FuncionDTO funcionFinal;
     private static final Logger logger = Logger.getLogger(Logger.class.getName());
 
     public static void main(String[] args) {
@@ -139,25 +139,37 @@ public class ControlDeNavegacion {
 
         for (int i = 0; i < listaFunciones.size(); i++) {
             FuncionDTO funcion = listaFunciones.get(i);
-            JButton boton = crearBotonFuncion(funcion);
+            JButton boton = crearBotonFuncion(funcion, panel);
             panel.add(boton);
         }
         return panel;
     }
 
-    public JButton crearBotonFuncion(FuncionDTO funcion) {
+    public JButton crearBotonFuncion(FuncionDTO funcion, JPanel panel) {
         JButton boton = new JButton();
         Date hora = funcion.getFechaHora();
         boton.setText(hora.getHours() + ":" + hora.getMinutes());
         boton.setBackground(Color.decode("#A2845E"));
+        //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
         boton.addActionListener(e -> {
-            funcionFinal = funcion;
-
-            JFrame SeleccionarAsientos = (JFrame) SwingUtilities.getWindowAncestor(boton);
-            SeleccionarAsientos.revalidate();
-            SeleccionarAsientos.repaint();
+            SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
+            seleccionarAsientos.revalidate();
+            seleccionarAsientos.repaint();
+            for (Component componente : panel.getComponents()) {
+                if (componente instanceof JButton) { // Verificamos si es un botón
+                    componente.setEnabled(true);
+                }
+            }
             boton.setEnabled(false);
-
+            int asientosDisponibles;
+            try {
+                asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
+                seleccionarAsientos.cargarDatos(funcion, asientosDisponibles);
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
         });
         return boton;
     }
@@ -172,9 +184,7 @@ public class ControlDeNavegacion {
             } catch (GestionReservaException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         });
-
     }
 
     public String traducirDia(DayOfWeek dia) {
@@ -254,13 +264,24 @@ public class ControlDeNavegacion {
         SeleccionarAsientos.dispose();
         mostrarSeleccionarAsientos(pelicula, dia);
     }
+    
+    public void validarCamposAsientos(String texto, FuncionDTO funcion) throws GestionReservaException {
+        if (manejoDeBoletos.validarCampoAsiento(texto)){
+            int numAsientos = Integer.parseInt(texto);
+            manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
+        }
+    }
 
     public static void generarTablaMetodosPago() {
 
     }
 
-    public static void mostrarSeleccionarMetodoPago() {
-
+    public void mostrarSeleccionarMetodoPago() {
+        SwingUtilities.invokeLater(() -> {
+            SeleccionarMetodoPago pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago();
+            pantallaSeleccionarMetodoPago.setLocationRelativeTo(null);
+            pantallaSeleccionarMetodoPago.setVisible(true);
+        });
     }
 
     public static void mostrarPagoTarjeta() {

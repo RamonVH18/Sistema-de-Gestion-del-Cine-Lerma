@@ -126,10 +126,10 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             if (dia == null) {
                 throw new GestionReservaException("El dia no puede ser nulo");
             }
-            
-            if (dia.before(new Date())) {
-                throw new GestionReservaException("La fecha no puede ser anterior al tiempo actual");
-            }
+//            Esta validacion todavia esta en duda
+//            if (dia.before(new Date())) {
+//                throw new GestionReservaException("La fecha no puede ser anterior al tiempo actual");
+//            }
 
             if (nombrePelicula == null || nombrePelicula.isBlank()) {
                 throw new GestionReservaException("El nombre de la pelicula esta vacio o es nulo");
@@ -160,16 +160,16 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         try {
 
             if (campoAsiento == null || campoAsiento.isBlank()) {
-                throw new GestionReservaException("El Campo de Asiento no puede estar vacio.");
+                throw new GestionReservaException("El Campo de numero de asientos no puede estar vacio.");
             }
 
             if (!campoAsiento.matches("\\d+")) {
-                throw new GestionReservaException("Solo puede ingresar digitos en este campo.");
+                throw new GestionReservaException("Solo puede ingresar digitos en el campo numero de asientos.");
             }
 
             return true;
         } catch (Exception e) {
-            throw new GestionReservaException("Hubo un error al validar el campoAsiento", e.getCause());
+            throw new GestionReservaException("ERROR:" + e.getMessage());
         }
     }
 
@@ -214,7 +214,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
             return true;
         } catch (Exception e) {
-            throw new GestionReservaException("Hubo un error al contabilizar validar la disponibilida de los asientos seleccionados");
+            throw new GestionReservaException("ERROR:" + e.getMessage());
         }
     }
     

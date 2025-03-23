@@ -4,6 +4,7 @@
  */
 package capaPresentacion;
 
+import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
 import java.awt.GridBagLayout;
@@ -11,7 +12,10 @@ import java.awt.GridLayout;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -22,6 +26,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
 
     private ControlDeNavegacion control = new ControlDeNavegacion();
     
+    private FuncionDTO funcionFinal;
     private JPanel panelFunciones = new JPanel(new GridLayout(0, 3, 5, 5));
     
     private LocalDate fechaHoy = LocalDate.now();
@@ -78,6 +83,12 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void cargarDatos(FuncionDTO funcion, int asientosDisponibles) {
+        jLabelCosto.setText("Costo del Boleto: " + String.valueOf(funcion.getPrecio()));
+        jLabelAsientosDisp.setText("Asientos Disponibles: " + asientosDisponibles);
+        this.funcionFinal = funcion;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -127,6 +138,11 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         btnSiguiente.setForeground(new java.awt.Color(255, 255, 255));
         btnSiguiente.setText("Siguiente");
         btnSiguiente.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnSiguiente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSiguienteMouseClicked(evt);
+            }
+        });
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSiguienteActionPerformed(evt);
@@ -263,6 +279,19 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         control.mostrarSeleccionarPelicula();
         dispose();
     }//GEN-LAST:event_btnVolverMouseClicked
+
+    private void btnSiguienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSiguienteMouseClicked
+        // TODO add your handling code here:
+        String texto = jTextFieldNumAsientos.getText();
+        try {
+            control.validarCamposAsientos(texto, funcionFinal);
+            dispose();
+            control.mostrarSeleccionarMetodoPago();
+        } catch (GestionReservaException ex) {
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSiguienteMouseClicked
 
     /**
      * @param args the command line arguments
