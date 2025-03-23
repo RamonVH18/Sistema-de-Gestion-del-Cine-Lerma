@@ -13,13 +13,16 @@ import Excepciones.GestionReservaException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Ramon Valencia
  */
 public class ManejoDeBoletos implements IManejoDeBoletos {
-
+    
+    private static final Logger logger = Logger.getLogger(Logger.class.getName());
+    
     List<PeliculaDTO> peliculas = new ArrayList<>();
     List<FuncionDTO> funciones = new ArrayList<>();
     List<AsientoFuncionDTO> asientos = new ArrayList<>();
@@ -57,9 +60,9 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         FuncionDTO funcion6 = new FuncionDTO("B3", "John Wick 3", new Date(125, 02, 24, 21, 00, 0), 80.00);
 
         FuncionDTO funcion7 = new FuncionDTO("A2", "Sonic 3", new Date(125, 02, 28, 13, 00, 0), 60.00);
-        FuncionDTO funcion8 = new FuncionDTO("B2", "Sonic 3", new Date(125, 02, 22, 15, 30, 0), 60.00);
+        FuncionDTO funcion8 = new FuncionDTO("B2", "Sonic 3", new Date(125, 02, 22, 23, 59, 0), 60.00);
 
-        FuncionDTO funcion9 = new FuncionDTO("A1", "Wazaa la Pelicula", new Date(125, 02, 25, 20, 00, 0), 90.00);
+        FuncionDTO funcion9 = new FuncionDTO("A1", "Wazaa la Pelicula", new Date(125, 02, 26, 20, 00, 0), 90.00);
         FuncionDTO funcion10 = new FuncionDTO("B3", "Wazaa la Pelicula", new Date(125, 02, 26, 22, 15, 0), 75.00);
 
         FuncionDTO funcion11 = new FuncionDTO("A2", "Thor: Ragnarok", new Date(125, 02, 27, 17, 30, 0), 65.00);
@@ -123,6 +126,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             if (dia == null) {
                 throw new GestionReservaException("El dia no puede ser nulo");
             }
+            
             if (dia.before(new Date())) {
                 throw new GestionReservaException("La fecha no puede ser anterior al tiempo actual");
             }
@@ -139,13 +143,15 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             //En este for se van a filtrar las funciones y se guardaran solo las funciones que sean del dia correspondiente
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
+                
                 if (funcion.getNombre() == nombrePelicula && funcion.getFechaHora().getDay() == dia.getDay()) {
+                    logger.info("Ingresando funcion en la sala: " + funcion.getSala() + " de la pelicula: " + funcion.getNombre());
                     funcionDia.add(funcion);
                 }
             }
             return funcionDia;
         } catch (Exception e) {
-            throw new GestionReservaException("Hubo un error al obtener las peliculas del dia " + dia.getDay(), e.getCause());
+            throw new GestionReservaException("Hubo un error al obtener las funciones del dia: " + dia.getDay() + " " + e.getMessage());
         }
     }
 

@@ -4,24 +4,31 @@
  */
 package capaPresentacion;
 
+import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.net.URL;
+import java.util.Date;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 /**
@@ -30,7 +37,8 @@ import javax.swing.SwingUtilities;
  */
 public class ControlDeNavegacion {
 
-    IManejoDeBoletos manejoDeBoletos = new ManejoDeBoletos();
+    private IManejoDeBoletos manejoDeBoletos = new ManejoDeBoletos();
+    private FuncionDTO funcionFinal;
     private static final Logger logger = Logger.getLogger(Logger.class.getName());
 
     public static void main(String[] args) {
@@ -72,14 +80,33 @@ public class ControlDeNavegacion {
                 250,
                 300,
                 Image.SCALE_SMOOTH
-            );
+        );
         imagen = new ImageIcon(scaledImage);
-        
-        
-        JButton boton = new JButton(imagen);
-        
+
+        JButton boton = new JButton(pelicula.getNombrePelicula(), imagen);
+        LocalDate dia = LocalDate.now();
+        boton.addActionListener(e -> {
+            mostrarSeleccionarAsientos(pelicula, dia);
+            JFrame SeleccionarPelicula = (JFrame) SwingUtilities.getWindowAncestor(boton);
+            SeleccionarPelicula.dispose();
+
+        }
+        );
+
         boton.setPreferredSize(new Dimension(250, 200));
         return boton;
+    }
+
+    //Checar de nuevo la funcionalidad de este metodo
+    public ImageIcon crearImagen(String url, int ancho, int altura) {
+        URL imageUrl = getClass().getClassLoader().getResource(url);
+        ImageIcon imagen = new ImageIcon(imageUrl);
+        Image scaledImage = imagen.getImage().getScaledInstance(
+                ancho,
+                altura,
+                Image.SCALE_SMOOTH
+        );
+        return imagen = new ImageIcon(scaledImage);
     }
 
     public void mostrarSeleccionarPelicula() {
@@ -96,12 +123,136 @@ public class ControlDeNavegacion {
         });
     }
 
-    public static void mostrarSeleccionarAsientos() {
+    public JPanel generarTablaFunciones(JPanel panel, LocalDate dia, PeliculaDTO pelicula) throws GestionReservaException {
+        
+        Date diaNuevo = new Date();
+        if (dia.equals(LocalDate.now())) {
+            LocalTime horaActual = LocalTime.now();
+            LocalDateTime fechaConHora = LocalDateTime.of(dia, horaActual);
+            diaNuevo = Date.from(fechaConHora.atZone(ZoneId.systemDefault()).toInstant());
+        } else {
+            diaNuevo = Date.from(dia.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+
+        List<FuncionDTO> listaFunciones = manejoDeBoletos.cargarFuncionesDelDia(diaNuevo, pelicula.getNombrePelicula());
+        panel.removeAll();
+
+        for (int i = 0; i < listaFunciones.size(); i++) {
+            FuncionDTO funcion = listaFunciones.get(i);
+            JButton boton = crearBotonFuncion(funcion);
+            panel.add(boton);
+        }
+        return panel;
+    }
+
+    public JButton crearBotonFuncion(FuncionDTO funcion) {
+        JButton boton = new JButton();
+        Date hora = funcion.getFechaHora();
+        boton.setText(hora.getHours() + ":" + hora.getMinutes());
+        boton.setBackground(Color.decode("#A2845E"));
+        boton.addActionListener(e -> {
+            funcionFinal = funcion;
+
+            JFrame SeleccionarAsientos = (JFrame) SwingUtilities.getWindowAncestor(boton);
+            SeleccionarAsientos.revalidate();
+            SeleccionarAsientos.repaint();
+            boton.setEnabled(false);
+
+        });
+        return boton;
+    }
+
+    public void mostrarSeleccionarAsientos(PeliculaDTO pelicula, LocalDate dia) {
+        SwingUtilities.invokeLater(() -> {
+            SeleccionarAsientos pantallaSeleccionarAsientos;
+            try {
+                pantallaSeleccionarAsientos = new SeleccionarAsientos(pelicula, dia);
+                pantallaSeleccionarAsientos.setLocationRelativeTo(null);
+                pantallaSeleccionarAsientos.setVisible(true);
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        });
 
     }
 
-    public static void recargarPaginaFunciones() {
+    public String traducirDia(DayOfWeek dia) {
+        String nuevoDia = new String();
+        switch (dia) {
+            case dia.MONDAY:
+                nuevoDia = "Lun";
+                break;
+            case dia.TUESDAY:
+                nuevoDia = "Mar";
+                break;
+            case dia.WEDNESDAY:
+                nuevoDia = "Mie";
+                break;
+            case dia.THURSDAY:
+                nuevoDia = "Jue";
+                break;
+            case dia.FRIDAY:
+                nuevoDia = "Vie";
+                break;
+            case dia.SATURDAY:
+                nuevoDia = "Sab";
+                break;
+            case dia.SUNDAY:
+                nuevoDia = "Dom";
+                break;
 
+        }
+        return nuevoDia;
+    }
+
+    public String traducirMes(Month mes) {
+        String nuevoMes = new String();
+        switch (mes) {
+            case JANUARY:
+                nuevoMes = "Enero";
+                break;
+            case FEBRUARY:
+                nuevoMes = "Febrero";
+                break;
+            case MARCH:
+                nuevoMes = "Marzo";
+                break;
+            case APRIL:
+                nuevoMes = "Abril";
+                break;
+            case MAY:
+                nuevoMes = "Mayo";
+                break;
+            case JUNE:
+                nuevoMes = "Junio";
+                break;
+            case JULY:
+                nuevoMes = "Julio";
+                break;
+            case AUGUST:
+                nuevoMes = "Agosto";
+                break;
+            case SEPTEMBER:
+                nuevoMes = "Septiembre";
+                break;
+            case OCTOBER:
+                nuevoMes = "Octobre";
+                break;
+            case NOVEMBER:
+                nuevoMes = "Noviembre";
+                break;
+            case DECEMBER:
+                nuevoMes = "Diciembre";
+                break;
+        }
+        return nuevoMes;
+    }
+
+    public void recargarPaginaFunciones(LocalDate dia, JPanel panel, PeliculaDTO pelicula) {
+        JFrame SeleccionarAsientos = (JFrame) SwingUtilities.getWindowAncestor(panel);
+        SeleccionarAsientos.dispose();
+        mostrarSeleccionarAsientos(pelicula, dia);
     }
 
     public static void generarTablaMetodosPago() {
@@ -151,6 +302,5 @@ public class ControlDeNavegacion {
     public static void mostrarPagoRechazado() {
 
     }
-    
-    
+
 }

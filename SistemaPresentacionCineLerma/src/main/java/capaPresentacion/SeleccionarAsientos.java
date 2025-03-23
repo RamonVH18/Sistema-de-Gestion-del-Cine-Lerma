@@ -4,17 +4,79 @@
  */
 package capaPresentacion;
 
+import DTOs.PeliculaDTO;
+import Excepciones.GestionReservaException;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class SeleccionarAsientos extends javax.swing.JFrame {
 
+    private ControlDeNavegacion control = new ControlDeNavegacion();
+    
+    private JPanel panelFunciones = new JPanel(new GridLayout(0, 3, 5, 5));
+    
+    private LocalDate fechaHoy = LocalDate.now();
+    private LocalDate fechaSegundo = LocalDate.now().plusDays(1);
+    private LocalDate fechaTercero = LocalDate.now().plusDays(2);
+    private LocalDate fechaCuarto = LocalDate.now().plusDays(3);
+    
+    private String segundoDia = control.traducirDia(fechaSegundo.getDayOfWeek()) + ", " + 
+                                    fechaSegundo.getDayOfMonth() + " de " + 
+                                    control.traducirMes(fechaSegundo.getMonth());
+    private String tercerDia = control.traducirDia(fechaTercero.getDayOfWeek()) + ", " + 
+                                    fechaTercero.getDayOfMonth() + " de " + 
+                                    control.traducirMes(fechaTercero.getMonth());
+    private String cuartoDia = control.traducirDia(fechaCuarto.getDayOfWeek()) + ", " + 
+                                    fechaCuarto.getDayOfMonth() + " de " + 
+                                    control.traducirMes(fechaCuarto.getMonth());    
     /**
      * Creates new form SeleccionarAsientos
      */
-    public SeleccionarAsientos() {
+    public SeleccionarAsientos(PeliculaDTO pelicula, LocalDate dia) throws GestionReservaException {
         initComponents();
+        jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
+        ImageIcon imagen = control.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
+        jLabelImagenPelicula.setIcon(imagen);
+        jLabelNombrePelicula.setText(pelicula.getNombrePelicula());
+        jTextAreaDescripcion.setEnabled(false);
+        jTextFieldNumAsientos.setText("");
+        
+        if (dia.equals(fechaHoy)) {
+            jLabelDia.setText("Hoy");
+        } else if (dia.equals(fechaSegundo)) {
+            jLabelDia.setText(segundoDia);
+        } else if (dia.equals(fechaTercero)) {
+            jLabelDia.setText(tercerDia);
+        } else if (dia.equals(fechaCuarto)) {
+            jLabelDia.setText(cuartoDia);
+        }
+        
+        panelFunciones = control.generarTablaFunciones(panelFunciones, dia, pelicula);
+        jScrollPane1.setViewportView(panelFunciones);
+        revalidate();
+        repaint();
+        
+        jComboBoxDiaSemana.addActionListener(e -> {
+            String seleccion = (String) jComboBoxDiaSemana.getSelectedItem();
+            if (seleccion == "Hoy") {
+                control.recargarPaginaFunciones(fechaHoy, panelFunciones, pelicula);
+            } else if (seleccion == segundoDia) {
+                control.recargarPaginaFunciones(fechaSegundo, panelFunciones, pelicula);
+            } else if (seleccion == tercerDia) {
+                control.recargarPaginaFunciones(fechaTercero, panelFunciones, pelicula);
+            } else if (seleccion == cuartoDia) {
+                control.recargarPaginaFunciones(fechaCuarto, panelFunciones, pelicula);
+            }
+        });
     }
 
     /**
@@ -30,11 +92,17 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         btnSiguiente = new javax.swing.JButton();
         jComboBoxDiaSemana = new javax.swing.JComboBox<>();
         jTextFieldNumAsientos = new javax.swing.JTextField();
-        jLabelNumAsientos = new javax.swing.JLabel();
+        jLabelDescripcion = new javax.swing.JLabel();
         jLabelDiaSemana = new javax.swing.JLabel();
         jLabelAsientosDisp = new javax.swing.JLabel();
         jLabelCosto = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
+        jLabelNumAsientos = new javax.swing.JLabel();
+        jLabelImagenPelicula = new javax.swing.JLabel();
+        jLabelNombrePelicula = new javax.swing.JLabel();
+        jTextAreaDescripcion = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jLabelDia = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,6 +111,11 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
         btnVolver.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnVolver.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVolverMouseClicked(evt);
+            }
+        });
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
@@ -60,12 +133,12 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxDiaSemana.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxDiaSemana.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoy", segundoDia, tercerDia, cuartoDia }));
 
         jTextFieldNumAsientos.setText("jTextField1");
 
-        jLabelNumAsientos.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabelNumAsientos.setText("Numero De Asientos:");
+        jLabelDescripcion.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabelDescripcion.setText("Descripción: ");
 
         jLabelDiaSemana.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabelDiaSemana.setText("Dia de la Semana");
@@ -79,51 +152,95 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         jLabelTitulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 36)); // NOI18N
         jLabelTitulo.setText("Funciones:");
 
+        jLabelNumAsientos.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabelNumAsientos.setText("Numero De Asientos:");
+
+        jLabelNombrePelicula.setText("jLabel1");
+
+        jTextAreaDescripcion.setText("jLabel1");
+
+        jLabelDia.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabelDia.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(210, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelTitulo)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabelDiaSemana, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxDiaSemana, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGap(49, 49, 49)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelCosto)
-                            .addComponent(jLabelAsientosDisp)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabelNumAsientos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(64, 64, 64))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelDescripcion)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabelDiaSemana, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxDiaSemana, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelCosto)
+                                    .addComponent(jLabelAsientosDisp)
+                                    .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelNumAsientos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jTextAreaDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(30, 30, 30)
+                                        .addComponent(jLabelNombrePelicula))
+                                    .addComponent(jLabelImagenPelicula))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(41, 41, 41))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(220, 220, 220)
+                .addComponent(jLabelTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabelDia)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(45, 45, 45)
-                .addComponent(jLabelTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 228, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelNumAsientos)
-                    .addComponent(jLabelDiaSemana))
+                    .addComponent(jLabelTitulo)
+                    .addComponent(jLabelDia))
+                .addGap(24, 24, 24)
+                .addComponent(jLabelNombrePelicula)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabelImagenPelicula)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jScrollPane1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelDescripcion, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelDiaSemana)
+                            .addComponent(jLabelNumAsientos))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBoxDiaSemana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelAsientosDisp)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelCosto)
+                        .addGap(56, 56, 56)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBoxDiaSemana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabelAsientosDisp)
-                .addGap(18, 18, 18)
-                .addComponent(jLabelCosto)
-                .addGap(303, 303, 303)
+                .addComponent(jTextAreaDescripcion)
+                .addGap(253, 253, 253)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -141,6 +258,12 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
+    private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
+        // TODO add your handling code here:
+        control.mostrarSeleccionarPelicula();
+        dispose();
+    }//GEN-LAST:event_btnVolverMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -148,15 +271,20 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JButton btnVolver1;
-    private javax.swing.JButton btnVolver2;
-    private javax.swing.JButton btnVolver3;
     private javax.swing.JComboBox<String> jComboBoxDiaSemana;
     private javax.swing.JLabel jLabelAsientosDisp;
     private javax.swing.JLabel jLabelCosto;
+    private javax.swing.JLabel jLabelDescripcion;
+    private javax.swing.JLabel jLabelDia;
     private javax.swing.JLabel jLabelDiaSemana;
+    private javax.swing.JLabel jLabelImagenPelicula;
+    private javax.swing.JLabel jLabelNombrePelicula;
     private javax.swing.JLabel jLabelNumAsientos;
     private javax.swing.JLabel jLabelTitulo;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jTextAreaDescripcion;
     private javax.swing.JTextField jTextFieldNumAsientos;
+    private javax.swing.JPanel panelCartelera;
     // End of variables declaration//GEN-END:variables
+    
 }

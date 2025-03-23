@@ -32,6 +32,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
 
         Titulo = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
         panelCartelera = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -59,12 +60,14 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         panelCartelera.setLayout(panelCarteleraLayout);
         panelCarteleraLayout.setHorizontalGroup(
             panelCarteleraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 579, Short.MAX_VALUE)
+            .addGap(0, 602, Short.MAX_VALUE)
         );
         panelCarteleraLayout.setVerticalGroup(
             panelCarteleraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 614, Short.MAX_VALUE)
         );
+
+        jScrollPane1.setViewportView(panelCartelera);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,17 +82,17 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelCartelera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(Titulo)
-                .addGap(23, 23, 23)
-                .addComponent(panelCartelera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
@@ -114,6 +117,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelCartelera;
     // End of variables declaration//GEN-END:variables
 
@@ -126,7 +130,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         initComponents();
         panelCartelera = control.generarCartelera(panelCartelera);
         panelCartelera.setPreferredSize(new Dimension(300, 200));
-        add(panelCartelera, BorderLayout.CENTER);
+        add(jScrollPane1, BorderLayout.CENTER);
         
         add(btnVolver, BorderLayout.SOUTH);
     
