@@ -27,13 +27,13 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     //PELICULAS HARDCODEADAS, ESTE SERA RETIRADO EN LA VERSION FINAL
     public List<PeliculaDTO> peliculasHarcodeadas() {
         PeliculaDTO pelicula1 = new PeliculaDTO("Batman El Caballero Loco",
-                "/img/batman.jpg",
+                "img/batman.jpg",
                 "Pelicula de las God");
-        PeliculaDTO pelicula2 = new PeliculaDTO("Interstellar", "/img/interstellar.jpg", "Pelicula algo Bien");
-        PeliculaDTO pelicula3 = new PeliculaDTO("John Wick 3", "/img/johnWick3.jpg", "Tercera Pelicula donde sale el John Wick");
-        PeliculaDTO pelicula4 = new PeliculaDTO("Sonic 3", "/img/sonic3.jpg", "Pelicula donde sale el Sonic");
-        PeliculaDTO pelicula5 = new PeliculaDTO("Wazaa la Pelicula", "/img/wazaa.jpg", "WAZAAAAAAAAAAAAAA");
-        PeliculaDTO pelicula6 = new PeliculaDTO("Thor: Ragnarok", "/img/thor.jpg", "Thor, mas thor que nunca");
+        PeliculaDTO pelicula2 = new PeliculaDTO("Interstellar", "img/interstellar.jpg", "Pelicula algo Bien");
+        PeliculaDTO pelicula3 = new PeliculaDTO("John Wick 3", "img/johnWick3.jpg", "Tercera Pelicula donde sale el John Wick");
+        PeliculaDTO pelicula4 = new PeliculaDTO("Sonic 3", "img/sonic3.jpg", "Pelicula donde sale el Sonic");
+        PeliculaDTO pelicula5 = new PeliculaDTO("Wazaa la Pelicula", "img/wazaa.jpg", "WAZAAAAAAAAAAAAAA");
+        PeliculaDTO pelicula6 = new PeliculaDTO("Thor: Ragnarok", "img/thor.jpg", "Thor, mas thor que nunca");
 
         peliculas.add(pelicula1);
         peliculas.add(pelicula2);
@@ -224,7 +224,11 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             double precio = funcion.getPrecio();
             return precio * numAsientos;
         } catch (Exception e) {
-            throw new GestionReservaException("HUbo un problema al calcular el costo total del boleto");
+            throw new GestionReservaException("Hubo un problema al calcular el costo total del boleto");
         }
     }
+    
+    
+    
+    
 }

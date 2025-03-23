@@ -4,19 +4,22 @@
  */
 package capaPresentacion;
 
+import Excepciones.GestionReservaException;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 /**
  *
  * @author Daniel Miribe
  */
 public class SeleccionarPelicula extends javax.swing.JFrame {
-    
-    private ControlDeNavegacion control = new ControlDeNavegacion();
-    /**
-     * Creates new form SeleccionarPelicula
-     */
-    public SeleccionarPelicula() {
-        initComponents();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,8 +31,8 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     private void initComponents() {
 
         Titulo = new javax.swing.JLabel();
-        scrollPane1 = new java.awt.ScrollPane();
         btnVolver = new javax.swing.JButton();
+        panelCartelera = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,6 +55,17 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout panelCarteleraLayout = new javax.swing.GroupLayout(panelCartelera);
+        panelCartelera.setLayout(panelCarteleraLayout);
+        panelCarteleraLayout.setHorizontalGroup(
+            panelCarteleraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 579, Short.MAX_VALUE)
+        );
+        panelCarteleraLayout.setVerticalGroup(
+            panelCarteleraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 614, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -62,21 +76,20 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
                         .addGap(180, 180, 180)
                         .addComponent(Titulo))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(panelCartelera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(Titulo)
+                .addGap(23, 23, 23)
+                .addComponent(panelCartelera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 605, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
@@ -101,6 +114,29 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnVolver;
-    private java.awt.ScrollPane scrollPane1;
+    private javax.swing.JPanel panelCartelera;
     // End of variables declaration//GEN-END:variables
+
+    private ControlDeNavegacion control = new ControlDeNavegacion();
+
+    /**
+     * Creates new form SeleccionarPelicula
+     */
+    public SeleccionarPelicula() throws GestionReservaException {
+        initComponents();
+        panelCartelera = control.generarCartelera(panelCartelera);
+        panelCartelera.setPreferredSize(new Dimension(300, 200));
+        add(panelCartelera, BorderLayout.CENTER);
+        
+        add(btnVolver, BorderLayout.SOUTH);
+    
+        
+        revalidate();
+        repaint();
+    
+        setSize(640, 830);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
 }

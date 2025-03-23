@@ -196,6 +196,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         control.mostrarSeleccionarPelicula();
         dispose();
+        
     }//GEN-LAST:event_btnCarteleraMenuMouseClicked
 
     /**
