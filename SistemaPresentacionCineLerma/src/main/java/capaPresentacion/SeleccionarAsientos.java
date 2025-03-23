@@ -291,7 +291,6 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             int numAsientos = Integer.valueOf(texto);
             control.mostrarSeleccionarMetodoPago(peliculaFinal, funcionFinal, numAsientos);
         } catch (GestionReservaException ex) {
-            System.out.println(ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSiguienteMouseClicked

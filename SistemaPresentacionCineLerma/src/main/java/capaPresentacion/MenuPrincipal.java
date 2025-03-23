@@ -112,6 +112,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnSalirMenu.setForeground(new java.awt.Color(255, 255, 255));
         btnSalirMenu.setText("Salir");
         btnSalirMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnSalirMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSalirMenuMouseClicked(evt);
+            }
+        });
         btnSalirMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirMenuActionPerformed(evt);
@@ -198,6 +203,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         dispose();
         
     }//GEN-LAST:event_btnCarteleraMenuMouseClicked
+
+    private void btnSalirMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMenuMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnSalirMenuMouseClicked
 
     /**
      * @param args the command line arguments
