@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -310,7 +311,6 @@ public class ControlDeNavegacion {
         JButton boton3 = crearBotonMetodoPago("img/mercadoPago.jpg", border, "mercado");
         JLabel label3 = new JLabel("Mercado pago");
         label3.setBorder(border);
-        
 
         panel.add(label1);
         panel.add(boton1);
@@ -318,7 +318,6 @@ public class ControlDeNavegacion {
         panel.add(boton2);
         panel.add(label3);
         panel.add(boton3);
-        
 
         return panel;
 
@@ -331,6 +330,19 @@ public class ControlDeNavegacion {
         boton.setBorder(border);
         boton.addActionListener(e -> {
             
+            JDialog SeleccionarMetodoPago = (JDialog) SwingUtilities.getWindowAncestor(boton);
+            SeleccionarMetodoPago.dispose();
+            
+            switch (nombreMetodo) {
+                case "tarjeta" ->
+                    mostrarPagoTarjeta();
+                case "paypal" ->
+                    mostrarPagoPaypal();
+                case "mercado" ->
+                    mostrarPagoMercado();
+                default -> {
+                }
+            }
         });
         return boton;
     }
@@ -343,16 +355,28 @@ public class ControlDeNavegacion {
         });
     }
 
-    public static void mostrarPagoTarjeta() {
-
+    public void mostrarPagoTarjeta() {
+        SwingUtilities.invokeLater(() -> {
+            PantallaPagoTarjeta pantallaPagoTarjeta = new PantallaPagoTarjeta();
+            pantallaPagoTarjeta.setLocationRelativeTo(null);
+            pantallaPagoTarjeta.setVisible(true);
+        });
     }
 
-    public static void mostrarPagoPaypal() {
-
+    public void mostrarPagoPaypal() {
+        SwingUtilities.invokeLater(() -> {
+            PantallaPagoPaypal pantallaPagoPaypal = new PantallaPagoPaypal();
+            pantallaPagoPaypal.setLocationRelativeTo(null);
+            pantallaPagoPaypal.setVisible(true);
+        });
     }
 
-    public static void mostrarPagoMercado() {
-
+    public void mostrarPagoMercado() {
+        SwingUtilities.invokeLater(() -> {
+            PantallaPagoMercado pantallaPagoMercado = new PantallaPagoMercado();
+            pantallaPagoMercado.setLocationRelativeTo(null);
+            pantallaPagoMercado.setVisible(true);
+        });
     }
 
     public List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws GestionReservaException {

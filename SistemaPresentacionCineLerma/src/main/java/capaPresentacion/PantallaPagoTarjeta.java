@@ -15,8 +15,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     /**
      * Creates new form PantallaPagoTarjeta
      */
-    public PantallaPagoTarjeta(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public PantallaPagoTarjeta() {
         initComponents();
     }
 
@@ -210,9 +209,9 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     }//GEN-LAST:event_fieldCorreoElectronicoActionPerformed
 
     private void btnCompletarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompletarPagoActionPerformed
-        if(txtCVV.getText().trim().isEmpty() || txtCorreoElectronico.getText().trim().isEmpty() || txtFechaVencimiento.getText().trim().isEmpty()
-                || txtNumeroTarjeta.getText().trim().isEmpty() || txtPropietario.getText().trim().isEmpty()){
-            JOptionPane.showMessageDialog(this, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+        if (txtCVV.getText().isBlank() || txtCorreoElectronico.getText().isBlank() || txtFechaVencimiento.getText().isBlank()
+                || txtNumeroTarjeta.getText().isBlank() || txtPropietario.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
     }//GEN-LAST:event_btnCompletarPagoActionPerformed

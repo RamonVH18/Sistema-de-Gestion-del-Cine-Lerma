@@ -24,9 +24,9 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
      */
     public PantallaPagoMercado() {
         initComponents();
-    SwingUtilities.invokeLater(() -> {
-        setImagen(labelimagen, "img/mercadoPago.jpg");
-    });
+        SwingUtilities.invokeLater(() -> {
+            setImagen(labelimagen, "img/mercadoPago.jpg");
+        });
 
     }
 
@@ -45,17 +45,17 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
             ImageIcon imageIcon = new ImageIcon(imageUrl);
             // Escala la imagen al tamaño actual del JLabel
             Image scaledImage = imageIcon.getImage().getScaledInstance(
-                labelName.getWidth(),
-                labelName.getHeight(),
-                Image.SCALE_SMOOTH
+                    labelName.getWidth(),
+                    labelName.getHeight(),
+                    Image.SCALE_SMOOTH
             );
             labelName.setIcon(new ImageIcon(scaledImage));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(
-                this, 
-                "Error al cargar la imagen: " + e.getMessage(),
-                "Error", 
-                JOptionPane.ERROR_MESSAGE
+                    this,
+                    "Error al cargar la imagen: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
             );
         }
     }

@@ -14,8 +14,7 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     /**
      * Creates new form PantallaPagoPaypal
      */
-    public PantallaPagoPaypal(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public PantallaPagoPaypal() {
         initComponents();
     }
 
