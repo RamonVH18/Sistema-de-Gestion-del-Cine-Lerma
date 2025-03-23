@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -49,7 +50,7 @@ public class ControlDeNavegacion {
         // TODO code application logic here
         ControlDeNavegacion.mostrarMenuPrincipalStatic();
     }
-    
+
     //Este metodo sirve para inicializar el menu
     public static void mostrarMenuPrincipalStatic() {
         SwingUtilities.invokeLater(() -> {
@@ -58,6 +59,7 @@ public class ControlDeNavegacion {
             pantalla.setVisible(true);
         });
     }
+
     //Este metodo sirve para regresar al menu Principal, se encontrara la forma de de fusionar
     public void mostrarMenuPrincipal() {
         SwingUtilities.invokeLater(() -> {
@@ -66,7 +68,7 @@ public class ControlDeNavegacion {
             pantalla.setVisible(true);
         });
     }
-    
+
     //Metodo para generar la Cartelera, se modificara un JPanel ya escrito y se le añadiran los JButton de cada respectiva pelicula
     public JPanel generarCartelera(JPanel panel) throws GestionReservaException {
         List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
@@ -86,7 +88,7 @@ public class ControlDeNavegacion {
         panel.repaint();
         return panel;
     }
-    
+
     //
     public JButton crearBotonImagen(PeliculaDTO pelicula) {
         //Esto csera modificado una vez que implementemos el sistema de bases de datos
@@ -140,7 +142,7 @@ public class ControlDeNavegacion {
     }
 
     public JPanel generarTablaFunciones(JPanel panel, LocalDate dia, PeliculaDTO pelicula) throws GestionReservaException {
-        
+
         Date diaNuevo = new Date();
         if (dia.equals(LocalDate.now())) {
             LocalTime horaActual = LocalTime.now();
@@ -164,10 +166,10 @@ public class ControlDeNavegacion {
     public JButton crearBotonFuncion(FuncionDTO funcion, JPanel panel) {
         JButton boton = new JButton();
         Date hora = funcion.getFechaHora();
-        String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0" + 
-                Integer.toString(funcion.getFechaHora().getMinutes()) : 
-                Integer.toString(funcion.getFechaHora().getMinutes());
-        
+        String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0"
+                + Integer.toString(funcion.getFechaHora().getMinutes())
+                : Integer.toString(funcion.getFechaHora().getMinutes());
+
         boton.setText(hora.getHours() + ":" + funcionMinutos);
         boton.setBackground(Color.decode("#A2845E"));
         //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
@@ -188,8 +190,7 @@ public class ControlDeNavegacion {
             } catch (GestionReservaException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
+
         });
         return boton;
     }
@@ -284,16 +285,42 @@ public class ControlDeNavegacion {
         SeleccionarAsientos.dispose();
         mostrarSeleccionarAsientos(pelicula, dia);
     }
-    
+
     public void validarCamposAsientos(String texto, FuncionDTO funcion) throws GestionReservaException {
-        if (manejoDeBoletos.validarCampoAsiento(texto)){
+        if (manejoDeBoletos.validarCampoAsiento(texto)) {
             int numAsientos = Integer.parseInt(texto);
             manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
         }
     }
 
-    public static void generarTablaMetodosPago() {
+    public JPanel generarTablaMetodosPago(JPanel panel) {
+        panel.setLayout(new GridLayout(0, 2, 0, 0));
+        panel.removeAll();
+        JButton boton1 = generarBotonMetodoPago("img/visamaster.png");
+        JLabel label1 = new JLabel("Tarjeta");
 
+        JButton boton2 = generarBotonMetodoPago("img/paypal.png");
+        JLabel label2 = new JLabel("Paypal");
+
+        JButton boton3 = generarBotonMetodoPago("img/mercadoPago.jpg");
+        JLabel label3 = new JLabel("Mercado pago");
+
+        panel.add(label1);
+        panel.add(boton1);
+        panel.add(label2);
+        panel.add(boton2);
+        panel.add(label3);
+        panel.add(boton3);
+
+        return panel;
+
+    }
+
+    public JButton generarBotonMetodoPago(String url) {
+        ImageIcon image = crearImagen(url, 50, 50);
+        JButton boton = new JButton(image);
+        boton.setPreferredSize(new Dimension(50, 50));
+        return boton;
     }
 
     public void mostrarSeleccionarMetodoPago(PeliculaDTO pelicula, FuncionDTO funcion, int numAsientos) {
@@ -315,20 +342,20 @@ public class ControlDeNavegacion {
     public static void mostrarPagoMercado() {
 
     }
-    
+
     public List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws GestionReservaException {
         List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
         return asientosReservados;
     }
-    
+
     public BoletoDTO cargarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, int numAsientos) throws GestionReservaException {
-        System.out.println("Numero de asientos: " + numAsientos );
+        System.out.println("Numero de asientos: " + numAsientos);
         List<String> asientos = obtenerListaAsientosReservados(funcion, numAsientos);
         System.out.println(asientos);
         this.boletoFinal = manejoDeBoletos.generarBoleto(pelicula, funcion, asientos, cliente);
         return boletoFinal;
     }
-    
+
     public void mostrarDetalleBoleto() {
         SwingUtilities.invokeLater(() -> {
             DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto(boletoFinal);
