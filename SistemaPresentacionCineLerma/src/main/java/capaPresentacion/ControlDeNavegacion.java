@@ -28,12 +28,14 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 /**
  *
@@ -296,14 +298,19 @@ public class ControlDeNavegacion {
     public JPanel generarTablaMetodosPago(JPanel panel) {
         panel.setLayout(new GridLayout(0, 2, 0, 0));
         panel.removeAll();
-        JButton boton1 = generarBotonMetodoPago("img/visamaster.png");
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+        JButton boton1 = crearBotonMetodoPago("img/visamaster.png", border, "tarjeta");
         JLabel label1 = new JLabel("Tarjeta");
+        label1.setBorder(border);
 
-        JButton boton2 = generarBotonMetodoPago("img/paypal.png");
+        JButton boton2 = crearBotonMetodoPago("img/paypal.png", border, "paypal");
         JLabel label2 = new JLabel("Paypal");
+        label2.setBorder(border);
 
-        JButton boton3 = generarBotonMetodoPago("img/mercadoPago.jpg");
+        JButton boton3 = crearBotonMetodoPago("img/mercadoPago.jpg", border, "mercado");
         JLabel label3 = new JLabel("Mercado pago");
+        label3.setBorder(border);
+        
 
         panel.add(label1);
         panel.add(boton1);
@@ -311,15 +318,20 @@ public class ControlDeNavegacion {
         panel.add(boton2);
         panel.add(label3);
         panel.add(boton3);
+        
 
         return panel;
 
     }
 
-    public JButton generarBotonMetodoPago(String url) {
+    public JButton crearBotonMetodoPago(String url, Border border, String nombreMetodo) {
         ImageIcon image = crearImagen(url, 50, 50);
         JButton boton = new JButton(image);
-        boton.setPreferredSize(new Dimension(50, 50));
+        boton.setPreferredSize(new Dimension(150, 50));
+        boton.setBorder(border);
+        boton.addActionListener(e -> {
+            
+        });
         return boton;
     }
 

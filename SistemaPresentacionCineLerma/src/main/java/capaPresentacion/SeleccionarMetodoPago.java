@@ -28,7 +28,6 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
         initComponents();
         panelMetodoPago = control.generarTablaMetodosPago(panelMetodoPago);
         panelMetodoPago.setVisible(true);
-        System.out.println(panelMetodoPago.getComponentCount());
         this.peliculaFinal = pelicula;
         this.funcionFinal = funcion;
         this.numAsientos = numAsientos;
