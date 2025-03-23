@@ -4,6 +4,8 @@
  */
 package gestionReservaBoletos;
 
+import DTOs.BoletoDTO;
+import DTOs.ClienteDTO;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
@@ -27,4 +29,8 @@ public interface IManejoDeBoletos {
     public boolean validarDisponibilidaDeAsientos(int numAsientos, FuncionDTO funcion) throws GestionReservaException;
     
     public double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws GestionReservaException;
+    
+    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GestionReservaException;
+    
+    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws GestionReservaException;
 }

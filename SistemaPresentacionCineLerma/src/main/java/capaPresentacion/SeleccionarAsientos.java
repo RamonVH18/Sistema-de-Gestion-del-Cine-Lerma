@@ -27,6 +27,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private ControlDeNavegacion control = new ControlDeNavegacion();
     
     private FuncionDTO funcionFinal;
+    private PeliculaDTO peliculaFinal;
     private JPanel panelFunciones = new JPanel(new GridLayout(0, 3, 5, 5));
     
     private LocalDate fechaHoy = LocalDate.now();
@@ -48,6 +49,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      */
     public SeleccionarAsientos(PeliculaDTO pelicula, LocalDate dia) throws GestionReservaException {
         initComponents();
+        this.peliculaFinal = pelicula;
         jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
         ImageIcon imagen = control.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
         jLabelImagenPelicula.setIcon(imagen);
@@ -286,7 +288,8 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         try {
             control.validarCamposAsientos(texto, funcionFinal);
             dispose();
-            control.mostrarSeleccionarMetodoPago();
+            int numAsientos = Integer.valueOf(texto);
+            control.mostrarSeleccionarMetodoPago(peliculaFinal, funcionFinal, numAsientos);
         } catch (GestionReservaException ex) {
             System.out.println(ex);
             JOptionPane.showMessageDialog(null, ex.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);

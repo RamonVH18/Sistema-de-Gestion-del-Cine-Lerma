@@ -4,17 +4,46 @@
  */
 package capaPresentacion;
 
+import DTOs.BoletoDTO;
+import DTOs.FuncionDTO;
+import DTOs.PeliculaDTO;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Abraham Coronel Bringas
  */
 public class DetalleDelBoleto extends javax.swing.JFrame {
-
+    
+    private ControlDeNavegacion control = new ControlDeNavegacion();
     /**
      * Creates new form DetalleDelBoleto
      */
-    public DetalleDelBoleto() {
+    public DetalleDelBoleto(BoletoDTO boleto) {
         initComponents();
+        
+        ImageIcon imagen = control.crearImagen(boleto.getImagenPelicula(), 200, 300);
+        etiquetaImagen.setIcon(imagen);
+        textoPelicula.setText(boleto.getNombrePelicula());
+        LocalDate fecha = boleto.getFechaHoraFuncion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        textoFecha3.setText(control.traducirDia(fecha.getDayOfWeek()) + ", " + 
+                                    fecha.getDayOfMonth() + " de " + 
+                                    control.traducirMes(fecha.getMonth()));
+        
+        String funcionMinutos = (boleto.getFechaHoraFuncion().getMinutes() < 10) ? "0" + 
+                Integer.toString(boleto.getFechaHoraFuncion().getMinutes()) : 
+                Integer.toString(boleto.getFechaHoraFuncion().getMinutes());
+        labelHora.setText("Hora: " + boleto.getFechaHoraFuncion().getHours() + ":" + funcionMinutos);
+        
+        labelSala.setText("Sala: " + boleto.getNumeroSala());
+        
+        String numAsientos = String.join(", ", boleto.getListaAsientosSeleccionados());
+        textoAsiento.setText(numAsientos);
+        
+        labelCliente.setText("Cliente: " + boleto.getNombreCliente());
     }
 
     /**
@@ -26,6 +55,7 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        labelAsiento1 = new javax.swing.JLabel();
         Titulo = new javax.swing.JLabel();
         laberPelicula = new javax.swing.JLabel();
         labelHora = new javax.swing.JLabel();
@@ -39,6 +69,10 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         textoFecha3 = new javax.swing.JLabel();
         btnRegresoMenu = new javax.swing.JButton();
         etiquetaImagen = new javax.swing.JLabel();
+        labelCliente = new javax.swing.JLabel();
+
+        labelAsiento1.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        labelAsiento1.setText("Asiento/s:");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -77,6 +111,14 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         btnRegresoMenu.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresoMenu.setText("Volver al menu principal");
         btnRegresoMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnRegresoMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegresoMenuMouseClicked(evt);
+            }
+        });
+
+        labelCliente.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        labelCliente.setText("Cliente: ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,18 +126,6 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(53, 53, 53)
-                                .addComponent(etiquetaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(labelAsiento)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(textoAsiento, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -116,7 +146,21 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
                                 .addComponent(labelFecha1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(textoFecha3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(17, 17, 17)))
+                        .addGap(17, 17, 17))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addComponent(etiquetaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelCliente)
+                                    .addComponent(labelAsiento))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(textoAsiento, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(48, 48, 48))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(89, 138, Short.MAX_VALUE)
@@ -135,7 +179,7 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
                             .addComponent(textoPelicula, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(laberPelicula))
                         .addGap(41, 41, 41)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(labelFecha1)
                             .addComponent(textoFecha3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(34, 34, 34)
@@ -154,13 +198,21 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(46, 46, 46)
                         .addComponent(etiquetaImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(labelCliente)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(105, 105, 105))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegresoMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresoMenuMouseClicked
+        // TODO add your handling code here:
+        control.mostrarMenuPrincipal();
+        dispose();
+    }//GEN-LAST:event_btnRegresoMenuMouseClicked
 
     /**
      * @param args the command line arguments
@@ -171,6 +223,8 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     private javax.swing.JButton btnRegresoMenu;
     private javax.swing.JLabel etiquetaImagen;
     private javax.swing.JLabel labelAsiento;
+    private javax.swing.JLabel labelAsiento1;
+    private javax.swing.JLabel labelCliente;
     private javax.swing.JLabel labelFecha1;
     private javax.swing.JLabel labelHora;
     private javax.swing.JLabel labelSala;

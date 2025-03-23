@@ -4,6 +4,8 @@
  */
 package capaPresentacion;
 
+import DTOs.BoletoDTO;
+import DTOs.ClienteDTO;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
@@ -39,14 +41,24 @@ import javax.swing.SwingUtilities;
 public class ControlDeNavegacion {
 
     private IManejoDeBoletos manejoDeBoletos = new ManejoDeBoletos();
+    private BoletoDTO boletoFinal;
+    private ClienteDTO cliente = new ClienteDTO("Isabel Valenzuela Rocha", "jaime@lerma.com.mx");
     private static final Logger logger = Logger.getLogger(Logger.class.getName());
 
     public static void main(String[] args) {
         // TODO code application logic here
-        ControlDeNavegacion.mostrarMenuPrincipal();
+        ControlDeNavegacion.mostrarMenuPrincipalStatic();
     }
 
-    public static void mostrarMenuPrincipal() {
+    public static void mostrarMenuPrincipalStatic() {
+        SwingUtilities.invokeLater(() -> {
+            MenuPrincipal pantalla = new MenuPrincipal();
+            pantalla.setLocationRelativeTo(null);
+            pantalla.setVisible(true);
+        });
+    }
+    
+    public void mostrarMenuPrincipal() {
         SwingUtilities.invokeLater(() -> {
             MenuPrincipal pantalla = new MenuPrincipal();
             pantalla.setLocationRelativeTo(null);
@@ -148,7 +160,11 @@ public class ControlDeNavegacion {
     public JButton crearBotonFuncion(FuncionDTO funcion, JPanel panel) {
         JButton boton = new JButton();
         Date hora = funcion.getFechaHora();
-        boton.setText(hora.getHours() + ":" + hora.getMinutes());
+        String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0" + 
+                Integer.toString(funcion.getFechaHora().getMinutes()) : 
+                Integer.toString(funcion.getFechaHora().getMinutes());
+        
+        boton.setText(hora.getHours() + ":" + funcionMinutos);
         boton.setBackground(Color.decode("#A2845E"));
         //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
         boton.addActionListener(e -> {
@@ -276,9 +292,9 @@ public class ControlDeNavegacion {
 
     }
 
-    public void mostrarSeleccionarMetodoPago() {
+    public void mostrarSeleccionarMetodoPago(PeliculaDTO pelicula, FuncionDTO funcion, int numAsientos) {
         SwingUtilities.invokeLater(() -> {
-            SeleccionarMetodoPago pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago();
+            SeleccionarMetodoPago pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago(pelicula, funcion, numAsientos);
             pantallaSeleccionarMetodoPago.setLocationRelativeTo(null);
             pantallaSeleccionarMetodoPago.setVisible(true);
         });
@@ -295,9 +311,26 @@ public class ControlDeNavegacion {
     public static void mostrarPagoMercado() {
 
     }
-
-    public static void mostrarDetalleBoleto() {
-
+    
+    public List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws GestionReservaException {
+        List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
+        return asientosReservados;
+    }
+    
+    public BoletoDTO cargarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, int numAsientos) throws GestionReservaException {
+        System.out.println("Numero de asientos: " + numAsientos );
+        List<String> asientos = obtenerListaAsientosReservados(funcion, numAsientos);
+        System.out.println(asientos);
+        this.boletoFinal = manejoDeBoletos.generarBoleto(pelicula, funcion, asientos, cliente);
+        return boletoFinal;
+    }
+    
+    public void mostrarDetalleBoleto() {
+        SwingUtilities.invokeLater(() -> {
+            DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto(boletoFinal);
+            pantallaDetalleDelBoleto.setLocationRelativeTo(null);
+            pantallaDetalleDelBoleto.setVisible(true);
+        });
     }
 
     public static void mostrarErrorCamposVaciosPagoMercado() {

@@ -21,6 +21,8 @@ public class BoletoDTO {
     
     private String numeroSala;
     
+    private String nombreCliente;
+    
     private List<String> listaAsientosSeleccionados;
 
     public BoletoDTO() {
@@ -30,12 +32,13 @@ public class BoletoDTO {
         return nombrePelicula;
     }
 
-    public BoletoDTO(String nombrePelicula, String imagenPelicula, Date fechaHoraFuncion, String numeroSala, List<String> listaAsientosSeleccionados) {
+    public BoletoDTO(String nombrePelicula, String imagenPelicula, Date fechaHoraFuncion, String numeroSala, List<String> listaAsientosSeleccionados, String nombreCliente) {
         this.nombrePelicula = nombrePelicula;
         this.imagenPelicula = imagenPelicula;
         this.fechaHoraFuncion = fechaHoraFuncion;
         this.numeroSala = numeroSala;
         this.listaAsientosSeleccionados = listaAsientosSeleccionados;
+        this.nombreCliente = nombreCliente;
     }
 
     public void setNombrePelicula(String nombrePelicula) {
@@ -73,8 +76,13 @@ public class BoletoDTO {
     public void setListaAsientosSeleccionados(List<String> listaAsientosSeleccionados) {
         this.listaAsientosSeleccionados = listaAsientosSeleccionados;
     }
-    
-    
-    
 
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+    
 }
