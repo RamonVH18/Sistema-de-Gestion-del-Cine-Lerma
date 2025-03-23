@@ -43,26 +43,27 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         peliculas.add(pelicula6);
         return peliculas;
     }
+
     //FUNCIONES HARDCODEADAS, ESTE SERA RETIRADO EN LA VERSION FINAL
     public List<FuncionDTO> funcionesHarcodeadas() {
 
-        FuncionDTO funcion1 = new FuncionDTO("A1", "Batman El Caballero Loco", new Date(125, 02, 24, 14, 30, 0));
-        FuncionDTO funcion2 = new FuncionDTO("B1", "Batman El Caballero Loco", new Date(125, 02, 23, 17, 00, 0));
+        FuncionDTO funcion1 = new FuncionDTO("A1", "Batman El Caballero Loco", new Date(125, 02, 24, 14, 30, 0), 80.00);
+        FuncionDTO funcion2 = new FuncionDTO("B1", "Batman El Caballero Loco", new Date(125, 02, 23, 17, 00, 0), 75.00);
 
-        FuncionDTO funcion3 = new FuncionDTO("A2", "Interstellar", new Date(125, 02, 25, 16, 00, 0));
-        FuncionDTO funcion4 = new FuncionDTO("B1", "Interstellar", new Date(125, 02, 24, 19, 30, 0));
+        FuncionDTO funcion3 = new FuncionDTO("A2", "Interstellar", new Date(125, 02, 25, 16, 00, 0), 75.00);
+        FuncionDTO funcion4 = new FuncionDTO("B1", "Interstellar", new Date(125, 02, 24, 19, 30, 0), 75.00);
 
-        FuncionDTO funcion5 = new FuncionDTO("A3", "John Wick 3", new Date(125, 02, 23, 18, 45, 0));
-        FuncionDTO funcion6 = new FuncionDTO("B3", "John Wick 3", new Date(125, 02, 24, 21, 00, 0));
+        FuncionDTO funcion5 = new FuncionDTO("A3", "John Wick 3", new Date(125, 02, 23, 18, 45, 0), 80.00);
+        FuncionDTO funcion6 = new FuncionDTO("B3", "John Wick 3", new Date(125, 02, 24, 21, 00, 0), 80.00);
 
-        FuncionDTO funcion7 = new FuncionDTO("A2", "Sonic 3", new Date(125, 02, 28, 13, 00, 0));
-        FuncionDTO funcion8 = new FuncionDTO("B2", "Sonic 3", new Date(125, 02, 22, 15, 30, 0));
+        FuncionDTO funcion7 = new FuncionDTO("A2", "Sonic 3", new Date(125, 02, 28, 13, 00, 0), 60.00);
+        FuncionDTO funcion8 = new FuncionDTO("B2", "Sonic 3", new Date(125, 02, 22, 15, 30, 0), 60.00);
 
-        FuncionDTO funcion9 = new FuncionDTO("A1", "Wazaa la Pelicula", new Date(125, 02, 25, 20, 00, 0));
-        FuncionDTO funcion10 = new FuncionDTO("B3", "Wazaa la Pelicula", new Date(125, 02, 26, 22, 15, 0));
+        FuncionDTO funcion9 = new FuncionDTO("A1", "Wazaa la Pelicula", new Date(125, 02, 25, 20, 00, 0), 90.00);
+        FuncionDTO funcion10 = new FuncionDTO("B3", "Wazaa la Pelicula", new Date(125, 02, 26, 22, 15, 0), 75.00);
 
-        FuncionDTO funcion11 = new FuncionDTO("A2", "Thor: Ragnarok", new Date(125, 02, 27, 17, 30, 0));
-        FuncionDTO funcion12 = new FuncionDTO("B2", "Thor: Ragnarok", new Date(125, 02, 26, 20, 45, 0));
+        FuncionDTO funcion11 = new FuncionDTO("A2", "Thor: Ragnarok", new Date(125, 02, 27, 17, 30, 0), 65.00);
+        FuncionDTO funcion12 = new FuncionDTO("B2", "Thor: Ragnarok", new Date(125, 02, 26, 20, 45, 0), 75.00);
 
         funciones.add(funcion1);
         funciones.add(funcion2);
@@ -79,7 +80,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
         return funciones;
     }
-    
+
     //ASIENTOS HARDCODEADOS, ESTE SERA RETIRADO EN LA VERSION FINAL
     public List<AsientoFuncionDTO> asientosHarcodeados() {
         if (asientos.isEmpty()) {
@@ -119,6 +120,17 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     @Override
     public List<FuncionDTO> cargarFuncionesDelDia(Date dia, String nombrePelicula) throws GestionReservaException {
         try {
+            if (dia == null) {
+                throw new GestionReservaException("El dia no puede ser nulo");
+            }
+            if (dia.before(new Date())) {
+                throw new GestionReservaException("La fecha no puede ser anterior al tiempo actual");
+            }
+
+            if (nombrePelicula == null || nombrePelicula.isBlank()) {
+                throw new GestionReservaException("El nombre de la pelicula esta vacio o es nulo");
+            }
+
             // aqui se llamaria a un metodo que de una listaFunciones, sin embargo como aun no tenemos la BO, voy hardcodearlas
             List<FuncionDTO> funciones = funcionesHarcodeadas();
 
@@ -137,7 +149,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         }
     }
 
-    @Override
+    @Override //Metodo para validar el campoAsiento de la pantalla Seleccionar Asientos
     public boolean validarCampoAsiento(String campoAsiento) throws GestionReservaException {
         try {
 
@@ -154,7 +166,65 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             throw new GestionReservaException("Hubo un error al validar el campoAsiento", e.getCause());
         }
     }
-    
-    public int consultar
 
+    // Metodo que solo se utilizara en esta clase, sera uitilizado para filtrar la lista de asientos y guardar unicamente los asientos que esten disponibles
+    public List<AsientoFuncionDTO> listaAsientosDisponibles(FuncionDTO funcion) {
+        // Aqui se llamaria un metodo para consultar a los asientos de la respectiva funcion, pero eso sera hasta que agreguemos los BOs
+        List<AsientoFuncionDTO> asientos = asientosHarcodeados();
+        //Lista que servira para guardar aquellos asientos vacios
+        List<AsientoFuncionDTO> asientosDisponibles = new ArrayList<>();
+        for (int i = 0; i < asientos.size(); i++) {
+            AsientoFuncionDTO asiento = asientos.get(i);
+            if (asiento.getFuncion() == funcion && asiento.isDisponibilidad()) {
+                asientosDisponibles.add(asiento);
+            }
+        }
+        return asientosDisponibles;
+    }
+
+    @Override //Metodo para consultar cuantos Asientos disponibles haya para cierta funcion
+    public int consultarDisponibilidadAsientos(FuncionDTO funcion) throws GestionReservaException {
+        try {
+            if (funcion == null) {
+                throw new GestionReservaException("La funcion no puede ser nula.");
+            }
+            List<AsientoFuncionDTO> asientosDisponibles = listaAsientosDisponibles(funcion);
+            return asientosDisponibles.size();
+        } catch (Exception e) {
+            throw new GestionReservaException("Hubo un error al contabilizar el numero de asientos disponibles.", e.getCause());
+        }
+    }
+
+    @Override //Metodo para validar que el numero de asientos selecionados este disponible
+    public boolean validarDisponibilidaDeAsientos(int numAsientos, FuncionDTO funcion) throws GestionReservaException {
+        try {
+            if (numAsientos <= 0) {
+                throw new GestionReservaException("Tiene que ingresar minimo 1 asiento.");
+            }
+            //Llamada al metodo para consultar los asientos disponibles de esa funcion
+            List<AsientoFuncionDTO> asientosDisponibles = listaAsientosDisponibles(funcion);
+            if (asientosDisponibles.size() < numAsientos) {
+                throw new GestionReservaException("Ingreso mas asientos de los que hay disponibles.");
+            }
+            return true;
+        } catch (Exception e) {
+            throw new GestionReservaException("Hubo un error al contabilizar validar la disponibilida de los asientos seleccionados");
+        }
+    }
+    
+    @Override //Metodo que sirve para calcular el costo final del boleto
+    public double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws GestionReservaException {
+        try {
+            if (numAsientos <= 0) {
+                throw new GestionReservaException("Tiene que ingresar minimo 1 asiento.");
+            }
+            if (funcion == null) {
+                throw new GestionReservaException("La funcion no puede ser nula.");
+            }
+            double precio = funcion.getPrecio();
+            return precio * numAsientos;
+        } catch (Exception e) {
+            throw new GestionReservaException("HUbo un problema al calcular el costo total del boleto");
+        }
+    }
 }

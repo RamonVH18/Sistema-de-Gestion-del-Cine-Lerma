@@ -21,4 +21,10 @@ public interface IManejoDeBoletos {
     public List<FuncionDTO> cargarFuncionesDelDia(Date dia, String nombrePelicula) throws GestionReservaException;
     
     public boolean validarCampoAsiento(String campoAsiento) throws GestionReservaException;
+    
+    public int consultarDisponibilidadAsientos(FuncionDTO funcion) throws GestionReservaException;
+    
+    public boolean validarDisponibilidaDeAsientos(int numAsientos, FuncionDTO funcion) throws GestionReservaException;
+    
+    public double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws GestionReservaException;
 }

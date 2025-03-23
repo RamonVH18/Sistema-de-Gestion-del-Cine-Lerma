@@ -19,21 +19,25 @@ public class FuncionDTO {
     private String nombre;
 
     private Date fechaHora;
+    
+    private double precio;
 
     public FuncionDTO() {
     }
 
-    public FuncionDTO(Long id, String sala, String nombre, Date fechaHora) {
+    public FuncionDTO(Long id, String sala, String nombre, Date fechaHora, double precio) {
         this.id = id;
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
+        this.precio = precio;
     }
 
-    public FuncionDTO(String sala, String nombre, Date fechaHora) {
+    public FuncionDTO(String sala, String nombre, Date fechaHora, double precio) {
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
+        this.precio = precio;
     }
 
     public Long getId() {
@@ -67,5 +71,15 @@ public class FuncionDTO {
     public void setFechaHora(Date fechaHora) {
         this.fechaHora = fechaHora;
     }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+    
+    
 
 }
