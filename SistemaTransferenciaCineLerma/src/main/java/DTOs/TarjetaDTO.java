@@ -5,6 +5,7 @@
 package DTOs;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  *
@@ -58,6 +59,42 @@ public class TarjetaDTO {
     public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.numeroTarjeta);
+        hash = 89 * hash + Objects.hashCode(this.titular);
+        hash = 89 * hash + Objects.hashCode(this.cvv);
+        hash = 89 * hash + Objects.hashCode(this.fechaVencimiento);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TarjetaDTO other = (TarjetaDTO) obj;
+        if (!Objects.equals(this.numeroTarjeta, other.numeroTarjeta)) {
+            return false;
+        }
+        if (!Objects.equals(this.titular, other.titular)) {
+            return false;
+        }
+        if (!Objects.equals(this.cvv, other.cvv)) {
+            return false;
+        }
+        return Objects.equals(this.fechaVencimiento, other.fechaVencimiento);
+    }
+    
+    
 
     @Override
     public String toString() {

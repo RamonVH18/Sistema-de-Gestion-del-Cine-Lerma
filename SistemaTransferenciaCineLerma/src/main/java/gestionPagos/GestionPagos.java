@@ -9,13 +9,69 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.excepcionTransferencia;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author Abraham Coronel Bringas
  */
 public class GestionPagos implements IGestionPagos {
+    private static GestionPagos instancia;
+    List<CuentaMercadoDTO> cuentasMercado = new ArrayList<>();
+    List<PaypalDTO> cuentasPaypal = new ArrayList<>();
+    List<TarjetaDTO> cuentasTarjeta = new ArrayList<>();
+
+    public List<CuentaMercadoDTO> agregarCuentasMercado() {
+        if (cuentasMercado.isEmpty()) {
+
+            // Crear y configurar algunos objetos CuentaMercadoDTO
+            CuentaMercadoDTO cuenta1 = new CuentaMercadoDTO("Jaime Lerma", "lerma@gmail.com", 101);
+            CuentaMercadoDTO cuenta2 = new CuentaMercadoDTO("Gibran master", "Giga@gmail.com", 696);
+            cuentasMercado.add(cuenta1);
+            cuentasMercado.add(cuenta2);
+
+        }
+        return cuentasMercado;
+    }
+
+    public List<PaypalDTO> agregarCuentasPaypal() {
+        if (cuentasPaypal.isEmpty()) {
+            
+            PaypalDTO cuenta1 = new PaypalDTO("sonic15622@gmail.com", "camello");
+            PaypalDTO cuenta2 = new PaypalDTO("abrahama@gmail.com", "perrito");
+            cuentasPaypal.add(cuenta1);
+            cuentasPaypal.add(cuenta2);
+
+        }
+        return cuentasPaypal;
+    }
+    
+    public List<TarjetaDTO> agregarCuentasTarjeta() {
+        if (cuentasPaypal.isEmpty()) {
+            
+            TarjetaDTO cuenta1 = new TarjetaDTO("987654321123456", "ramoncito", 789, new Date());
+            TarjetaDTO cuenta2 = new TarjetaDTO("123456789675321", "jaimico", 123, new Date());
+            cuentasTarjeta.add(cuenta1);
+            cuentasTarjeta.add(cuenta2);
+
+        }
+        return cuentasTarjeta;
+    }
+    
+    List<TarjetaDTO> tarjetas = agregarCuentasTarjeta();
+    List<PaypalDTO> paypals = agregarCuentasPaypal();
+    List<CuentaMercadoDTO> mercados = agregarCuentasMercado();
+    
+    
+    public static GestionPagos getInstancia() {
+        if (instancia == null) {
+            instancia = new GestionPagos();
+        }
+        return instancia;
+    }
+    
 
     @Override
     public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws excepcionTransferencia {
@@ -105,6 +161,10 @@ public class GestionPagos implements IGestionPagos {
 
     @Override
     public boolean validarPaypal(PaypalDTO paypal) {
+        if (!paypals.contains(paypal)) {
+        return false;
+        }
+        
         if (paypal == null) {
             return false;
         }
@@ -125,6 +185,10 @@ public class GestionPagos implements IGestionPagos {
 
     @Override
     public boolean validarMercado(CuentaMercadoDTO mercadoPago) {
+        if (!mercados.contains(mercadoPago)) {
+        return false;
+        }
+        
         if (mercadoPago == null) {
             return false;
         }
@@ -135,7 +199,7 @@ public class GestionPagos implements IGestionPagos {
         if (!mercadoPago.getCorreo().matches(formatoCorreo)) {
             return false;
         }
-        
+
         if (mercadoPago.getClienteID() == null) {
             return false;
         }
@@ -146,6 +210,10 @@ public class GestionPagos implements IGestionPagos {
 
     @Override
     public boolean validarTarjeta(TarjetaDTO tarjeta) {
+        if (!tarjetas.contains(tarjeta)) {
+        return false;
+        }
+        
         if (tarjeta == null) {
             return false;
         }
