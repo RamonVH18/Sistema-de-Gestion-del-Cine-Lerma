@@ -9,5 +9,5 @@ package capaPresentacion;
  * @author Ramon Valencia
  */
 public class Utilidades {
-    
+    //CORREGIR TODOS LOS NOMBRES Y PONER NOMBRE COHERENTES
 }

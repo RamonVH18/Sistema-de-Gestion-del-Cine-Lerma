@@ -30,7 +30,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private PeliculaDTO peliculaFinal;
     private JPanel panelFunciones = new JPanel(new GridLayout(0, 3, 5, 5));
     
-    //QUITAR TODO ESTO, AGREGAR UNA FUNCION EN EL SUBSISTEMA QUE ME DE LAS FECHAS
+    //QUITAR TODO ESTO, AGREGAR UNA FUNCION EN EL SUBSISTEMA QUE ME DE LAS FECHAS, NO LO HARCODEES
     private LocalDate fechaHoy = LocalDate.now();
     private LocalDate fechaSegundo = LocalDate.now().plusDays(1);
     private LocalDate fechaTercero = LocalDate.now().plusDays(2);
