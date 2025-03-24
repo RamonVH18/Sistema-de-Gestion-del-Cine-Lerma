@@ -63,10 +63,10 @@ public class TarjetaDTO {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.numeroTarjeta);
-        hash = 89 * hash + Objects.hashCode(this.titular);
-        hash = 89 * hash + Objects.hashCode(this.cvv);
-        hash = 89 * hash + Objects.hashCode(this.fechaVencimiento);
+        hash = 29 * hash + Objects.hashCode(this.numeroTarjeta);
+        hash = 29 * hash + Objects.hashCode(this.titular);
+        hash = 29 * hash + Objects.hashCode(this.cvv);
+        hash = 29 * hash + Objects.hashCode(this.fechaVencimiento);
         return hash;
     }
 
@@ -93,6 +93,8 @@ public class TarjetaDTO {
         }
         return Objects.equals(this.fechaVencimiento, other.fechaVencimiento);
     }
+
+    
     
     
 

@@ -43,8 +43,8 @@ public class PaypalDTO {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 23 * hash + Objects.hashCode(this.correo);
-        hash = 23 * hash + Objects.hashCode(this.contrasenia);
+        hash = 37 * hash + Objects.hashCode(this.correo);
+        hash = 37 * hash + Objects.hashCode(this.contrasenia);
         return hash;
     }
 
@@ -65,7 +65,6 @@ public class PaypalDTO {
         }
         return Objects.equals(this.contrasenia, other.contrasenia);
     }
-    
     
     
 

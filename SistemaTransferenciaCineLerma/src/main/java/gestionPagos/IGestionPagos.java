@@ -9,6 +9,7 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.excepcionTransferencia;
+import java.util.List;
 
 /**
  *
@@ -29,5 +30,11 @@ public interface IGestionPagos {
     public boolean validarTarjeta(TarjetaDTO tarjeta);
     
     public boolean consultarEstadoPago(PagoDTO pago);
+    
+    public List<CuentaMercadoDTO> agregarCuentasMercado();
+    
+    public List<PaypalDTO> agregarCuentasPaypal();
+    
+    public List<TarjetaDTO> agregarCuentasTarjeta();
         
-    }
+}

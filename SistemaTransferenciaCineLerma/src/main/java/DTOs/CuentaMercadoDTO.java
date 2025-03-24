@@ -55,7 +55,8 @@ public class CuentaMercadoDTO {
 
     @Override
     public int hashCode() {
-        int hash = 5;
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.clienteID);
         return hash;
     }
 
@@ -73,6 +74,8 @@ public class CuentaMercadoDTO {
         final CuentaMercadoDTO other = (CuentaMercadoDTO) obj;
         return Objects.equals(this.clienteID, other.clienteID);
     }
+
+    
     
     
 

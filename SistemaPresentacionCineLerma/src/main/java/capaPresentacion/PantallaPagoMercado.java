@@ -4,17 +4,13 @@
  */
 package capaPresentacion;
 
+import DTOs.CuentaMercadoDTO;
 import Excepciones.GestionReservaException;
+import gestionPagos.GestionPagos;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -23,6 +19,7 @@ import javax.swing.SwingUtilities;
 public class PantallaPagoMercado extends javax.swing.JDialog {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private GestionPagos gestionPagos = GestionPagos.getInstancia();
     
     private int numAsientos = 0;
     /**
@@ -60,7 +57,6 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(514, 632));
-        setUndecorated(true);
 
         Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
         Titulo.setText("MercadoPago");
@@ -181,16 +177,33 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
         
-        
-        // El texto ingresado es un número double válido
-        if (!textMontoAPagar.getText().trim().matches("-?\\d+(\\.\\d+)?")) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un monto válido", "Error", JOptionPane.ERROR_MESSAGE);
+        if (!textClienteID.getText().trim().matches("-?\\d+")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un ID de cliente valida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         
-        //Si el texto es un numero double valido se convertira a un valor double
-        Double monto = Double.parseDouble(textMontoAPagar.getText().trim());
+        // El monto ingresado es un número entero valido
+        if (!textMontoAPagar.getText().trim().matches("-?\\d+")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un monto válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        //Se crea el dto a partir de los datos ingresados
+        CuentaMercadoDTO mercado = new CuentaMercadoDTO();
+        int clienteID = Integer.parseInt(textClienteID.getText().trim());
+        mercado.setClienteID(clienteID);
+        
+        //Se valida la cuenta segun el dto creado 
+        if (!gestionPagos.validarMercado(mercado)) {
+            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+       
+        
+        //Si el texto es un numero entero valido se convertira a un valor double
+        Double monto = (double) Integer.parseInt(textMontoAPagar.getText().trim());
         
         
         
