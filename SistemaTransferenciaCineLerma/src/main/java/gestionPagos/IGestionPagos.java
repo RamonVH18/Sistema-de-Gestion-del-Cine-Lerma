@@ -26,7 +26,7 @@ public interface IGestionPagos {
     
     public boolean validarMercado(CuentaMercadoDTO mercadoPago);
     
-    public boolean validadarTarjeta(TarjetaDTO tarjeta);
+    public boolean validarTarjeta(TarjetaDTO tarjeta);
     
 //  public boolean consultarEstadoPagoPaypal(PagoDTO pago);
 //    
