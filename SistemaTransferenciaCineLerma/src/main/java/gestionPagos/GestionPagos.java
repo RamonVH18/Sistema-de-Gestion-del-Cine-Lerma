@@ -135,6 +135,10 @@ public class GestionPagos implements IGestionPagos {
         if (!mercadoPago.getCorreo().matches(formatoCorreo)) {
             return false;
         }
+        
+        if (mercadoPago.getClienteID() == null) {
+            return false;
+        }
 
         return true;
 
@@ -175,32 +179,6 @@ public class GestionPagos implements IGestionPagos {
         return true;
     }
 
-//    public boolean consultarEstadoPagoPaypal(PagoDTO pago) {
-//        if (pago == null || pago.getEstado() == null) {
-//            return false;
-//        }
-//
-//        String estado = pago.getEstado().toUpperCase();
-//
-//        return estado.equals("EXITOSO");
-//
-//    }
-//
-//    public boolean consultarEstadoPagoTarjeta(PagoDTO pago) {
-//
-//        return false;
-//
-//    }
-//
-//    public boolean consultarEstadoPagoMercado(PagoDTO pago) {
-//        if (pago == null || pago.getEstado() == null) {
-//            return false;
-//        }
-//        String estado = pago.toString().toUpperCase();
-//        
-//        return estado.equals("EXITOSO");
-//
-//    }
     @Override
     public boolean consultarEstadoPago(PagoDTO pago) {
         if (pago == null || pago.getEstado() == null) {

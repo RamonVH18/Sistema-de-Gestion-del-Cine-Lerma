@@ -11,13 +11,15 @@ package DTOs;
 public class CuentaMercadoDTO {
     private String titular;
     private String correo;
+    private Integer clienteID;
 
     public CuentaMercadoDTO() {
     }
 
-    public CuentaMercadoDTO(String titular, String correo) {
+    public CuentaMercadoDTO(String titular, String correo, Integer clienteID) {
         this.titular = titular;
         this.correo = correo;
+        this.clienteID = clienteID;
     }
 
     public String getTitular() {
@@ -36,12 +38,17 @@ public class CuentaMercadoDTO {
         this.correo = correo;
     }
 
+    public Integer getClienteID() {
+        return clienteID;
+    }
+
+    public void setClienteID(Integer clienteID) {
+        this.clienteID = clienteID;
+    }
+
     @Override
     public String toString() {
-        return "CuentaMercadoDTO{" + "titular=" + titular + ", correo=" + correo + '}';
+        return "CuentaMercadoDTO{" + "titular=" + titular + ", correo=" + correo + ", clienteID=" + clienteID + '}';
     }
-    
-    
-    
-    
+
 }
