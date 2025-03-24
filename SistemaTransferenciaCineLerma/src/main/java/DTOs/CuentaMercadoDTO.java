@@ -22,6 +22,11 @@ public class CuentaMercadoDTO {
         this.clienteID = clienteID;
     }
 
+    public CuentaMercadoDTO(Integer clienteID) {
+        this.clienteID = clienteID;
+    }
+    
+
     public String getTitular() {
         return titular;
     }

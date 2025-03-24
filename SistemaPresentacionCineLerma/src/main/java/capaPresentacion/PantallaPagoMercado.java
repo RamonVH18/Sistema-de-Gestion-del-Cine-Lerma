@@ -186,7 +186,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         
         // El texto ingresado es un número double válido
         if (!textMontoAPagar.getText().trim().matches("-?\\d+(\\.\\d+)?")) {
-            control.mostrarErrorMontoInvalidoPagoMercado();
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un monto válido", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
         //Si el texto es un numero double valido se convertira a un valor double
