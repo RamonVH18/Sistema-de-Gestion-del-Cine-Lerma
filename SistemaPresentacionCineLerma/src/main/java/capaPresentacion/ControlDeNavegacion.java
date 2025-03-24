@@ -395,7 +395,7 @@ public class ControlDeNavegacion {
 
     public void mostrarPagoMercado() {
         SwingUtilities.invokeLater(() -> {
-            PantallaPagoMercado pantallaPagoMercado = new PantallaPagoMercado();
+            PantallaPagoMercado pantallaPagoMercado = new PantallaPagoMercado(numAsientos);
             pantallaPagoMercado.setLocationRelativeTo(null);
             pantallaPagoMercado.setVisible(true);
         });

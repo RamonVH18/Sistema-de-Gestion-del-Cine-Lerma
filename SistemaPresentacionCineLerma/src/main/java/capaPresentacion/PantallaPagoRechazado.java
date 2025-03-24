@@ -16,12 +16,13 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
 
-    public PantallaPagoRechazado(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public PantallaPagoRechazado() {
         initComponents();
-        
+        ImageIcon imagen = control.crearImagen("img/error-icon (1).png", 100, 100);
+        jLabelImagenIcono.setIcon(imagen);
+        revalidate();
+        repaint();
     }
-
     
 
     /**
@@ -37,6 +38,7 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         btnCambiarMetodopago = new javax.swing.JButton();
         btnVolverMenu = new javax.swing.JButton();
+        jLabelImagenIcono = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setSize(new java.awt.Dimension(640, 830));
@@ -71,6 +73,7 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnVolverMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 540, -1, -1));
+        getContentPane().add(jLabelImagenIcono, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, 190, 110));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -96,6 +99,7 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
     private javax.swing.JButton btnVolverMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabelImagenIcono;
     // End of variables declaration//GEN-END:variables
 
     

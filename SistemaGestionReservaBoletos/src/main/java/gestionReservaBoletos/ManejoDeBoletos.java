@@ -172,7 +172,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
             return funcionDia;
         } catch (Exception e) {
-            throw new GestionReservaException("Hubo un error al obtener las funciones del dia: " + dia.getDay() + " " + e.getMessage());
+            throw new GestionReservaException("ERROR: " + e.getMessage());
         }
     }
 
@@ -190,7 +190,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
             return true;
         } catch (Exception e) {
-            throw new GestionReservaException("ERROR:" + e.getMessage());
+            throw new GestionReservaException("ERROR: " + e.getMessage());
         }
     }
 
@@ -242,7 +242,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
             return true;
         } catch (Exception e) {
-            throw new GestionReservaException("ERROR:" + e.getMessage());
+            throw new GestionReservaException("ERROR: " + e.getMessage());
         }
     }
 

@@ -23,15 +23,15 @@ import javax.swing.SwingUtilities;
 public class PantallaPagoMercado extends javax.swing.JDialog {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
-
+    
+    private int numAsientos = 0;
     /**
      * Creates new form PantallaPagoMercado
      */
-    public PantallaPagoMercado() {
+    public PantallaPagoMercado(int numero) {
         initComponents();
-        SwingUtilities.invokeLater(() -> {
-        });
-
+        
+        this.numAsientos = numero;
     }
 
     @Override
@@ -206,7 +206,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     }//GEN-LAST:event_btnPagarActionPerformed
 
     private void btnRegresoMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenu1ActionPerformed
-        control.mostrarSeleccionarMetodoPago(0);
+        control.mostrarSeleccionarMetodoPago(numAsientos);
         dispose();
     }//GEN-LAST:event_btnRegresoMenu1ActionPerformed
 
