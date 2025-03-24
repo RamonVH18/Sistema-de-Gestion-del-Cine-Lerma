@@ -42,16 +42,16 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
         setSize(new java.awt.Dimension(640, 830));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 54)); // NOI18N
         jLabel1.setText("TU PAGO HA SIDO RECHAZADO");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jLabel2.setText("Tu pago ha sido rechazado debido a fondos insuficientes o datos incorrectos de tu tarjeta ");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, -1, -1));
 
         btnCambiarMetodopago.setBackground(new java.awt.Color(157, 109, 4));
-        btnCambiarMetodopago.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnCambiarMetodopago.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 24)); // NOI18N
         btnCambiarMetodopago.setForeground(new java.awt.Color(255, 255, 255));
         btnCambiarMetodopago.setText("Probar con otro metodo de pago");
         btnCambiarMetodopago.addActionListener(new java.awt.event.ActionListener() {
@@ -59,10 +59,10 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
                 btnCambiarMetodopagoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCambiarMetodopago, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 510, -1, -1));
+        getContentPane().add(btnCambiarMetodopago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 480, -1, -1));
 
         btnVolverMenu.setBackground(new java.awt.Color(157, 109, 4));
-        btnVolverMenu.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnVolverMenu.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 24)); // NOI18N
         btnVolverMenu.setForeground(new java.awt.Color(255, 255, 255));
         btnVolverMenu.setText("Volver al menu principal");
         btnVolverMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -70,7 +70,7 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
                 btnVolverMenuActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVolverMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 560, -1, -1));
+        getContentPane().add(btnVolverMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 540, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
