@@ -4,19 +4,25 @@
  */
 package capaPresentacion;
 
+import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class PantallaPagoRechazado extends javax.swing.JDialog {
 
-    /**
-     * Creates new form PantallaPagoRechazado
-     */
+    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+
     public PantallaPagoRechazado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,26 +33,70 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        btnCambiarMetodopago = new javax.swing.JButton();
+        btnVolverMenu = new javax.swing.JButton();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setSize(new java.awt.Dimension(640, 830));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setText("TU PAGO HA SIDO RECHAZADO");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Tu pago ha sido rechazado debido a fondos insuficientes o datos incorrectos de tu tarjeta ");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, -1, -1));
+
+        btnCambiarMetodopago.setBackground(new java.awt.Color(157, 109, 4));
+        btnCambiarMetodopago.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnCambiarMetodopago.setForeground(new java.awt.Color(255, 255, 255));
+        btnCambiarMetodopago.setText("Probar con otro metodo de pago");
+        btnCambiarMetodopago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarMetodopagoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCambiarMetodopago, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 510, -1, -1));
+
+        btnVolverMenu.setBackground(new java.awt.Color(157, 109, 4));
+        btnVolverMenu.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnVolverMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnVolverMenu.setText("Volver al menu principal");
+        btnVolverMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverMenuActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnVolverMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 560, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCambiarMetodopagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarMetodopagoActionPerformed
+
+        control.mostrarSeleccionarMetodoPago(SOMEBITS);
+
+
+    }//GEN-LAST:event_btnCambiarMetodopagoActionPerformed
+
+    private void btnVolverMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverMenuActionPerformed
+
+        control.mostrarMenuPrincipal();
+    }//GEN-LAST:event_btnVolverMenuActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCambiarMetodopago;
+    private javax.swing.JButton btnVolverMenu;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
+
+    
 }

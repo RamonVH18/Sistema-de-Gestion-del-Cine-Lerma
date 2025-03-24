@@ -10,7 +10,8 @@ package capaPresentacion;
  *
  */
 public class PantallaPagoPaypal extends javax.swing.JDialog {
-
+    
+    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     /**
      * Creates new form PantallaPagoPaypal
      */
@@ -146,7 +147,9 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     }//GEN-LAST:event_textContraActionPerformed
 
     private void btnRegresoMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenuActionPerformed
-        // TODO add your handling code here:
+        
+        control.mostrarMenuPrincipal();
+        
     }//GEN-LAST:event_btnRegresoMenuActionPerformed
 
     /**
