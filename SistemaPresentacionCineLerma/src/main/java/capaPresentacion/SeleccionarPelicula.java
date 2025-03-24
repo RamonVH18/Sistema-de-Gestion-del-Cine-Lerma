@@ -4,16 +4,23 @@
  */
 package capaPresentacion;
 
+import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -126,9 +133,11 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     /**
      * Creates new form SeleccionarPelicula
      */
+    
+    //PASO POR REFERENCIA - ESTO ES IMPORTANTE ESTUDIARLO
     public SeleccionarPelicula() throws GestionReservaException {
         initComponents();
-        panelCartelera = control.generarCartelera(panelCartelera);
+        this.generarCartelera(panelCartelera);
         panelCartelera.setPreferredSize(new Dimension(300, 200));
         add(jScrollPane1, BorderLayout.CENTER);
         
@@ -142,5 +151,49 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
+    public JPanel generarCartelera(JPanel panel) throws GestionReservaException {
+        List<PeliculaDTO> peliculas = ControlDeNavegacion.cargarPeliculasActivas();
+        //Modificacion del JPanel para que sea 3 columnas de botones
+        panel.setLayout(new GridLayout(0, 3, 10, 10));
+        panel.setPreferredSize(new Dimension(600, Math.max(400, panel.getComponentCount() * 100)));
+        panel.removeAll();
+        //En este for se crean los botones, se recorre el arreglo de lista y por cada pelicula se manda a llamar al metodo crear pelicula
+        for (int i = 0; i < peliculas.size(); i++) {
+            PeliculaDTO pelicula = peliculas.get(i);
+            JButton boton = crearBotonImagen(pelicula);
+            panel.add(boton);
+            logger.info("Pelicula: " + pelicula.getNombrePelicula());
+        }
+        panel.setVisible(true);
+        panel.revalidate();
+        panel.repaint();
+        return panel;
+    }
+    
+    public JButton crearBotonPelicula(PeliculaDTO pelicula) {
+        //Esto csera modificado una vez que implementemos el sistema de bases de datos
+        URL imageUrl = getClass().getClassLoader().getResource(pelicula.getPeliculaImagen());
+        ImageIcon imagen = new ImageIcon(imageUrl);
+        Image scaledImage = imagen.getImage().getScaledInstance(
+                250,
+                300,
+                Image.SCALE_SMOOTH
+        );
+        imagen = new ImageIcon(scaledImage);
 
+        JButton boton = new JButton(pelicula.getNombrePelicula(), imagen);
+        //
+        boton.addActionListener(e -> {
+            this.peliculaSeleccionada  = pelicula;
+            logger.info("Nombre de la pelicula seleccionada: " + peliculaFinal.getNombrePelicula());
+            mostrarSeleccionarAsientos(LocalDate.now());
+            JFrame SeleccionarPelicula = (JFrame) SwingUtilities.getWindowAncestor(boton);
+            SeleccionarPelicula.dispose();
+
+        }
+        );
+
+        boton.setPreferredSize(new Dimension(250, 200));
+        return boton;
+    }
 }

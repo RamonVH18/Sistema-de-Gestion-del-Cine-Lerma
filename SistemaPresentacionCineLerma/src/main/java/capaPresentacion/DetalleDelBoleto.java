@@ -163,7 +163,7 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
                         .addComponent(textoAsiento, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(48, 48, 48))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(89, 138, Short.MAX_VALUE)
+                .addGap(89, 310, Short.MAX_VALUE)
                 .addComponent(Titulo)
                 .addGap(82, 82, 82))
         );

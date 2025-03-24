@@ -91,53 +91,13 @@ public class ControlDeNavegacion {
     }
 
     //Metodo para generar la Cartelera, se modificara un JPanel ya escrito y se le añadiran los JButton de cada respectiva pelicula
-    public JPanel generarCartelera(JPanel panel) throws GestionReservaException {
-        List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
-        //Modificacion del JPanel para que sea 3 columnas de botones
-        panel.setLayout(new GridLayout(0, 3, 10, 10));
-        panel.setPreferredSize(new Dimension(600, Math.max(400, panel.getComponentCount() * 100)));
-        panel.removeAll();
-        //En este for se crean los botones, se recorre el arreglo de lista y por cada pelicula se manda a llamar al metodo crear pelicula
-        for (int i = 0; i < peliculas.size(); i++) {
-            PeliculaDTO pelicula = peliculas.get(i);
-            JButton boton = crearBotonImagen(pelicula);
-            panel.add(boton);
-            logger.info("Pelicula: " + pelicula.getNombrePelicula());
-        }
-        panel.setVisible(true);
-        panel.revalidate();
-        panel.repaint();
-        return panel;
-    }
+    
 
     //
-    public JButton crearBotonImagen(PeliculaDTO pelicula) {
-        //Esto csera modificado una vez que implementemos el sistema de bases de datos
-        URL imageUrl = getClass().getClassLoader().getResource(pelicula.getPeliculaImagen());
-        ImageIcon imagen = new ImageIcon(imageUrl);
-        Image scaledImage = imagen.getImage().getScaledInstance(
-                250,
-                300,
-                Image.SCALE_SMOOTH
-        );
-        imagen = new ImageIcon(scaledImage);
-
-        JButton boton = new JButton(pelicula.getNombrePelicula(), imagen);
-        boton.addActionListener(e -> {
-            this.peliculaFinal = pelicula;
-            logger.info("Nombre de la pelicula seleccionada: " + peliculaFinal.getNombrePelicula());
-            mostrarSeleccionarAsientos(LocalDate.now());
-            JFrame SeleccionarPelicula = (JFrame) SwingUtilities.getWindowAncestor(boton);
-            SeleccionarPelicula.dispose();
-
-        }
-        );
-
-        boton.setPreferredSize(new Dimension(250, 200));
-        return boton;
-    }
+    
 
     //Checar de nuevo la funcionalidad de este metodo
+    //METE ESTO A UNA NUEVA CLASE UTILERIA
     public ImageIcon crearImagen(String url, int ancho, int altura) {
         URL imageUrl = getClass().getClassLoader().getResource(url);
         ImageIcon imagen = new ImageIcon(imageUrl);

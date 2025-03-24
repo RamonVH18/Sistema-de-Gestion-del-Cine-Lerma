@@ -4,9 +4,8 @@
  */
 package capaPresentacion;
 
-import DTOs.CuentaMercadoDTO;
+
 import Excepciones.GestionReservaException;
-import gestionPagos.GestionPagos;
 import java.awt.Graphics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +18,7 @@ import javax.swing.JOptionPane;
 public class PantallaPagoMercado extends javax.swing.JDialog {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
-    private GestionPagos gestionPagos = GestionPagos.getInstancia();
+    //private GestionPagos gestionPagos = GestionPagos.getInstancia();
     
     private int numAsientos = 0;
     /**
@@ -190,15 +189,15 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         }
         
         //Se crea el dto a partir de los datos ingresados
-        CuentaMercadoDTO mercado = new CuentaMercadoDTO();
+        //CuentaMercadoDTO mercado = new CuentaMercadoDTO();
         int clienteID = Integer.parseInt(textClienteID.getText().trim());
-        mercado.setClienteID(clienteID);
+        //mercado.setClienteID(clienteID);
         
         //Se valida la cuenta segun el dto creado 
-        if (!gestionPagos.validarMercado(mercado)) {
-            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+//        if (!gestionPagos.validarMercado(mercado)) {
+//            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
         
        
         

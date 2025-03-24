@@ -71,13 +71,13 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public List<FuncionDTO> funcionesHarcodeadas() {
         if (funciones.isEmpty()) {
             FuncionDTO funcion1 = new FuncionDTO("A1", "Batman El Caballero Loco", new Date(125, 02, 24, 14, 30, 0), 80.00);
-            FuncionDTO funcion2 = new FuncionDTO("B1", "Batman El Caballero Loco", new Date(125, 02, 23, 17, 00, 0), 75.00);
+            FuncionDTO funcion2 = new FuncionDTO("B1", "Batman El Caballero Loco", new Date(125, 02, 25, 17, 00, 0), 75.00);
 
             FuncionDTO funcion3 = new FuncionDTO("A2", "Interstellar", new Date(125, 02, 25, 16, 00, 0), 75.00);
             FuncionDTO funcion4 = new FuncionDTO("B1", "Interstellar", new Date(125, 02, 24, 19, 30, 0), 75.00);
 
-            FuncionDTO funcion5 = new FuncionDTO("A3", "John Wick 3", new Date(125, 02, 23, 18, 45, 0), 80.00);
-            FuncionDTO funcion6 = new FuncionDTO("B3", "John Wick 3", new Date(125, 02, 24, 21, 00, 0), 80.00);
+            FuncionDTO funcion5 = new FuncionDTO("A3", "John Wick 3", new Date(125, 02, 27, 18, 45, 0), 80.00);
+            FuncionDTO funcion6 = new FuncionDTO("B3", "John Wick 3", new Date(125, 02, 26, 21, 00, 0), 80.00);
 
             FuncionDTO funcion7 = new FuncionDTO("A2", "Sonic 3", new Date(125, 02, 28, 13, 00, 0), 60.00);
             FuncionDTO funcion8 = new FuncionDTO("B2", "Sonic 3", new Date(125, 02, 22, 23, 59, 0), 60.00);
