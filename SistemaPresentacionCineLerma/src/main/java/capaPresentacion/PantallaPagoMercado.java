@@ -4,9 +4,12 @@
  */
 package capaPresentacion;
 
+import Excepciones.GestionReservaException;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -19,13 +22,14 @@ import javax.swing.SwingUtilities;
  */
 public class PantallaPagoMercado extends javax.swing.JDialog {
 
+    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+
     /**
      * Creates new form PantallaPagoMercado
      */
     public PantallaPagoMercado() {
         initComponents();
         SwingUtilities.invokeLater(() -> {
-            setImagen(labelimagen, "img/mercadoPago.jpg");
         });
 
     }
@@ -34,30 +38,6 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     public void paint(Graphics g) {
         super.paint(g);
         g.drawLine(0, 510, getWidth(), 510);
-    }
-
-    public void setImagen(JLabel labelName, String resourcePath) {
-        try {
-            URL imageUrl = getClass().getClassLoader().getResource(resourcePath);
-            if (imageUrl == null) {
-                throw new IllegalArgumentException("Imagen no encontrada: " + resourcePath);
-            }
-            ImageIcon imageIcon = new ImageIcon(imageUrl);
-            // Escala la imagen al tamaño actual del JLabel
-            Image scaledImage = imageIcon.getImage().getScaledInstance(
-                    labelName.getWidth(),
-                    labelName.getHeight(),
-                    Image.SCALE_SMOOTH
-            );
-            labelName.setIcon(new ImageIcon(scaledImage));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error al cargar la imagen: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
     }
 
     /**
@@ -75,8 +55,8 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         textMontoAPagar = new javax.swing.JTextField();
         btnPagar = new javax.swing.JButton();
-        btnRegresoMenu1 = new javax.swing.JButton();
         labelimagen = new javax.swing.JLabel();
+        btnRegresoMenu1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(514, 632));
@@ -116,14 +96,19 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
             }
         });
 
+        labelimagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/mercadoPago.jpg"))); // NOI18N
+        labelimagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         btnRegresoMenu1.setBackground(new java.awt.Color(162, 132, 94));
         btnRegresoMenu1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
         btnRegresoMenu1.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresoMenu1.setText("<Volver");
         btnRegresoMenu1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        labelimagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/mercadoPago.jpg"))); // NOI18N
-        labelimagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnRegresoMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresoMenu1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,21 +125,21 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
                         .addComponent(labelimagen)))
                 .addGap(115, 115, 115))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textClienteID)
-                            .addComponent(textMontoAPagar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(147, 147, 147)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textClienteID)
+                    .addComponent(textMontoAPagar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(176, 176, 176)
-                .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -174,9 +159,9 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
                 .addComponent(textMontoAPagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(60, 60, 60)
                 .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
-                .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
         );
 
         pack();
@@ -191,11 +176,39 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     }//GEN-LAST:event_textMontoAPagarActionPerformed
 
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
+        //Se muestra un error si alguno de los dos campos estan vacios
         if (textClienteID.getText().trim().isEmpty() || textMontoAPagar.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        
+        
+        // El texto ingresado es un número double válido
+        if (!textMontoAPagar.getText().trim().matches("-?\\d+(\\.\\d+)?")) {
+            control.mostrarErrorMontoInvalidoPagoMercado();
+        }
+        
+        //Si el texto es un numero double valido se convertira a un valor double
+        Double monto = Double.parseDouble(textMontoAPagar.getText().trim());
+        
+        
+        
+        //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago sea correcto
+        try {
+            control.cargarBoleto();
+        } catch (GestionReservaException ex) {
+            Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        control.mostrarDetalleBoleto();
+        dispose();
+
     }//GEN-LAST:event_btnPagarActionPerformed
+
+    private void btnRegresoMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenu1ActionPerformed
+        control.mostrarSeleccionarMetodoPago(0);
+        dispose();
+    }//GEN-LAST:event_btnRegresoMenu1ActionPerformed
 
     /**
      * @param args the command line arguments

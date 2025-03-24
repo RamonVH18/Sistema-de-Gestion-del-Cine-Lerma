@@ -28,12 +28,6 @@ public interface IGestionPagos {
     
     public boolean validarTarjeta(TarjetaDTO tarjeta);
     
-//  public boolean consultarEstadoPagoPaypal(PagoDTO pago);
-//    
-//  public boolean consultarEstadoPagoTarjeta(PagoDTO pago);
-//    
-//  public boolean consultarEstadoPagoMercado(PagoDTO pago);
-    
     public boolean consultarEstadoPago(PagoDTO pago);
         
     }
