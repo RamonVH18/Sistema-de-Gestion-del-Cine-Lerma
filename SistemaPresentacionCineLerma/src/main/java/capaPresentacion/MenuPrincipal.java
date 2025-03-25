@@ -6,11 +6,14 @@ package capaPresentacion;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -30,8 +33,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private int anchoPanelBtns = 200;
     private int alturaPanelBtns = 400;
     private Dimension tamañoPanel = new Dimension(anchoPanelBtns, alturaPanelBtns);
-    private int alturaBoton = 200;
-    private int anchoBoton = 20;
+    private int alturaBoton = 40;
+    private int anchoBoton = 200;
     private Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
 
     private JPanel panelCentral = new JPanel();
@@ -43,6 +46,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         initComponents();
         setTitle(nombrePestania);
         setSize(640, 830);
+        setMinimumSize(new java.awt.Dimension(450, 700));
 
         setLocationRelativeTo(null);
         crearEstructuraMenuPrincipal();
@@ -284,55 +288,58 @@ public class MenuPrincipal extends javax.swing.JFrame {
         setLayout(new BorderLayout());
 
         labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        
+
         labelTitulo.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 52));
         labelTitulo.setForeground(Color.BLACK);
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
-        
+
         add(labelTitulo, BorderLayout.NORTH);
 
         crearEstructuraPanelBotones(panelBotones);
 
-        panelCentral.setPreferredSize(tamañoPanel);
-        panelCentral.add(panelBotones, BorderLayout.CENTER);
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+
+        panelCentral.add(Box.createVerticalStrut(110)); 
+        panelCentral.add(panelBotones);
+        panelCentral.add(Box.createVerticalGlue());
+
         add(panelCentral, BorderLayout.CENTER);
-        
 
     }
 
     private void crearEstructuraPanelBotones(JPanel panelBotones) {
-        panelBotones.setPreferredSize(tamañoPanel);
-        ajustarTamañoBotones();
+        panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
 
-        panelBotones.add(btnCarteleraMenu);
-        panelBotones.add(btnAlimentosMenu);
-        panelBotones.add(btnCuentaMenu);
-        panelBotones.add(btnHistorialMenu);
-        panelBotones.add(btnOpcionesMenu1);
-        panelBotones.add(btnSalirMenu);
-
-        panelBotones.setLayout(new GridLayout(6, 1, 0, tamSeparacionbBtns));
-        panelCentral.setBorder(BorderFactory.createEmptyBorder(90, 0, 0, 0));
+        //Agregar cada boton al panel de botones utilizando boxLayout
+        agregarBotonEnBox(btnCarteleraMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        agregarBotonEnBox(btnAlimentosMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        agregarBotonEnBox(btnCuentaMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        agregarBotonEnBox(btnHistorialMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        agregarBotonEnBox(btnOpcionesMenu1, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        agregarBotonEnBox(btnSalirMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
 
         panelBotones.setVisible(true);
         panelBotones.revalidate();
         panelBotones.repaint();
     }
 
-    private void ajustarTamañoBotones() {
-        btnCarteleraMenu.setPreferredSize(tamañoBoton);
-        btnAlimentosMenu.setPreferredSize(tamañoBoton);
-        btnCuentaMenu.setPreferredSize(tamañoBoton);
-        btnHistorialMenu.setPreferredSize(tamañoBoton);
-        btnSalirMenu.setPreferredSize(tamañoBoton);
-
-    }
-
     private void dibujarLineasDeDiseño(Graphics g) {
         super.paint(g);
         g.setColor(Color.BLACK);
-        g.drawLine(0, 150, getWidth(), 150); //Dibujar las lineas de decoracion
-        g.drawLine(0, 720, getWidth(), 720);
+        //Dibujar las lineas de decoracion
+        g.drawLine(0, 150, getWidth(), 150);
+        g.drawLine(0, 680, getWidth(), 680);
+    }
+
+    private void agregarBotonEnBox(JButton boton, Dimension tamaño, int separacion, JPanel panel) {
+        boton.setMaximumSize(tamaño);
+        boton.setPreferredSize(tamaño);
+        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(boton);
+        if (separacion > 0) {
+            panel.add(Box.createVerticalStrut(separacion)); //Agregar espacios entre los botones
+        }
+
     }
 
 }
