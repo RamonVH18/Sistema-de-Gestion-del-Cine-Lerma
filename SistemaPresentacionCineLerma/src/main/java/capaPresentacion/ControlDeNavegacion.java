@@ -37,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import utilitades.Utilidades;
 
 /**
  *

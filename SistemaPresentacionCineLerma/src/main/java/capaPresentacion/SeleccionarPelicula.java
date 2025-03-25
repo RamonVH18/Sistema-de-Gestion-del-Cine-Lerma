@@ -7,14 +7,25 @@ package capaPresentacion;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import utilitades.Utilidades;
 
@@ -23,12 +34,12 @@ import utilitades.Utilidades;
  * @author Daniel Miribe
  */
 public class SeleccionarPelicula extends javax.swing.JFrame {
-    
+
     //Instancia que nos permite llamar los metodos de control
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     //Objeto que nos permite invocar a los metodos de utilidades
     private Utilidades utilidades = new Utilidades();
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,16 +48,46 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     public SeleccionarPelicula() throws GestionReservaException {
         initComponents();
+
+        // Configuración inicial del layout
+        getContentPane().setLayout(new BorderLayout());
+
+        // 1. Configuración del scroll pane
+        jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
+
+        // 2. Configuración del panel de cartelera
+        panelCartelera.setLayout(new GridLayout(0, 3, 15, 15)); // 3 columnas, espacio 15px
+        panelCartelera.setBackground(Color.BLACK);
+        panelCartelera.setAutoscrolls(true);
+
+        // 3. Carga inicial de películas
         generarCartelera(panelCartelera);
-        panelCartelera.setPreferredSize(new Dimension(300, 200));
+
+        // 4. Configuración del redimensionamiento
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                ajustarTamSeleccionPeliculas();
+                regenerarCartelera();
+            }
+        });
+
+        // 5. Añadir componentes al frame
+        JPanel topPanel = new JPanel();
+        topPanel.add(Titulo);
+        add(topPanel, BorderLayout.NORTH);
         add(jScrollPane1, BorderLayout.CENTER);
 
-        add(btnVolver, BorderLayout.SOUTH);
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        bottomPanel.add(btnVolver);
+        add(bottomPanel, BorderLayout.SOUTH);
 
-        revalidate();
-        repaint();
-
-        setSize(640, 830);
+        // 6. Ajustes finales
+        setSize(800, 600); // Tamaño inicial más adecuado
+        setMinimumSize(new Dimension(640, 480));
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -79,17 +120,11 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout panelCarteleraLayout = new javax.swing.GroupLayout(panelCartelera);
-        panelCartelera.setLayout(panelCarteleraLayout);
-        panelCarteleraLayout.setHorizontalGroup(
-            panelCarteleraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 602, Short.MAX_VALUE)
-        );
-        panelCarteleraLayout.setVerticalGroup(
-            panelCarteleraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 794, Short.MAX_VALUE)
-        );
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+        panelCartelera.setAutoscrolls(true);
+        panelCartelera.setLayout(new java.awt.GridLayout());
         jScrollPane1.setViewportView(panelCartelera);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -103,19 +138,21 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
                         .addComponent(Titulo))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(36, Short.MAX_VALUE))
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(181, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(Titulo)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
@@ -144,59 +181,136 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     private javax.swing.JPanel panelCartelera;
     // End of variables declaration//GEN-END:variables
 
-
     /**
      * Metodo que se encarga de la generacion de la cartelera, recibe un JPanel
+     *
      * @param panel
      * @return
-     * @throws GestionReservaException 
-     */ 
-    
+     * @throws GestionReservaException
+     */
     public void generarCartelera(JPanel panel) throws GestionReservaException {
         //Se llama a un metodo de control que es el encargado de obtenernos las Peliculas y guardardalas como una Lista de Peliculas DTO
         List<PeliculaDTO> peliculas = control.obtenerPeliculas();
         //Modificacion del JPanel para que sea 3 columnas de botones
-        panel.setLayout(new GridLayout(0, 3, 10, 10));
-        //Modificacion del tamaño del JPanel
-        panel.setPreferredSize(new Dimension(600, Math.max(400, panel.getComponentCount() * 100)));
         panel.removeAll();
-        
-        
+        //Modificacion del tamaño del JPanel
+        int columnas = Math.max(3, getWidth() /250);
+        int anchoBoton = (getWidth() - 50) / columnas;
+
         //En este for se crean los botones, se recorre el arreglo de lista y por cada pelicula se manda a llamar al metodo crear pelicula
-        for (int i = 0; i < peliculas.size(); i++) {
-            PeliculaDTO pelicula = peliculas.get(i);
+        for (PeliculaDTO pelicula : peliculas) {
             //Se llama al metodo para crear el boton
-            JButton boton = crearBotonPelicula(pelicula);
+            JButton boton = crearBotonPelicula(pelicula, anchoBoton);
             panel.add(boton);
         }
-        
+
         panel.setVisible(true);
         panel.revalidate();
         panel.repaint();
     }
+
     /**
      * Metodo para crear un boton con la imagen de una pelicula
-     * 
+     *
      * @param pelicula
      * @return boton
      */
-    public JButton crearBotonPelicula(PeliculaDTO pelicula) {
-        //Se llama el metodo para crear la Imagen en base a la imagen guardada en la pelicula, MAS ADELANTE SE USARA UN METODO DIFERENTE PARA ESTO
-        ImageIcon imagen = utilidades.crearImagen(pelicula.getPeliculaImagen(), 250, 300);
-        //Se crea el boton con la imagen de la Pelicula
-        JButton boton = new JButton(pelicula.getNombrePelicula(), imagen);
+    private JButton crearBotonPelicula(PeliculaDTO pelicula, int ancho) {
+        // 1. Usar tu método crearImagen pero con parámetros dinámicos
         
-        //Se le añade un funcionamiento al boton
-        boton.addActionListener(e -> {
-            //Se llama al metodo encargado de abrir la pantalla de SeleccionarAsientos
-            control.mostrarSeleccionarAsientos(LocalDate.now());
-            //Se cierra la ventana
-            JFrame SeleccionarPelicula = (JFrame) SwingUtilities.getWindowAncestor(boton);
-            SeleccionarPelicula.dispose();
-        }
+        ImageIcon imagen = utilidades.crearImagen(
+                pelicula.getPeliculaImagen(),
+                ancho - 20,
+                (int) ((ancho - 20) * 1.5) // 
         );
-        //Se configura el tamaño del boton
-        boton.setPreferredSize(new Dimension(250, 200));
+
+        // 2. Crear botón con diseño flexible
+        JButton boton = new JButton(pelicula.getNombrePelicula(), imagen);
+        boton.setLayout(new BorderLayout());
+
+        // 3. Configuración de texto y estilo
+        boton.setHorizontalTextPosition(SwingConstants.CENTER);
+        boton.setVerticalTextPosition(SwingConstants.BOTTOM);
+        boton.setFont(new Font("Arial", Font.BOLD, calcularTamanioFuente(ancho)));
+        boton.setForeground(Color.WHITE);
+        boton.setBackground(Color.BLACK);
+        boton.setOpaque(true);
+        boton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        // 4. Tamaños dinámicos
+        boton.setPreferredSize(new Dimension(ancho, (int) (ancho * 1.6)));
+
+        // 5. Acción del botón (mantener tu lógica actual)
+        boton.addActionListener(e -> {
+            control.mostrarSeleccionarAsientos(LocalDate.now());
+            dispose();
+        });
+
         return boton;
+    }
+
+    private void ajustarTamSeleccionPeliculas() {
+
+        int alturaDisponible = getHeight() - btnVolver.getHeight() - Titulo.getHeight() - 50;
+        jScrollPane1.setPreferredSize(new Dimension(panelCartelera.getPreferredSize().width,
+                Math.max(alturaDisponible, 300)));
+        revalidate();
+
+    }
+
+    private int calcularAnchoBotones() {
+        int anchoVentana = this.getWidth();
+        int margen = 40; // Margen total izquierdo + derecho
+        int espacioEntre = 20; // Espacio entre botones
+        int columnas = Math.max(3, anchoVentana / 250); // Mínimo 3 columnas
+
+        return (anchoVentana - margen - (columnas - 1) * espacioEntre) / columnas;
+    }
+
+    private int calcularTamanioFuente(int anchoBoton) {
+        return Math.max(12, anchoBoton / 15); // Tamaño de fuente proporcional
+    }
+
+    private void regenerarCartelera() {
+        int columnas = Math.max(3, getWidth() / 250);
+        ((GridLayout) panelCartelera.getLayout()).setColumns(columnas);
+
+        // Reconfigurar todos los botones existentes
+        for (Component comp : panelCartelera.getComponents()) {
+            if (comp instanceof JButton) {
+                JButton boton = (JButton) comp;
+                int nuevoAncho = calcularAnchoBotones();
+                ImageIcon iconoOriginal = (ImageIcon) boton.getIcon();
+
+                // Reescalar la imagen manteniendo la proporción
+                ImageIcon nuevoIcono = utilidades.crearImagen(
+                        obtenerUrlPelicula(boton.getText()), // Necesitarás implementar esto
+                        nuevoAncho,
+                        (int) (nuevoAncho * 1.5)
+                );
+
+                boton.setIcon(nuevoIcono);
+                boton.setPreferredSize(new Dimension(nuevoAncho, (int) (nuevoAncho * 1.5)));
+                boton.setFont(new Font("Arial", Font.BOLD, calcularTamanioFuente(nuevoAncho)));
+            }
+        }
+
+        panelCartelera.revalidate();
+        panelCartelera.repaint();
+    }
+
+    private String obtenerUrlPelicula(String nombrePelicula) {
+        try {
+            // Implementa según tu estructura de datos
+            // Ejemplo básico:
+            for (PeliculaDTO pelicula : control.obtenerPeliculas()) {
+                if (pelicula.getNombrePelicula().equals(nombrePelicula)) {
+                    return pelicula.getPeliculaImagen();
+                }
+            }
+        } catch (GestionReservaException ex) {
+            Logger.getLogger(SeleccionarPelicula.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "default_poster.jpg"; // Imagen por defecto
     }
 }

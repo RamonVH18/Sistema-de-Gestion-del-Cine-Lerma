@@ -13,7 +13,22 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>SistemaNegocioCineLerma</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>SistemaGestionReservaBoletos</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SistemaTransferenciaCineLerma</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SistemaPersistenciaCineLerma</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
