@@ -98,7 +98,6 @@ public class ControlDeNavegacion {
     }
 
     public JPanel generarTablaFunciones(JPanel panel, LocalDate dia, PeliculaDTO pelicula) throws GestionReservaException {
-
         Date diaNuevo = new Date();
         if (dia.equals(LocalDate.now())) {
             LocalTime horaActual = LocalTime.now();

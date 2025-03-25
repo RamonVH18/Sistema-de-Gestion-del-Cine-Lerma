@@ -7,20 +7,16 @@ package capaPresentacion;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import utilitades.Utilidades;
 
 /**
  *
