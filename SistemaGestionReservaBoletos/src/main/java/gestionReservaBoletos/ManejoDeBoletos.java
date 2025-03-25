@@ -142,35 +142,25 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
 
     @Override
-    public List<FuncionDTO> cargarFuncionesDelDia(Date dia, String nombrePelicula) throws GestionReservaException {
+    public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws GestionReservaException {
         try {
-            if (dia == null) {
-                throw new GestionReservaException("El dia no puede ser nulo");
-            }
-//            Esta validacion todavia esta en duda
-//            if (dia.before(new Date())) {
-//                throw new GestionReservaException("La fecha no puede ser anterior al tiempo actual");
-//            }
-
             if (nombrePelicula == null || nombrePelicula.isBlank()) {
                 throw new GestionReservaException("El nombre de la pelicula esta vacio o es nulo");
             }
-
             // aqui se llamaria a un metodo que de una listaFunciones, sin embargo como aun no tenemos la BO, voy hardcodearlas
             List<FuncionDTO> funciones = funcionesHarcodeadas();
-
             //Lista donde se guardada las funciones del dia
-            List<FuncionDTO> funcionDia = new ArrayList<>();
+            List<FuncionDTO> funcionesPelicula = new ArrayList<>();
+            
             //En este for se van a filtrar las funciones y se guardaran solo las funciones que sean del dia correspondiente
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
-
-                if (funcion.getNombre() == nombrePelicula && funcion.getFechaHora().getDay() == dia.getDay()) {
-                    logger.info("Ingresando funcion en la sala: " + funcion.getSala() + " de la pelicula: " + funcion.getNombre());
-                    funcionDia.add(funcion);
+                
+                if (funcion.getNombre() == nombrePelicula) {
+                    funcionesPelicula.add(funcion);
                 }
             }
-            return funcionDia;
+            return funcionesPelicula;
         } catch (Exception e) {
             throw new GestionReservaException("ERROR: " + e.getMessage());
         }

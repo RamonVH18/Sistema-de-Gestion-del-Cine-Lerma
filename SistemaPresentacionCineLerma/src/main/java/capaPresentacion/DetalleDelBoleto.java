@@ -29,9 +29,9 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         textoPelicula.setText(boleto.getNombrePelicula());
         LocalDate fecha = boleto.getFechaHoraFuncion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         
-        textoFecha3.setText(control.traducirDia(fecha.getDayOfWeek()) + ", " + 
-                                    fecha.getDayOfMonth() + " de " + 
-                                    control.traducirMes(fecha.getMonth()));
+//        textoFecha3.setText(control.traducirDia(fecha.getDayOfWeek()) + ", " + 
+//                                    fecha.getDayOfMonth() + " de " + 
+//                                    control.traducirMes(fecha.getMonth()));
         
         String funcionMinutos = (boleto.getFechaHoraFuncion().getMinutes() < 10) ? "0" + 
                 Integer.toString(boleto.getFechaHoraFuncion().getMinutes()) : 

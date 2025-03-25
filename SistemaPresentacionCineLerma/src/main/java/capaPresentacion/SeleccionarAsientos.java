@@ -7,16 +7,31 @@ package capaPresentacion;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import utilitades.Utilerias;
 
 /**
  *
@@ -25,74 +40,57 @@ import javax.swing.JPanel;
 public class SeleccionarAsientos extends javax.swing.JFrame {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private Utilerias utilerias = new Utilerias();
     
-    private FuncionDTO funcionFinal;
-    private PeliculaDTO peliculaFinal;
     private JPanel panelFunciones = new JPanel(new GridLayout(0, 3, 5, 5));
-    
-    //QUITAR TODO ESTO, AGREGAR UNA FUNCION EN EL SUBSISTEMA QUE ME DE LAS FECHAS, NO LO HARCODEES
-    private LocalDate fechaHoy = LocalDate.now();
-    private LocalDate fechaSegundo = LocalDate.now().plusDays(1);
-    private LocalDate fechaTercero = LocalDate.now().plusDays(2);
-    private LocalDate fechaCuarto = LocalDate.now().plusDays(3);
-    
-    private String segundoDia = control.traducirDia(fechaSegundo.getDayOfWeek()) + ", " + 
-                                    fechaSegundo.getDayOfMonth() + " de " + 
-                                    control.traducirMes(fechaSegundo.getMonth());
-    private String tercerDia = control.traducirDia(fechaTercero.getDayOfWeek()) + ", " + 
-                                    fechaTercero.getDayOfMonth() + " de " + 
-                                    control.traducirMes(fechaTercero.getMonth());
-    private String cuartoDia = control.traducirDia(fechaCuarto.getDayOfWeek()) + ", " + 
-                                    fechaCuarto.getDayOfMonth() + " de " + 
-                                    control.traducirMes(fechaCuarto.getMonth());    
+
     /**
      * Creates new form SeleccionarAsientos
      */
-    public SeleccionarAsientos(PeliculaDTO pelicula, LocalDate dia) throws GestionReservaException {
+    public SeleccionarAsientos(LocalDate dia) throws GestionReservaException {
         initComponents();
+        PeliculaDTO pelicula = control.consultarPelicula();
         //SEPARAR TODO ESTO EN METODOS, LIBRO CLEAN CODE DIVIDIR TODO ESTO
-        this.peliculaFinal = pelicula;
         jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
         //ImageIcon imagen = control.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
         //jLabelImagenPelicula.setIcon(imagen);
         jLabelNombrePelicula.setText(pelicula.getNombrePelicula());
         jTextAreaDescripcion.setEnabled(false);
         jTextFieldNumAsientos.setText("");
-        
-        if (dia.equals(fechaHoy)) {
-            jLabelDia.setText("Hoy");
-        } else if (dia.equals(fechaSegundo)) {
-            jLabelDia.setText(segundoDia);
-        } else if (dia.equals(fechaTercero)) {
-            jLabelDia.setText(tercerDia);
-        } else if (dia.equals(fechaCuarto)) {
-            jLabelDia.setText(cuartoDia);
-        }
-        
-        panelFunciones = control.generarTablaFunciones(panelFunciones, dia, pelicula);
+
+//        if (dia.equals(fechaHoy)) {
+//            jLabelDia.setText("Hoy");
+//        } else if (dia.equals(fechaSegundo)) {
+//            jLabelDia.setText(segundoDia);
+//        } else if (dia.equals(fechaTercero)) {
+//            jLabelDia.setText(tercerDia);
+//        } else if (dia.equals(fechaCuarto)) {
+//            jLabelDia.setText(cuartoDia);
+//        }
+    
+        generarTablaFunciones(panelFunciones, dia, pelicula);
+        generarComboBox(jComboBoxDiaSemana);
         jScrollPane1.setViewportView(panelFunciones);
         revalidate();
         repaint();
         
+        
+
+        //QUITAR TODO ESTO, AGREGAR UNA FUNCION EN EL SUBSISTEMA QUE ME DE LAS FECHAS, NO LO HARCODEES
         jComboBoxDiaSemana.addActionListener(e -> {
             String seleccion = (String) jComboBoxDiaSemana.getSelectedItem();
-            if (seleccion == "Hoy") {
-                control.recargarPaginaFunciones(fechaHoy, panelFunciones, pelicula);
-            } else if (seleccion == segundoDia) {
-                control.recargarPaginaFunciones(fechaSegundo, panelFunciones, pelicula);
-            } else if (seleccion == tercerDia) {
-                control.recargarPaginaFunciones(fechaTercero, panelFunciones, pelicula);
-            } else if (seleccion == cuartoDia) {
-                control.recargarPaginaFunciones(fechaCuarto, panelFunciones, pelicula);
-            }
+//            if (seleccion == "Hoy") {
+//                control.recargarPaginaFunciones(fechaHoy, panelFunciones, pelicula);
+//            } else if (seleccion == segundoDia) {
+//                control.recargarPaginaFunciones(fechaSegundo, panelFunciones, pelicula);
+//            } else if (seleccion == tercerDia) {
+//                control.recargarPaginaFunciones(fechaTercero, panelFunciones, pelicula);
+//            } else if (seleccion == cuartoDia) {
+//                control.recargarPaginaFunciones(fechaCuarto, panelFunciones, pelicula);
+//            }
         });
     }
-    
-    public void cargarDatos(FuncionDTO funcion, int asientosDisponibles) {
-        jLabelCosto.setText("Costo del Boleto: " + String.valueOf(funcion.getPrecio()));
-        jLabelAsientosDisp.setText("Asientos Disponibles: " + asientosDisponibles);
-        this.funcionFinal = funcion;
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -153,7 +151,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxDiaSemana.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hoy", segundoDia, tercerDia, cuartoDia }));
+        jComboBoxDiaSemana.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
 
         jTextFieldNumAsientos.setText("jTextField1");
 
@@ -284,14 +282,15 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private void btnSiguienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSiguienteMouseClicked
         // TODO add your handling code here:
         String texto = jTextFieldNumAsientos.getText();
+        FuncionDTO funcion = control.consultarFuncion();
         try {
-            control.validarCamposAsientos(texto, funcionFinal);
-            dispose();
-            int numAsientos = Integer.valueOf(texto);
-            control.mostrarSeleccionarMetodoPago(numAsientos);
+            control.validarCamposAsientos(texto, funcion);
         } catch (GestionReservaException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(SeleccionarAsientos.class.getName()).log(Level.SEVERE, null, ex);
         }
+        dispose();
+        int numAsientos = Integer.valueOf(texto);
+        control.mostrarSeleccionarMetodoPago(numAsientos);
     }//GEN-LAST:event_btnSiguienteMouseClicked
 
     /**
@@ -315,5 +314,113 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private javax.swing.JLabel jTextAreaDescripcion;
     private javax.swing.JTextField jTextFieldNumAsientos;
     // End of variables declaration//GEN-END:variables
+
+    private void generarTablaFunciones(JPanel panel, LocalDate dia, PeliculaDTO pelicula) throws GestionReservaException {
+        Date diaNuevo = new Date();
+
+        if (dia.equals(LocalDate.now())) {
+            LocalTime horaActual = LocalTime.now();
+            LocalDateTime fechaConHora = LocalDateTime.of(dia, horaActual);
+            diaNuevo = Date.from(fechaConHora.atZone(ZoneId.systemDefault()).toInstant());
+        } else {
+            diaNuevo = Date.from(dia.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+
+        List<FuncionDTO> listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
+        panel.removeAll();
+
+        for (int i = 0; i < listaFunciones.size(); i++) {
+            FuncionDTO funcion = listaFunciones.get(i);
+            if (funcion.getFechaHora() == diaNuevo) {
+                JButton boton = crearBotonFuncion(funcion, panel);
+                panel.add(boton);
+            }
+        }
+    }
+
+    private JButton crearBotonFuncion(FuncionDTO funcion, JPanel panel) {
+        
+        JButton boton = new JButton();
+        Date hora = funcion.getFechaHora();
+        
+        String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0"
+                + Integer.toString(funcion.getFechaHora().getMinutes())
+                : Integer.toString(funcion.getFechaHora().getMinutes());
+
+        boton.setText(hora.getHours() + ":" + funcionMinutos);
+        boton.setBackground(Color.decode("#A2845E"));
+        //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
+        boton.addActionListener(e -> {
+            SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
+            seleccionarAsientos.revalidate();
+            seleccionarAsientos.repaint();
+            
+            for (Component componente : panel.getComponents()) {
+                if (componente instanceof JButton) { // Verificamos si es un botón
+                    componente.setEnabled(true);
+                }
+            }
+            
+            boton.setEnabled(false);
+            int asientosDisponibles;
+            try {
+                control.guardarFuncionSeleccionada(funcion);
+                asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
+                cargarDatos(funcion, asientosDisponibles);
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        });
+        return boton;
+    }
     
+    private void cargarDatos(FuncionDTO funcion, int asientosDisponibles) {
+        jLabelCosto.setText("Costo del Boleto: " + String.valueOf(funcion.getPrecio()));
+        jLabelAsientosDisp.setText("Asientos Disponibles: " + asientosDisponibles);
+    }
+    
+    private void generarComboBox(JComboBox comboBox) throws GestionReservaException {
+        List<Date> fechasFunciones = obtenerFechasFunciones();
+        for (int a = 0; a < fechasFunciones.size(); a++) {
+            
+            crearOpcionComboBox(comboBox, fechasFunciones.get(a));
+        }
+        comboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
+    }
+    
+    private List<Date> obtenerFechasFunciones() throws GestionReservaException {
+        PeliculaDTO pelicula = control.consultarPelicula();
+        List<FuncionDTO> listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
+        List<Date> fechasFunciones = new ArrayList<>();
+        
+        for (int i = 0; i < listaFunciones.size(); i++) {
+            FuncionDTO funcion = listaFunciones.get(i);
+            Date fecha = funcion.getFechaHora();
+            
+            if (fechasFunciones.isEmpty()) {
+                for (int s = 0; s < fechasFunciones.size(); s++) {
+                    if (!fechasFunciones.contains(fecha)) {
+                        fechasFunciones.add(fecha);
+                    }
+                }
+            } else {
+                System.out.println(fecha);
+                fechasFunciones.add(fecha);
+            }
+        }
+        return fechasFunciones;
+    }
+    
+    private void crearOpcionComboBox(JComboBox comboBox, Date dia) {
+        
+        LocalDate diaLocal = utilerias.convertirDateALocalDate(dia);
+        
+        String diaTexto = utilerias.traducirDia(diaLocal.getDayOfWeek()) + ", "
+            + diaLocal.getDayOfMonth() + " de "
+            + utilerias.traducirMes(diaLocal.getMonth());
+        comboBox.addItem(diaTexto);
+    } 
+    
+
 }

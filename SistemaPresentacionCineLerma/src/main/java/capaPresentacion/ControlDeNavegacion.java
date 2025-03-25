@@ -12,18 +12,11 @@ import Excepciones.GestionReservaException;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.net.URL;
-import java.util.Date;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -37,7 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-import utilitades.Utilidades;
+import utilitades.Utilerias;
 
 /**
  *
@@ -47,10 +40,10 @@ public class ControlDeNavegacion {
 
     //Instancias y clases para llamar metodos
     private IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
-    private Utilidades utilidades = new Utilidades();
+    private Utilerias utilidades = new Utilerias();
     //Variables que hay que checar
-    private PeliculaDTO peliculaFinal = new PeliculaDTO();
-    private FuncionDTO funcionFinal = new FuncionDTO();
+    private PeliculaDTO peliculaSeleccionada = new PeliculaDTO();
+    private FuncionDTO funcionSeleccionada = new FuncionDTO();
     private List<String> asientos = new ArrayList<>();
     private int numAsientos = 0;
     private BoletoDTO boletoFinal;
@@ -97,66 +90,33 @@ public class ControlDeNavegacion {
         List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
         return peliculas;
     }
-
-    public JPanel generarTablaFunciones(JPanel panel, LocalDate dia, PeliculaDTO pelicula) throws GestionReservaException {
-        Date diaNuevo = new Date();
-        if (dia.equals(LocalDate.now())) {
-            LocalTime horaActual = LocalTime.now();
-            LocalDateTime fechaConHora = LocalDateTime.of(dia, horaActual);
-            diaNuevo = Date.from(fechaConHora.atZone(ZoneId.systemDefault()).toInstant());
-        } else {
-            diaNuevo = Date.from(dia.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        }
-
-        List<FuncionDTO> listaFunciones = manejoDeBoletos.cargarFuncionesDelDia(diaNuevo, pelicula.getNombrePelicula());
-        panel.removeAll();
-
-        for (int i = 0; i < listaFunciones.size(); i++) {
-            FuncionDTO funcion = listaFunciones.get(i);
-            JButton boton = crearBotonFuncion(funcion, panel);
-            panel.add(boton);
-        }
-        return panel;
+    
+    public void guardarPeliculaSeleccionada(PeliculaDTO pelicula) {
+        this.peliculaSeleccionada = pelicula;
     }
-
-    private JButton crearBotonFuncion(FuncionDTO funcion, JPanel panel) {
-        JButton boton = new JButton();
-        Date hora = funcion.getFechaHora();
-        String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0"
-                + Integer.toString(funcion.getFechaHora().getMinutes())
-                : Integer.toString(funcion.getFechaHora().getMinutes());
-
-        boton.setText(hora.getHours() + ":" + funcionMinutos);
-        boton.setBackground(Color.decode("#A2845E"));
-        //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
-        boton.addActionListener(e -> {
-            SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
-            seleccionarAsientos.revalidate();
-            seleccionarAsientos.repaint();
-            for (Component componente : panel.getComponents()) {
-                if (componente instanceof JButton) { // Verificamos si es un botón
-                    componente.setEnabled(true);
-                }
-            }
-            boton.setEnabled(false);
-            int asientosDisponibles;
-            try {
-                this.funcionFinal = funcion;
-                asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
-                seleccionarAsientos.cargarDatos(funcion, asientosDisponibles);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        });
-        return boton;
+    
+    public PeliculaDTO consultarPelicula() {
+        return peliculaSeleccionada;
+    }
+    
+    public List<FuncionDTO> obtenerFunciones(String nombrePelicula) throws GestionReservaException {
+        List<FuncionDTO> funciones = manejoDeBoletos.cargarFuncionesPelicula(nombrePelicula);
+        return funciones;
+    }
+    
+    public void guardarFuncionSeleccionada(FuncionDTO funcion) {
+        this.funcionSeleccionada = funcion;
+    }
+    
+    public FuncionDTO consultarFuncion() {
+        return funcionSeleccionada;
     }
 
     public void mostrarSeleccionarAsientos(LocalDate dia) {
         SwingUtilities.invokeLater(() -> {
             SeleccionarAsientos pantallaSeleccionarAsientos;
             try {
-                pantallaSeleccionarAsientos = new SeleccionarAsientos(peliculaFinal, dia);
+                pantallaSeleccionarAsientos = new SeleccionarAsientos(dia);
                 pantallaSeleccionarAsientos.setLocationRelativeTo(null);
                 pantallaSeleccionarAsientos.setVisible(true);
             } catch (GestionReservaException ex) {
@@ -164,79 +124,13 @@ public class ControlDeNavegacion {
             }
         });
     }
-
-    public String traducirDia(DayOfWeek dia) {
-        String nuevoDia = new String();
-        switch (dia) {
-            case dia.MONDAY:
-                nuevoDia = "Lun";
-                break;
-            case dia.TUESDAY:
-                nuevoDia = "Mar";
-                break;
-            case dia.WEDNESDAY:
-                nuevoDia = "Mie";
-                break;
-            case dia.THURSDAY:
-                nuevoDia = "Jue";
-                break;
-            case dia.FRIDAY:
-                nuevoDia = "Vie";
-                break;
-            case dia.SATURDAY:
-                nuevoDia = "Sab";
-                break;
-            case dia.SUNDAY:
-                nuevoDia = "Dom";
-                break;
-
-        }
-        return nuevoDia;
+    
+    public int obtenerAsientosDisponibles(FuncionDTO funcion) throws GestionReservaException {
+         int asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
+         return asientosDisponibles;
     }
 
-    public String traducirMes(Month mes) {
-        String nuevoMes = new String();
-        switch (mes) {
-            case JANUARY:
-                nuevoMes = "Enero";
-                break;
-            case FEBRUARY:
-                nuevoMes = "Febrero";
-                break;
-            case MARCH:
-                nuevoMes = "Marzo";
-                break;
-            case APRIL:
-                nuevoMes = "Abril";
-                break;
-            case MAY:
-                nuevoMes = "Mayo";
-                break;
-            case JUNE:
-                nuevoMes = "Junio";
-                break;
-            case JULY:
-                nuevoMes = "Julio";
-                break;
-            case AUGUST:
-                nuevoMes = "Agosto";
-                break;
-            case SEPTEMBER:
-                nuevoMes = "Septiembre";
-                break;
-            case OCTOBER:
-                nuevoMes = "Octobre";
-                break;
-            case NOVEMBER:
-                nuevoMes = "Noviembre";
-                break;
-            case DECEMBER:
-                nuevoMes = "Diciembre";
-                break;
-        }
-        return nuevoMes;
-    }
-
+    
     public void recargarPaginaFunciones(LocalDate dia, JPanel panel, PeliculaDTO pelicula) {
         JFrame SeleccionarAsientos = (JFrame) SwingUtilities.getWindowAncestor(panel);
         SeleccionarAsientos.dispose();
@@ -342,9 +236,9 @@ public class ControlDeNavegacion {
 
     public void cargarBoleto() throws GestionReservaException {
         System.out.println("Numero de asientos: " + numAsientos);
-        List<String> asientosReservados = obtenerListaAsientosReservados(funcionFinal, numAsientos);
+        List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
         System.out.println(asientosReservados);
-        this.boletoFinal = manejoDeBoletos.generarBoleto(peliculaFinal, funcionFinal, asientosReservados, cliente);
+        //this.boletoFinal = manejoDeBoletos.generarBoleto(pelicula, funcionSeleccionada, asientosReservados, cliente);
     }
 
     public void mostrarDetalleBoleto() {

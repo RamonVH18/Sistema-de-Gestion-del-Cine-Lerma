@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import utilitades.Utilidades;
+import utilitades.Utilerias;
 
 /**
  *
@@ -38,7 +38,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     //Instancia que nos permite llamar los metodos de control
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     //Objeto que nos permite invocar a los metodos de utilidades
-    private Utilidades utilidades = new Utilidades();
+    private Utilerias utilidades = new Utilerias();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -242,6 +242,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
 
         // 5. Acción del botón (mantener tu lógica actual)
         boton.addActionListener(e -> {
+            control.guardarPeliculaSeleccionada(pelicula);
             control.mostrarSeleccionarAsientos(LocalDate.now());
             dispose();
         });
@@ -312,5 +313,5 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
             Logger.getLogger(SeleccionarPelicula.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "default_poster.jpg"; // Imagen por defecto
-    }
+    } 
 }

@@ -20,7 +20,7 @@ public interface IManejoDeBoletos {
     
     public List<PeliculaDTO> cargarPeliculasActivas() throws GestionReservaException;
     
-    public List<FuncionDTO> cargarFuncionesDelDia(Date dia, String nombrePelicula) throws GestionReservaException;
+    public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws GestionReservaException;
     
     public boolean validarCampoAsiento(String campoAsiento) throws GestionReservaException;
     
