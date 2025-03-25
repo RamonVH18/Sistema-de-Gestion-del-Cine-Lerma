@@ -24,8 +24,8 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     public DetalleDelBoleto(BoletoDTO boleto) {
         initComponents();
         
-        ImageIcon imagen = control.crearImagen(boleto.getImagenPelicula(), 200, 300);
-        etiquetaImagen.setIcon(imagen);
+        //ImageIcon imagen = control.crearImagen(boleto.getImagenPelicula(), 200, 300);
+        //etiquetaImagen.setIcon(imagen);
         textoPelicula.setText(boleto.getNombrePelicula());
         LocalDate fecha = boleto.getFechaHoraFuncion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         

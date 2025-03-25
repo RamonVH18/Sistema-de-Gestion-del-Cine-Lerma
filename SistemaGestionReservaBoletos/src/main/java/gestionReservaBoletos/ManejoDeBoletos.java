@@ -137,7 +137,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             return peliculas;
 
         } catch (Exception e) {
-            throw new GestionReservaException("Hubo un error al cargar la lista de Peliculas: ", e.getCause());
+            throw new GestionReservaException("ERROR: Hubo un error al cargar la lista de Peliculas: " + e.getMessage());
         }
     }
 

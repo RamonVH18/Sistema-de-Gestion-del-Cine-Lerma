@@ -44,15 +44,17 @@ import javax.swing.border.Border;
  */
 public class ControlDeNavegacion {
 
+    //Instancias y clases para llamar metodos
     private IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
+    private Utilidades utilidades = new Utilidades();
+    //Variables que hay que checar
     private PeliculaDTO peliculaFinal = new PeliculaDTO();
     private FuncionDTO funcionFinal = new FuncionDTO();
     private List<String> asientos = new ArrayList<>();
     private int numAsientos = 0;
     private BoletoDTO boletoFinal;
-    private ClienteDTO cliente = new ClienteDTO("Abrahama Coronel Garcia", "jaime@lerma.com.mx");
     
-    private static final Logger logger = Logger.getLogger(Logger.class.getName());
+    private ClienteDTO cliente = new ClienteDTO("Abrahama Coronel Garcia", "jaime@lerma.com.mx");
     
     private static ControlDeNavegacion instancia;
     
@@ -75,26 +77,7 @@ public class ControlDeNavegacion {
             pantalla.setVisible(true);
         });
     }
-
-    //Metodo para generar la Cartelera, se modificara un JPanel ya escrito y se le añadiran los JButton de cada respectiva pelicula
     
-
-    //
-    
-
-    //Checar de nuevo la funcionalidad de este metodo
-    //METE ESTO A UNA NUEVA CLASE UTILERIA
-    public ImageIcon crearImagen(String url, int ancho, int altura) {
-        URL imageUrl = getClass().getClassLoader().getResource(url);
-        ImageIcon imagen = new ImageIcon(imageUrl);
-        Image scaledImage = imagen.getImage().getScaledInstance(
-                ancho,
-                altura,
-                Image.SCALE_SMOOTH
-        );
-        return imagen = new ImageIcon(scaledImage);
-    }
-
     public void mostrarSeleccionarPelicula() {
         SwingUtilities.invokeLater(() -> {
             SeleccionarPelicula pantallaSeleccionarPelicula;
@@ -109,8 +92,9 @@ public class ControlDeNavegacion {
         });
     }
     
-    public List<PeliculaDTO> obtenerPelicula() {
-        
+    public List<PeliculaDTO> obtenerPeliculas() throws GestionReservaException {
+        List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
+        return peliculas;
     }
 
     public JPanel generarTablaFunciones(JPanel panel, LocalDate dia, PeliculaDTO pelicula) throws GestionReservaException {
@@ -149,7 +133,6 @@ public class ControlDeNavegacion {
             SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
             seleccionarAsientos.revalidate();
             seleccionarAsientos.repaint();
-            logger.info("Nombre de la pelicula seleccionada: " + peliculaFinal.getNombrePelicula());
             for (Component componente : panel.getComponents()) {
                 if (componente instanceof JButton) { // Verificamos si es un botón
                     componente.setEnabled(true);
@@ -295,7 +278,7 @@ public class ControlDeNavegacion {
     }
 
     private JButton crearBotonMetodoPago(String url, Border border, String nombreMetodo) {
-        ImageIcon image = crearImagen(url, 50, 50);
+        ImageIcon image = utilidades.crearImagen(url, 50, 50);
         JButton boton = new JButton(image);
         boton.setPreferredSize(new Dimension(150, 50));
         boton.setBorder(border);
@@ -362,7 +345,6 @@ public class ControlDeNavegacion {
         List<String> asientosReservados = obtenerListaAsientosReservados(funcionFinal, numAsientos);
         System.out.println(asientosReservados);
         this.boletoFinal = manejoDeBoletos.generarBoleto(peliculaFinal, funcionFinal, asientosReservados, cliente);
-        logger.info("Boleto generado: " + boletoFinal.getNombreCliente() + "Pelicula: " + boletoFinal.getNombrePelicula());
     }
 
     public void mostrarDetalleBoleto() {

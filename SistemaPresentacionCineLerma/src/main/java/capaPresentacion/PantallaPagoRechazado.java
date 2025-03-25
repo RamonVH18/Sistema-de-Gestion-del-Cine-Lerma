@@ -18,8 +18,8 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
 
     public PantallaPagoRechazado() {
         initComponents();
-        ImageIcon imagen = control.crearImagen("img/error-icon (1).png", 100, 100);
-        jLabelImagenIcono.setIcon(imagen);
+        //ImageIcon imagen = control.crearImagen("img/error-icon (1).png", 100, 100);
+        //jLabelImagenIcono.setIcon(imagen);
         revalidate();
         repaint();
     }

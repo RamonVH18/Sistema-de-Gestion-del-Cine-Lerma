@@ -53,8 +53,8 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         //SEPARAR TODO ESTO EN METODOS, LIBRO CLEAN CODE DIVIDIR TODO ESTO
         this.peliculaFinal = pelicula;
         jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
-        ImageIcon imagen = control.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
-        jLabelImagenPelicula.setIcon(imagen);
+        //ImageIcon imagen = control.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
+        //jLabelImagenPelicula.setIcon(imagen);
         jLabelNombrePelicula.setText(pelicula.getNombrePelicula());
         jTextAreaDescripcion.setEnabled(false);
         jTextFieldNumAsientos.setText("");
