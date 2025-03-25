@@ -7,59 +7,61 @@ package capaPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import javax.swing.BoxLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.text.View;
 
 /**
  *
  * @author Sebastian Borquez
  */
 public class MenuPrincipal extends javax.swing.JFrame {
-    
+
     //CHECAR EL TAMAÑO DEL MENU PRINCIPAL Y LOS LAYOUTS
-    
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     private int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
     private String nombrePestania = "CINEMA LERMA"; // Variable para escribir el nombre de la pestaña
     private JPanel panelBotones = new JPanel();
-    
+
     private int anchoPanelBtns = 200;
-    private int alturaPanelBtns = 300;
+    private int alturaPanelBtns = 400;
     private Dimension tamañoPanel = new Dimension(anchoPanelBtns, alturaPanelBtns);
-    private int alturaBoton = 50;
+    private int alturaBoton = 200;
     private int anchoBoton = 20;
     private Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
-    
+
     private JPanel panelCentral = new JPanel();
+
     /**
      * Creates new form MenuPrincipal
      */
     public MenuPrincipal() {
         initComponents();
         setTitle(nombrePestania);
-        setSize(320, 415);
-        
+        setSize(640, 830);
+
+        setLocationRelativeTo(null);
         crearEstructuraMenuPrincipal();
-        
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        
+
         revalidate();
         repaint();
     }
 
-//    @Override
-//    public void paint(Graphics g) {
-//        super.paint(g);
-//        g.drawLine(0, 150, getWidth(), 150); // Línea horizontal en el centro
-//        g.drawLine(0, 720, getWidth(), 720);
-//    }
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        dibujarLineasDeDiseño(g);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,9 +76,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         labelTitulo = new javax.swing.JLabel();
         btnCuentaMenu = new javax.swing.JButton();
         btnCarteleraMenu = new javax.swing.JButton();
-        btnOpcionesMenu = new javax.swing.JButton();
+        btnHistorialMenu = new javax.swing.JButton();
         btnSalirMenu = new javax.swing.JButton();
         btnAlimentosMenu = new javax.swing.JButton();
+        btnOpcionesMenu1 = new javax.swing.JButton();
 
         btnRegresoMenu1.setBackground(new java.awt.Color(162, 132, 94));
         btnRegresoMenu1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
@@ -125,14 +128,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnOpcionesMenu.setBackground(new java.awt.Color(162, 132, 94));
-        btnOpcionesMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
-        btnOpcionesMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnOpcionesMenu.setText("Opciones");
-        btnOpcionesMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnOpcionesMenu.addActionListener(new java.awt.event.ActionListener() {
+        btnHistorialMenu.setBackground(new java.awt.Color(162, 132, 94));
+        btnHistorialMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnHistorialMenu.setForeground(new java.awt.Color(255, 255, 255));
+        btnHistorialMenu.setText("Historial de Compras");
+        btnHistorialMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnHistorialMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpcionesMenuActionPerformed(evt);
+                btnHistorialMenuActionPerformed(evt);
             }
         });
 
@@ -163,23 +166,43 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnOpcionesMenu1.setBackground(new java.awt.Color(162, 132, 94));
+        btnOpcionesMenu1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnOpcionesMenu1.setForeground(new java.awt.Color(255, 255, 255));
+        btnOpcionesMenu1.setText("Opciones");
+        btnOpcionesMenu1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnOpcionesMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpcionesMenu1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(147, 147, 147)
-                .addComponent(labelTitulo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnAlimentosMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOpcionesMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCarteleraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCuentaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(200, 200, 200))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addComponent(labelTitulo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnOpcionesMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,10 +216,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnCuentaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnOpcionesMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnOpcionesMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(251, 251, 251))
+                .addGap(183, 183, 183))
         );
 
         pack();
@@ -214,9 +239,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCarteleraMenuActionPerformed
 
-    private void btnOpcionesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpcionesMenuActionPerformed
+    private void btnHistorialMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialMenuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnOpcionesMenuActionPerformed
+    }//GEN-LAST:event_btnHistorialMenuActionPerformed
 
     private void btnSalirMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirMenuActionPerformed
         // TODO add your handling code here:
@@ -230,13 +255,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         control.mostrarSeleccionarPelicula();
         dispose();
-        
+
     }//GEN-LAST:event_btnCarteleraMenuMouseClicked
 
     private void btnSalirMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMenuMouseClicked
         // TODO add your handling code here:
-        
+        this.dispose();
+
     }//GEN-LAST:event_btnSalirMenuMouseClicked
+
+    private void btnOpcionesMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpcionesMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnOpcionesMenu1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -246,50 +276,83 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnAlimentosMenu;
     private javax.swing.JButton btnCarteleraMenu;
     private javax.swing.JButton btnCuentaMenu;
-    private javax.swing.JButton btnOpcionesMenu;
+    private javax.swing.JButton btnHistorialMenu;
+    private javax.swing.JButton btnOpcionesMenu1;
     private javax.swing.JButton btnRegresoMenu1;
     private javax.swing.JButton btnSalirMenu;
     private javax.swing.JLabel labelTitulo;
     // End of variables declaration//GEN-END:variables
-    
+
     private void crearEstructuraMenuPrincipal() {
         setLayout(new BorderLayout());
-        
+
         labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+
+        labelTitulo.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 52));
+        labelTitulo.setForeground(Color.BLACK);
+        labelTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
+
         add(labelTitulo, BorderLayout.NORTH);
-        
+
         crearEstructuraPanelBotones(panelBotones);
-        
+
         panelCentral.setPreferredSize(tamañoPanel);
         panelCentral.add(panelBotones, BorderLayout.CENTER);
         add(panelCentral, BorderLayout.CENTER);
-        
-        
-        
-        
+
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Configuración del título (parte superior)
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.1; // 10% del espacio
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(20, 0, 30, 0); // Márgenes
+        add(labelTitulo, gbc);
+
+        // Configuración del panel de botones (parte central)
+        gbc.gridy = 1;
+        gbc.weighty = 0.9; // 90% del espacio
+        gbc.fill = GridBagConstraints.BOTH; // Expande en ambas direcciones
+        add(panelBotones, gbc);
+
     }
+
     private void crearEstructuraPanelBotones(JPanel panelBotones) {
-        
         panelBotones.setPreferredSize(tamañoPanel);
         ajustarTamañoBotones();
-        
+
         panelBotones.add(btnCarteleraMenu);
         panelBotones.add(btnAlimentosMenu);
         panelBotones.add(btnCuentaMenu);
-        panelBotones.add(btnOpcionesMenu);
+        panelBotones.add(btnHistorialMenu);
+        panelBotones.add(btnOpcionesMenu1);
         panelBotones.add(btnSalirMenu);
-        panelBotones.setLayout(new GridLayout(5, 1, 0, tamSeparacionbBtns));
-        
+
+        panelBotones.setLayout(new GridLayout(6, 1, 0, tamSeparacionbBtns));
+        panelCentral.setBorder(BorderFactory.createEmptyBorder(90, 0, 0, 0));
+
         panelBotones.setVisible(true);
         panelBotones.revalidate();
         panelBotones.repaint();
     }
+
     private void ajustarTamañoBotones() {
-        btnCarteleraMenu.setPreferredSize(tamañoBoton);        
+        btnCarteleraMenu.setPreferredSize(tamañoBoton);
         btnAlimentosMenu.setPreferredSize(tamañoBoton);
         btnCuentaMenu.setPreferredSize(tamañoBoton);
-        btnOpcionesMenu.setPreferredSize(tamañoBoton);
+        btnHistorialMenu.setPreferredSize(tamañoBoton);
         btnSalirMenu.setPreferredSize(tamañoBoton);
-        
+
     }
+
+    private void dibujarLineasDeDiseño(Graphics g) {
+        super.paint(g);
+        g.setColor(Color.BLACK);
+        g.drawLine(0, 150, getWidth(), 150); //Dibujar las lineas de decoracion
+        g.drawLine(0, 720, getWidth(), 720);
+    }
+
 }
