@@ -9,10 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -287,11 +284,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         setLayout(new BorderLayout());
 
         labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-
+        
         labelTitulo.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 52));
         labelTitulo.setForeground(Color.BLACK);
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
-
+        
         add(labelTitulo, BorderLayout.NORTH);
 
         crearEstructuraPanelBotones(panelBotones);
@@ -299,24 +296,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         panelCentral.setPreferredSize(tamañoPanel);
         panelCentral.add(panelBotones, BorderLayout.CENTER);
         add(panelCentral, BorderLayout.CENTER);
-
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        // Configuración del título (parte superior)
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 0.1; // 10% del espacio
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(20, 0, 30, 0); // Márgenes
-        add(labelTitulo, gbc);
-
-        // Configuración del panel de botones (parte central)
-        gbc.gridy = 1;
-        gbc.weighty = 0.9; // 90% del espacio
-        gbc.fill = GridBagConstraints.BOTH; // Expande en ambas direcciones
-        add(panelBotones, gbc);
+        
 
     }
 
