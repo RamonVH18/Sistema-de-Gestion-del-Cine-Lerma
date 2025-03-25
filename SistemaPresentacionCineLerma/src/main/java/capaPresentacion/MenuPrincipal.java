@@ -4,8 +4,17 @@
  */
 package capaPresentacion;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.text.View;
 
 /**
  *
@@ -13,24 +22,44 @@ import javax.swing.JFrame;
  */
 public class MenuPrincipal extends javax.swing.JFrame {
     
+    //CHECAR EL TAMAÑO DEL MENU PRINCIPAL Y LOS LAYOUTS
+    
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
+    private String nombrePestania = "CINEMA LERMA"; // Variable para escribir el nombre de la pestaña
+    private JPanel panelBotones = new JPanel();
+    
+    private int anchoPanelBtns = 200;
+    private int alturaPanelBtns = 300;
+    private Dimension tamañoPanel = new Dimension(anchoPanelBtns, alturaPanelBtns);
+    private int alturaBoton = 50;
+    private int anchoBoton = 20;
+    private Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+    
+    private JPanel panelCentral = new JPanel();
     /**
      * Creates new form MenuPrincipal
      */
     public MenuPrincipal() {
         initComponents();
+        setTitle(nombrePestania);
+        setSize(320, 415);
         
-        setSize(640, 830);
+        crearEstructuraMenuPrincipal();
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        
+        revalidate();
+        repaint();
     }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        g.drawLine(0, 150, getWidth(), 150); // Línea horizontal en el centro
-        g.drawLine(0, 720, getWidth(), 720);
-    }
+//    @Override
+//    public void paint(Graphics g) {
+//        super.paint(g);
+//        g.drawLine(0, 150, getWidth(), 150); // Línea horizontal en el centro
+//        g.drawLine(0, 720, getWidth(), 720);
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,7 +71,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         btnRegresoMenu1 = new javax.swing.JButton();
-        Titulo = new javax.swing.JLabel();
+        labelTitulo = new javax.swing.JLabel();
         btnCuentaMenu = new javax.swing.JButton();
         btnCarteleraMenu = new javax.swing.JButton();
         btnOpcionesMenu = new javax.swing.JButton();
@@ -61,13 +90,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(640, 830));
-        setMinimumSize(new java.awt.Dimension(640, 830));
-        setPreferredSize(new java.awt.Dimension(640, 830));
-        setSize(new java.awt.Dimension(640, 830));
+        setMaximumSize(new java.awt.Dimension(450, 450));
+        setMinimumSize(new java.awt.Dimension(450, 450));
+        setPreferredSize(new java.awt.Dimension(450, 450));
+        setSize(new java.awt.Dimension(450, 450));
 
-        Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
-        Titulo.setText("CINEMA LERMA");
+        labelTitulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
+        labelTitulo.setText("CINEMA LERMA");
 
         btnCuentaMenu.setBackground(new java.awt.Color(162, 132, 94));
         btnCuentaMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
@@ -140,8 +169,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(147, 147, 147)
-                .addComponent(Titulo)
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addComponent(labelTitulo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -156,8 +185,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(Titulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                .addComponent(labelTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCarteleraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnAlimentosMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -214,12 +243,53 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnAlimentosMenu;
     private javax.swing.JButton btnCarteleraMenu;
     private javax.swing.JButton btnCuentaMenu;
     private javax.swing.JButton btnOpcionesMenu;
     private javax.swing.JButton btnRegresoMenu1;
     private javax.swing.JButton btnSalirMenu;
+    private javax.swing.JLabel labelTitulo;
     // End of variables declaration//GEN-END:variables
+    
+    private void crearEstructuraMenuPrincipal() {
+        setLayout(new BorderLayout());
+        
+        labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        add(labelTitulo, BorderLayout.NORTH);
+        
+        crearEstructuraPanelBotones(panelBotones);
+        
+        panelCentral.setPreferredSize(tamañoPanel);
+        panelCentral.add(panelBotones, BorderLayout.CENTER);
+        add(panelCentral, BorderLayout.CENTER);
+        
+        
+        
+        
+    }
+    private void crearEstructuraPanelBotones(JPanel panelBotones) {
+        
+        panelBotones.setPreferredSize(tamañoPanel);
+        ajustarTamañoBotones();
+        
+        panelBotones.add(btnCarteleraMenu);
+        panelBotones.add(btnAlimentosMenu);
+        panelBotones.add(btnCuentaMenu);
+        panelBotones.add(btnOpcionesMenu);
+        panelBotones.add(btnSalirMenu);
+        panelBotones.setLayout(new GridLayout(5, 1, 0, tamSeparacionbBtns));
+        
+        panelBotones.setVisible(true);
+        panelBotones.revalidate();
+        panelBotones.repaint();
+    }
+    private void ajustarTamañoBotones() {
+        btnCarteleraMenu.setPreferredSize(tamañoBoton);        
+        btnAlimentosMenu.setPreferredSize(tamañoBoton);
+        btnCuentaMenu.setPreferredSize(tamañoBoton);
+        btnOpcionesMenu.setPreferredSize(tamañoBoton);
+        btnSalirMenu.setPreferredSize(tamañoBoton);
+        
+    }
 }

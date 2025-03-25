@@ -28,16 +28,16 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[640, 830]"/>
+      <Dimension value="[450, 450]"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[640, 830]"/>
+      <Dimension value="[450, 450]"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[640, 830]"/>
+      <Dimension value="[450, 450]"/>
     </Property>
     <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[640, 830]"/>
+      <Dimension value="[450, 450]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -61,8 +61,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="147" max="-2" attributes="0"/>
-              <Component id="Titulo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="150" max="32767" attributes="0"/>
+              <Component id="labelTitulo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
@@ -81,8 +81,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-              <Component id="Titulo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="174" max="32767" attributes="0"/>
+              <Component id="labelTitulo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="btnCarteleraMenu" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnAlimentosMenu" min="-2" pref="50" max="-2" attributes="0"/>
@@ -98,10 +98,10 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="Titulo">
+    <Component class="javax.swing.JLabel" name="labelTitulo">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tw Cen MT Condensed" size="64" style="1"/>
+          <Font name="Tw Cen MT Condensed" size="48" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="CINEMA LERMA"/>
       </Properties>

@@ -71,7 +71,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         );
         panelCarteleraLayout.setVerticalGroup(
             panelCarteleraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 614, Short.MAX_VALUE)
+            .addGap(0, 794, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(panelCartelera);
@@ -88,8 +88,8 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -137,7 +137,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     //PASO POR REFERENCIA - ESTO ES IMPORTANTE ESTUDIARLO
     public SeleccionarPelicula() throws GestionReservaException {
         initComponents();
-        this.generarCartelera(panelCartelera);
+//        this.generarCartelera(panelCartelera);
         panelCartelera.setPreferredSize(new Dimension(300, 200));
         add(jScrollPane1, BorderLayout.CENTER);
         
@@ -152,7 +152,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         setVisible(true);
     }
     public JPanel generarCartelera(JPanel panel) throws GestionReservaException {
-        List<PeliculaDTO> peliculas = ControlDeNavegacion.cargarPeliculasActivas();
+        List<PeliculaDTO> peliculas = control.obtenerPeliculas();
         //Modificacion del JPanel para que sea 3 columnas de botones
         panel.setLayout(new GridLayout(0, 3, 10, 10));
         panel.setPreferredSize(new Dimension(600, Math.max(400, panel.getComponentCount() * 100)));
@@ -160,7 +160,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         //En este for se crean los botones, se recorre el arreglo de lista y por cada pelicula se manda a llamar al metodo crear pelicula
         for (int i = 0; i < peliculas.size(); i++) {
             PeliculaDTO pelicula = peliculas.get(i);
-            JButton boton = crearBotonImagen(pelicula);
+            JButton boton = crearBotonPelicula(pelicula);
             panel.add(boton);
             logger.info("Pelicula: " + pelicula.getNombrePelicula());
         }

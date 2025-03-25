@@ -67,20 +67,6 @@ public class ControlDeNavegacion {
         return instancia;
     }
 
-    public static void main(String[] args) {
-        // TODO code application logic here
-        ControlDeNavegacion.mostrarMenuPrincipalStatic();
-    }
-
-    //Este metodo sirve para inicializar el menu
-    public static void mostrarMenuPrincipalStatic() {
-        SwingUtilities.invokeLater(() -> {
-            MenuPrincipal pantalla = new MenuPrincipal();
-            pantalla.setLocationRelativeTo(null);
-            pantalla.setVisible(true);
-        });
-    }
-
     //Este metodo sirve para regresar al menu Principal, se encontrara la forma de de fusionar
     public void mostrarMenuPrincipal() {
         SwingUtilities.invokeLater(() -> {
@@ -121,6 +107,10 @@ public class ControlDeNavegacion {
             }
 
         });
+    }
+    
+    public List<PeliculaDTO> obtenerPelicula() {
+        
     }
 
     public JPanel generarTablaFunciones(JPanel panel, LocalDate dia, PeliculaDTO pelicula) throws GestionReservaException {
