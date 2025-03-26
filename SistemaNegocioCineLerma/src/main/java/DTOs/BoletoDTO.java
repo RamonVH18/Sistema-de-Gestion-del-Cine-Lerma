@@ -28,9 +28,6 @@ public class BoletoDTO {
     public BoletoDTO() {
     }
 
-    public String getNombrePelicula() {
-        return nombrePelicula;
-    }
 
     public BoletoDTO(String nombrePelicula, String imagenPelicula, Date fechaHoraFuncion, String numeroSala, List<String> listaAsientosSeleccionados, String nombreCliente) {
         this.nombrePelicula = nombrePelicula;
@@ -40,7 +37,12 @@ public class BoletoDTO {
         this.listaAsientosSeleccionados = listaAsientosSeleccionados;
         this.nombreCliente = nombreCliente;
     }
-
+    
+    
+    public String getNombrePelicula() {
+        return nombrePelicula;
+    }
+    
     public void setNombrePelicula(String nombrePelicula) {
         this.nombrePelicula = nombrePelicula;
     }

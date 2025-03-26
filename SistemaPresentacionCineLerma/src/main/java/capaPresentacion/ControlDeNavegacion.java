@@ -14,6 +14,7 @@ import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.GestionReservaException;
 import Excepciones.TransferenciaException;
+import com.google.zxing.WriterException;
 import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
@@ -190,7 +191,6 @@ public class ControlDeNavegacion {
     }
 
     public BoletoDTO cargarBoleto() throws GestionReservaException {
-        System.out.println("Jaime repetido");
         List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
         return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
     }
@@ -203,6 +203,10 @@ public class ControlDeNavegacion {
                 pantallaDetalleDelBoleto.setLocationRelativeTo(null);
                 pantallaDetalleDelBoleto.setVisible(true);
             } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (WriterException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
 

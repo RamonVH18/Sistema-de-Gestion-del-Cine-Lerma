@@ -6,6 +6,7 @@ package capaPresentacion;
 
 import DTOs.BoletoDTO;
 import Excepciones.GestionReservaException;
+import com.google.zxing.WriterException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.ImageIcon;
@@ -22,11 +23,23 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     /**
      * Creates new form DetalleDelBoleto
      */
-    public DetalleDelBoleto() throws GestionReservaException {
+    public DetalleDelBoleto() throws GestionReservaException, InterruptedException, WriterException {
         initComponents();
         
         BoletoDTO boleto = control.cargarBoleto();
         llenarCamposBoleto(boleto);
+        btnRegresoMenu.setVisible(false);
+        setVisible(true);
+        Thread.sleep(500); 
+        String rutaImagen = utilerias.sacarCapturaJFrame(this, "C:\\Users\\PC\\Documents\\GitHub\\Sistema-de-Gestion-del-Cine-Lerma\\SistemaPresentacionCineLerma\\src\\main\\resources\\img\\captura.png");
+        ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 300);
+        etiquetaImagenQR.setIcon(qrIcon);
+        ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
+        etiquetaImagen.setIcon(imagen);
+        btnRegresoMenu.setVisible(true);
+        
+        revalidate();
+        repaint();
     
     }
 
@@ -183,8 +196,7 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     
     public void llenarCamposBoleto(BoletoDTO boleto) {
-        ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
-        etiquetaImagen.setIcon(imagen);
+        
         labelPelicula.setText("Pelicula: " + boleto.getNombrePelicula());
         LocalDate fecha = boleto.getFechaHoraFuncion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         
