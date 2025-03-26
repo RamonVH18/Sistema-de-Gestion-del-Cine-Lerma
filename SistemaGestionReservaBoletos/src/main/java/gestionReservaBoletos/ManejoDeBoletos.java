@@ -74,13 +74,13 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             FuncionDTO funcion2 = new FuncionDTO("B1", "Batman El Caballero Loco", new Date(125, 02, 25, 17, 00, 0), 75.00);
 
             FuncionDTO funcion3 = new FuncionDTO("A2", "Interstellar", new Date(125, 02, 25, 16, 00, 0), 75.00);
-            FuncionDTO funcion4 = new FuncionDTO("B1", "Interstellar", new Date(125, 02, 24, 19, 30, 0), 75.00);
+            FuncionDTO funcion4 = new FuncionDTO("B1", "Interstellar", new Date(125, 02, 29, 19, 30, 0), 75.00);
 
             FuncionDTO funcion5 = new FuncionDTO("A3", "John Wick 3", new Date(125, 02, 27, 18, 45, 0), 80.00);
             FuncionDTO funcion6 = new FuncionDTO("B3", "John Wick 3", new Date(125, 02, 26, 21, 00, 0), 80.00);
 
-            FuncionDTO funcion7 = new FuncionDTO("A2", "Sonic 3", new Date(125, 02, 28, 13, 00, 0), 60.00);
-            FuncionDTO funcion8 = new FuncionDTO("B2", "Sonic 3", new Date(125, 02, 22, 23, 59, 0), 60.00);
+            FuncionDTO funcion7 = new FuncionDTO("A2", "Interstellar", new Date(125, 02, 28, 13, 00, 0), 60.00);
+            FuncionDTO funcion8 = new FuncionDTO("B2", "Interstellar", new Date(125, 02, 25, 23, 59, 0), 60.00);
 
             FuncionDTO funcion9 = new FuncionDTO("A1", "Wazaa la Pelicula", new Date(125, 02, 26, 20, 00, 0), 90.00);
             FuncionDTO funcion10 = new FuncionDTO("B3", "Wazaa la Pelicula", new Date(125, 02, 26, 22, 15, 0), 75.00);
@@ -151,11 +151,10 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             List<FuncionDTO> funciones = funcionesHarcodeadas();
             //Lista donde se guardada las funciones del dia
             List<FuncionDTO> funcionesPelicula = new ArrayList<>();
-            
             //En este for se van a filtrar las funciones y se guardaran solo las funciones que sean del dia correspondiente
+            
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
-                
                 if (funcion.getNombre() == nombrePelicula) {
                     funcionesPelicula.add(funcion);
                 }

@@ -9,28 +9,24 @@ import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridBagLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.time.DayOfWeek;
+import java.awt.Rectangle;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.border.Border;
 import utilitades.Utilerias;
 
 /**
@@ -41,7 +37,9 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     private Utilerias utilerias = new Utilerias();
-    
+    private List<FuncionDTO> listaFunciones;
+    private PeliculaDTO pelicula;
+
     private JPanel panelFunciones = new JPanel(new GridLayout(0, 3, 5, 5));
 
     /**
@@ -49,48 +47,24 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      */
     public SeleccionarAsientos(LocalDate dia) throws GestionReservaException {
         initComponents();
-        PeliculaDTO pelicula = control.consultarPelicula();
+
+        this.pelicula = control.consultarPelicula();
+        this.listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
+
         //SEPARAR TODO ESTO EN METODOS, LIBRO CLEAN CODE DIVIDIR TODO ESTO
         jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
-        //ImageIcon imagen = control.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
-        //jLabelImagenPelicula.setIcon(imagen);
+        ImageIcon imagen = utilerias.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
+        jLabelImagenPelicula.setIcon(imagen);
         jLabelNombrePelicula.setText(pelicula.getNombrePelicula());
         jTextAreaDescripcion.setEnabled(false);
         jTextFieldNumAsientos.setText("");
 
-//        if (dia.equals(fechaHoy)) {
-//            jLabelDia.setText("Hoy");
-//        } else if (dia.equals(fechaSegundo)) {
-//            jLabelDia.setText(segundoDia);
-//        } else if (dia.equals(fechaTercero)) {
-//            jLabelDia.setText(tercerDia);
-//        } else if (dia.equals(fechaCuarto)) {
-//            jLabelDia.setText(cuartoDia);
-//        }
-    
-        generarTablaFunciones(panelFunciones, dia, pelicula);
-        generarComboBox(jComboBoxDiaSemana);
-        jScrollPane1.setViewportView(panelFunciones);
+        generarTablaFunciones(jScrollPanel);
+
         revalidate();
         repaint();
-        
-        
 
-        //QUITAR TODO ESTO, AGREGAR UNA FUNCION EN EL SUBSISTEMA QUE ME DE LAS FECHAS, NO LO HARCODEES
-        jComboBoxDiaSemana.addActionListener(e -> {
-            String seleccion = (String) jComboBoxDiaSemana.getSelectedItem();
-//            if (seleccion == "Hoy") {
-//                control.recargarPaginaFunciones(fechaHoy, panelFunciones, pelicula);
-//            } else if (seleccion == segundoDia) {
-//                control.recargarPaginaFunciones(fechaSegundo, panelFunciones, pelicula);
-//            } else if (seleccion == tercerDia) {
-//                control.recargarPaginaFunciones(fechaTercero, panelFunciones, pelicula);
-//            } else if (seleccion == cuartoDia) {
-//                control.recargarPaginaFunciones(fechaCuarto, panelFunciones, pelicula);
-//            }
-        });
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -103,10 +77,8 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
 
         btnVolver = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        jComboBoxDiaSemana = new javax.swing.JComboBox<>();
         jTextFieldNumAsientos = new javax.swing.JTextField();
         jLabelDescripcion = new javax.swing.JLabel();
-        jLabelDiaSemana = new javax.swing.JLabel();
         jLabelAsientosDisp = new javax.swing.JLabel();
         jLabelCosto = new javax.swing.JLabel();
         jLabelTitulo = new javax.swing.JLabel();
@@ -114,8 +86,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         jLabelImagenPelicula = new javax.swing.JLabel();
         jLabelNombrePelicula = new javax.swing.JLabel();
         jTextAreaDescripcion = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jLabelDia = new javax.swing.JLabel();
+        jScrollPanel = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,15 +122,10 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxDiaSemana.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
-
         jTextFieldNumAsientos.setText("jTextField1");
 
         jLabelDescripcion.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabelDescripcion.setText("Descripción: ");
-
-        jLabelDiaSemana.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabelDiaSemana.setText("Dia de la Semana");
 
         jLabelAsientosDisp.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabelAsientosDisp.setText("Asientos Disponibles: ");
@@ -177,39 +143,38 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
 
         jTextAreaDescripcion.setText("jLabel1");
 
-        jLabelDia.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabelDia.setText("jLabel1");
+        jScrollPanel.setPreferredSize(new java.awt.Dimension(250, 150));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(220, 220, 220)
-                .addComponent(jLabelTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabelDia)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelDescripcion)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabelDiaSemana, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxDiaSemana, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelCosto)
-                            .addComponent(jLabelAsientosDisp)
-                            .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelNumAsientos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jTextAreaDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelDescripcion)
+                                    .addComponent(jTextAreaDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(171, 171, 171)
+                                        .addComponent(jLabelTitulo)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelNumAsientos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelCosto)
+                                            .addComponent(jLabelAsientosDisp)
+                                            .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addGap(41, 41, 41))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -217,45 +182,35 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
                                 .addComponent(jLabelNombrePelicula))
                             .addComponent(jLabelImagenPelicula))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(41, 41, 41))
+                        .addComponent(jScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTitulo)
-                    .addComponent(jLabelDia))
+                .addComponent(jLabelTitulo)
                 .addGap(24, 24, 24)
-                .addComponent(jLabelNombrePelicula)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelNombrePelicula)
                         .addGap(39, 39, 39)
                         .addComponent(jLabelImagenPelicula)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelDescripcion, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelDiaSemana)
-                            .addComponent(jLabelNumAsientos))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBoxDiaSemana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelAsientosDisp)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelCosto)
-                        .addGap(56, 56, 56)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextAreaDescripcion)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNumAsientos)
+                    .addComponent(jLabelDescripcion))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextAreaDescripcion))
+                .addGap(18, 18, 18)
+                .addComponent(jLabelAsientosDisp)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelCosto)
+                .addGap(96, 96, 96)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -300,49 +255,77 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<String> jComboBoxDiaSemana;
     private javax.swing.JLabel jLabelAsientosDisp;
     private javax.swing.JLabel jLabelCosto;
     private javax.swing.JLabel jLabelDescripcion;
-    private javax.swing.JLabel jLabelDia;
-    private javax.swing.JLabel jLabelDiaSemana;
     private javax.swing.JLabel jLabelImagenPelicula;
     private javax.swing.JLabel jLabelNombrePelicula;
     private javax.swing.JLabel jLabelNumAsientos;
     private javax.swing.JLabel jLabelTitulo;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPanel;
     private javax.swing.JLabel jTextAreaDescripcion;
     private javax.swing.JTextField jTextFieldNumAsientos;
     // End of variables declaration//GEN-END:variables
 
-    private void generarTablaFunciones(JPanel panel, LocalDate dia, PeliculaDTO pelicula) throws GestionReservaException {
-        Date diaNuevo = new Date();
+    private void generarScrollPanel(JScrollPane scrollPanel, JPanel panel) throws GestionReservaException {
+        scrollPanel.setViewportView(panel);
+        scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        if (dia.equals(LocalDate.now())) {
-            LocalTime horaActual = LocalTime.now();
-            LocalDateTime fechaConHora = LocalDateTime.of(dia, horaActual);
-            diaNuevo = Date.from(fechaConHora.atZone(ZoneId.systemDefault()).toInstant());
-        } else {
-            diaNuevo = Date.from(dia.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        }
-
-        List<FuncionDTO> listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
-        panel.removeAll();
-
-        for (int i = 0; i < listaFunciones.size(); i++) {
-            FuncionDTO funcion = listaFunciones.get(i);
-            if (funcion.getFechaHora() == diaNuevo) {
-                JButton boton = crearBotonFuncion(funcion, panel);
-                panel.add(boton);
-            }
-        }
     }
 
+    private JPanel generarPanelBotones(JPanel panelBotones, Date dia) {
+        panelBotones.setLayout(new GridLayout(2, 0, 10, 10));
+        for (int s = 0; s < listaFunciones.size(); s++) {
+            FuncionDTO funcion = listaFunciones.get(s);
+            if (funcion.getFechaHora() == dia) {
+                JButton boton = crearBotonFuncion(funcion, panelBotones);
+                panelBotones.add(boton);
+                panelBotones.revalidate();
+                panelBotones.repaint();
+            }
+        }
+        panelBotones.setVisible(true);
+        return panelBotones;
+    }
+
+    private JPanel generarPanelFuncionDia(JPanel panelFuncionDia, Date dia) throws GestionReservaException {
+        LocalDate diaLocal = utilerias.convertirDateALocalDate(dia);
+
+        String diaTexto = utilerias.traducirDia(diaLocal.getDayOfWeek()) + ", "
+                + diaLocal.getDayOfMonth() + " de "
+                + utilerias.traducirMes(diaLocal.getMonth());
+
+        JLabel labelDia = new JLabel(diaTexto);
+        labelDia.setHorizontalAlignment(SwingConstants.CENTER);
+
+        panelFuncionDia.add(labelDia);
+        panelFuncionDia.add(generarPanelBotones(new JPanel(), dia));
+
+        panelFuncionDia.setVisible(true);
+        return panelFuncionDia;
+    }
+
+    public void generarPanelPrincipal(JPanel panelPrincipal) throws GestionReservaException {
+        List<Date> fechasFunciones = obtenerFechasFunciones();
+
+        for (int i = 0; i < fechasFunciones.size(); i++) {
+            Date dia = fechasFunciones.get(i);
+            panelPrincipal.add(generarPanelFuncionDia(new JPanel(), dia));
+        }
+        panelPrincipal.setVisible(true);
+    }
+
+    private void generarTablaFunciones(JScrollPane scrollPanel) throws GestionReservaException {
+        generarPanelPrincipal(panelFunciones);
+        generarScrollPanel(scrollPanel, panelFunciones);
+    }
+
+    //REVISADO
     private JButton crearBotonFuncion(FuncionDTO funcion, JPanel panel) {
-        
+
         JButton boton = new JButton();
         Date hora = funcion.getFechaHora();
-        
+
         String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0"
                 + Integer.toString(funcion.getFechaHora().getMinutes())
                 : Integer.toString(funcion.getFechaHora().getMinutes());
@@ -351,76 +334,65 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         boton.setBackground(Color.decode("#A2845E"));
         //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
         boton.addActionListener(e -> {
-            SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
-            seleccionarAsientos.revalidate();
-            seleccionarAsientos.repaint();
-            
-            for (Component componente : panel.getComponents()) {
-                if (componente instanceof JButton) { // Verificamos si es un botón
-                    componente.setEnabled(true);
-                }
-            }
-            
-            boton.setEnabled(false);
-            int asientosDisponibles;
             try {
-                control.guardarFuncionSeleccionada(funcion);
-                asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
-                cargarDatos(funcion, asientosDisponibles);
+                funcionalidadBoton(boton, panel, funcion);
             } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SeleccionarAsientos.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         });
+        boton.setVisible(true);
         return boton;
     }
-    
+
+    //REVISADO
     private void cargarDatos(FuncionDTO funcion, int asientosDisponibles) {
         jLabelCosto.setText("Costo del Boleto: " + String.valueOf(funcion.getPrecio()));
         jLabelAsientosDisp.setText("Asientos Disponibles: " + asientosDisponibles);
     }
-    
-    private void generarComboBox(JComboBox comboBox) throws GestionReservaException {
-        List<Date> fechasFunciones = obtenerFechasFunciones();
-        for (int a = 0; a < fechasFunciones.size(); a++) {
-            
-            crearOpcionComboBox(comboBox, fechasFunciones.get(a));
-        }
-        comboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
-    }
-    
+
+    //REVISADO
     private List<Date> obtenerFechasFunciones() throws GestionReservaException {
-        PeliculaDTO pelicula = control.consultarPelicula();
-        List<FuncionDTO> listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
         List<Date> fechasFunciones = new ArrayList<>();
-        
+
         for (int i = 0; i < listaFunciones.size(); i++) {
             FuncionDTO funcion = listaFunciones.get(i);
             Date fecha = funcion.getFechaHora();
-            
-            if (fechasFunciones.isEmpty()) {
+
+            if (!fechasFunciones.isEmpty()) {
                 for (int s = 0; s < fechasFunciones.size(); s++) {
                     if (!fechasFunciones.contains(fecha)) {
                         fechasFunciones.add(fecha);
                     }
                 }
             } else {
-                System.out.println(fecha);
                 fechasFunciones.add(fecha);
             }
         }
         return fechasFunciones;
     }
-    
-    private void crearOpcionComboBox(JComboBox comboBox, Date dia) {
-        
-        LocalDate diaLocal = utilerias.convertirDateALocalDate(dia);
-        
-        String diaTexto = utilerias.traducirDia(diaLocal.getDayOfWeek()) + ", "
-            + diaLocal.getDayOfMonth() + " de "
-            + utilerias.traducirMes(diaLocal.getMonth());
-        comboBox.addItem(diaTexto);
-    } 
-    
 
+    //REVISADO
+    private void funcionalidadBoton(JButton boton, JPanel panel, FuncionDTO funcion) throws GestionReservaException {
+        SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
+        seleccionarAsientos.revalidate();
+        seleccionarAsientos.repaint();
+
+        for (Component componente : panel.getComponents()) {
+            if (componente instanceof JButton) { // Verificamos si es un botón
+                componente.setEnabled(true);
+            }
+        }
+
+        boton.setEnabled(false);
+        int asientosDisponibles;
+        try {
+            control.guardarFuncionSeleccionada(funcion);
+            asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
+            cargarDatos(funcion, asientosDisponibles);
+        } catch (GestionReservaException ex) {
+            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            throw new GestionReservaException("ERROR: " + ex.getMessage());
+        }
+
+    }
 }
