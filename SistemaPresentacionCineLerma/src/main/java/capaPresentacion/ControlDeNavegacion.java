@@ -12,6 +12,7 @@ import DTOs.MetodoPagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
+import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
 import Excepciones.TransferenciaException;
@@ -44,6 +45,8 @@ public class ControlDeNavegacion {
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
     private PeliculaDTO peliculaSeleccionada = new PeliculaDTO();
     private FuncionDTO funcionSeleccionada = new FuncionDTO();
+
+    private String titulo = "¡ERROR!";
 
     private List<String> asientos = new ArrayList<>();
 
@@ -90,13 +93,9 @@ public class ControlDeNavegacion {
     //Metodo que se encarga de abrir la pantalla de SeleccionarAsientos
     public void mostrarSeleccionarAsientos() {
         SwingUtilities.invokeLater(() -> {
-            try {
-                SeleccionarAsientos pantallaSeleccionarAsientos = new SeleccionarAsientos();
-                pantallaSeleccionarAsientos.setLocationRelativeTo(null);
-                pantallaSeleccionarAsientos.setVisible(true);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            SeleccionarAsientos pantallaSeleccionarAsientos = new SeleccionarAsientos();
+            pantallaSeleccionarAsientos.setLocationRelativeTo(null);
+            pantallaSeleccionarAsientos.setVisible(true);
         });
     }
 
@@ -170,7 +169,7 @@ public class ControlDeNavegacion {
             return peliculas;
         } catch (PeliculasCargaException e) {
             //PONER JOptionPane y cerrar la pantalla actual y volver al menuPrincipal
-            JOptionPane.showMessageDialog(null, e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             mostrarMenuPrincipal();
             return null;
         }
@@ -202,9 +201,15 @@ public class ControlDeNavegacion {
      * @return
      * @throws GestionReservaException
      */
-    public List<FuncionDTO> obtenerFunciones(String nombrePelicula) throws GestionReservaException {
-        List<FuncionDTO> funciones = manejoDeBoletos.cargarFuncionesPelicula(nombrePelicula);
-        return funciones;
+    public List<FuncionDTO> obtenerFunciones(String nombrePelicula) {
+        try {
+            List<FuncionDTO> funciones = manejoDeBoletos.cargarFuncionesPelicula(nombrePelicula);
+            return funciones;
+        } catch (FuncionCargaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            mostrarMenuPrincipal();
+            return null;
+        }
     }
 
     /**
@@ -234,9 +239,14 @@ public class ControlDeNavegacion {
      * @return
      * @throws GestionReservaException
      */
-    public int obtenerAsientosDisponibles(FuncionDTO funcion) throws GestionReservaException {
-        int asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
-        return asientosDisponibles;
+    public int obtenerAsientosDisponibles(FuncionDTO funcion) {
+        try {
+            int asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
+            return asientosDisponibles;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, numAsientos);
+            return 0;
+        }
     }
 
     /**
@@ -317,7 +327,5 @@ public class ControlDeNavegacion {
         boolean esValida = gestionDePagos.validarTarjeta(cuentaTarjeta);
         return esValida;
     }
-
-
 
 }

@@ -12,6 +12,7 @@ import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
 import DTOs.PeliculaDTO;
+import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
 import java.util.ArrayList;
@@ -157,7 +158,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         try {
             // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
             List<PeliculaDTO> peliculas = peliculasHarcodeadas();
-            if (peliculas.isEmpty()) {
+            if (peliculas.isEmpty() || peliculas == null) {
                 throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
             }
             return peliculas;
@@ -168,15 +169,19 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
 
     @Override
-    public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws GestionReservaException {
+    public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws FuncionCargaException {
         try {
             if (nombrePelicula == null || nombrePelicula.isBlank()) {
-                throw new PeliculasCargaException("El nombre de la pelicula esta vacio o es nulo");
+                throw new FuncionCargaException("El nombre de la pelicula esta vacio o es nulo");
             }
             // aqui se llamaria a un metodo que de una listaFunciones, sin embargo como aun no tenemos la BO, voy hardcodearlas
             List<FuncionDTO> funciones = funcionesHarcodeadas();
+            if (funciones.isEmpty() || funciones == null) {
+                throw new FuncionCargaException("Hubo un error al cargar las funciones, favor de ingresar mas al rato.");
+            }
             //Lista donde se guardada las funciones del dia
             List<FuncionDTO> funcionesPelicula = new ArrayList<>();
+            
             //En este for se van a filtrar las funciones y se guardaran solo las funciones que sean del dia correspondiente
             
             for (int i = 0; i < funciones.size(); i++) {
@@ -185,13 +190,16 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                     funcionesPelicula.add(funcion);
                 }
             }
+            
+            if (funcionesPelicula == null || funcionesPelicula.isEmpty()) {
+                throw new FuncionCargaException("Hubo un error al cargar las funciones de esta pelicula, seleccione otra pelicula o ingrese mas al rato.");
+            }
             //Funcion usada para poder ordernar la lista de funciones, para de esa manera mostrar las que van primero en fecha hora
             funcionesPelicula.sort(Comparator.comparing(e -> e.getFechaHora()));
             
             return funcionesPelicula;
-        } catch (PeliculasCargaException e) {
-           // throw new PeliculasCargaException("ERROR: " + e.getMessage());
-           return null;
+        } catch (FuncionCargaException e) {
+            throw new FuncionCargaException("ERROR: " + e.getMessage());
         }
     }
 

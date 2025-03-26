@@ -9,11 +9,11 @@ import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
 import java.awt.Color;
 
-
 import java.awt.GridLayout;
 
 import java.time.LocalDate;
-import java.util.ArrayList;import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -48,7 +48,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     /**
      * Creates new form SeleccionarAsientos
      */
-    public SeleccionarAsientos() throws GestionReservaException {
+    public SeleccionarAsientos() {
         initComponents();
 
         this.pelicula = control.consultarPelicula();
@@ -57,6 +57,12 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         generarFormatoPagina();
 
         generarTablaFunciones(jScrollPanel);
+
+        if (panelFunciones.getComponentCount() == 0) {
+            SwingUtilities.invokeLater(() -> {
+                dispose();
+            });
+        }
 
         revalidate();
         repaint();
@@ -279,7 +285,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldNumAsientos;
     // End of variables declaration//GEN-END:variables
 
-    private void generarFormatoPagina() throws GestionReservaException {
+    private void generarFormatoPagina() {
         panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
         jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
         ImageIcon imagen = utilerias.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
@@ -288,8 +294,8 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         jTextAreaDescripcion.setEnabled(false);
         jTextFieldNumAsientos.setText("");
     }
-    
-    private void generarScrollPanel(JScrollPane scrollPanel, JPanel panel) throws GestionReservaException {
+
+    private void generarScrollPanel(JScrollPane scrollPanel, JPanel panel) {
         scrollPanel.setViewportView(panel);
         scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -297,21 +303,23 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
 
     private JPanel generarPanelBotones(JPanel panelBotones, Date dia, String diaTexto) {
         panelBotones.setLayout(new GridLayout(2, 0, 10, 10));
-        for (int s = 0; s < listaFunciones.size(); s++) {
-            FuncionDTO funcion = listaFunciones.get(s);
-            if (funcion.getFechaHora() == dia) {
-                JButton boton = crearBotonFuncion(funcion, diaTexto);
+        if (listaFunciones != null) {
+            for (int s = 0; s < listaFunciones.size(); s++) {
+                FuncionDTO funcion = listaFunciones.get(s);
+                if (funcion.getFechaHora() == dia) {
+                    JButton boton = crearBotonFuncion(funcion, diaTexto);
 
-                panelBotones.add(boton);
-                panelBotones.revalidate();
-                panelBotones.repaint();
+                    panelBotones.add(boton);
+                    panelBotones.revalidate();
+                    panelBotones.repaint();
+                }
             }
         }
         panelBotones.setVisible(true);
         return panelBotones;
     }
 
-    private JPanel generarPanelFuncionDia(JPanel panelFuncionDia, Date dia) throws GestionReservaException {
+    private JPanel generarPanelFuncionDia(JPanel panelFuncionDia, Date dia) {
 
         LocalDate diaLocal = utilerias.convertirDateALocalDate(dia);
 
@@ -335,7 +343,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         return panelFuncionDia;
     }
 
-    public void generarPanelPrincipal(JPanel panelPrincipal) throws GestionReservaException {
+    public void generarPanelPrincipal(JPanel panelPrincipal) {
         List<Date> fechasFunciones = obtenerFechasFunciones();
 
         for (int i = 0; i < fechasFunciones.size(); i++) {
@@ -345,7 +353,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         panelPrincipal.setVisible(true);
     }
 
-    private void generarTablaFunciones(JScrollPane scrollPanel) throws GestionReservaException {
+    private void generarTablaFunciones(JScrollPane scrollPanel) {
         generarPanelPrincipal(panelFunciones);
         generarScrollPanel(scrollPanel, panelFunciones);
     }
@@ -364,11 +372,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         boton.setBackground(Color.decode("#A2845E"));
         //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
         boton.addActionListener(e -> {
-            try {
-                funcionalidadBoton(boton, funcion, diaTexto);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(SeleccionarAsientos.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            funcionalidadBoton(boton, funcion, diaTexto);
         });
         boton.setVisible(true);
         return boton;
@@ -382,42 +386,38 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     }
 
     //REVISADO
-    private List<Date> obtenerFechasFunciones() throws GestionReservaException {
+    private List<Date> obtenerFechasFunciones() {
         List<Date> fechasFunciones = new ArrayList<>();
 
-        for (int i = 0; i < listaFunciones.size(); i++) {
-            FuncionDTO funcion = listaFunciones.get(i);
-            Date fecha = funcion.getFechaHora();
+        if (listaFunciones != null) {
+            for (int i = 0; i < listaFunciones.size(); i++) {
+                FuncionDTO funcion = listaFunciones.get(i);
+                Date fecha = funcion.getFechaHora();
 
-            if (!fechasFunciones.isEmpty()) {
-                for (int s = 0; s < fechasFunciones.size(); s++) {
-                    if (!fechasFunciones.contains(fecha)) {
-                        fechasFunciones.add(fecha);
+                if (!fechasFunciones.isEmpty()) {
+                    for (int s = 0; s < fechasFunciones.size(); s++) {
+                        if (!fechasFunciones.contains(fecha)) {
+                            fechasFunciones.add(fecha);
+                        }
                     }
+                } else {
+                    fechasFunciones.add(fecha);
                 }
-            } else {
-                fechasFunciones.add(fecha);
             }
         }
         return fechasFunciones;
     }
 
     //REVISADO
-    private void funcionalidadBoton(JButton boton, FuncionDTO funcion, String diaTexto) throws GestionReservaException {
+    private void funcionalidadBoton(JButton boton, FuncionDTO funcion, String diaTexto) {
         SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
         seleccionarAsientos.revalidate();
         seleccionarAsientos.repaint();
 
-        
         int asientosDisponibles;
-        try {
-            control.guardarFuncionSeleccionada(funcion);
-            asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
-            cargarDatos(funcion, asientosDisponibles, diaTexto);
-        } catch (GestionReservaException ex) {
-            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            throw new GestionReservaException("ERROR: " + ex.getMessage());
-        }
+        control.guardarFuncionSeleccionada(funcion);
+        asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
+        cargarDatos(funcion, asientosDisponibles, diaTexto);
 
     }
 }

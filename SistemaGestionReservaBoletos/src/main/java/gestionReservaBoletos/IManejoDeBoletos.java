@@ -9,6 +9,7 @@ import DTOs.ClienteDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
 import DTOs.PeliculaDTO;
+import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
 import java.util.List;
@@ -21,7 +22,7 @@ public interface IManejoDeBoletos {
     
     public List<PeliculaDTO> cargarPeliculasActivas() throws PeliculasCargaException;
     
-    public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws GestionReservaException;
+    public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws FuncionCargaException;
     
     public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws GestionReservaException;
     
