@@ -15,14 +15,19 @@ public class PaypalDTO {
     private String correo;
 
     private String contrasenia;
+    
+    private double saldo;
 
     public PaypalDTO() {
     }
 
-    public PaypalDTO(String correo, String contrasenia) {
+    public PaypalDTO(String correo, String contrasenia, double saldo) {
         this.correo = correo;
         this.contrasenia = contrasenia;
+        this.saldo = saldo;
     }
+
+    
 
     public String getCorreo() {
         return correo;
@@ -39,6 +44,16 @@ public class PaypalDTO {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+    
+    
     
     
     //Estos metodos hash y equals se utilizan para buscar la cuenta dentro de las listas de cuentas registradas, se hacen comparaciones, en este caso se comparan todos los atributos

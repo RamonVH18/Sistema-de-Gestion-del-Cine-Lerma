@@ -14,15 +14,19 @@ public class CuentaMercadoDTO {
     private String titular;
     private String correo;
     private Integer clienteID;
+    private double saldo;
 
     public CuentaMercadoDTO() {
     }
 
-    public CuentaMercadoDTO(String titular, String correo, Integer clienteID) {
+    public CuentaMercadoDTO(String titular, String correo, Integer clienteID, double saldo) {
         this.titular = titular;
         this.correo = correo;
         this.clienteID = clienteID;
+        this.saldo = saldo;
     }
+
+    
 
     public CuentaMercadoDTO(Integer clienteID) {
         this.clienteID = clienteID;
@@ -53,6 +57,16 @@ public class CuentaMercadoDTO {
         this.clienteID = clienteID;
     }
 
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+    
+    
+
     //Estos metodos hash y equals se utilizan para buscar la cuenta dentro de las listas de cuentas registradas, se hacen comparaciones, en este caso solo se compara por el clienteID
     @Override
     public int hashCode() {
@@ -76,13 +90,15 @@ public class CuentaMercadoDTO {
         return Objects.equals(this.clienteID, other.clienteID);
     }
 
+    @Override
+    public String toString() {
+        return "CuentaMercadoDTO{" + "titular=" + titular + ", correo=" + correo + ", clienteID=" + clienteID + ", saldo=" + saldo + '}';
+    }
+
     
     
     
 
-    @Override
-    public String toString() {
-        return "CuentaMercadoDTO{" + "titular=" + titular + ", correo=" + correo + ", clienteID=" + clienteID + '}';
-    }
+    
 
 }

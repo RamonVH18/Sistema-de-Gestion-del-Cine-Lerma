@@ -39,8 +39,8 @@ public class GestionPagos implements IGestionPagos {
     @Override
     public final List<CuentaMercadoDTO> agregarCuentasMercado() {
         if (mercados.isEmpty()) {
-            CuentaMercadoDTO cuenta1 = new CuentaMercadoDTO("Jaime Lerma", "lerma@gmail.com", 101);
-            CuentaMercadoDTO cuenta2 = new CuentaMercadoDTO("Joseson master", "Giga@gmail.com", 696);
+            CuentaMercadoDTO cuenta1 = new CuentaMercadoDTO("Jaime Lerma", "lerma@gmail.com", 101, 300.2);
+            CuentaMercadoDTO cuenta2 = new CuentaMercadoDTO("Joseson master", "Giga@gmail.com", 696, 170.5);
             mercados.add(cuenta1);
             mercados.add(cuenta2);
         }
@@ -51,8 +51,8 @@ public class GestionPagos implements IGestionPagos {
     public final List<PaypalDTO> agregarCuentasPaypal() {
         if (paypals.isEmpty()) {
 
-            PaypalDTO cuenta1 = new PaypalDTO("sonic15622@gmail.com", "camello");
-            PaypalDTO cuenta2 = new PaypalDTO("abrahama@gmail.com", "perrito");
+            PaypalDTO cuenta1 = new PaypalDTO("sonic15622@gmail.com", "camello", 100.0);
+            PaypalDTO cuenta2 = new PaypalDTO("abrahama@gmail.com", "perrito", 200.6);
             paypals.add(cuenta1);
             paypals.add(cuenta2);
 
@@ -87,8 +87,8 @@ public class GestionPagos implements IGestionPagos {
                             .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
                             .toInstant());
 
-            TarjetaDTO cuenta1 = new TarjetaDTO("987654321123456", "ramoncito", 789, fechaVencimiento1); // 05/26
-            TarjetaDTO cuenta2 = new TarjetaDTO("123456789675321", "jaimico", 123, fechaVencimiento2); // 02/29
+            TarjetaDTO cuenta1 = new TarjetaDTO("987654321123456", "ramoncito", 789, fechaVencimiento1, 421.9); // 05/26
+            TarjetaDTO cuenta2 = new TarjetaDTO("123456789675321", "jaimico", 123, fechaVencimiento2, 20.4); // 02/29
             tarjetas.add(cuenta1);
             tarjetas.add(cuenta2);
 

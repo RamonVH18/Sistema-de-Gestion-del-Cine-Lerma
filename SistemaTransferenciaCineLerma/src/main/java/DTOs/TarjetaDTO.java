@@ -17,16 +17,20 @@ public class TarjetaDTO {
     private String titular;
     private Integer cvv;
     private Date fechaVencimiento;
+    private double saldo;
 
     public TarjetaDTO() {
     }
 
-    public TarjetaDTO(String numeroTarjeta, String titular, Integer cvv, Date fechaVencimiento) {
+    public TarjetaDTO(String numeroTarjeta, String titular, Integer cvv, Date fechaVencimiento, double saldo) {
         this.numeroTarjeta = numeroTarjeta;
         this.titular = titular;
         this.cvv = cvv;
         this.fechaVencimiento = fechaVencimiento;
+        this.saldo = saldo;
     }
+
+    
 
     public String getNumeroTarjeta() {
         return numeroTarjeta;
@@ -59,6 +63,16 @@ public class TarjetaDTO {
     public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+    
+    
     
     //Estos metodos hash y equals se utilizan para buscar la cuenta dentro de las listas de cuentas registradas, se hacen comparaciones, en este caso se comparan todos los atributos
     @Override
@@ -95,13 +109,15 @@ public class TarjetaDTO {
         return Objects.equals(this.fechaVencimiento, other.fechaVencimiento);
     }
 
+    @Override
+    public String toString() {
+        return "TarjetaDTO{" + "numeroTarjeta=" + numeroTarjeta + ", titular=" + titular + ", cvv=" + cvv + ", fechaVencimiento=" + fechaVencimiento + ", saldo=" + saldo + '}';
+    }
+
     
     
     
 
-    @Override
-    public String toString() {
-        return "TarjetaDTO{" + "numeroTarjeta=" + numeroTarjeta + ", titular=" + titular + ", cvv=" + cvv + ", fechaVencimiento=" + fechaVencimiento + '}';
-    }
+    
 
 }
