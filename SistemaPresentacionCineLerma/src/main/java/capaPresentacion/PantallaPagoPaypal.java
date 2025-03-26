@@ -207,13 +207,8 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
             if (!validarCampos()) {
                 return;
             }
-
             //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
-            try {
-                control.cargarBoleto();
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
             control.mostrarDetalleBoleto();
             dispose();
 

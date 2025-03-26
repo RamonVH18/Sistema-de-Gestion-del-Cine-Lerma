@@ -31,73 +31,8 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         initComponents();
     }
 
-    public boolean validarCampos() throws TransferenciaException {
-        //Se muestra un error si alguno de los campos estan vacios
-        if (textNumeroTarjeta.getText().trim().isEmpty() || textFechaVencimiento.getText().trim().isEmpty() || textCVV.getText().trim().isEmpty() || textPropietario.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+    
 
-        if (textCVV.getText().trim().length() > 3 || textCVV.getText().trim().length() < 3) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un CVV valido, la longitud debe ser estrictamente de 3 numeros", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!textCVV.getText().trim().matches("-?\\d+")) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un CVV valido", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (textNumeroTarjeta.getText().trim().length() > 16 || textNumeroTarjeta.getText().trim().length() < 15) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un numero de tarjeta valido, la longitud debe ser estrictamente de entre 15 y 16 numeros", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!textNumeroTarjeta.getText().trim().matches("-?\\d+")) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un numero de tarjeta valido", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (!textFechaVencimiento.getText().trim().matches("\\d{2}/\\d{2}")) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa una fecha de vencimiento valida, (FORMATO: MM/AA)", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        //CONVERTIR LA FECHA INGRESADA POR EL USUARIO A UN DATE REAL
-        String fechaVencimientoStr = textFechaVencimiento.getText().trim();
-
-        // Formateador para MM/AA
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/yy");
-
-        // Parsear el String a YearMonth
-        YearMonth yearMonth = YearMonth.parse(fechaVencimientoStr, formatter);
-
-        // Convertir a Date (último día del mes a medianoche)
-        Date fechaVencimientoIngresada = Date.from(
-                yearMonth.atEndOfMonth() // Obtiene el último día del mes (ej: 31 de Mayo 2026)
-                        .atStartOfDay() // Hora 00:00
-                        .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
-                        .toInstant()
-        );
-
-        //CREAR DTO DE TARJETA
-        TarjetaDTO cuentaTarjeta = new TarjetaDTO();
-        String numeroTarjeta = textNumeroTarjeta.getText().trim();
-        String titular = textPropietario.getText().trim();
-        Integer CVV = Integer.valueOf(textCVV.getText().trim());
-        Date fechaVencimiento = fechaVencimientoIngresada;
-        cuentaTarjeta.setNumeroTarjeta(numeroTarjeta);
-        cuentaTarjeta.setTitular(titular);
-        cuentaTarjeta.setCvv(CVV);
-        cuentaTarjeta.setFechaVencimiento(fechaVencimiento);
-
-        //Se valida la cuenta segun el dto creado 
-        if (!control.verificarCuentaTarjeta(cuentaTarjeta)) {
-            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -272,13 +207,8 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
             if (!validarCampos()) {
                 return;
             }
-
             //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
-            try {
-                control.cargarBoleto();
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
             control.mostrarDetalleBoleto();
             dispose();
 
@@ -309,4 +239,77 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     private javax.swing.JLabel txtNumeroTarjeta;
     private javax.swing.JLabel txtPropietario;
     // End of variables declaration//GEN-END:variables
+
+    public boolean validarCampos() throws TransferenciaException {
+        //Se muestra un error si alguno de los campos estan vacios
+        if (textNumeroTarjeta.getText().trim().isEmpty() || textFechaVencimiento.getText().trim().isEmpty() || textCVV.getText().trim().isEmpty() || textPropietario.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (textCVV.getText().trim().length() > 3 || textCVV.getText().trim().length() < 3) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un CVV valido, la longitud debe ser estrictamente de 3 numeros", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!textCVV.getText().trim().matches("-?\\d+")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un CVV valido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (textNumeroTarjeta.getText().trim().length() > 16 || textNumeroTarjeta.getText().trim().length() < 15) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un numero de tarjeta valido, la longitud debe ser estrictamente de entre 15 y 16 numeros", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!textNumeroTarjeta.getText().trim().matches("-?\\d+")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un numero de tarjeta valido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!textFechaVencimiento.getText().trim().matches("\\d{2}/\\d{2}")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa una fecha de vencimiento valida, (FORMATO: MM/AA)", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        TarjetaDTO cuentaTarjeta = construirDTO();
+
+        //Se valida la cuenta segun el dto creado 
+        if (!control.verificarCuentaTarjeta(cuentaTarjeta)) {
+            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
+    private TarjetaDTO construirDTO() {
+        //CONVERTIR LA FECHA INGRESADA POR EL USUARIO A UN DATE REAL
+        String fechaVencimientoStr = textFechaVencimiento.getText().trim();
+
+        // Formateador para MM/AA
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/yy");
+
+        // Parsear el String a YearMonth
+        YearMonth yearMonth = YearMonth.parse(fechaVencimientoStr, formatter);
+
+        // Convertir a Date (último día del mes a medianoche)
+        Date fechaVencimientoIngresada = Date.from(
+                yearMonth.atEndOfMonth() // Obtiene el último día del mes (ej: 31 de Mayo 2026)
+                        .atStartOfDay() // Hora 00:00
+                        .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
+                        .toInstant()
+        );
+
+        //CREAR DTO DE TARJETA
+        TarjetaDTO cuentaTarjeta = new TarjetaDTO();
+        String numeroTarjeta = textNumeroTarjeta.getText().trim();
+        String titular = textPropietario.getText().trim();
+        Integer CVV = Integer.valueOf(textCVV.getText().trim());
+        Date fechaVencimiento = fechaVencimientoIngresada;
+        cuentaTarjeta.setNumeroTarjeta(numeroTarjeta);
+        cuentaTarjeta.setTitular(titular);
+        cuentaTarjeta.setCvv(CVV);
+        cuentaTarjeta.setFechaVencimiento(fechaVencimiento);
+        return cuentaTarjeta;
+    }
 }
