@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -42,7 +43,7 @@ public class ControlDeNavegacion {
 
     private List<String> asientos = new ArrayList<>();
 
-    private int numAsientos = 0;
+    private int numAsientos;
 
     private ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx");
 
@@ -86,11 +87,11 @@ public class ControlDeNavegacion {
     }
     
     //Metodo que se encarga de abrir la pantalla de SeleccionarAsientos
-    public void mostrarSeleccionarAsientos(LocalDate dia) {
+    public void mostrarSeleccionarAsientos() {
         SwingUtilities.invokeLater(() -> {
             SeleccionarAsientos pantallaSeleccionarAsientos;
             try {
-                pantallaSeleccionarAsientos = new SeleccionarAsientos(dia);
+                pantallaSeleccionarAsientos = new SeleccionarAsientos();
                 pantallaSeleccionarAsientos.setLocationRelativeTo(null);
                 pantallaSeleccionarAsientos.setVisible(true);
             } catch (GestionReservaException ex) {
@@ -167,9 +168,14 @@ public class ControlDeNavegacion {
      * Metodo que se encarga de obtener todas las peliculas que estan disponibles y lo píde desde el subsistema
      */
    
-    public List<PeliculaDTO> obtenerPeliculas() throws GestionReservaException {
+    public List<PeliculaDTO> obtenerPeliculas(){
+        try {
         List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
         return peliculas;
+        } catch (GestionReservaException e) {
+            //PONER JOptionPane y cerrar la pantalla actual y volver al menuPrincipal
+            JOptionPane.showMessageDialog(parentComponent, e, title, numAsientos, icon);
+        }
     }
     
     /**

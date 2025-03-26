@@ -48,21 +48,13 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     /**
      * Creates new form SeleccionarAsientos
      */
-    public SeleccionarAsientos(LocalDate dia) throws GestionReservaException {
+    public SeleccionarAsientos() throws GestionReservaException {
         initComponents();
 
         this.pelicula = control.consultarPelicula();
         this.listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
 
-        panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
-
-        //SEPARAR TODO ESTO EN METODOS, LIBRO CLEAN CODE DIVIDIR TODO ESTO
-        jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
-        ImageIcon imagen = utilerias.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
-        jLabelImagenPelicula.setIcon(imagen);
-        jLabelNombrePelicula.setText(pelicula.getNombrePelicula());
-        jTextAreaDescripcion.setEnabled(false);
-        jTextFieldNumAsientos.setText("");
+        generarFormatoPagina();
 
         generarTablaFunciones(jScrollPanel);
 
@@ -287,6 +279,16 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldNumAsientos;
     // End of variables declaration//GEN-END:variables
 
+    private void generarFormatoPagina() throws GestionReservaException {
+        panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
+        jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
+        ImageIcon imagen = utilerias.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
+        jLabelImagenPelicula.setIcon(imagen);
+        jLabelNombrePelicula.setText(pelicula.getNombrePelicula());
+        jTextAreaDescripcion.setEnabled(false);
+        jTextFieldNumAsientos.setText("");
+    }
+    
     private void generarScrollPanel(JScrollPane scrollPanel, JPanel panel) throws GestionReservaException {
         scrollPanel.setViewportView(panel);
         scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

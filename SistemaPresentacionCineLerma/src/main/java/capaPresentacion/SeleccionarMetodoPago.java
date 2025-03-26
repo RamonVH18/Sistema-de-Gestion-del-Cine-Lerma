@@ -38,6 +38,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
     public SeleccionarMetodoPago() throws GestionReservaException {
         initComponents();
         generarTablaMetodosPago(panelMetodoPago);
+        btnPrueba.setVisible(false);
         panelMetodoPago.setVisible(true);
         revalidate();
         repaint();
@@ -143,7 +144,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
         // TODO add your handling code here:
-        control.mostrarSeleccionarAsientos(LocalDate.now());
+        control.mostrarSeleccionarAsientos();
         dispose();
     }//GEN-LAST:event_btnVolverMouseClicked
 
