@@ -9,6 +9,7 @@ import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
 import DTOs.FuncionAsientosDTO;
 import DTOs.FuncionDTO;
+import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
@@ -30,6 +31,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     List<PeliculaDTO> peliculas = new ArrayList<>();
     List<FuncionDTO> funciones = new ArrayList<>();
     List<AsientoFuncionDTO> asientos = new ArrayList<>();
+    List<MetodoPagoDTO> metodosPago = new ArrayList<>();
     
     private static ManejoDeBoletos instancia;
     
@@ -121,6 +123,21 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         }
         return asientos;
     }
+    
+    //METODOS DE PAGO HARDCODEADOS
+    public List<MetodoPagoDTO> metodosPagoHarcodeados() {
+        if (metodosPago.isEmpty()) {
+            //MetodoPagoDTO mercadoPago = new MetodoPagoDTO("Mercado Pago", "img/mercadoPago.jpg");
+            MetodoPagoDTO paypal = new MetodoPagoDTO("Paypal", "img/paypal.png");
+            MetodoPagoDTO tarjeta = new MetodoPagoDTO("Tarjeta", "img/visamaster.png");
+            
+            metodosPago.add(tarjeta);
+            //metodosPago.add(mercadoPago);
+            metodosPago.add(paypal);
+        }
+        return metodosPago;
+    }
+    
 
     /**
      * Metodo que sirve para crear una lista de las peliculas que se van a
@@ -257,13 +274,16 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         }
     }
 
-    //MODIFICAR DESPUES
-//    @Override 
-//    public PagoDTO registraPago(double monto, String nombreCliente) throws GestionReservaException {
-//        try {
-//            
-//        }
-//    }
+    @Override 
+    public List<MetodoPagoDTO> cargarMetodosPago() throws GestionReservaException {
+        try {
+            List<MetodoPagoDTO> metodosPago = metodosPagoHarcodeados();
+            return metodosPago;
+        } catch (Exception e) {
+            throw new GestionReservaException("ERROR: Hubo un error al cargar los metodos de pago: " + e.getMessage());
+        }
+    }
+    
     @Override
     public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GestionReservaException {
         try {

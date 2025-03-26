@@ -4,26 +4,40 @@
  */
 package capaPresentacion;
 
-import DTOs.FuncionDTO;
-import DTOs.PeliculaDTO;
+import DTOs.MetodoPagoDTO;
 import Excepciones.GestionReservaException;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import utilitades.Utilerias;
 
 /**
  *
  * @author Ramon Valencia
  */
 public class SeleccionarMetodoPago extends javax.swing.JDialog {
-    
+
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private Utilerias utilerias = new Utilerias();
+
     /**
      * Creates new form SeleccionarMetodoPago
      */
-    public SeleccionarMetodoPago() {
+    public SeleccionarMetodoPago() throws GestionReservaException {
         initComponents();
-        panelMetodoPago = control.generarTablaMetodosPago(panelMetodoPago);
+        generarTablaMetodosPago(panelMetodoPago);
         panelMetodoPago.setVisible(true);
         revalidate();
         repaint();
@@ -161,4 +175,55 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel panelMetodoPago;
     // End of variables declaration//GEN-END:variables
+
+    public JPanel generarTablaMetodosPago(JPanel panel) throws GestionReservaException {
+
+        panel.setLayout(new GridLayout(0, 2, 0, 0));
+        List<MetodoPagoDTO> metodosPago = control.obtenerMetodosPago();
+
+        panel.removeAll();
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+
+        for (int i = 0; i < metodosPago.size(); i++) {
+            MetodoPagoDTO metodoPago = metodosPago.get(i);
+            JButton boton = crearBotonMetodoPago(metodoPago.getImagenMetodo(), border, metodoPago.getNombreMetodo());
+            
+            JLabel label = new JLabel(metodoPago.getNombreMetodo().toUpperCase());
+            label.setBorder(border);
+            panel.add(label);
+            panel.add(boton);
+        }
+
+        return panel;
+
+    }
+
+    private JButton crearBotonMetodoPago(String url, Border border, String nombreMetodo) {
+        ImageIcon image = utilerias.crearImagen(url, 50, 50);
+        JButton boton = new JButton(image);
+        boton.setPreferredSize(new Dimension(150, 50));
+        boton.setBorder(border);
+        boton.addActionListener(e -> {
+
+            JDialog SeleccionarMetodoPago = (JDialog) SwingUtilities.getWindowAncestor(boton);
+            SeleccionarMetodoPago.dispose();
+            
+            cambioPestañaBoton(nombreMetodo);
+        });
+        return boton;
+    }
+    
+    private void cambioPestañaBoton (String nombreMetodo) {
+        switch (nombreMetodo) {
+                case "Tarjeta" ->
+                    control.mostrarPagoTarjeta();
+                case "Paypal" ->
+                    control.mostrarPagoPaypal();
+                case "Mercado Pago" ->
+                    control.mostrarPagoMercado();
+                default -> {
+                }
+            }
+    }
+    
 }
