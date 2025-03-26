@@ -56,7 +56,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                 "Pelicula de las God");
         PeliculaDTO pelicula2 = new PeliculaDTO("Interstellar", "img/interstellar.jpg", "Pelicula algo Bien");
         PeliculaDTO pelicula3 = new PeliculaDTO("John Wick 3", "img/johnWick3.jpg", "Tercera Pelicula donde sale el John Wick");
-        PeliculaDTO pelicula4 = new PeliculaDTO("Sonic 3", "img/sonic3.jpg", "Pelicula donde sale el Sonic");
+        PeliculaDTO pelicula4 = new PeliculaDTO("La vida es bella", "img/vidaBella.jpg", "La pelicula favorita del jaime");
         PeliculaDTO pelicula5 = new PeliculaDTO("Wazaa la Pelicula", "img/wazaa.jpg", "WAZAAAAAAAAAAAAAA");
         PeliculaDTO pelicula6 = new PeliculaDTO("Thor: Ragnarok", "img/thor.jpg", "Thor, mas thor que nunca");
 
@@ -90,6 +90,9 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
             FuncionDTO funcion11 = new FuncionDTO("A2", "Thor: Ragnarok", new Date(125, 02, 27, 17, 30, 0), 65.00);
             FuncionDTO funcion12 = new FuncionDTO("B2", "Thor: Ragnarok", new Date(125, 02, 26, 20, 45, 0), 75.00);
+            
+            FuncionDTO funcion13 = new FuncionDTO("A2", "La vida es bella", new Date(125, 02, 27, 17, 30, 0), 65.00);
+            FuncionDTO funcion14 = new FuncionDTO("B2", "La vida es bella", new Date(125, 02, 26, 20, 45, 0), 75.00);
 
             funciones.add(funcion1);
             funciones.add(funcion2);
@@ -103,6 +106,8 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             funciones.add(funcion10);
             funciones.add(funcion11);
             funciones.add(funcion12);
+            funciones.add(funcion13);
+            funciones.add(funcion14);
         }
 
         return funciones;
