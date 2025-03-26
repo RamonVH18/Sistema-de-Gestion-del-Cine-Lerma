@@ -7,7 +7,6 @@ package capaPresentacion;
 
 import DTOs.CuentaMercadoDTO;
 import Excepciones.GestionReservaException;
-import Excepciones.excepcionTransferencia;
 import java.awt.Graphics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -215,14 +214,14 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         cuentaMercado.setClienteID(clienteID);
         
         //validar la cuenta segun el dto creado
-        try {
-            if (!control.verificarCuentaMercado(cuentaMercado)) {
-                JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        } catch (excepcionTransferencia ex) {
-            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            if (!control.verificarCuentaMercado(cuentaMercado)) {
+//                JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+//        } catch (excepcionTransferencia ex) {
+//            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
         //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
         try {
@@ -236,7 +235,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     }//GEN-LAST:event_btnPagarActionPerformed
 
     private void btnRegresoMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenu1ActionPerformed
-        control.mostrarSeleccionarMetodoPago(numAsientos);
+        control.mostrarSeleccionarMetodoPago();
         dispose();
     }//GEN-LAST:event_btnRegresoMenu1ActionPerformed
 

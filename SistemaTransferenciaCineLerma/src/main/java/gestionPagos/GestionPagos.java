@@ -8,7 +8,7 @@ import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.TarjetaDTO;
-import Excepciones.excepcionTransferencia;
+import Excepciones.TransferenciaException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,26 +21,24 @@ import java.util.Optional;
 public class GestionPagos implements IGestionPagos {
 
     private static GestionPagos instancia;
-    
+
     //Listas de cuentas
     private List<CuentaMercadoDTO> mercados = new ArrayList<>();
     private List<PaypalDTO> paypals = new ArrayList<>();
     private List<TarjetaDTO> tarjetas = new ArrayList<>();
-    
+
     public GestionPagos() {
         mercados = agregarCuentasMercado();
         tarjetas = agregarCuentasTarjeta();
         paypals = agregarCuentasPaypal();
     }
-    
-    
-    //METODOS PARA LLENAR LAS LISTAS DE CUENTAS
 
+    //METODOS PARA LLENAR LAS LISTAS DE CUENTAS
     @Override
     public final List<CuentaMercadoDTO> agregarCuentasMercado() {
         if (mercados.isEmpty()) {
             CuentaMercadoDTO cuenta1 = new CuentaMercadoDTO("Jaime Lerma", "lerma@gmail.com", 101);
-            CuentaMercadoDTO cuenta2 = new CuentaMercadoDTO("Gibran master", "Giga@gmail.com", 696);
+            CuentaMercadoDTO cuenta2 = new CuentaMercadoDTO("Joseson master", "Giga@gmail.com", 696);
             mercados.add(cuenta1);
             mercados.add(cuenta2);
         }
@@ -72,28 +70,24 @@ public class GestionPagos implements IGestionPagos {
         }
         return tarjetas;
     }
-    
-    
-    
-    //GETINSTANCE
 
+    //GETINSTANCE
     public static GestionPagos getInstancia() {
         if (instancia == null) {
             instancia = new GestionPagos();
         }
         return instancia;
     }
-    
-    //METODOS DE VALIDACIONES
 
+    //METODOS DE VALIDACIONES
     @Override
-    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws excepcionTransferencia {
-        if (!validarPaypal(paypal)) {
-            throw new excepcionTransferencia("Error: Los datos de la cuenta de paypal son incorrectos");
-        }
+    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws TransferenciaException {
+//        if (!validarPaypal(paypal)) {
+//            throw new TransferenciaException("Error: Los datos de la cuenta de paypal son incorrectos");
+//        }
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new excepcionTransferencia("Error: El monto debe ser mayor a 0");
+            throw new TransferenciaException("Error: El monto debe ser mayor a 0");
         }
 
         System.out.println("Procesando pago de " + pago.getMonto() + "con Paypal");
@@ -114,18 +108,18 @@ public class GestionPagos implements IGestionPagos {
     }
 
     @Override
-    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws excepcionTransferencia {
+    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws TransferenciaException {
         Date fechaHoy = new Date();
         if (!validarMercado(mercadoPago)) {
-            throw new excepcionTransferencia("Error: Los datos de la cuenta de MercadoPago son incorrectos");
+            throw new TransferenciaException("Error: Los datos de la cuenta de MercadoPago son incorrectos");
         }
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new excepcionTransferencia("Error: El monto debe ser mayor a 0");
+            throw new TransferenciaException("Error: El monto debe ser mayor a 0");
         }
 
         if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new excepcionTransferencia("Error: La fecha del pago debe ser la del dia de hoy");
+            throw new TransferenciaException("Error: La fecha del pago debe ser la del dia de hoy");
         }
 
         System.out.println("Procesando pago de " + pago.getMonto() + "con MercadoPago");
@@ -144,18 +138,18 @@ public class GestionPagos implements IGestionPagos {
     }
 
     @Override
-    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws excepcionTransferencia {
+    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws TransferenciaException {
         Date fechaHoy = new Date();
         if (!validarTarjeta(tarjeta)) {
-            throw new excepcionTransferencia("Error: Los datos de tarjeta son incorrectos");
+            throw new TransferenciaException("Error: Los datos de tarjeta son incorrectos");
         }
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new excepcionTransferencia("Error: El monto debe ser mayor a 0");
+            throw new TransferenciaException("Error: El monto debe ser mayor a 0");
         }
 
         if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new excepcionTransferencia("Error: La fecha del pago debe ser la del dia de hoy");
+            throw new TransferenciaException("Error: La fecha del pago debe ser la del dia de hoy");
         }
 
         System.out.println("Procesando pago de: $" + pago.getMonto() + "con tarjeta");
@@ -173,25 +167,43 @@ public class GestionPagos implements IGestionPagos {
     }
 
     @Override
-    public boolean validarPaypal(PaypalDTO paypal) {
-        if (paypal == null) {
-            return false;
+    public void validarCamposPaypal(String correo, String contrasenia) throws TransferenciaException {
+        try {
+            
+            if (correo == null || correo.isEmpty()) {
+                throw new TransferenciaException("Favor de ingresar un correo en el espacio en blanco.");
+            }
+            
+            if (contrasenia == null || contrasenia.isEmpty()) {
+                throw new TransferenciaException("Favor de ingresar su contraseña en el espacio correspondiente.");
+            }
+            
+            String formatoCorreo = "^[\\w.-]+@[a-zA-Z\\d,-]+\\.[a-zA-Z]{2,6}$";
+            
+            if (!correo.matches(formatoCorreo)) {
+                throw new TransferenciaException("El correo que ingrese no se encuentra en un formato valido.");
+            }
+            
+        } catch (Exception e) {
+            throw new TransferenciaException("ERROR: " + e.getMessage());
         }
-
-        if (paypal.getCorreo() == null || paypal.getCorreo().isEmpty() || paypal.getContrasenia() == null || paypal.getContrasenia().isEmpty()) {
-            return false;
-        }
-
-        String formatoCorreo = "^[\\w.-]+@[a-zA-Z\\d,-]+\\.[a-zA-Z]{2,6}$";
-
-        if (!paypal.getCorreo().matches(formatoCorreo)) {
-            return false;
-        }
-
-        return true;
-
     }
-
+    
+    @Override
+    public boolean validarCuentaPaypal(PaypalDTO paypal) throws TransferenciaException {
+        try {
+            List<PaypalDTO> cuentasPaypal = paypals;
+            for (PaypalDTO paypalComparacion : cuentasPaypal) {
+                if (paypal == paypalComparacion) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            throw new TransferenciaException("ERROR: " + e.getMessage());
+        }
+    }
+    
     @Override
     public boolean validarMercado(CuentaMercadoDTO mercadoPago) {
         Optional<CuentaMercadoDTO> cuentaMercadoEncontrada = mercados.stream().filter(p -> p.equals(mercadoPago)).findFirst();
@@ -199,7 +211,7 @@ public class GestionPagos implements IGestionPagos {
             return false;
         }
         CuentaMercadoDTO cuentaMercado = cuentaMercadoEncontrada.get();
-        
+
         if (cuentaMercado == null) {
             return false;
         }
@@ -207,7 +219,7 @@ public class GestionPagos implements IGestionPagos {
             return false;
         }
 
-        if (cuentaMercado.getClienteID()== null) {
+        if (cuentaMercado.getClienteID() == null) {
             return false;
         }
 

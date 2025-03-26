@@ -13,7 +13,7 @@ import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.GestionReservaException;
-import Excepciones.excepcionTransferencia;
+import Excepciones.TransferenciaException;
 import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
@@ -40,9 +40,9 @@ public class ControlDeNavegacion {
     private FuncionDTO funcionSeleccionada = new FuncionDTO();
 
     private List<String> asientos = new ArrayList<>();
+    
     private int numAsientos = 0;
-    private BoletoDTO boletoFinal;
-
+    
     private ClienteDTO cliente = new ClienteDTO("Abrahama Coronel Garcia", "jaime@lerma.com.mx");
 
     private static ControlDeNavegacion instancia;
@@ -125,6 +125,14 @@ public class ControlDeNavegacion {
         return asientosDisponibles;
     }
 
+    public void guardarNumeroAsientos(int numAsientos) {
+        this.numAsientos = numAsientos;
+    }
+
+    public int consultarNumeroAsientos() {
+        return numAsientos;
+    }
+
     public void validarCamposAsientos(String texto, FuncionDTO funcion) throws GestionReservaException {
         if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
             int numAsientos = Integer.parseInt(texto);
@@ -132,7 +140,7 @@ public class ControlDeNavegacion {
         }
     }
 
-    public void mostrarSeleccionarMetodoPago(int numAsientos) {
+    public void mostrarSeleccionarMetodoPago() {
         this.numAsientos = numAsientos;
         SwingUtilities.invokeLater(() -> {
             SeleccionarMetodoPago pantallaSeleccionarMetodoPago;
@@ -181,18 +189,23 @@ public class ControlDeNavegacion {
         return asientosReservados;
     }
 
-    public void cargarBoleto() throws GestionReservaException {
-        System.out.println("Numero de asientos: " + numAsientos);
+    public BoletoDTO cargarBoleto() throws GestionReservaException {
+        System.out.println("Jaime repetido");
         List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
-        System.out.println(asientosReservados);
-        //this.boletoFinal = manejoDeBoletos.generarBoleto(pelicula, funcionSeleccionada, asientosReservados, cliente);
+        return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
     }
 
     public void mostrarDetalleBoleto() {
         SwingUtilities.invokeLater(() -> {
-            DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto(boletoFinal);
-            pantallaDetalleDelBoleto.setLocationRelativeTo(null);
-            pantallaDetalleDelBoleto.setVisible(true);
+            DetalleDelBoleto pantallaDetalleDelBoleto;
+            try {
+                pantallaDetalleDelBoleto = new DetalleDelBoleto();
+                pantallaDetalleDelBoleto.setLocationRelativeTo(null);
+                pantallaDetalleDelBoleto.setVisible(true);
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         });
     }
 
@@ -219,23 +232,20 @@ public class ControlDeNavegacion {
     public static void mostrarPagoRechazado() {
 
     }
-    
+
     //Metodos de gestion de pagos
-    public boolean verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws excepcionTransferencia {
+    public boolean verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws TransferenciaException {
         boolean esValida = gestionDePagos.validarMercado(cuentaMercado);
         return esValida;
     }
-    
-    public boolean verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws excepcionTransferencia {
-        boolean esValida = gestionDePagos.validarPaypal(cuentaPaypal);
-        return esValida;
-    }
-    
-    public boolean verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws excepcionTransferencia {
+
+//    public boolean verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws TransferenciaException {
+//        //boolean esValida = gestionDePagos.validarPaypal(cuentaPaypal);
+//        return esValida;
+//    }
+    public boolean verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws TransferenciaException {
         boolean esValida = gestionDePagos.validarTarjeta(cuentaTarjeta);
         return esValida;
     }
-    
-    
-    
+
 }

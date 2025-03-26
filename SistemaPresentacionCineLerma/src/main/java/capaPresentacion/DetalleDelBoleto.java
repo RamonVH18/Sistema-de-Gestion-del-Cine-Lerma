@@ -5,8 +5,11 @@
 package capaPresentacion;
 
 import DTOs.BoletoDTO;
+import Excepciones.GestionReservaException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import javax.swing.ImageIcon;
+import utilitades.Utilerias;
 
 /**
  *
@@ -15,32 +18,16 @@ import java.time.ZoneId;
 public class DetalleDelBoleto extends javax.swing.JFrame {
     
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private Utilerias utilerias = new Utilerias();
     /**
      * Creates new form DetalleDelBoleto
      */
-    public DetalleDelBoleto(BoletoDTO boleto) {
+    public DetalleDelBoleto() throws GestionReservaException {
         initComponents();
         
-        //ImageIcon imagen = control.crearImagen(boleto.getImagenPelicula(), 200, 300);
-        //etiquetaImagen.setIcon(imagen);
-//        textoPelicula.setText(boleto.getNombrePelicula());
-        LocalDate fecha = boleto.getFechaHoraFuncion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        
-//        textoFecha3.setText(control.traducirDia(fecha.getDayOfWeek()) + ", " + 
-//                                    fecha.getDayOfMonth() + " de " + 
-//                                    control.traducirMes(fecha.getMonth()));
-        
-        String funcionMinutos = (boleto.getFechaHoraFuncion().getMinutes() < 10) ? "0" + 
-                Integer.toString(boleto.getFechaHoraFuncion().getMinutes()) : 
-                Integer.toString(boleto.getFechaHoraFuncion().getMinutes());
-        labelHora.setText("Hora: " + boleto.getFechaHoraFuncion().getHours() + ":" + funcionMinutos);
-        
-        labelSala.setText("Sala: " + boleto.getNumeroSala());
-        
-        String numAsientos = String.join(", ", boleto.getListaAsientosSeleccionados());
-//        textoAsiento.setText(numAsientos);
-        
-        labelCliente.setText("Cliente: " + boleto.getNombreCliente());
+        BoletoDTO boleto = control.cargarBoleto();
+        llenarCamposBoleto(boleto);
+    
     }
 
     /**
@@ -54,7 +41,7 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
 
         labelAsiento1 = new javax.swing.JLabel();
         Titulo = new javax.swing.JLabel();
-        laberPelicula = new javax.swing.JLabel();
+        labelPelicula = new javax.swing.JLabel();
         labelHora = new javax.swing.JLabel();
         labelFecha = new javax.swing.JLabel();
         labelSala = new javax.swing.JLabel();
@@ -75,8 +62,8 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         Titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Titulo.setText("DETALLES DEL BOLETO");
 
-        laberPelicula.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
-        laberPelicula.setText("Pelicula: ");
+        labelPelicula.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        labelPelicula.setText("Pelicula: ");
 
         labelHora.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
         labelHora.setText("Hora:");
@@ -117,14 +104,14 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
                 .addComponent(etiquetaImagenQR, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelCliente)
                             .addComponent(labelAsiento)
                             .addComponent(labelFecha)
                             .addComponent(labelSala)
                             .addComponent(labelHora)
-                            .addComponent(laberPelicula))
+                            .addComponent(labelPelicula))
                         .addGap(223, 223, 223))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(78, 78, 78)
@@ -142,7 +129,7 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(Titulo)
                 .addGap(70, 70, 70)
-                .addComponent(laberPelicula)
+                .addComponent(labelPelicula)
                 .addGap(39, 39, 39)
                 .addComponent(labelFecha)
                 .addGap(35, 35, 35)
@@ -191,7 +178,31 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     private javax.swing.JLabel labelCliente;
     private javax.swing.JLabel labelFecha;
     private javax.swing.JLabel labelHora;
+    private javax.swing.JLabel labelPelicula;
     private javax.swing.JLabel labelSala;
-    private javax.swing.JLabel laberPelicula;
     // End of variables declaration//GEN-END:variables
+    
+    public void llenarCamposBoleto(BoletoDTO boleto) {
+        ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
+        etiquetaImagen.setIcon(imagen);
+        labelPelicula.setText("Pelicula: " + boleto.getNombrePelicula());
+        LocalDate fecha = boleto.getFechaHoraFuncion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        labelFecha.setText("Fecha: " + utilerias.traducirDia(fecha.getDayOfWeek()) + ", " + 
+                                    fecha.getDayOfMonth() + " de " + 
+                                    utilerias.traducirMes(fecha.getMonth()));
+        
+        String funcionMinutos = (boleto.getFechaHoraFuncion().getMinutes() < 10) ? "0" + 
+                Integer.toString(boleto.getFechaHoraFuncion().getMinutes()) : 
+                Integer.toString(boleto.getFechaHoraFuncion().getMinutes());
+        
+        labelHora.setText("Hora: " + boleto.getFechaHoraFuncion().getHours() + ":" + funcionMinutos);
+        
+        labelSala.setText("Sala: " + boleto.getNumeroSala());
+        
+        String numAsientos = String.join(", ", boleto.getListaAsientosSeleccionados());
+        labelAsiento.setText("Asiento/s: " + numAsientos);
+        
+        labelCliente.setText("Cliente: " + boleto.getNombreCliente());
+    }
 }

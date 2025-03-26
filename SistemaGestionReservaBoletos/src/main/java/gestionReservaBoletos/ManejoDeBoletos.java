@@ -127,12 +127,12 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     //METODOS DE PAGO HARDCODEADOS
     public List<MetodoPagoDTO> metodosPagoHarcodeados() {
         if (metodosPago.isEmpty()) {
-            //MetodoPagoDTO mercadoPago = new MetodoPagoDTO("Mercado Pago", "img/mercadoPago.jpg");
+            MetodoPagoDTO mercadoPago = new MetodoPagoDTO("Mercado Pago", "img/mercadoPago.jpg");
             MetodoPagoDTO paypal = new MetodoPagoDTO("Paypal", "img/paypal.png");
             MetodoPagoDTO tarjeta = new MetodoPagoDTO("Tarjeta", "img/visamaster.png");
             
             metodosPago.add(tarjeta);
-            //metodosPago.add(mercadoPago);
+            metodosPago.add(mercadoPago);
             metodosPago.add(paypal);
         }
         return metodosPago;

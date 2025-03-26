@@ -8,7 +8,7 @@ import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.TarjetaDTO;
-import Excepciones.excepcionTransferencia;
+import Excepciones.TransferenciaException;
 import java.util.List;
 
 /**
@@ -17,13 +17,15 @@ import java.util.List;
  */
 public interface IGestionPagos {
     
-    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws excepcionTransferencia;
+    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws TransferenciaException;
     
-    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws excepcionTransferencia;
+    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws TransferenciaException;
     
-    public void procesarPagoTarjeta(TarjetaDTO paypal, PagoDTO pago) throws excepcionTransferencia;
+    public void procesarPagoTarjeta(TarjetaDTO paypal, PagoDTO pago) throws TransferenciaException;
     
-    public boolean validarPaypal(PaypalDTO paypal);
+    public void validarCamposPaypal(String correo, String contrasenia) throws TransferenciaException;
+    
+    public boolean validarCuentaPaypal(PaypalDTO paypal) throws TransferenciaException;
     
     public boolean validarMercado(CuentaMercadoDTO mercadoPago);
     

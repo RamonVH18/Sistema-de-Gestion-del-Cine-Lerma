@@ -80,7 +80,7 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
 
     private void btnCambiarMetodopagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarMetodopagoActionPerformed
 
-        control.mostrarSeleccionarMetodoPago(SOMEBITS);
+        control.mostrarSeleccionarMetodoPago();
 
 
     }//GEN-LAST:event_btnCambiarMetodopagoActionPerformed

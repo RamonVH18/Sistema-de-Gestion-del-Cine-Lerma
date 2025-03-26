@@ -156,11 +156,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
     }//GEN-LAST:event_btnPruebaActionPerformed
 
     private void btnPruebaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPruebaMouseClicked
-        try {
-            control.cargarBoleto();
-        } catch (GestionReservaException ex) {
-            Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         control.mostrarDetalleBoleto();
         dispose();
     }//GEN-LAST:event_btnPruebaMouseClicked

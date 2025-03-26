@@ -144,9 +144,8 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     }//GEN-LAST:event_correoActionPerformed
 
     private void btnRegresoMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenuActionPerformed
-        
         control.mostrarMenuPrincipal();
-        
+        dispose();
     }//GEN-LAST:event_btnRegresoMenuActionPerformed
 
     private void contraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contraseniaActionPerformed

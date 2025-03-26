@@ -8,16 +8,16 @@ package Excepciones;
  *
  * @author Abraham Coronel Bringas
  */
-public class excepcionTransferencia extends Exception {
+public class TransferenciaException extends Exception {
 
-    public excepcionTransferencia() {
+    public TransferenciaException() {
     }
 
-    public excepcionTransferencia(String message) {
+    public TransferenciaException(String message) {
         super(message);
     }
 
-    public excepcionTransferencia(String message, Throwable cause) {
+    public TransferenciaException(String message, Throwable cause) {
         super(message, cause);
     }
 

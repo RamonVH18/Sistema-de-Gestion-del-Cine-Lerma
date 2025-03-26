@@ -259,7 +259,8 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             control.validarCamposAsientos(texto, funcion);
             dispose();
             int numAsientos = Integer.valueOf(texto);
-            control.mostrarSeleccionarMetodoPago(numAsientos);
+            control.guardarNumeroAsientos(numAsientos);
+            control.mostrarSeleccionarMetodoPago();
         } catch (GestionReservaException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
         }

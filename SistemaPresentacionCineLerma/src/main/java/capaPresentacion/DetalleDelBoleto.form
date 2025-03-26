@@ -47,14 +47,14 @@
               <Component id="etiquetaImagenQR" min="-2" pref="276" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace pref="68" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="labelCliente" min="-2" max="-2" attributes="0"/>
                           <Component id="labelAsiento" min="-2" max="-2" attributes="0"/>
                           <Component id="labelFecha" min="-2" max="-2" attributes="0"/>
                           <Component id="labelSala" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="labelHora" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="laberPelicula" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelPelicula" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="223" max="-2" attributes="0"/>
                   </Group>
@@ -80,7 +80,7 @@
               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Component id="Titulo" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
-              <Component id="laberPelicula" min="-2" max="-2" attributes="0"/>
+              <Component id="labelPelicula" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               <Component id="labelFecha" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
@@ -123,7 +123,7 @@
         <Property name="text" type="java.lang.String" value="DETALLES DEL BOLETO"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="laberPelicula">
+    <Component class="javax.swing.JLabel" name="labelPelicula">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT" size="24" style="1"/>
