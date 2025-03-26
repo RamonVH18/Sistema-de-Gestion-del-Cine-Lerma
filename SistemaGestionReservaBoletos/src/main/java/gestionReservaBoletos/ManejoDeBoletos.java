@@ -13,6 +13,7 @@ import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
+import Excepciones.PeliculasCargaException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public static ManejoDeBoletos getInstancia() {
         if (instancia == null) {
             instancia = new ManejoDeBoletos();
-        }
+        } 
         return instancia;
     }
     
@@ -152,14 +153,17 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
      * @throws GestionReservaException
      */
     @Override
-    public List<PeliculaDTO> cargarPeliculasActivas() throws GestionReservaException {
+    public List<PeliculaDTO> cargarPeliculasActivas() throws PeliculasCargaException {
         try {
             // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
             List<PeliculaDTO> peliculas = peliculasHarcodeadas();
+            if (peliculas.isEmpty()) {
+                throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
+            }
             return peliculas;
 
         } catch (Exception e) {
-            throw new GestionReservaException("ERROR: Hubo un error al cargar la lista de Peliculas: " + e.getMessage());
+            throw new PeliculasCargaException("ERROR: " + e.getMessage());
         }
     }
 
@@ -167,7 +171,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws GestionReservaException {
         try {
             if (nombrePelicula == null || nombrePelicula.isBlank()) {
-                throw new GestionReservaException("El nombre de la pelicula esta vacio o es nulo");
+                throw new PeliculasCargaException("El nombre de la pelicula esta vacio o es nulo");
             }
             // aqui se llamaria a un metodo que de una listaFunciones, sin embargo como aun no tenemos la BO, voy hardcodearlas
             List<FuncionDTO> funciones = funcionesHarcodeadas();
@@ -185,8 +189,9 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             funcionesPelicula.sort(Comparator.comparing(e -> e.getFechaHora()));
             
             return funcionesPelicula;
-        } catch (Exception e) {
-            throw new GestionReservaException("ERROR: " + e.getMessage());
+        } catch (PeliculasCargaException e) {
+           // throw new PeliculasCargaException("ERROR: " + e.getMessage());
+           return null;
         }
     }
 

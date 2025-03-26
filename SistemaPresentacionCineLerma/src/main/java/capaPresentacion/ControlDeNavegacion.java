@@ -13,6 +13,7 @@ import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.GestionReservaException;
+import Excepciones.PeliculasCargaException;
 import Excepciones.TransferenciaException;
 import com.google.zxing.WriterException;
 import gestionPagos.GestionPagos;
@@ -24,7 +25,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
@@ -48,6 +52,8 @@ public class ControlDeNavegacion {
     private ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx");
 
     private static ControlDeNavegacion instancia;
+    private JFrame instanciaJFrame;
+    private JDialog instanciaJDialog;
 
     private ControlDeNavegacion() {
         // Constructor privado para evitar múltiples instancias 
@@ -74,24 +80,18 @@ public class ControlDeNavegacion {
     //Metodo que se encarga de abrir la pantalla de SeleccionarPelicula
     public void mostrarSeleccionarPelicula() {
         SwingUtilities.invokeLater(() -> {
-            SeleccionarPelicula pantallaSeleccionarPelicula;
-            try {
-                pantallaSeleccionarPelicula = new SeleccionarPelicula();
-                pantallaSeleccionarPelicula.setLocationRelativeTo(null);
-                pantallaSeleccionarPelicula.setVisible(true);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
+            pantallaSeleccionarPelicula.setLocationRelativeTo(null);
+            pantallaSeleccionarPelicula.setVisible(true);
 
         });
     }
-    
+
     //Metodo que se encarga de abrir la pantalla de SeleccionarAsientos
     public void mostrarSeleccionarAsientos() {
         SwingUtilities.invokeLater(() -> {
-            SeleccionarAsientos pantallaSeleccionarAsientos;
             try {
-                pantallaSeleccionarAsientos = new SeleccionarAsientos();
+                SeleccionarAsientos pantallaSeleccionarAsientos = new SeleccionarAsientos();
                 pantallaSeleccionarAsientos.setLocationRelativeTo(null);
                 pantallaSeleccionarAsientos.setVisible(true);
             } catch (GestionReservaException ex) {
@@ -99,13 +99,12 @@ public class ControlDeNavegacion {
             }
         });
     }
-    
+
     //Metodo que se encarga de abrir la pantalla de SeleccionarMetodoPago
     public void mostrarSeleccionarMetodoPago() {
         SwingUtilities.invokeLater(() -> {
-            SeleccionarMetodoPago pantallaSeleccionarMetodoPago;
             try {
-                pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago();
+                SeleccionarMetodoPago pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago();
                 pantallaSeleccionarMetodoPago.setLocationRelativeTo(null);
                 pantallaSeleccionarMetodoPago.setVisible(true);
             } catch (GestionReservaException ex) {
@@ -113,7 +112,7 @@ public class ControlDeNavegacion {
             }
         });
     }
-    
+
     //Metodo que se encarga de abrir el JDialog para el pago con tarjeta
     public void mostrarPagoTarjeta() {
         SwingUtilities.invokeLater(() -> {
@@ -122,7 +121,7 @@ public class ControlDeNavegacion {
             pantallaPagoTarjeta.setVisible(true);
         });
     }
-    
+
     //Metodo que se encarga de abrir el JDialog para el pago con Paypal
     public void mostrarPagoPaypal() {
         SwingUtilities.invokeLater(() -> {
@@ -131,7 +130,7 @@ public class ControlDeNavegacion {
             pantallaPagoPaypal.setVisible(true);
         });
     }
-    
+
     //Metodo que se encarga de abrir el JDialog para el pago con Mercado pago
     public void mostrarPagoMercado() {
         SwingUtilities.invokeLater(() -> {
@@ -140,13 +139,12 @@ public class ControlDeNavegacion {
             pantallaPagoMercado.setVisible(true);
         });
     }
-    
+
     //Metodo que se encarga de abrir la pantalla de DetalleBoleto
     public void mostrarDetalleBoleto() {
         SwingUtilities.invokeLater(() -> {
-            DetalleDelBoleto pantallaDetalleDelBoleto;
             try {
-                pantallaDetalleDelBoleto = new DetalleDelBoleto();
+                DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
                 pantallaDetalleDelBoleto.setLocationRelativeTo(null);
                 pantallaDetalleDelBoleto.setVisible(true);
             } catch (GestionReservaException ex) {
@@ -159,47 +157,50 @@ public class ControlDeNavegacion {
 
         });
     }
-    
+
     //METODOS PARA GUARDAR Y OBTENER LOS ELEMENTOS NECESARIOS
-    
     //PELICULA
-    
     /**
-     * Metodo que se encarga de obtener todas las peliculas que estan disponibles y lo píde desde el subsistema
+     * Metodo que se encarga de obtener todas las peliculas que estan
+     * disponibles y lo píde desde el subsistema
      */
-   
-    public List<PeliculaDTO> obtenerPeliculas(){
+    public List<PeliculaDTO> obtenerPeliculas(JPanel panel) {
         try {
-        List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
-        return peliculas;
-        } catch (GestionReservaException e) {
+            List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
+            return peliculas;
+        } catch (PeliculasCargaException e) {
             //PONER JOptionPane y cerrar la pantalla actual y volver al menuPrincipal
-            JOptionPane.showMessageDialog(parentComponent, e, title, numAsientos, icon);
+            JOptionPane.showMessageDialog(null, e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            mostrarMenuPrincipal();
+            return null;
         }
     }
-    
+
     /**
      * Metodo que se encarga de guardar la pelicula que fue seleccionada
      */
     public void guardarPeliculaSeleccionada(PeliculaDTO pelicula) {
         this.peliculaSeleccionada = pelicula;
     }
-    
+
     /**
-     * Metodo que se usa para cuando una clase Boundary necesite consultar la pelicula que fue seleccionada
-     * @return 
+     * Metodo que se usa para cuando una clase Boundary necesite consultar la
+     * pelicula que fue seleccionada
+     *
+     * @return
      */
     public PeliculaDTO consultarPelicula() {
         return peliculaSeleccionada;
     }
-    
+
     //FUNCION
-    
     /**
-     * Metodo que se encarga de obtener todas las funciones que estan disponibles y lo píde desde el subsistema
+     * Metodo que se encarga de obtener todas las funciones que estan
+     * disponibles y lo píde desde el subsistema
+     *
      * @param nombrePelicula
      * @return
-     * @throws GestionReservaException 
+     * @throws GestionReservaException
      */
     public List<FuncionDTO> obtenerFunciones(String nombrePelicula) throws GestionReservaException {
         List<FuncionDTO> funciones = manejoDeBoletos.cargarFuncionesPelicula(nombrePelicula);
@@ -208,27 +209,30 @@ public class ControlDeNavegacion {
 
     /**
      * Metodo que se encarga de guardar la funcion que fue seleccionada
-     * @param funcion 
+     *
+     * @param funcion
      */
     public void guardarFuncionSeleccionada(FuncionDTO funcion) {
         this.funcionSeleccionada = funcion;
     }
-    
+
     /**
-     * Metodo que se usa para cuando una clase Boundary necesite consultar la funcion que fue seleccionada
-     * @return 
+     * Metodo que se usa para cuando una clase Boundary necesite consultar la
+     * funcion que fue seleccionada
+     *
+     * @return
      */
     public FuncionDTO consultarFuncion() {
         return funcionSeleccionada;
     }
-    
+
     //ASIENTOS
-    
     /**
      * Metodo que consigue todos los asientosDisponibles en una funcion
+     *
      * @param funcion
      * @return
-     * @throws GestionReservaException 
+     * @throws GestionReservaException
      */
     public int obtenerAsientosDisponibles(FuncionDTO funcion) throws GestionReservaException {
         int asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
@@ -237,27 +241,29 @@ public class ControlDeNavegacion {
 
     /**
      * Metodo que se encarga de guardar el numero de asientos
-     * @param numAsientos 
+     *
+     * @param numAsientos
      */
     public void guardarNumeroAsientos(int numAsientos) {
         this.numAsientos = numAsientos;
     }
-    
+
     /**
      * Metodo para consultar el numero de asiento que se seleccionaron
-     * @return 
+     *
+     * @return
      */
     public int consultarNumeroAsientos() {
         return numAsientos;
     }
-        
+
     //VALIDACIONES
-    
     /**
      * Metodo para validar los campos numeros de asientos
+     *
      * @param texto
      * @param funcion
-     * @throws GestionReservaException 
+     * @throws GestionReservaException
      */
     public void validarCamposAsientos(String texto, FuncionDTO funcion) throws GestionReservaException {
         if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
@@ -265,22 +271,25 @@ public class ControlDeNavegacion {
             manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
         }
     }
-    
+
     /**
      * Metodo para obtener los metodos de pago que estan guardados en el sistema
+     *
      * @return
-     * @throws GestionReservaException 
+     * @throws GestionReservaException
      */
     public List<MetodoPagoDTO> obtenerMetodosPago() throws GestionReservaException {
         List<MetodoPagoDTO> metodosPago = manejoDeBoletos.cargarMetodosPago();
         return metodosPago;
     }
+
     /**
      * Metodo para obtener una lista con todo los asientos reservados
+     *
      * @param funcion
      * @param numAsientos
      * @return
-     * @throws GestionReservaException 
+     * @throws GestionReservaException
      */
     private List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws GestionReservaException {
         List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
@@ -292,6 +301,7 @@ public class ControlDeNavegacion {
         List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
         return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
     }
+
     //Metodos de gestion de pagos
     public boolean verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws TransferenciaException {
         boolean esValida = gestionDePagos.validarMercado(cuentaMercado);
@@ -302,9 +312,12 @@ public class ControlDeNavegacion {
         boolean esValida = gestionDePagos.validarCuentaPaypal(cuentaPaypal);
         return esValida;
     }
+
     public boolean verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws TransferenciaException {
         boolean esValida = gestionDePagos.validarTarjeta(cuentaTarjeta);
         return esValida;
     }
+
+
 
 }

@@ -10,7 +10,7 @@ import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
-import java.util.Date;
+import Excepciones.PeliculasCargaException;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface IManejoDeBoletos {
     
-    public List<PeliculaDTO> cargarPeliculasActivas() throws GestionReservaException;
+    public List<PeliculaDTO> cargarPeliculasActivas() throws PeliculasCargaException;
     
     public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws GestionReservaException;
     

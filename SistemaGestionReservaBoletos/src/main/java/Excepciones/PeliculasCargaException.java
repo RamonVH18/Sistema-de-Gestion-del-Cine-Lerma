@@ -8,17 +8,14 @@ package Excepciones;
  *
  * @author Ramon Valencia
  */
-public class GestionReservaException extends Exception {
+public class PeliculasCargaException extends Exception {
 
-    public GestionReservaException(String message) {
+    public PeliculasCargaException(String message) {
         super(message);
     }
 
-    public GestionReservaException(String message, Throwable cause) {
+    public PeliculasCargaException(String message, Throwable cause) {
         super(message, cause);
     }
     
-    
 }
-
-
