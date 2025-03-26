@@ -243,10 +243,10 @@ public class ControlDeNavegacion {
         return esValida;
     }
 
-//    public boolean verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws TransferenciaException {
-//        //boolean esValida = gestionDePagos.validarPaypal(cuentaPaypal);
-//        return esValida;
-//    }
+    public boolean verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws TransferenciaException {
+        boolean esValida = gestionDePagos.validarCuentaPaypal(cuentaPaypal);
+        return esValida;
+    }
     public boolean verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws TransferenciaException {
         boolean esValida = gestionDePagos.validarTarjeta(cuentaTarjeta);
         return esValida;

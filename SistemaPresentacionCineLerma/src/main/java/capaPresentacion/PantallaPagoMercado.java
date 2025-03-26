@@ -4,13 +4,13 @@
  */
 package capaPresentacion;
 
-
 import DTOs.CuentaMercadoDTO;
 import Excepciones.GestionReservaException;
 import java.awt.Graphics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import Excepciones.TransferenciaException;
 
 /**
  *
@@ -19,14 +19,15 @@ import javax.swing.JOptionPane;
 public class PantallaPagoMercado extends javax.swing.JDialog {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
-    
+
     private int numAsientos = 0;
+
     /**
      * Creates new form PantallaPagoMercado
      */
     public PantallaPagoMercado(int numero) {
         initComponents();
-        
+
         this.numAsientos = numero;
     }
 
@@ -35,35 +36,36 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         super.paint(g);
         g.drawLine(0, 510, getWidth(), 510);
     }
-    
-    public void validarCampos() {
+
+    public boolean validarCampos() throws TransferenciaException {
         //Se muestra un error si alguno de los dos campos estan vacios
         if (textClienteID.getText().trim().isEmpty() || textMontoAPagar.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
         
         if (!textClienteID.getText().trim().matches("-?\\d+")) {
             JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un ID de cliente valida", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
-        
+
         // El monto ingresado es un número entero valido
         if (!textMontoAPagar.getText().trim().matches("-?\\d+")) {
             JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un monto válido", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
-        
-        //Se crea el dto a partir de los datos ingresados
-        //CuentaMercadoDTO mercado = new CuentaMercadoDTO();
+
+        //Crear DTO
+        CuentaMercadoDTO cuentaMercado = new CuentaMercadoDTO();
         int clienteID = Integer.parseInt(textClienteID.getText().trim());
-        //mercado.setClienteID(clienteID);
-        
+        cuentaMercado.setClienteID(clienteID);
+
         //Se valida la cuenta segun el dto creado 
-//        if (!gestionPagos.validarMercado(mercado)) {
-//            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
+        if (!control.verificarCuentaMercado(cuentaMercado)) {
+            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -202,35 +204,24 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     }//GEN-LAST:event_textMontoAPagarActionPerformed
 
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
-        //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
-        validarCampos();
-        
-        //Si el texto es un numero entero valido se convertira a un valor double
-        Double monto = (double) Integer.parseInt(textMontoAPagar.getText().trim());
-
-        //DESPUES SE CREARA UN CUENTAMERCADODTO Y SE VA A LLAMAR AL METODO PARA VALIDARCUENTAMERCADO QUE RECIBE EL DTO, ASI VERIFICAMOS LA CUENTA
-        CuentaMercadoDTO cuentaMercado = new CuentaMercadoDTO();
-        int clienteID = Integer.parseInt(textClienteID.getText().trim());
-        cuentaMercado.setClienteID(clienteID);
-        
-        //validar la cuenta segun el dto creado
-//        try {
-//            if (!control.verificarCuentaMercado(cuentaMercado)) {
-//                JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//        } catch (excepcionTransferencia ex) {
-//            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        
-        //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
-        try {
-            control.cargarBoleto();
-        } catch (GestionReservaException ex) {
-            Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
+        try {                                         
+            //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
+            if (!validarCampos()) {
+                return;
+            }
+            
+            //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
+            try {
+                control.cargarBoleto();
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            control.mostrarDetalleBoleto();
+            dispose();
+            
+        } catch (TransferenciaException ex) {
+            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
         }
-        control.mostrarDetalleBoleto();
-        dispose();
 
     }//GEN-LAST:event_btnPagarActionPerformed
 

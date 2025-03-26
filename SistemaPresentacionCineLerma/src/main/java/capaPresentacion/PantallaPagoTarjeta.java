@@ -4,6 +4,16 @@
  */
 package capaPresentacion;
 
+import DTOs.CuentaMercadoDTO;
+import DTOs.TarjetaDTO;
+import Excepciones.GestionReservaException;
+import Excepciones.TransferenciaException;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,11 +22,81 @@ import javax.swing.JOptionPane;
  */
 public class PantallaPagoTarjeta extends javax.swing.JDialog {
 
+    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+
     /**
      * Creates new form PantallaPagoTarjeta
      */
     public PantallaPagoTarjeta() {
         initComponents();
+    }
+
+    public boolean validarCampos() throws TransferenciaException {
+        //Se muestra un error si alguno de los campos estan vacios
+        if (textNumeroTarjeta.getText().trim().isEmpty() || textFechaVencimiento.getText().trim().isEmpty() || textCVV.getText().trim().isEmpty() || textPropietario.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (textCVV.getText().trim().length() > 3 || textCVV.getText().trim().length() < 3) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un CVV valido, la longitud debe ser estrictamente de 3 numeros", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!textCVV.getText().trim().matches("-?\\d+")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un CVV valido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (textNumeroTarjeta.getText().trim().length() > 16 || textNumeroTarjeta.getText().trim().length() < 15) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un numero de tarjeta valido, la longitud debe ser estrictamente de entre 15 y 16 numeros", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!textNumeroTarjeta.getText().trim().matches("-?\\d+")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un numero de tarjeta valido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!textFechaVencimiento.getText().trim().matches("\\d{2}/\\d{2}")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa una fecha de vencimiento valida, (FORMATO: MM/AA)", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        //CONVERTIR LA FECHA INGRESADA POR EL USUARIO A UN DATE REAL
+        String fechaVencimientoStr = textFechaVencimiento.getText().trim();
+
+        // Formateador para MM/AA
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/yy");
+
+        // Parsear el String a YearMonth
+        YearMonth yearMonth = YearMonth.parse(fechaVencimientoStr, formatter);
+
+        // Convertir a Date (último día del mes a medianoche)
+        Date fechaVencimientoIngresada = Date.from(
+                yearMonth.atEndOfMonth() // Obtiene el último día del mes (ej: 31 de Mayo 2026)
+                        .atStartOfDay() // Hora 00:00
+                        .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
+                        .toInstant()
+        );
+
+        //CREAR DTO DE TARJETA
+        TarjetaDTO cuentaTarjeta = new TarjetaDTO();
+        String numeroTarjeta = textNumeroTarjeta.getText().trim();
+        String titular = textPropietario.getText().trim();
+        Integer CVV = Integer.valueOf(textCVV.getText().trim());
+        Date fechaVencimiento = fechaVencimientoIngresada;
+        cuentaTarjeta.setNumeroTarjeta(numeroTarjeta);
+        cuentaTarjeta.setTitular(titular);
+        cuentaTarjeta.setCvv(CVV);
+        cuentaTarjeta.setFechaVencimiento(fechaVencimiento);
+
+        //Se valida la cuenta segun el dto creado 
+        if (!control.verificarCuentaTarjeta(cuentaTarjeta)) {
+            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -29,13 +109,13 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     private void initComponents() {
 
         Titulo = new javax.swing.JLabel();
-        fieldNumeroTarjeta = new javax.swing.JTextField();
+        textNumeroTarjeta = new javax.swing.JTextField();
         txtNumeroTarjeta = new javax.swing.JLabel();
-        fieldFechaVencimiento = new javax.swing.JTextField();
+        textFechaVencimiento = new javax.swing.JTextField();
         txtFechaVencimiento = new javax.swing.JLabel();
-        fieldCVV = new javax.swing.JTextField();
+        textCVV = new javax.swing.JTextField();
         txtCVV = new javax.swing.JLabel();
-        fieldPropietario = new javax.swing.JTextField();
+        textPropietario = new javax.swing.JTextField();
         txtPropietario = new javax.swing.JLabel();
         btnCompletarPago = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
@@ -46,40 +126,40 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
         Titulo.setText("Tarjeta");
 
-        fieldNumeroTarjeta.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        fieldNumeroTarjeta.addActionListener(new java.awt.event.ActionListener() {
+        textNumeroTarjeta.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        textNumeroTarjeta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldNumeroTarjetaActionPerformed(evt);
+                textNumeroTarjetaActionPerformed(evt);
             }
         });
 
         txtNumeroTarjeta.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         txtNumeroTarjeta.setText("Numero de tarjeta:");
 
-        fieldFechaVencimiento.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        fieldFechaVencimiento.addActionListener(new java.awt.event.ActionListener() {
+        textFechaVencimiento.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        textFechaVencimiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldFechaVencimientoActionPerformed(evt);
+                textFechaVencimientoActionPerformed(evt);
             }
         });
 
         txtFechaVencimiento.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         txtFechaVencimiento.setText("Fecha de vencimiento:");
 
-        fieldCVV.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        fieldCVV.addActionListener(new java.awt.event.ActionListener() {
+        textCVV.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        textCVV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldCVVActionPerformed(evt);
+                textCVVActionPerformed(evt);
             }
         });
 
         txtCVV.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         txtCVV.setText("CVV:");
 
-        fieldPropietario.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        fieldPropietario.addActionListener(new java.awt.event.ActionListener() {
+        textPropietario.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        textPropietario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldPropietarioActionPerformed(evt);
+                textPropietarioActionPerformed(evt);
             }
         });
 
@@ -131,12 +211,12 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtFechaVencimiento)
-                                    .addComponent(fieldFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(textFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtCVV)
-                                    .addComponent(fieldCVV, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(textCVV, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtPropietario)
-                                    .addComponent(fieldPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(fieldNumeroTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(textPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(textNumeroTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(174, 174, 174))))
         );
         layout.setVerticalGroup(
@@ -147,19 +227,19 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
                 .addGap(71, 71, 71)
                 .addComponent(txtNumeroTarjeta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldNumeroTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textNumeroTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtFechaVencimiento)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtCVV)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldCVV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textCVV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtPropietario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fieldPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(94, 94, 94)
                 .addComponent(btnCompletarPago, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
@@ -170,32 +250,46 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fieldNumeroTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNumeroTarjetaActionPerformed
+    private void textNumeroTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNumeroTarjetaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fieldNumeroTarjetaActionPerformed
+    }//GEN-LAST:event_textNumeroTarjetaActionPerformed
 
-    private void fieldFechaVencimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldFechaVencimientoActionPerformed
+    private void textFechaVencimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFechaVencimientoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fieldFechaVencimientoActionPerformed
+    }//GEN-LAST:event_textFechaVencimientoActionPerformed
 
-    private void fieldCVVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldCVVActionPerformed
+    private void textCVVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCVVActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fieldCVVActionPerformed
+    }//GEN-LAST:event_textCVVActionPerformed
 
-    private void fieldPropietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPropietarioActionPerformed
+    private void textPropietarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPropietarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fieldPropietarioActionPerformed
+    }//GEN-LAST:event_textPropietarioActionPerformed
 
     private void btnCompletarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompletarPagoActionPerformed
-        if (txtCVV.getText().isBlank() || txtFechaVencimiento.getText().isBlank()
-                || txtNumeroTarjeta.getText().isBlank() || txtPropietario.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        try {
+            //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
+            if (!validarCampos()) {
+                return;
+            }
+
+            //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
+            try {
+                control.cargarBoleto();
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            control.mostrarDetalleBoleto();
+            dispose();
+
+        } catch (TransferenciaException ex) {
+            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCompletarPagoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        control.mostrarSeleccionarMetodoPago();
+        dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
@@ -206,10 +300,10 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnCompletarPago;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JTextField fieldCVV;
-    private javax.swing.JTextField fieldFechaVencimiento;
-    private javax.swing.JTextField fieldNumeroTarjeta;
-    private javax.swing.JTextField fieldPropietario;
+    private javax.swing.JTextField textCVV;
+    private javax.swing.JTextField textFechaVencimiento;
+    private javax.swing.JTextField textNumeroTarjeta;
+    private javax.swing.JTextField textPropietario;
     private javax.swing.JLabel txtCVV;
     private javax.swing.JLabel txtFechaVencimiento;
     private javax.swing.JLabel txtNumeroTarjeta;

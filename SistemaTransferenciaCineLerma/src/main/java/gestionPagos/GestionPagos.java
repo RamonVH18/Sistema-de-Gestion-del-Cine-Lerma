@@ -9,6 +9,9 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.TransferenciaException;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,8 +65,27 @@ public class GestionPagos implements IGestionPagos {
     public final List<TarjetaDTO> agregarCuentasTarjeta() {
         if (tarjetas.isEmpty()) {
 
-            TarjetaDTO cuenta1 = new TarjetaDTO("987654321123456", "ramoncito", 789, new Date());
-            TarjetaDTO cuenta2 = new TarjetaDTO("123456789675321", "jaimico", 123, new Date());
+            // Fecha de vencimiento: Mayo 2026 (MM/AAAA = 05/2026)
+            YearMonth fechaVencimiento1s = YearMonth.of(2026, 5); // Año 2026, mes 5 (Mayo)
+
+            // Convertir a Date (se usa el último día del mes para la fecha completa)
+            Date fechaVencimiento1 = Date.from(
+                    fechaVencimiento1s.atEndOfMonth() // Obtiene el último día del mes (31 de mayo)
+                            .atStartOfDay() // Hora 00:00
+                            .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
+                            .toInstant());
+
+            YearMonth fechaVencimiento2s = YearMonth.of(2029, 2); // Año 2029, mes 2 (Febrero)
+
+            // Convertir a Date (se usa el último día del mes para la fecha completa)
+            Date fechaVencimiento2 = Date.from(
+                    fechaVencimiento2s.atEndOfMonth() // Obtiene el último día del mes (31 de mayo)
+                            .atStartOfDay() // Hora 00:00
+                            .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
+                            .toInstant());
+
+            TarjetaDTO cuenta1 = new TarjetaDTO("987654321123456", "ramoncito", 789, fechaVencimiento1); // 5/26
+            TarjetaDTO cuenta2 = new TarjetaDTO("123456789675321", "jaimico", 123, fechaVencimiento2); // 2/29
             tarjetas.add(cuenta1);
             tarjetas.add(cuenta2);
 
@@ -167,43 +189,28 @@ public class GestionPagos implements IGestionPagos {
     }
 
     @Override
-    public void validarCamposPaypal(String correo, String contrasenia) throws TransferenciaException {
-        try {
-            
-            if (correo == null || correo.isEmpty()) {
-                throw new TransferenciaException("Favor de ingresar un correo en el espacio en blanco.");
-            }
-            
-            if (contrasenia == null || contrasenia.isEmpty()) {
-                throw new TransferenciaException("Favor de ingresar su contraseña en el espacio correspondiente.");
-            }
-            
-            String formatoCorreo = "^[\\w.-]+@[a-zA-Z\\d,-]+\\.[a-zA-Z]{2,6}$";
-            
-            if (!correo.matches(formatoCorreo)) {
-                throw new TransferenciaException("El correo que ingrese no se encuentra en un formato valido.");
-            }
-            
-        } catch (Exception e) {
-            throw new TransferenciaException("ERROR: " + e.getMessage());
-        }
-    }
-    
-    @Override
     public boolean validarCuentaPaypal(PaypalDTO paypal) throws TransferenciaException {
-        try {
-            List<PaypalDTO> cuentasPaypal = paypals;
-            for (PaypalDTO paypalComparacion : cuentasPaypal) {
-                if (paypal == paypalComparacion) {
-                    return true;
-                }
-            }
+        Optional<PaypalDTO> cuentaPaypalEncontrada = paypals.stream().filter(p -> p.equals(paypal)).findFirst();
+        if (!cuentaPaypalEncontrada.isPresent()) {
             return false;
-        } catch (Exception e) {
-            throw new TransferenciaException("ERROR: " + e.getMessage());
         }
+        PaypalDTO cuentaPaypal = cuentaPaypalEncontrada.get();
+
+        if (cuentaPaypal == null) {
+            return false;
+        }
+
+        if (cuentaPaypal.getCorreo() == null || cuentaPaypal.getCorreo().isEmpty() || cuentaPaypal.getCorreo().isBlank()) {
+            return false;
+        }
+
+        if (cuentaPaypal.getContrasenia() == null || cuentaPaypal.getContrasenia().isEmpty() || cuentaPaypal.getContrasenia().isBlank()) {
+            return false;
+        }
+
+        return true;
     }
-    
+
     @Override
     public boolean validarMercado(CuentaMercadoDTO mercadoPago) {
         Optional<CuentaMercadoDTO> cuentaMercadoEncontrada = mercados.stream().filter(p -> p.equals(mercadoPago)).findFirst();
@@ -233,6 +240,11 @@ public class GestionPagos implements IGestionPagos {
 
     @Override
     public boolean validarTarjeta(TarjetaDTO tarjeta) {
+        Optional<TarjetaDTO> tarjetaEncontrada = tarjetas.stream().filter(p -> p.equals(tarjeta)).findFirst();
+        if (!tarjetaEncontrada.isPresent()) {
+            return false;
+        }
+
         if (tarjeta == null) {
             return false;
         }
@@ -241,7 +253,7 @@ public class GestionPagos implements IGestionPagos {
             return false;
         }
 
-        if (tarjeta.getTitular().isBlank()) {
+        if (tarjeta.getTitular().isBlank() || tarjeta.getNumeroTarjeta().isBlank()) {
             return false;
         }
 
@@ -259,7 +271,7 @@ public class GestionPagos implements IGestionPagos {
         }
 
         int longitudNumeroTarjeta = tarjeta.getNumeroTarjeta().length();
-        if (longitudNumeroTarjeta < 13 || longitudNumeroTarjeta > 16) {
+        if (longitudNumeroTarjeta < 15 || longitudNumeroTarjeta > 16) {
             return false;
         }
 
@@ -276,4 +288,5 @@ public class GestionPagos implements IGestionPagos {
 
         return estado.equals("EXITOSO");
     }
+
 }

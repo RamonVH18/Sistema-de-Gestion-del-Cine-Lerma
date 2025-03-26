@@ -23,8 +23,6 @@ public interface IGestionPagos {
     
     public void procesarPagoTarjeta(TarjetaDTO paypal, PagoDTO pago) throws TransferenciaException;
     
-    public void validarCamposPaypal(String correo, String contrasenia) throws TransferenciaException;
-    
     public boolean validarCuentaPaypal(PaypalDTO paypal) throws TransferenciaException;
     
     public boolean validarMercado(CuentaMercadoDTO mercadoPago);

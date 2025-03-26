@@ -58,10 +58,10 @@
               <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="labelCorreo" max="32767" attributes="0"/>
-                  <Component id="correo" max="32767" attributes="0"/>
+                  <Component id="textCorreo" max="32767" attributes="0"/>
                   <Component id="labelTextoIniciarSesion" alignment="0" max="32767" attributes="0"/>
                   <Component id="labelContrasenia" max="32767" attributes="0"/>
-                  <Component id="contrasenia" max="32767" attributes="0"/>
+                  <Component id="textContrasenia" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="81" max="32767" attributes="0"/>
           </Group>
@@ -77,11 +77,11 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="labelCorreo" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="correo" min="-2" max="-2" attributes="0"/>
+              <Component id="textCorreo" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="labelContrasenia" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="contrasenia" min="-2" pref="27" max="-2" attributes="0"/>
+              <Component id="textContrasenia" min="-2" pref="27" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Component id="btnIniciarSesion" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace pref="138" max="32767" attributes="0"/>
@@ -108,14 +108,14 @@
         <Property name="text" type="java.lang.String" value="Correo:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="correo">
+    <Component class="javax.swing.JTextField" name="textCorreo">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT" size="18" style="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="correoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textCorreoActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="labelTextoIniciarSesion">
@@ -152,6 +152,9 @@
           </Border>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIniciarSesionActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnRegresoMenu">
       <Properties>
@@ -175,12 +178,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegresoMenuActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JPasswordField" name="contrasenia">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jPasswordField2"/>
-      </Properties>
+    <Component class="javax.swing.JPasswordField" name="textContrasenia">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contraseniaActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textContraseniaActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

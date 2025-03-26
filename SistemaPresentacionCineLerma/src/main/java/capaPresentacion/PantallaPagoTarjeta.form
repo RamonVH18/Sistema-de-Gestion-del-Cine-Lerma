@@ -48,13 +48,13 @@
                           <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                               <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                                   <Component id="txtFechaVencimiento" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="fieldFechaVencimiento" alignment="0" min="-2" pref="283" max="-2" attributes="0"/>
+                                  <Component id="textFechaVencimiento" alignment="0" min="-2" pref="283" max="-2" attributes="0"/>
                                   <Component id="txtCVV" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="fieldCVV" alignment="0" min="-2" pref="283" max="-2" attributes="0"/>
+                                  <Component id="textCVV" alignment="0" min="-2" pref="283" max="-2" attributes="0"/>
                                   <Component id="txtPropietario" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="fieldPropietario" alignment="0" min="-2" pref="283" max="-2" attributes="0"/>
+                                  <Component id="textPropietario" alignment="0" min="-2" pref="283" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="fieldNumeroTarjeta" min="-2" pref="283" max="-2" attributes="0"/>
+                              <Component id="textNumeroTarjeta" min="-2" pref="283" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="174" max="-2" attributes="0"/>
@@ -71,19 +71,19 @@
               <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
               <Component id="txtNumeroTarjeta" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="fieldNumeroTarjeta" min="-2" max="-2" attributes="0"/>
+              <Component id="textNumeroTarjeta" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="txtFechaVencimiento" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="fieldFechaVencimiento" min="-2" max="-2" attributes="0"/>
+              <Component id="textFechaVencimiento" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="txtCVV" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="fieldCVV" min="-2" max="-2" attributes="0"/>
+              <Component id="textCVV" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="txtPropietario" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="fieldPropietario" min="-2" max="-2" attributes="0"/>
+              <Component id="textPropietario" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
               <Component id="btnCompletarPago" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace pref="127" max="32767" attributes="0"/>
@@ -102,14 +102,14 @@
         <Property name="text" type="java.lang.String" value="Tarjeta"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="fieldNumeroTarjeta">
+    <Component class="javax.swing.JTextField" name="textNumeroTarjeta">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT" size="18" style="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fieldNumeroTarjetaActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textNumeroTarjetaActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="txtNumeroTarjeta">
@@ -120,14 +120,14 @@
         <Property name="text" type="java.lang.String" value="Numero de tarjeta:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="fieldFechaVencimiento">
+    <Component class="javax.swing.JTextField" name="textFechaVencimiento">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT" size="18" style="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fieldFechaVencimientoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textFechaVencimientoActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="txtFechaVencimiento">
@@ -138,14 +138,14 @@
         <Property name="text" type="java.lang.String" value="Fecha de vencimiento:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="fieldCVV">
+    <Component class="javax.swing.JTextField" name="textCVV">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT" size="18" style="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fieldCVVActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textCVVActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="txtCVV">
@@ -156,14 +156,14 @@
         <Property name="text" type="java.lang.String" value="CVV:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="fieldPropietario">
+    <Component class="javax.swing.JTextField" name="textPropietario">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT" size="18" style="0"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fieldPropietarioActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textPropietarioActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="txtPropietario">

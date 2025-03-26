@@ -4,19 +4,63 @@
  */
 package capaPresentacion;
 
+import DTOs.CuentaMercadoDTO;
+import DTOs.PaypalDTO;
+import Excepciones.GestionReservaException;
+import Excepciones.TransferenciaException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Abraham Coronel Bringas
  *
  */
 public class PantallaPagoPaypal extends javax.swing.JDialog {
-    
+
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+
     /**
      * Creates new form PantallaPagoPaypal
      */
     public PantallaPagoPaypal() {
         initComponents();
+    }
+
+    public boolean validarCampos() throws TransferenciaException {
+        //Se verifica que no hayan campos vacios
+        //primero se convierten los chars a string
+        char[] contraseniaChars = textContrasenia.getPassword();
+        String contrasenia = new String(contraseniaChars);
+
+        if (textCorreo.getText().trim().isEmpty() || contrasenia.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        //Se verifica si el formato del correo ingresado en el campo es correcto
+        if (!textCorreo.getText().trim().matches("^[\\w.-]+@([a-zA-Z\\d-]+\\.)+[a-zA-Z]{2,6}$")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un Correo valido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        //Crear DTO
+        PaypalDTO cuentaPaypal = new PaypalDTO();
+        String correoVerificado = textCorreo.getText();
+        String contraseniaVerificada = contrasenia;
+        cuentaPaypal.setCorreo(correoVerificado);
+        cuentaPaypal.setContrasenia(contraseniaVerificada);
+
+        //Se valida la cuenta segun el dto creado 
+        if (!control.verificarCuentaPaypal(cuentaPaypal)) {
+            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+            Arrays.fill(contraseniaChars, '\0');
+            return false;
+        }
+        Arrays.fill(contraseniaChars, '\0');
+        return true;
     }
 
     /**
@@ -31,12 +75,12 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         jPasswordField1 = new javax.swing.JPasswordField();
         TituloPaypal = new javax.swing.JLabel();
         labelCorreo = new javax.swing.JLabel();
-        correo = new javax.swing.JTextField();
+        textCorreo = new javax.swing.JTextField();
         labelTextoIniciarSesion = new javax.swing.JLabel();
         labelContrasenia = new javax.swing.JLabel();
         btnIniciarSesion = new javax.swing.JButton();
         btnRegresoMenu = new javax.swing.JButton();
-        contrasenia = new javax.swing.JPasswordField();
+        textContrasenia = new javax.swing.JPasswordField();
 
         jPasswordField1.setText("jPasswordField1");
 
@@ -50,10 +94,10 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         labelCorreo.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         labelCorreo.setText("Correo:");
 
-        correo.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        correo.addActionListener(new java.awt.event.ActionListener() {
+        textCorreo.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        textCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                correoActionPerformed(evt);
+                textCorreoActionPerformed(evt);
             }
         });
 
@@ -68,6 +112,11 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         btnIniciarSesion.setForeground(new java.awt.Color(255, 255, 255));
         btnIniciarSesion.setText("Iniciar sesion");
         btnIniciarSesion.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarSesionActionPerformed(evt);
+            }
+        });
 
         btnRegresoMenu.setBackground(new java.awt.Color(162, 132, 94));
         btnRegresoMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
@@ -80,10 +129,9 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
             }
         });
 
-        contrasenia.setText("jPasswordField2");
-        contrasenia.addActionListener(new java.awt.event.ActionListener() {
+        textContrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contraseniaActionPerformed(evt);
+                textContraseniaActionPerformed(evt);
             }
         });
 
@@ -108,10 +156,10 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
                 .addGap(66, 66, 66)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(labelCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(correo)
+                    .addComponent(textCorreo)
                     .addComponent(labelTextoIniciarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(labelContrasenia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(contrasenia))
+                    .addComponent(textContrasenia))
                 .addContainerGap(81, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -124,11 +172,11 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(labelCorreo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(correo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(labelContrasenia)
                 .addGap(18, 18, 18)
-                .addComponent(contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
@@ -139,18 +187,40 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void correoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_correoActionPerformed
+    private void textCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCorreoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_correoActionPerformed
+    }//GEN-LAST:event_textCorreoActionPerformed
 
     private void btnRegresoMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenuActionPerformed
-        control.mostrarMenuPrincipal();
+        control.mostrarSeleccionarMetodoPago();
         dispose();
     }//GEN-LAST:event_btnRegresoMenuActionPerformed
 
-    private void contraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contraseniaActionPerformed
+    private void textContraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textContraseniaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_contraseniaActionPerformed
+    }//GEN-LAST:event_textContraseniaActionPerformed
+
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        // TODO add your handling code here:
+        try {
+            //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
+            if (!validarCampos()) {
+                return;
+            }
+
+            //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
+            try {
+                control.cargarBoleto();
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(SeleccionarMetodoPago.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            control.mostrarDetalleBoleto();
+            dispose();
+
+        } catch (TransferenciaException ex) {
+            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,11 +230,11 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     private javax.swing.JLabel TituloPaypal;
     private javax.swing.JButton btnIniciarSesion;
     private javax.swing.JButton btnRegresoMenu;
-    private javax.swing.JPasswordField contrasenia;
-    private javax.swing.JTextField correo;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel labelContrasenia;
     private javax.swing.JLabel labelCorreo;
     private javax.swing.JLabel labelTextoIniciarSesion;
+    private javax.swing.JPasswordField textContrasenia;
+    private javax.swing.JTextField textCorreo;
     // End of variables declaration//GEN-END:variables
 }
