@@ -39,31 +39,52 @@ public class AsientoFuncionDTO {
     public FuncionDTO getFuncion() {
         return funcion;
     }
-
+    /**
+     * 
+     * @param funcion 
+     */
     public void setFuncion(FuncionDTO funcion) {
         this.funcion = funcion;
     }
-
+    /**
+     * 
+     * @return 
+     */
     public String getAsiento() {
         return asiento;
     }
-
+    /**
+     * 
+     * @param asiento 
+     */
     public void setAsiento(String asiento) {
         this.asiento = asiento;
     }
-
+    /**
+     * 
+     * @return 
+     */
     public boolean isDisponibilidad() {
         return disponibilidad;
     }
-
+    /**
+     * 
+     * @param disponibilidad 
+     */
     public void setDisponibilidad(boolean disponibilidad) {
         this.disponibilidad = disponibilidad;
     }
-
+    /**
+     * 
+     * @return 
+     */
     public ClienteDTO getCliente() {
         return cliente;
     }
-
+    /**
+     * 
+     * @param cliente 
+     */
     public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
     } 

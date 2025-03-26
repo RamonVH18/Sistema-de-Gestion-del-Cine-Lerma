@@ -15,27 +15,45 @@ public class FuncionesPorPeliculaDTO {
     private String nombrePelicula;
 
     private List<FuncionDTO> listaFuncionesDelDia;
-
+    /**
+     * Constructor vacio
+     */
+    public FuncionesPorPeliculaDTO() {
+    }
+    /**
+     * Constructor con todos los atributos
+     * @param nombrePelicula
+     * @param listaFuncionesDelDia 
+     */
     public FuncionesPorPeliculaDTO(String nombrePelicula, List<FuncionDTO> listaFuncionesDelDia) {
         this.nombrePelicula = nombrePelicula;
         this.listaFuncionesDelDia = listaFuncionesDelDia;
     }
-
-    public FuncionesPorPeliculaDTO() {
-    }
-
+    /**
+     * 
+     * @return 
+     */
     public String getNombrePelicula() {
         return nombrePelicula;
     }
-
+    /**
+     * 
+     * @param nombrePelicula 
+     */
     public void setNombrePelicula(String nombrePelicula) {
         this.nombrePelicula = nombrePelicula;
     }
-
+    /**
+     * 
+     * @return 
+     */
     public List<FuncionDTO> getListaFuncionesDelDia() {
         return listaFuncionesDelDia;
     }
-
+    /**
+     * 
+     * @param listaFuncionesDelDia 
+     */
     public void setListaFuncionesDelDia(List<FuncionDTO> listaFuncionesDelDia) {
         this.listaFuncionesDelDia = listaFuncionesDelDia;
     }

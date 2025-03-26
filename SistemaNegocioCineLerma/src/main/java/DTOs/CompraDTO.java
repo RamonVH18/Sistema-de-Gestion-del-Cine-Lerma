@@ -14,13 +14,13 @@ public class CompraDTO {
     private ClienteDTO cliente;
     
     /**
-     * 
+     * Constructor vacio
      */
     public CompraDTO() {
     }
     
     /**
-     * 
+     * Constructor con todos los atributos
      * @param pago
      * @param metodoPago
      * @param cliente 
@@ -36,23 +36,38 @@ public class CompraDTO {
     public PagoDTO getPago() {
         return pago;
     }
-
+    /**
+     * 
+     * @param pago 
+     */
     public void setPago(PagoDTO pago) {
         this.pago = pago;
     }
-
+    /**
+     * 
+     * @return 
+     */
     public String getMetodoPago() {
         return metodoPago;
     }
-
+    /**
+     * 
+     * @param metodoPago 
+     */
     public void setMetodoPago(String metodoPago) {
         this.metodoPago = metodoPago;
     }
-
+    /**
+     * 
+     * @return 
+     */
     public ClienteDTO getCliente() {
         return cliente;
     }
-
+    /**
+     * 
+     * @param cliente 
+     */
     public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
     }

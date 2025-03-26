@@ -31,11 +31,11 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         btnRegresoMenu.setVisible(false);
         setVisible(true);
         Thread.sleep(500); 
+        
         String rutaImagen = utilerias.sacarCapturaJFrame(this, "C:\\Users\\PC\\Documents\\GitHub\\Sistema-de-Gestion-del-Cine-Lerma\\SistemaPresentacionCineLerma\\src\\main\\resources\\img\\captura.png");
-        ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 300);
-        etiquetaImagenQR.setIcon(qrIcon);
-        ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
-        etiquetaImagen.setIcon(imagen);
+        //ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 300);
+        //etiquetaImagenQR.setIcon(qrIcon);
+        
         btnRegresoMenu.setVisible(true);
         
         revalidate();
@@ -196,6 +196,9 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     
     public void llenarCamposBoleto(BoletoDTO boleto) {
+        
+        ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
+        etiquetaImagen.setIcon(imagen);
         
         labelPelicula.setText("Pelicula: " + boleto.getNombrePelicula());
         LocalDate fecha = boleto.getFechaHoraFuncion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
