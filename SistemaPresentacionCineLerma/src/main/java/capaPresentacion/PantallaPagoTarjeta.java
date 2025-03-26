@@ -41,6 +41,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setSize(new java.awt.Dimension(420, 550));
 
         Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
         Titulo.setText("Tarjeta");

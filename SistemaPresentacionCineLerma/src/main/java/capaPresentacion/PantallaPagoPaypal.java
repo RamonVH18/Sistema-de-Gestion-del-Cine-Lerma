@@ -28,46 +28,40 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Titulo = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        textCorreo = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        textContra = new javax.swing.JTextField();
+        jPasswordField1 = new javax.swing.JPasswordField();
+        TituloPaypal = new javax.swing.JLabel();
+        labelCorreo = new javax.swing.JLabel();
+        correo = new javax.swing.JTextField();
+        labelTextoIniciarSesion = new javax.swing.JLabel();
+        labelContrasenia = new javax.swing.JLabel();
         btnIniciarSesion = new javax.swing.JButton();
         btnRegresoMenu = new javax.swing.JButton();
+        contrasenia = new javax.swing.JPasswordField();
+
+        jPasswordField1.setText("jPasswordField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(320, 415));
         setMinimumSize(new java.awt.Dimension(320, 415));
-        setPreferredSize(new java.awt.Dimension(320, 415));
-        setSize(new java.awt.Dimension(320, 415));
+        setSize(new java.awt.Dimension(420, 550));
 
-        Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
-        Titulo.setText("Paypal");
+        TituloPaypal.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
+        TituloPaypal.setText("Paypal");
 
-        jLabel1.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
-        jLabel1.setText("Correo:");
+        labelCorreo.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        labelCorreo.setText("Correo:");
 
-        textCorreo.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        textCorreo.addActionListener(new java.awt.event.ActionListener() {
+        correo.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
+        correo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textCorreoActionPerformed(evt);
+                correoActionPerformed(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
-        jLabel2.setText("Inicie sesion para vincular su cuenta de Paypal");
+        labelTextoIniciarSesion.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        labelTextoIniciarSesion.setText("Inicie sesion para vincular su cuenta de Paypal");
 
-        jLabel3.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
-        jLabel3.setText("Contraseña:");
-
-        textContra.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        textContra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textContraActionPerformed(evt);
-            }
-        });
+        labelContrasenia.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        labelContrasenia.setText("Contraseña:");
 
         btnIniciarSesion.setBackground(new java.awt.Color(0, 122, 255));
         btnIniciarSesion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
@@ -86,6 +80,13 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
             }
         });
 
+        contrasenia.setText("jPasswordField2");
+        contrasenia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contraseniaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -99,38 +100,38 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
                         .addGap(137, 137, 137)
                         .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(TituloPaypal)
+                .addGap(179, 179, 179))
             .addGroup(layout.createSequentialGroup()
                 .addGap(66, 66, 66)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textCorreo)
-                    .addComponent(jLabel2)
-                    .addComponent(textContra)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(correo)
+                    .addComponent(labelTextoIniciarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelContrasenia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(contrasenia))
                 .addContainerGap(81, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Titulo)
-                .addGap(179, 179, 179))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(Titulo)
+                .addComponent(TituloPaypal)
                 .addGap(51, 51, 51)
-                .addComponent(jLabel2)
+                .addComponent(labelTextoIniciarSesion)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addComponent(labelCorreo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(textCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(correo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addComponent(labelContrasenia)
                 .addGap(18, 18, 18)
-                .addComponent(textContra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
                 .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
                 .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
         );
@@ -138,13 +139,9 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCorreoActionPerformed
+    private void correoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_correoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textCorreoActionPerformed
-
-    private void textContraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textContraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textContraActionPerformed
+    }//GEN-LAST:event_correoActionPerformed
 
     private void btnRegresoMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenuActionPerformed
         
@@ -152,18 +149,23 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         
     }//GEN-LAST:event_btnRegresoMenuActionPerformed
 
+    private void contraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contraseniaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contraseniaActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Titulo;
+    private javax.swing.JLabel TituloPaypal;
     private javax.swing.JButton btnIniciarSesion;
     private javax.swing.JButton btnRegresoMenu;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField textContra;
-    private javax.swing.JTextField textCorreo;
+    private javax.swing.JPasswordField contrasenia;
+    private javax.swing.JTextField correo;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JLabel labelContrasenia;
+    private javax.swing.JLabel labelCorreo;
+    private javax.swing.JLabel labelTextoIniciarSesion;
     // End of variables declaration//GEN-END:variables
 }

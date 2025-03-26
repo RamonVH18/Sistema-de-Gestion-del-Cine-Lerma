@@ -56,6 +56,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(514, 632));
+        setSize(new java.awt.Dimension(420, 550));
 
         Titulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 64)); // NOI18N
         Titulo.setText("MercadoPago");
