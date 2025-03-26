@@ -8,6 +8,8 @@ package Excepciones;
  *
  * @author Abraham Coronel Bringas
  */
+
+//Clase de excepcion en general para todo el subsistema
 public class TransferenciaException extends Exception {
 
     public TransferenciaException() {

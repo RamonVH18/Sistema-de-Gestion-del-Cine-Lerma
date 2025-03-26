@@ -39,7 +39,9 @@ public class PaypalDTO {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
-
+    
+    
+    //Estos metodos hash y equals se utilizan para buscar la cuenta dentro de las listas de cuentas registradas, se hacen comparaciones, en este caso se comparan todos los atributos
     @Override
     public int hashCode() {
         int hash = 7;

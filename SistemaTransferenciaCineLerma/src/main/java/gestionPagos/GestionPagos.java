@@ -11,7 +11,6 @@ import DTOs.TarjetaDTO;
 import Excepciones.TransferenciaException;
 import java.time.YearMonth;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,10 +21,10 @@ import java.util.Optional;
  * @author Abraham Coronel Bringas
  */
 public class GestionPagos implements IGestionPagos {
-
+    //Instancia de la clase
     private static GestionPagos instancia;
 
-    //Listas de cuentas
+    //Se definen las listas de cuentas hardcodeadas
     private List<CuentaMercadoDTO> mercados = new ArrayList<>();
     private List<PaypalDTO> paypals = new ArrayList<>();
     private List<TarjetaDTO> tarjetas = new ArrayList<>();
@@ -60,21 +59,25 @@ public class GestionPagos implements IGestionPagos {
         }
         return paypals;
     }
-
+    
+    //En esta parte las fechas de vencimiento de las tarjetas son objetos tipo DATE y en este caso estas deberan tener el formato (MM/AA) estrictamente, por lo que hay que formatearlas
+    //pues el usuario ingresara la fecha de vencimiento en ese formato EJ: 01/26
     @Override
     public final List<TarjetaDTO> agregarCuentasTarjeta() {
         if (tarjetas.isEmpty()) {
-
+            
             // Fecha de vencimiento: Mayo 2026 (MM/AAAA = 05/2026)
+            // Primero tenemos que crear un objeto YearMonth, un formato que incluye solamente año y mes 
             YearMonth fechaVencimiento1s = YearMonth.of(2026, 5); // Año 2026, mes 5 (Mayo)
 
-            // Convertir a Date (se usa el último día del mes para la fecha completa)
+            // Convertir a Date 
             Date fechaVencimiento1 = Date.from(
                     fechaVencimiento1s.atEndOfMonth() // Obtiene el último día del mes (31 de mayo)
                             .atStartOfDay() // Hora 00:00
                             .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
                             .toInstant());
-
+            
+            //Se repite lo mismo pero con una fecha de vencimiento nueva, esta es para la segunda tarjeta que se creara
             YearMonth fechaVencimiento2s = YearMonth.of(2029, 2); // Año 2029, mes 2 (Febrero)
 
             // Convertir a Date (se usa el último día del mes para la fecha completa)
@@ -84,8 +87,8 @@ public class GestionPagos implements IGestionPagos {
                             .atZone(ZoneId.systemDefault()) // Zona horaria del sistema
                             .toInstant());
 
-            TarjetaDTO cuenta1 = new TarjetaDTO("987654321123456", "ramoncito", 789, fechaVencimiento1); // 5/26
-            TarjetaDTO cuenta2 = new TarjetaDTO("123456789675321", "jaimico", 123, fechaVencimiento2); // 2/29
+            TarjetaDTO cuenta1 = new TarjetaDTO("987654321123456", "ramoncito", 789, fechaVencimiento1); // 05/26
+            TarjetaDTO cuenta2 = new TarjetaDTO("123456789675321", "jaimico", 123, fechaVencimiento2); // 02/29
             tarjetas.add(cuenta1);
             tarjetas.add(cuenta2);
 
@@ -187,9 +190,11 @@ public class GestionPagos implements IGestionPagos {
             System.out.println("Pago no realizado, " + pago.getEstado());
         }
     }
-
+    
+    //Metodo para validar una cuenta de paypal, este metodo recibe un PaypalDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
+    //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
-    public boolean validarCuentaPaypal(PaypalDTO paypal) throws TransferenciaException {
+    public boolean validarCuentaPaypal(PaypalDTO paypal) {
         Optional<PaypalDTO> cuentaPaypalEncontrada = paypals.stream().filter(p -> p.equals(paypal)).findFirst();
         if (!cuentaPaypalEncontrada.isPresent()) {
             return false;
@@ -210,7 +215,9 @@ public class GestionPagos implements IGestionPagos {
 
         return true;
     }
-
+    
+    //Metodo para validar una cuenta de mercadoPago, este metodo recibe un CuentaMercadoDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
+    //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
     public boolean validarMercado(CuentaMercadoDTO mercadoPago) {
         Optional<CuentaMercadoDTO> cuentaMercadoEncontrada = mercados.stream().filter(p -> p.equals(mercadoPago)).findFirst();
@@ -237,7 +244,9 @@ public class GestionPagos implements IGestionPagos {
         return true;
 
     }
-
+    
+    //Metodo para validar una tarjeta, este metodo recibe un TarjetaDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
+    //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
     public boolean validarTarjeta(TarjetaDTO tarjeta) {
         Optional<TarjetaDTO> tarjetaEncontrada = tarjetas.stream().filter(p -> p.equals(tarjeta)).findFirst();
@@ -260,7 +269,8 @@ public class GestionPagos implements IGestionPagos {
         if (tarjeta.getFechaVencimiento().before(new Date())) {
             return false;
         }
-
+        
+        //Revisa si el cvv de la tarjeta es de 3 digitos
         String cvv = String.valueOf(tarjeta.getCvv());
         if (cvv.length() < 3 || cvv.length() > 4) {
             return false;

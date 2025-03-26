@@ -53,6 +53,7 @@ public class CuentaMercadoDTO {
         this.clienteID = clienteID;
     }
 
+    //Estos metodos hash y equals se utilizan para buscar la cuenta dentro de las listas de cuentas registradas, se hacen comparaciones, en este caso solo se compara por el clienteID
     @Override
     public int hashCode() {
         int hash = 7;

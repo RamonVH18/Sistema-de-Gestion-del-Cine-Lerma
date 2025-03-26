@@ -29,40 +29,6 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         initComponents();
     }
 
-    public boolean validarCampos() throws TransferenciaException {
-        //Se verifica que no hayan campos vacios
-        //primero se convierten los chars a string
-        char[] contraseniaChars = textContrasenia.getPassword();
-        String contrasenia = new String(contraseniaChars);
-
-        if (textCorreo.getText().trim().isEmpty() || contrasenia.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        //Se verifica si el formato del correo ingresado en el campo es correcto
-        if (!textCorreo.getText().trim().matches("^[\\w.-]+@([a-zA-Z\\d-]+\\.)+[a-zA-Z]{2,6}$")) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un Correo valido", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        //Crear DTO
-        PaypalDTO cuentaPaypal = new PaypalDTO();
-        String correoVerificado = textCorreo.getText();
-        String contraseniaVerificada = contrasenia;
-        cuentaPaypal.setCorreo(correoVerificado);
-        cuentaPaypal.setContrasenia(contraseniaVerificada);
-
-        //Se valida la cuenta segun el dto creado 
-        if (!control.verificarCuentaPaypal(cuentaPaypal)) {
-            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
-            Arrays.fill(contraseniaChars, '\0');
-            return false;
-        }
-        Arrays.fill(contraseniaChars, '\0');
-        return true;
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -232,4 +198,45 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     private javax.swing.JPasswordField textContrasenia;
     private javax.swing.JTextField textCorreo;
     // End of variables declaration//GEN-END:variables
+    public boolean validarCampos() throws TransferenciaException {
+        //Se verifica que no hayan campos vacios
+        //primero se convierten los chars a string
+        char[] contraseniaChars = textContrasenia.getPassword();
+        String contrasenia = new String(contraseniaChars);
+
+        if (textCorreo.getText().trim().isEmpty() || contrasenia.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        //Se verifica si el formato del correo ingresado en el campo es correcto
+        if (!textCorreo.getText().trim().matches("^[\\w.-]+@([a-zA-Z\\d-]+\\.)+[a-zA-Z]{2,6}$")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un Correo valido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        PaypalDTO cuentaPaypal = construirDTO();
+
+        //Se valida la cuenta segun el dto creado 
+        if (!control.verificarCuentaPaypal(cuentaPaypal)) {
+            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+            Arrays.fill(contraseniaChars, '\0');
+            return false;
+        }
+        Arrays.fill(contraseniaChars, '\0');
+        return true;
+    }
+
+    private PaypalDTO construirDTO() {
+        char[] contraseniaChars = textContrasenia.getPassword();
+        String contrasenia = new String(contraseniaChars);
+        //Crear DTO
+        PaypalDTO cuentaPaypal = new PaypalDTO();
+        String correoVerificado = textCorreo.getText();
+        String contraseniaVerificada = contrasenia;
+        cuentaPaypal.setCorreo(correoVerificado);
+        cuentaPaypal.setContrasenia(contraseniaVerificada);
+        return cuentaPaypal;
+    }
+
 }

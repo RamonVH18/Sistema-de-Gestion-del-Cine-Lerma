@@ -37,36 +37,6 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         g.drawLine(0, 510, getWidth(), 510);
     }
 
-    public boolean validarCampos() throws TransferenciaException {
-        //Se muestra un error si alguno de los dos campos estan vacios
-        if (textClienteID.getText().trim().isEmpty() || textMontoAPagar.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        
-        if (!textClienteID.getText().trim().matches("-?\\d+")) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un ID de cliente valida", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        // El monto ingresado es un número entero valido
-        if (!textMontoAPagar.getText().trim().matches("-?\\d+")) {
-            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un monto válido", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        //Crear DTO
-        CuentaMercadoDTO cuentaMercado = new CuentaMercadoDTO();
-        int clienteID = Integer.parseInt(textClienteID.getText().trim());
-        cuentaMercado.setClienteID(clienteID);
-
-        //Se valida la cuenta segun el dto creado 
-        if (!control.verificarCuentaMercado(cuentaMercado)) {
-            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -240,4 +210,43 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     private javax.swing.JTextField textClienteID;
     private javax.swing.JTextField textMontoAPagar;
     // End of variables declaration//GEN-END:variables
+    public boolean validarCampos() throws TransferenciaException {
+        //Se muestra un error si alguno de los dos campos estan vacios
+        if (textClienteID.getText().trim().isEmpty() || textMontoAPagar.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        if (!textClienteID.getText().trim().matches("-?\\d+")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un ID de cliente valida", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // El monto ingresado es un número entero valido
+        if (!textMontoAPagar.getText().trim().matches("-?\\d+")) {
+            JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un monto válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        CuentaMercadoDTO cuentaMercado = construirDTO();
+
+        //Se valida la cuenta segun el dto creado 
+        if (!control.verificarCuentaMercado(cuentaMercado)) {
+            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+    
+    private CuentaMercadoDTO construirDTO() {
+        //Crear DTO
+        CuentaMercadoDTO cuentaMercado = new CuentaMercadoDTO();
+        int clienteID = Integer.parseInt(textClienteID.getText().trim());
+        cuentaMercado.setClienteID(clienteID);
+        return cuentaMercado;
+    }
+
+
+
+
 }

@@ -15,6 +15,8 @@ import java.util.List;
  *
  * @author Ramon Valencia
  */
+
+//Interfaz para todos los metodos de GestionPagos 
 public interface IGestionPagos {
     
     public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws TransferenciaException;
@@ -23,7 +25,7 @@ public interface IGestionPagos {
     
     public void procesarPagoTarjeta(TarjetaDTO paypal, PagoDTO pago) throws TransferenciaException;
     
-    public boolean validarCuentaPaypal(PaypalDTO paypal) throws TransferenciaException;
+    public boolean validarCuentaPaypal(PaypalDTO paypal);
     
     public boolean validarMercado(CuentaMercadoDTO mercadoPago);
     
