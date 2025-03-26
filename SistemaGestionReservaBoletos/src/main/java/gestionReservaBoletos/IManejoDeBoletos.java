@@ -22,7 +22,7 @@ public interface IManejoDeBoletos {
     
     public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws GestionReservaException;
     
-    public boolean validarCampoAsiento(String campoAsiento) throws GestionReservaException;
+    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws GestionReservaException;
     
     public int consultarDisponibilidadAsientos(FuncionDTO funcion) throws GestionReservaException;
     

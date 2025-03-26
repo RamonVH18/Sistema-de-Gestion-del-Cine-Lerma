@@ -130,15 +130,8 @@ public class ControlDeNavegacion {
          return asientosDisponibles;
     }
 
-    
-    public void recargarPaginaFunciones(LocalDate dia, JPanel panel, PeliculaDTO pelicula) {
-        JFrame SeleccionarAsientos = (JFrame) SwingUtilities.getWindowAncestor(panel);
-        SeleccionarAsientos.dispose();
-        mostrarSeleccionarAsientos(dia);
-    }
-
     public void validarCamposAsientos(String texto, FuncionDTO funcion) throws GestionReservaException {
-        if (manejoDeBoletos.validarCampoAsiento(texto)) {
+        if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
             int numAsientos = Integer.parseInt(texto);
             manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
         }

@@ -13,6 +13,7 @@ import DTOs.PagoDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.GestionReservaException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -108,7 +109,6 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     //ASIENTOS HARDCODEADOS, ESTE SERA RETIRADO EN LA VERSION FINAL
     public List<AsientoFuncionDTO> asientosHarcodeados() {
         if (asientos.isEmpty()) {
-            System.out.println("Reiniciando lista");
             List<FuncionDTO> funciones = funcionesHarcodeadas();
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
@@ -159,6 +159,9 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                     funcionesPelicula.add(funcion);
                 }
             }
+            //Funcion usada para poder ordernar la lista de funciones, para de esa manera mostrar las que van primero en fecha hora
+            funcionesPelicula.sort(Comparator.comparing(e -> e.getFechaHora()));
+            
             return funcionesPelicula;
         } catch (Exception e) {
             throw new GestionReservaException("ERROR: " + e.getMessage());
@@ -166,11 +169,13 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
 
     @Override //Metodo para validar el campoAsiento de la pantalla Seleccionar Asientos
-    public boolean validarCampoAsiento(String campoAsiento) throws GestionReservaException {
+    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws GestionReservaException {
         try {
-
+            if (funcion == null) {
+                throw new GestionReservaException("Debe de ingresar una funcion.");
+            }
             if (campoAsiento == null || campoAsiento.isBlank()) {
-                throw new GestionReservaException("El Campo de numero de asientos no puede estar vacio.");
+                throw new GestionReservaException("El campo de numero de asientos no puede estar vacio.");
             }
 
             if (!campoAsiento.matches("\\d+")) {
@@ -221,6 +226,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     @Override //Metodo para validar que el numero de asientos selecionados este disponible
     public boolean validarDisponibilidaDeAsientos(int numAsientos, FuncionDTO funcion) throws GestionReservaException {
         try {
+            
             if (numAsientos <= 0) {
                 throw new GestionReservaException("Tiene que ingresar minimo 1 asiento.");
             }
