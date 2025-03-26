@@ -32,9 +32,9 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         setVisible(true);
         Thread.sleep(500); 
         
-        //String rutaImagen = utilerias.sacarCapturaJFrame(this, "C:\\Users\\PC\\Documents\\GitHub\\Sistema-de-Gestion-del-Cine-Lerma\\SistemaPresentacionCineLerma\\src\\main\\resources\\img\\captura.png");
-        //ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 300);
-        //etiquetaImagenQR.setIcon(qrIcon);
+        String rutaImagen = utilerias.sacarCapturaJFrame(this, "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema-de-Gestion-del-Cine-Lerma\\SistemaPresentacionCineLerma\\src\\main\\resources\\img\\captura.png");
+        ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 200);
+        etiquetaImagenQR.setIcon(qrIcon);
         
         btnRegresoMenu.setVisible(true);
         

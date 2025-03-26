@@ -180,36 +180,21 @@ public class Utilerias {
         }
     }
 
-    public String convertirImagenABase64(String rutaImagen) {
+    public String convertirImagenABase64(String rutaImagen, int nuevoAncho, int nuevoAlto) {
         try {
             BufferedImage imagen = ImageIO.read(new File(rutaImagen));
 
-            // Convertir la imagen a RGB (esto asegura que la imagen sea compatible con JPEG)
-            BufferedImage imagenRGB = new BufferedImage(imagen.getWidth(), imagen.getHeight(), BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2d = imagenRGB.createGraphics();
-            g2d.drawImage(imagen, 0, 0, null);
-            g2d.dispose();
+            // Reducir resolución
+            BufferedImage imagenRedimensionada = escalarImagen(imagen, nuevoAncho, nuevoAlto);
 
-            // Comprimir la imagen a JPEG con calidad reducida
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
-            ImageWriter writer = writers.next();
-            ImageWriteParam param = writer.getDefaultWriteParam();
-            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-            param.setCompressionQuality(0.5f); // Comprimir a calidad 50% (ajustar según sea necesario)
-
-            ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
-            writer.setOutput(ios);
-            writer.write(null, new IIOImage(imagenRGB, null, null), param);
-            ios.close();
-
+            ImageIO.write(imagenRedimensionada, "jpg", baos);
             byte[] bytesImagen = baos.toByteArray();
             return Base64.getEncoder().encodeToString(bytesImagen);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
     }
 
     // Generar un código QR desde el texto proporcionado
@@ -235,11 +220,21 @@ public class Utilerias {
 
     // Generar un código QR desde una imagen en Base64
     public ImageIcon obtenerQRDesdeImagen(String rutaImagen, int tamañoQR) {
-        String base64Imagen = convertirImagenABase64(rutaImagen);
+        String base64Imagen = convertirImagenABase64(rutaImagen, 10, 10);
         if (base64Imagen == null) {
             System.out.println("Error al convertir la imagen a Base64.");
             return null;
         }
         return generarCodigoQR(base64Imagen, tamañoQR);
     }
+
+    private BufferedImage escalarImagen(BufferedImage original, int ancho, int alto) {
+        Image imagenEscalada = original.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+        BufferedImage bufferedEscalada = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedEscalada.createGraphics();
+        g2d.drawImage(imagenEscalada, 0, 0, null);
+        g2d.dispose();
+        return bufferedEscalada;
+    }
+
 }

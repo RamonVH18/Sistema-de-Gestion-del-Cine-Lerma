@@ -44,7 +44,7 @@ public class ControlDeNavegacion {
 
     private int numAsientos = 0;
 
-    private ClienteDTO cliente = new ClienteDTO("Abrahama Coronel Garcia", "jaime@lerma.com.mx");
+    private ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx");
 
     private static ControlDeNavegacion instancia;
 
