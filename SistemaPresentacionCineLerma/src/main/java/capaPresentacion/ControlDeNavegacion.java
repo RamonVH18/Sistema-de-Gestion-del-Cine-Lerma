@@ -6,32 +6,24 @@ package capaPresentacion;
 
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
+import DTOs.CuentaMercadoDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
+import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
+import DTOs.TarjetaDTO;
 import Excepciones.GestionReservaException;
+import Excepciones.excepcionTransferencia;
+import gestionPagos.GestionPagos;
+import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import utilitades.Utilerias;
 
 /**
  *
@@ -41,6 +33,7 @@ public class ControlDeNavegacion {
 
     //Instancias y clases para llamar metodos
     private IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
+    private IGestionPagos gestionDePagos = GestionPagos.getInstancia();
 
     //Variables que hay que checar
     private PeliculaDTO peliculaSeleccionada = new PeliculaDTO();
@@ -226,5 +219,23 @@ public class ControlDeNavegacion {
     public static void mostrarPagoRechazado() {
 
     }
-
+    
+    //Metodos de gestion de pagos
+    public boolean verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws excepcionTransferencia {
+        boolean esValida = gestionDePagos.validarMercado(cuentaMercado);
+        return esValida;
+    }
+    
+    public boolean verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws excepcionTransferencia {
+        boolean esValida = gestionDePagos.validarPaypal(cuentaPaypal);
+        return esValida;
+    }
+    
+    public boolean verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws excepcionTransferencia {
+        boolean esValida = gestionDePagos.validarTarjeta(cuentaTarjeta);
+        return esValida;
+    }
+    
+    
+    
 }
