@@ -12,6 +12,8 @@ import DTOs.PeliculaDTO;
 import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
+import Excepciones.reservarAsientoFuncionException;
+import Excepciones.*;
 import java.util.List;
 
 /**
@@ -24,17 +26,17 @@ public interface IManejoDeBoletos {
     
     public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws FuncionCargaException;
     
-    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws GestionReservaException;
+    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws validarCampoAsientoException;
     
-    public int consultarDisponibilidadAsientos(FuncionDTO funcion) throws GestionReservaException;
+    public int consultarDisponibilidadAsientos(FuncionDTO funcion) throws DisponibilidadAsientosException;
     
-    public boolean validarDisponibilidaDeAsientos(int numAsientos, FuncionDTO funcion) throws GestionReservaException;
+    public boolean validarDisponibilidaDeAsientos(int numAsientos, FuncionDTO funcion) throws DisponibilidadAsientosException;
     
-    public double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws GestionReservaException;
+    public double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws CalcularCostoTotalException;
     
-    public List<MetodoPagoDTO> cargarMetodosPago() throws GestionReservaException;
+    public List<MetodoPagoDTO> cargarMetodosPago() throws CargarMetodopagoException;
     
-    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GestionReservaException;
+    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws generarBoletoException;
     
-    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws GestionReservaException;
+    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws reservarAsientoFuncionException;
 }
