@@ -7,6 +7,7 @@ package capaPresentacion;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import utilitades.Utilerias;
 
 /**
  *
@@ -15,9 +16,11 @@ import javax.swing.JLabel;
 public class PantallaPagoRechazado extends javax.swing.JDialog {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private Utilerias utilerias = new Utilerias();
 
     public PantallaPagoRechazado() {
         initComponents();
+        ponerImagen();
         //ImageIcon imagen = control.crearImagen("img/error-icon (1).png", 100, 100);
         //jLabelImagenIcono.setIcon(imagen);
         revalidate();
@@ -34,11 +37,12 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        labelimagen = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnCambiarMetodopago = new javax.swing.JButton();
         btnVolverMenu = new javax.swing.JButton();
-        jLabelImagenIcono = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setSize(new java.awt.Dimension(640, 830));
@@ -73,7 +77,9 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnVolverMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 540, -1, -1));
-        getContentPane().add(jLabelImagenIcono, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, 190, 110));
+
+        jLabel3.setText("jLabel3");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 220, 200));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -101,8 +107,15 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
     private javax.swing.JButton btnVolverMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabelImagenIcono;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel labelimagen;
     // End of variables declaration//GEN-END:variables
 
+    private void ponerImagen() {
+        
+        ImageIcon imagen = utilerias.crearImagen("img/errpr-icon (1).jpg", 200, 300);
+        labelimagen.setIcon(imagen);
+
+    }
     
 }

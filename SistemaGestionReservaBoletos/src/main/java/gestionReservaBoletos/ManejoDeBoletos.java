@@ -68,7 +68,9 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         PeliculaDTO pelicula6 = new PeliculaDTO("Thor: Ragnarok", "img/thor.jpg", "Thor, mas thor que nunca");
         PeliculaDTO pelicula7 = new PeliculaDTO("Cholos Empericados 2", "img/CHOLOS_EMPERICADOS.jpg", "Mas empericados que nunca...");
         PeliculaDTO pelicula8 = new PeliculaDTO("Pancho el perro millonario", "img/PANCHO.jpg", "Pancho se mete en problemas");
-         PeliculaDTO pelicula9 = new PeliculaDTO("Juego de gemelas", "img/JUEGOGEM.jpg", "juego de gemelas");
+        PeliculaDTO pelicula9 = new PeliculaDTO("Juego de gemelas", "img/JUEGOGEM.jpg", "juego de gemelas");
+        PeliculaDTO pelicula10 = new PeliculaDTO("El perro karateca", "img/elPerroKarateca.jpg", "Despues de ver morir a su sensei buscara venganza");
+        PeliculaDTO pelicula11 = new PeliculaDTO("James mono: El detective", "img/jamesMono.jpg", "El mayor detective de la historia");
 
         peliculas.add(pelicula1);
         peliculas.add(pelicula2);
@@ -79,6 +81,8 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         peliculas.add(pelicula7);
         peliculas.add(pelicula8);
         peliculas.add(pelicula9);
+        peliculas.add(pelicula10);
+        peliculas.add(pelicula11);
         }
         return peliculas;
     }
@@ -115,6 +119,12 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             
             FuncionDTO funcion19 = new FuncionDTO("A1", "Juego de gemelas", new Date(125, 02, 27, 17, 30, 0), 65.00);
             FuncionDTO funcion20 = new FuncionDTO("B1", "Juego de gemelas", new Date(125, 02, 26, 20, 45, 0), 75.00);
+            
+            FuncionDTO funcion21 = new FuncionDTO("A1", "El perro karateca", new Date(125, 02, 27, 17, 30, 0), 65.00);
+            FuncionDTO funcion22 = new FuncionDTO("B1", "El perro karateca", new Date(125, 02, 26, 20, 45, 0), 75.00);
+            
+            FuncionDTO funcion23 = new FuncionDTO("A1", "James mono: El detective", new Date(125, 02, 27, 17, 30, 0), 65.00);
+            FuncionDTO funcion24 = new FuncionDTO("B1", "James mono: El detective", new Date(125, 02, 26, 20, 45, 0), 75.00);
 
             funciones.add(funcion1);
             funciones.add(funcion2);
@@ -136,6 +146,10 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             funciones.add(funcion18);
             funciones.add(funcion19);
             funciones.add(funcion20);
+            funciones.add(funcion21);
+            funciones.add(funcion22);
+            funciones.add(funcion23);
+            funciones.add(funcion24);
            
         }
 
