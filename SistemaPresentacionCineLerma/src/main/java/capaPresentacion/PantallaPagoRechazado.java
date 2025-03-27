@@ -17,16 +17,20 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     private Utilerias utilerias = new Utilerias();
+    
+    private String url = "img/error-icon.png";
+    private int ancho = 200;
+    private int altura = 200;
+    
+    
 
     public PantallaPagoRechazado() {
         initComponents();
-        ponerImagen();
-        //ImageIcon imagen = control.crearImagen("img/error-icon (1).png", 100, 100);
-        //jLabelImagenIcono.setIcon(imagen);
+        ponerImagen(jLabel3, url, ancho, altura);
+        
         revalidate();
         repaint();
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,7 +58,7 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
 
         jLabel2.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jLabel2.setText("Tu pago ha sido rechazado debido a fondos insuficientes o datos incorrectos de tu tarjeta ");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, -1, 50));
 
         btnCambiarMetodopago.setBackground(new java.awt.Color(157, 109, 4));
         btnCambiarMetodopago.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 24)); // NOI18N
@@ -65,7 +69,7 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
                 btnCambiarMetodopagoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCambiarMetodopago, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 480, -1, -1));
+        getContentPane().add(btnCambiarMetodopago, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 480, -1, -1));
 
         btnVolverMenu.setBackground(new java.awt.Color(157, 109, 4));
         btnVolverMenu.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 24)); // NOI18N
@@ -76,24 +80,20 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
                 btnVolverMenuActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVolverMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 540, -1, -1));
+        getContentPane().add(btnVolverMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 540, -1, -1));
 
         jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 220, 200));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 150, 220, 200));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCambiarMetodopagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarMetodopagoActionPerformed
-
         control.mostrarSeleccionarMetodoPago();
         dispose();
-
-
     }//GEN-LAST:event_btnCambiarMetodopagoActionPerformed
 
     private void btnVolverMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverMenuActionPerformed
-
         control.mostrarMenuPrincipal();
         dispose();
     }//GEN-LAST:event_btnVolverMenuActionPerformed
@@ -111,11 +111,15 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
     private javax.swing.JLabel labelimagen;
     // End of variables declaration//GEN-END:variables
 
-    private void ponerImagen() {
-        
-        ImageIcon imagen = utilerias.crearImagen("img/errpr-icon (1).jpg", 200, 300);
-        labelimagen.setIcon(imagen);
+    private void ponerImagen(JLabel label, String url, int ancho, int altura) {
+
+        ImageIcon imagen = utilerias.crearImagen(url, ancho, altura);
+        label.setIcon(imagen);
+        label.setText("");
+        label.revalidate();
+        label.repaint();
+        label.setVisible(true);
 
     }
-    
+
 }

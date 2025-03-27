@@ -296,17 +296,22 @@ public class ControlDeNavegacion {
      * @param funcion
      * @throws GestionReservaException
      */
-    public void validarCamposAsientos(String texto, FuncionDTO funcion) {
+    public String validarCamposAsientos(String texto, FuncionDTO funcion) {
         try {
             if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
                 String textoValidado = texto.trim();
                 int numAsientos = Integer.parseInt(textoValidado);
                 manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
+                
+                return textoValidado;
             }
+            return null;
         } catch (ValidarCampoAsientoException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
         } catch (DisponibilidadAsientosException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
         }
     }
 

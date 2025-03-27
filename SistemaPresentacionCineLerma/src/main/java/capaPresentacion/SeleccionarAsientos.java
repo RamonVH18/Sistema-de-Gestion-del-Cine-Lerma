@@ -7,22 +7,16 @@ package capaPresentacion;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import java.awt.Color;
-
 import java.awt.GridLayout;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -180,7 +174,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelDescripcion)
                             .addComponent(jTextAreaDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 257, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelNumAsientos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
@@ -188,19 +182,19 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
                                     .addComponent(jLabelCosto)
                                     .addComponent(jLabelAsientosDisp)
                                     .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 54, Short.MAX_VALUE)))))
                 .addGap(41, 41, 41))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelTitulo)
-                .addGap(249, 249, 249))
+                .addGap(287, 287, 287))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(24, 24, 24)
                 .addComponent(jLabelTitulo)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(jLabelFuncionSeleccionada)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -252,15 +246,16 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         // TODO add your handling code here:
         String texto = jTextFieldNumAsientos.getText();
         FuncionDTO funcion = control.consultarFuncion();
-        
-        control.validarCamposAsientos(texto, funcion);
-        String textoValidado = texto.trim();
-        dispose();
-        
-        int numAsientos = Integer.valueOf(textoValidado);
-        control.guardarNumeroAsientos(numAsientos);
-        control.mostrarSeleccionarMetodoPago();
 
+        String textoValidado = control.validarCamposAsientos(texto, funcion);
+        if (textoValidado != null) {
+            dispose();
+
+            int numAsientos = Integer.valueOf(textoValidado);
+            control.guardarNumeroAsientos(numAsientos);
+            control.mostrarSeleccionarMetodoPago();
+
+        }
 
     }//GEN-LAST:event_btnSiguienteMouseClicked
 
@@ -416,7 +411,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         int asientosDisponibles;
         control.guardarFuncionSeleccionada(funcion);
         asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
-        
+
         if (asientosDisponibles == 0) {
             return;
         }
