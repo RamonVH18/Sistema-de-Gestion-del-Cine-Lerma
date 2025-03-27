@@ -277,7 +277,8 @@ public class ControlDeNavegacion {
      */
     public void validarCamposAsientos(String texto, FuncionDTO funcion) throws GestionReservaException {
         if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
-            int numAsientos = Integer.parseInt(texto);
+            String textoValidado = texto.trim();
+            int numAsientos = Integer.parseInt(textoValidado);
             manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
         }
     }

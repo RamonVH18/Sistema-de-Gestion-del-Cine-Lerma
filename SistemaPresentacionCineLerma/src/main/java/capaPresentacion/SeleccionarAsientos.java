@@ -255,8 +255,9 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         FuncionDTO funcion = control.consultarFuncion();
         try {
             control.validarCamposAsientos(texto, funcion);
+            String textoValidado = texto.trim();
             dispose();
-            int numAsientos = Integer.valueOf(texto);
+            int numAsientos = Integer.valueOf(textoValidado);
             control.guardarNumeroAsientos(numAsientos);
             control.mostrarSeleccionarMetodoPago();
         } catch (GestionReservaException e) {
