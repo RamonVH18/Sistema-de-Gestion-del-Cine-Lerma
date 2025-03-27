@@ -66,7 +66,6 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         PeliculaDTO pelicula4 = new PeliculaDTO("La vida es bella", "img/vidaBella.jpg", "La pelicula favorita del jaime");
         PeliculaDTO pelicula5 = new PeliculaDTO("Wazaa la Pelicula", "img/wazaa.jpg", "WAZAAAAAAAAAAAAAA");
         PeliculaDTO pelicula6 = new PeliculaDTO("Thor: Ragnarok", "img/thor.jpg", "Thor, mas thor que nunca");
-        PeliculaDTO pelicula7 = new PeliculaDTO("Interstellar", "img/interstellar.jpg", "Pelicula algo Bien");
 
         peliculas.add(pelicula1);
         peliculas.add(pelicula2);
@@ -74,7 +73,6 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         peliculas.add(pelicula4);
         peliculas.add(pelicula5);
         peliculas.add(pelicula6);
-        peliculas.add(pelicula7);
         }
         return peliculas;
     }
@@ -309,13 +307,13 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException {
         try {
             if (pelicula == null) {
-                throw new GenerarBoletoException("La pelicula no puede ser nula.");
+                throw new GenerarBoletoException("Hubo un problema al guardar la pelicula en el boleto. Intente mas tarde.");
             }
             if (funcion == null) {
-                throw new GenerarBoletoException("La funcion no puede ser nula.");
+                throw new GenerarBoletoException("Hubo un problema al guardar la funcion en el boleto. Intente mas tarde.");
             }
             if (asientos == null || asientos.isEmpty()) {
-                throw new GenerarBoletoException("Debe proporcionar al menos un asiento.");
+                throw new GenerarBoletoException("Hubo un problema al guardar los asientos en el boleto. Intente mas tarde.");
             }
             //Aqui abajo se añadira un metodo que registre el Boleto 
             return new BoletoDTO(pelicula.getNombrePelicula(), pelicula.getPeliculaImagen(), funcion.getFechaHora(), funcion.getSala(), asientos, cliente.getNombre());

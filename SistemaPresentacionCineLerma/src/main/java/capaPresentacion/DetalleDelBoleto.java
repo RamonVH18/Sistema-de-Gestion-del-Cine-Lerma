@@ -28,11 +28,14 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         initComponents();
         
         BoletoDTO boleto = control.cargarBoleto();
+        if (boleto == null) {
+            dispose();
+        }
         llenarCamposBoleto(boleto);
         btnRegresoMenu.setVisible(false);
         setVisible(true);
         
-        //Thread.sleep(500); Esta linea sirve para crear una linea 
+        //Thread.sleep(500); Esta linea sirve para que el hilo principal tena un delay de 500 milisegundos y asi se pueda tomar bien la captura de la imagen
         
         //Esta parte servira para la creacion del codigo qr
 //        URL url = DetalleDelBoleto.class.getResource("img/captura.png");

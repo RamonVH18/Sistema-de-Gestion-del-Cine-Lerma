@@ -13,6 +13,7 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
+import Excepciones.CalcularCostoTotalException;
 import Excepciones.DisponibilidadAsientosException;
 import Excepciones.FuncionCargaException;
 import Excepciones.GenerarBoletoException;
@@ -162,17 +163,10 @@ public class ControlDeNavegacion {
     //Metodo que se encarga de abrir la pantalla de DetalleBoleto
     public void mostrarDetalleBoleto() {
         SwingUtilities.invokeLater(() -> {
-            try {
-                DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
-                pantallaDetalleDelBoleto.setLocationRelativeTo(null);
-                pantallaDetalleDelBoleto.setVisible(true);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (WriterException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+            DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
+            pantallaDetalleDelBoleto.setLocationRelativeTo(null);
+            pantallaDetalleDelBoleto.setVisible(true);
 
         });
     }
@@ -351,20 +345,27 @@ public class ControlDeNavegacion {
 
     public BoletoDTO cargarBoleto() {
         try {
-        List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
-        return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
+            List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
+            return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
         } catch (GenerarBoletoException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            mostrarMenuPrincipal();
             return null;
         } catch (ReservarAsientoFuncionException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            mostrarMenuPrincipal();
             return null;
         }
     }
 
     //Metodos de gestion de pagos
-    public CuentaMercadoDTO verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws ValidarCuentaException {
-        return gestionDePagos.validarMercado(cuentaMercado);
+    public CuentaMercadoDTO verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) {
+        try {
+            return gestionDePagos.validarMercado(cuentaMercado);
+        } catch (ValidarCuentaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public PaypalDTO verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws ValidarCuentaException {
@@ -375,9 +376,14 @@ public class ControlDeNavegacion {
         return gestionDePagos.validarTarjeta(cuentaTarjeta);
     }
 
-    public double calcularCostoTotal() throws GestionReservaException {
-        double costoTotal = manejoDeBoletos.calcularCostoTotal(numAsientos, funcionSeleccionada);
-        return costoTotal;
+    public double calcularCostoTotal() {
+        try {
+            double costoTotal = manejoDeBoletos.calcularCostoTotal(numAsientos, funcionSeleccionada);
+            return costoTotal;
+        } catch (CalcularCostoTotalException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return 0;
+        }
     }
 
     public void actualizarSaldoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) {
@@ -393,8 +399,14 @@ public class ControlDeNavegacion {
         gestionDePagos.actualizarSaldoTarjeta(tarjeta, pago);
     }
 
-    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException {
-        gestionDePagos.procesarPagoMercado(mercadoPago, pago);
+    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) {
+        try {
+            gestionDePagos.procesarPagoMercado(mercadoPago, pago);
+        } catch (PagoException e) {
+            JOptionPane.showMessageDialog(null, pago, titulo, JOptionPane.ERROR_MESSAGE);
+        } catch (ValidarCuentaException e) {
+            JOptionPane.showMessageDialog(null, pago, titulo, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException {
