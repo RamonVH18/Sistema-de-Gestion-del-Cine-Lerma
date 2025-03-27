@@ -13,14 +13,13 @@ import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
 import DTOs.PeliculaDTO;
 import Excepciones.CalcularCostoTotalException;
-import Excepciones.CargarMetodopagoException;
 import Excepciones.DisponibilidadAsientosException;
 import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
-import Excepciones.generarBoletoException;
-import Excepciones.reservarAsientoFuncionException;
-import Excepciones.validarCampoAsientoException;
+import Excepciones.GenerarBoletoException;
+import Excepciones.ReservarAsientoFuncionException;
+import Excepciones.ValidarCampoAsientoException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -67,6 +66,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         PeliculaDTO pelicula4 = new PeliculaDTO("La vida es bella", "img/vidaBella.jpg", "La pelicula favorita del jaime");
         PeliculaDTO pelicula5 = new PeliculaDTO("Wazaa la Pelicula", "img/wazaa.jpg", "WAZAAAAAAAAAAAAAA");
         PeliculaDTO pelicula6 = new PeliculaDTO("Thor: Ragnarok", "img/thor.jpg", "Thor, mas thor que nunca");
+        PeliculaDTO pelicula7 = new PeliculaDTO("Interstellar", "img/interstellar.jpg", "Pelicula algo Bien");
 
         peliculas.add(pelicula1);
         peliculas.add(pelicula2);
@@ -74,6 +74,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         peliculas.add(pelicula4);
         peliculas.add(pelicula5);
         peliculas.add(pelicula6);
+        peliculas.add(pelicula7);
         }
         return peliculas;
     }
@@ -210,22 +211,22 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
 
     @Override //Metodo para validar el campoAsiento de la pantalla Seleccionar Asientos
-    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws validarCampoAsientoException {
+    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws ValidarCampoAsientoException {
         try {
             if (funcion == null) {
-                throw new GestionReservaException("Debe de ingresar una funcion.");
+                throw new ValidarCampoAsientoException("Debe de ingresar una funcion.");
             }
             if (campoAsiento == null || campoAsiento.isBlank()) {
-                throw new GestionReservaException("El campo de numero de asientos no puede estar vacio.");
+                throw new ValidarCampoAsientoException("El campo de numero de asientos no puede estar vacio.");
             }
 
             if (!campoAsiento.matches("\\d+")) {
-                throw new GestionReservaException("Solo puede ingresar digitos en el campo numero de asientos.");
+                throw new ValidarCampoAsientoException("Solo puede ingresar digitos en el campo numero de asientos.");
             }
 
             return true;
         } catch (Exception e) {
-            throw new validarCampoAsientoException("ERROR: " + e.getMessage());
+            throw new ValidarCampoAsientoException("ERROR: " + e.getMessage());
         }
     }
 
@@ -249,7 +250,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public int consultarDisponibilidadAsientos(FuncionDTO funcion) throws DisponibilidadAsientosException {
         try {
             if (funcion == null) {
-                throw new GestionReservaException("La funcion no puede ser nula.");
+                throw new DisponibilidadAsientosException("La funcion no puede ser nula.");
             }
             List<AsientoFuncionDTO> asientosDisponibles = listaAsientosDisponibles(funcion);
             int cuenta = 0;
@@ -269,12 +270,12 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         try {
             
             if (numAsientos <= 0) {
-                throw new GestionReservaException("Tiene que ingresar minimo 1 asiento.");
+                throw new DisponibilidadAsientosException("Tiene que ingresar minimo 1 asiento.");
             }
             //Llamada al metodo para consultar los asientos disponibles de esa funcion
             List<AsientoFuncionDTO> asientosDisponibles = listaAsientosDisponibles(funcion);
             if (asientosDisponibles.size() < numAsientos) {
-                throw new GestionReservaException("Ingreso mas asientos de los que hay disponibles.");
+                throw new DisponibilidadAsientosException("Ingreso mas asientos de los que hay disponibles.");
             }
             return true;
         } catch (Exception e) {
@@ -286,10 +287,10 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws CalcularCostoTotalException {
         try {
             if (numAsientos <= 0) {
-                throw new GestionReservaException("Tiene que ingresar minimo 1 asiento.");
+                throw new CalcularCostoTotalException("Tiene que ingresar minimo 1 asiento.");
             }
             if (funcion == null) {
-                throw new GestionReservaException("La funcion no puede ser nula.");
+                throw new CalcularCostoTotalException("La funcion no puede ser nula.");
             }
             double precio = funcion.getPrecio();
             return precio * numAsientos;
@@ -299,48 +300,44 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
 
     @Override 
-    public List<MetodoPagoDTO> cargarMetodosPago() throws CargarMetodopagoException {
-        try {
+    public List<MetodoPagoDTO> cargarMetodosPago() {
             List<MetodoPagoDTO> metodosPago = metodosPagoHarcodeados();
             return metodosPago;
-        } catch (Exception e) {
-            throw new CargarMetodopagoException("ERROR: Hubo un error al cargar los metodos de pago: " + e.getMessage());
-        }
     }
     
     @Override
-    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws generarBoletoException {
+    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException {
         try {
             if (pelicula == null) {
-                throw new GestionReservaException("La pelicula no puede ser nula.");
+                throw new GenerarBoletoException("La pelicula no puede ser nula.");
             }
             if (funcion == null) {
-                throw new GestionReservaException("La funcion no puede ser nula.");
+                throw new GenerarBoletoException("La funcion no puede ser nula.");
             }
             if (asientos == null || asientos.isEmpty()) {
-                throw new GestionReservaException("Debe proporcionar al menos un asiento.");
+                throw new GenerarBoletoException("Debe proporcionar al menos un asiento.");
             }
             //Aqui abajo se añadira un metodo que registre el Boleto 
             return new BoletoDTO(pelicula.getNombrePelicula(), pelicula.getPeliculaImagen(), funcion.getFechaHora(), funcion.getSala(), asientos, cliente.getNombre());
 
         } catch (Exception e) {
-            throw new generarBoletoException("ERROR: " + e.getMessage());
+            throw new GenerarBoletoException("ERROR: " + e.getMessage());
         }
     }
 
     //ESTE METODO CAMBIARA CASI POR COMPLETO
     @Override
-    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws reservarAsientoFuncionException {
+    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws ReservarAsientoFuncionException {
         
         try {
             if (funcion == null) {
-                throw new GestionReservaException("La funcion no puede ser nula.");
+                throw new ReservarAsientoFuncionException("La funcion no puede ser nula.");
             }
             if (numAsiento < 1) {
-                throw new GestionReservaException("No puede haber menos de 1 asiento.");
+                throw new ReservarAsientoFuncionException("No puede haber menos de 1 asiento.");
             }
             if (cliente == null) {
-                throw new GestionReservaException("El cliente no puede ser nula.");
+                throw new ReservarAsientoFuncionException("El cliente no puede ser nula.");
             }
 
             List<String> numAsientos = new ArrayList<>();
@@ -372,7 +369,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
             return numAsientos;
         } catch (Exception e) {
-            throw new reservarAsientoFuncionException("ERROR: " + e.getMessage());
+            throw new ReservarAsientoFuncionException("ERROR: " + e.getMessage());
         }
 
     }

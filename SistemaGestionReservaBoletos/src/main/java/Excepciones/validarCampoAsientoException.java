@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author isaac
  */
-public class validarCampoAsientoException extends Exception {
+public class ValidarCampoAsientoException extends Exception {
 
-    public validarCampoAsientoException(String message) {
+    public ValidarCampoAsientoException(String message) {
         super(message);
     }
 
-    public validarCampoAsientoException(String message, Throwable cause) {
+    public ValidarCampoAsientoException(String message, Throwable cause) {
         super(message, cause);
     }
 

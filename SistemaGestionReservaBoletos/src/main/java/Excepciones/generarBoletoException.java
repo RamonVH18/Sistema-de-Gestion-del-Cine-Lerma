@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author isaac
  */
-public class generarBoletoException extends Exception{
+public class GenerarBoletoException extends Exception{
 
-    public generarBoletoException(String message) {
+    public GenerarBoletoException(String message) {
         super(message);
     }
 
-    public generarBoletoException(String message, Throwable cause) {
+    public GenerarBoletoException(String message, Throwable cause) {
         super(message, cause);
     }
     

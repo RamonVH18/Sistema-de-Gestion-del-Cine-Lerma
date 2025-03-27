@@ -13,10 +13,14 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
+import Excepciones.DisponibilidadAsientosException;
 import Excepciones.FuncionCargaException;
+import Excepciones.GenerarBoletoException;
 import Excepciones.GestionReservaException;
 import Excepciones.PagoException;
 import Excepciones.PeliculasCargaException;
+import Excepciones.ReservarAsientoFuncionException;
+import Excepciones.ValidarCampoAsientoException;
 import Excepciones.ValidarCuentaException;
 import com.google.zxing.WriterException;
 import gestionPagos.GestionPagos;
@@ -172,14 +176,14 @@ public class ControlDeNavegacion {
 
         });
     }
-    
+
     //faltan los try catch no tira ninguna excepcion la pantalla de pago rechazado
     //Metodo que se encarga de abrir la pantalla de pago rechazado
     public void mostrarPantallaPagoRechazado() {
         SwingUtilities.invokeLater(() -> {
-                PantallaPagoRechazado pantallaPagoRechazado = new PantallaPagoRechazado();
-                pantallaPagoRechazado.setLocationRelativeTo(null);
-                pantallaPagoRechazado.setVisible(true);
+            PantallaPagoRechazado pantallaPagoRechazado = new PantallaPagoRechazado();
+            pantallaPagoRechazado.setLocationRelativeTo(null);
+            pantallaPagoRechazado.setVisible(true);
         });
     }
 
@@ -189,7 +193,7 @@ public class ControlDeNavegacion {
      * Metodo que se encarga de obtener todas las peliculas que estan
      * disponibles y lo píde desde el subsistema
      */
-    public List<PeliculaDTO> obtenerPeliculas(JPanel panel) {
+    public List<PeliculaDTO> obtenerPeliculas() {
         try {
             List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
             return peliculas;
@@ -270,7 +274,7 @@ public class ControlDeNavegacion {
             int asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
             return asientosDisponibles;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, numAsientos);
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return 0;
         }
     }
@@ -301,11 +305,17 @@ public class ControlDeNavegacion {
      * @param funcion
      * @throws GestionReservaException
      */
-    public void validarCamposAsientos(String texto, FuncionDTO funcion) throws GestionReservaException {
-        if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
-            String textoValidado = texto.trim();
-            int numAsientos = Integer.parseInt(textoValidado);
-            manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
+    public void validarCamposAsientos(String texto, FuncionDTO funcion) {
+        try {
+            if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
+                String textoValidado = texto.trim();
+                int numAsientos = Integer.parseInt(textoValidado);
+                manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
+            }
+        } catch (ValidarCampoAsientoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+        } catch (DisponibilidadAsientosException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -315,7 +325,7 @@ public class ControlDeNavegacion {
      * @return
      * @throws GestionReservaException
      */
-    public List<MetodoPagoDTO> obtenerMetodosPago() throws GestionReservaException {
+    public List<MetodoPagoDTO> obtenerMetodosPago() {
         List<MetodoPagoDTO> metodosPago = manejoDeBoletos.cargarMetodosPago();
         return metodosPago;
     }
@@ -328,19 +338,32 @@ public class ControlDeNavegacion {
      * @return
      * @throws GestionReservaException
      */
-    private List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws GestionReservaException {
-        List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
-        this.asientos = asientosReservados;
-        return asientosReservados;
+    private List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws ReservarAsientoFuncionException {
+        try {
+            List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
+            this.asientos = asientosReservados;
+            return asientosReservados;
+        } catch (ReservarAsientoFuncionException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
-    public BoletoDTO cargarBoleto() throws GestionReservaException {
+    public BoletoDTO cargarBoleto() {
+        try {
         List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
         return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
+        } catch (GenerarBoletoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        } catch (ReservarAsientoFuncionException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     //Metodos de gestion de pagos
-    public CuentaMercadoDTO verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws ValidarCuentaException  {
+    public CuentaMercadoDTO verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws ValidarCuentaException {
         return gestionDePagos.validarMercado(cuentaMercado);
     }
 
@@ -351,34 +374,34 @@ public class ControlDeNavegacion {
     public TarjetaDTO verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws ValidarCuentaException {
         return gestionDePagos.validarTarjeta(cuentaTarjeta);
     }
-    
+
     public double calcularCostoTotal() throws GestionReservaException {
         double costoTotal = manejoDeBoletos.calcularCostoTotal(numAsientos, funcionSeleccionada);
-        return costoTotal;        
+        return costoTotal;
     }
-    
+
     public void actualizarSaldoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) {
-        gestionDePagos.actualizarSaldoMercado(mercadoPago, pago); 
+        gestionDePagos.actualizarSaldoMercado(mercadoPago, pago);
     }
 
     public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) {
         gestionDePagos.actualizarSaldoPaypal(paypal, pago);
-           
+
     }
 
     public void actualizarSaldoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) {
         gestionDePagos.actualizarSaldoTarjeta(tarjeta, pago);
     }
-    
-    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException{
+
+    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException {
         gestionDePagos.procesarPagoMercado(mercadoPago, pago);
     }
-    
-    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException{
+
+    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException {
         gestionDePagos.procesarPagoPaypal(paypal, pago);
     }
-    
-    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException, ValidarCuentaException{
+
+    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException, ValidarCuentaException {
         gestionDePagos.procesarPagoTarjeta(tarjeta, pago);
     }
 

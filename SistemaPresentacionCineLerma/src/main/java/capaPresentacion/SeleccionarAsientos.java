@@ -6,7 +6,6 @@ package capaPresentacion;
 
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
-import Excepciones.GestionReservaException;
 import java.awt.Color;
 
 import java.awt.GridLayout;
@@ -253,16 +252,15 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         // TODO add your handling code here:
         String texto = jTextFieldNumAsientos.getText();
         FuncionDTO funcion = control.consultarFuncion();
-        try {
-            control.validarCamposAsientos(texto, funcion);
-            String textoValidado = texto.trim();
-            dispose();
-            int numAsientos = Integer.valueOf(textoValidado);
-            control.guardarNumeroAsientos(numAsientos);
-            control.mostrarSeleccionarMetodoPago();
-        } catch (GestionReservaException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
-        }
+        
+        control.validarCamposAsientos(texto, funcion);
+        String textoValidado = texto.trim();
+        dispose();
+        
+        int numAsientos = Integer.valueOf(textoValidado);
+        control.guardarNumeroAsientos(numAsientos);
+        control.mostrarSeleccionarMetodoPago();
+
 
     }//GEN-LAST:event_btnSiguienteMouseClicked
 
@@ -418,6 +416,10 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         int asientosDisponibles;
         control.guardarFuncionSeleccionada(funcion);
         asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
+        
+        if (asientosDisponibles == 0) {
+            return;
+        }
         cargarDatos(funcion, asientosDisponibles, diaTexto);
 
     }

@@ -24,14 +24,15 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     /**
      * Creates new form DetalleDelBoleto
      */
-    public DetalleDelBoleto() throws GestionReservaException, InterruptedException, WriterException {
+    public DetalleDelBoleto(){
         initComponents();
         
         BoletoDTO boleto = control.cargarBoleto();
         llenarCamposBoleto(boleto);
         btnRegresoMenu.setVisible(false);
         setVisible(true);
-        Thread.sleep(500); 
+        
+        //Thread.sleep(500); Esta linea sirve para crear una linea 
         
         //Esta parte servira para la creacion del codigo qr
 //        URL url = DetalleDelBoleto.class.getResource("img/captura.png");
