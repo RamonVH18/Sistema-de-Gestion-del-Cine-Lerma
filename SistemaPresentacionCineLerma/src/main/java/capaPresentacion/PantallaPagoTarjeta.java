@@ -4,18 +4,13 @@
  */
 package capaPresentacion;
 
-import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.GestionReservaException;
-import Excepciones.PagoException;
-import Excepciones.ValidarCuentaException;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -208,6 +203,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_textPropietarioActionPerformed
 
+
     private void btnCompletarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompletarPagoActionPerformed
 
         //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
@@ -252,13 +248,20 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     private javax.swing.JLabel txtPropietario;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Valida los campos de entrada para asegurarse de que no estén vacios y que
+     * el formato del correo sea correcto.
+     *
+     * @return true si todos los campos son válidos; false si hay algún error en
+     * la validación.
+     */
     public boolean validarCampos() {
         //Se muestra un error si alguno de los campos estan vacios
         if (textNumeroTarjeta.getText().trim().isEmpty() || textFechaVencimiento.getText().trim().isEmpty() || textCVV.getText().trim().isEmpty() || textPropietario.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        
+
         if (textCVV.getText().trim().length() > 3 || textCVV.getText().trim().length() < 3) {
             JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un CVV valido, la longitud debe ser estrictamente de 3 numeros", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -294,6 +297,12 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         return true;
     }
 
+    /**
+     * Construye un objeto TarjetaDTO a partir de los datos ingresados en los
+     * campos de texto del numeroTarjeta, titular, cvv, fechaVencimiento.
+     *
+     * @return un objeto TarjetaDTO.
+     */
     private TarjetaDTO construirDTO() {
         //CONVERTIR LA FECHA INGRESADA POR EL USUARIO A UN DATE REAL
         String fechaVencimientoStr = textFechaVencimiento.getText().trim();
@@ -325,6 +334,12 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         return cuentaTarjeta;
     }
 
+    /**
+     * Construye un objeto PagoDTO a partir del costo total calculado.
+     *
+     * @return un objeto PagoDTO con el monto y la fecha/hora del pago
+     * establecidos.
+     */
     private PagoDTO construirPagoDTO() {
         //Crear DTO
         Date fechaHoy = new Date();
@@ -336,11 +351,19 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         return pago;
     }
 
+    /**
+     * Valida el pago a realizar a traves de Tarjeta, asegurandose de que el
+     * monto no exceda el saldo de la cuenta de Tarjeta del cliente.
+     *
+     * @return true si el pago es valido y se procesa correctamente; false si la
+     * cuenta de Tarjeta no existe o si el monto del pago es mayor que el saldo
+     * de la cuenta.
+     */
     public boolean validarPagoTarjeta() {
         PagoDTO pagoTarjeta = construirPagoDTO();
         TarjetaDTO cuentaTarjeta = construirDTO();
         TarjetaDTO cuentaTarjetaExistente = control.verificarCuentaTarjeta(cuentaTarjeta);
-        
+
         if (cuentaTarjetaExistente == null) {
             return false;
         }
@@ -355,6 +378,10 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Establece el total a pagar en la etiqueta correspondiente, calculando el
+     * costo total a travess del control.
+     */
     private void setearTotalPagar() {
         String total = Double.toString(control.calcularCostoTotal());
         labelPago.setText("Total a pagar: " + total);

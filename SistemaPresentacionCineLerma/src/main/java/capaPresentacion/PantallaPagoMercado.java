@@ -7,12 +7,8 @@ package capaPresentacion;
 import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
 import Excepciones.GestionReservaException;
-import Excepciones.PagoException;
-import Excepciones.ValidarCuentaException;
 import java.awt.Graphics;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -224,21 +220,21 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     private javax.swing.JTextField textClienteID;
     private javax.swing.JTextField textMontoAPagar;
     // End of variables declaration//GEN-END:variables
-    
 
-/**
- * Valida los campos de entrada para asegurarse de que no estén vacíos y que contengan valores válidos.
- * 
- * @return true si todos los campos son válidos y cumplen con las condiciones necesarias; 
- *         false si hay algún error en la validación.
- */
-    public boolean validarCampos(){
+    /**
+     * Valida los campos de entrada para asegurarse de que no esten vacios y que
+     * contengan valores validos.
+     *
+     * @return true si todos los campos son validos y cumplen con las
+     * condiciones necesarias; false si hay algun error en la validacion.
+     */
+    public boolean validarCampos() {
         //Se muestra un error si alguno de los dos campos estan vacios
         if (textClienteID.getText().trim().isEmpty() || textMontoAPagar.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        
+
         //Se valida que el id ingresado sea una combinacion de digitos enteros y nada mas
         if (!textClienteID.getText().trim().matches("-?\\d+")) {
             JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un ID de cliente valida", "Error", JOptionPane.ERROR_MESSAGE);
@@ -250,19 +246,19 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un monto válido", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        
+
         CuentaMercadoDTO cuentaMercado = construirDTO();
-        
+
         //El metodo de mercadoPago tiene la peculiaridad de que se tiene que ingresar el monto que se desea pagar, aunque mas adelante se valida
         //que el monto a pagar que se ingresa sea el mismo que el monto que se debe pagar, como los precios se manejan en double
         //se tiene que parsear el contenido de textMontoAPagar (numero entero) a un valor double
         Double monto = Double.valueOf(textMontoAPagar.getText().trim());
         double costoTotal = control.calcularCostoTotal();
-        
+
         if (costoTotal == 0) {
             return false;
         }
-        
+
         if (monto > costoTotal || monto < costoTotal) {
             JOptionPane.showMessageDialog(null, "ERROR: El monto a pagar es mayor o menor que el total a pagar (debe ser el mismo)", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -276,11 +272,12 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         return true;
     }
 
-/**
- * Construye un objeto CuentaMercadoDTO a partir de los datos ingresados en el campo de texto del ID del cliente.
- * 
- * @return un objeto CuentaMercadoDTO con el ID del cliente establecido.
- */
+    /**
+     * Construye un objeto CuentaMercadoDTO a partir de los datos ingresados en
+     * el campo de texto del ID del cliente.
+     *
+     * @return un objeto CuentaMercadoDTO con el ID del cliente establecido.
+     */
     private CuentaMercadoDTO construirDTO() {
         //Crear DTO
         CuentaMercadoDTO cuentaMercado = new CuentaMercadoDTO();
@@ -291,10 +288,12 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     }
 
     /**
- * Construye un objeto PagoDTO a partir de los datos ingresados en el campo de texto del monto a pagar.
- * 
- * @return un objeto PagoDTO con el monto y la fecha/hora del pago establecidos.
- */
+     * Construye un objeto PagoDTO a partir de los datos ingresados en el campo
+     * de texto del monto a pagar.
+     *
+     * @return un objeto PagoDTO con el monto y la fecha/hora del pago
+     * establecidos.
+     */
     private PagoDTO construirPagoDTO() {
         //Crear DTO
         Date fechaHoy = new Date();
@@ -307,11 +306,12 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     }
 
     /**
- * Valida el pago a realizar, asegurándose de que el monto no exceda el saldo de la cuenta del cliente.
- * 
- * @return true si el pago es válido y se procesa correctamente; 
- *         false si el monto del pago es mayor que el saldo de la cuenta.
- */
+     * Valida el pago a realizar, asegurandose de que el monto no exceda el
+     * saldo de la cuenta del cliente.
+     *
+     * @return true si el pago es valido y se procesa correctamente; false si el
+     * monto del pago es mayor que el saldo de la cuenta.
+     */
     public boolean validarPago() {
         PagoDTO pagoloco = construirPagoDTO();
         CuentaMercadoDTO cuentaMercado = construirDTO();
@@ -332,9 +332,9 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     }
 
     /**
- * Establece el total a pagar en la etiqueta correspondiente, 
- * calculando el costo total a través del control.
- */
+     * Establece el total a pagar en la etiqueta correspondiente, calculando el
+     * costo total a través del control.
+     */
     private void setearTotalPagar() {
         String total = Double.toString(control.calcularCostoTotal());
         labelPago.setText("Total a pagar: " + total);
