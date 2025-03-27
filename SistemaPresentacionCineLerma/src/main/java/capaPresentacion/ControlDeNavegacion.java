@@ -16,13 +16,16 @@ import DTOs.TarjetaDTO;
 import Excepciones.CalcularCostoTotalException;
 import Excepciones.DisponibilidadAsientosException;
 import Excepciones.FuncionCargaException;
-import Excepciones.GenerarBoletoException;
+import Excepciones.generarBoletoException;
 import Excepciones.GestionReservaException;
 import Excepciones.PagoException;
 import Excepciones.PeliculasCargaException;
-import Excepciones.ReservarAsientoFuncionException;
-import Excepciones.ValidarCampoAsientoException;
+import Excepciones.reservarAsientoFuncionException;
+import Excepciones.validarCampoAsientoException;
 import Excepciones.ValidarCuentaException;
+import Excepciones.generarBoletoException;
+import Excepciones.reservarAsientoFuncionException;
+import Excepciones.validarCampoAsientoException;
 import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
@@ -320,7 +323,7 @@ public class ControlDeNavegacion {
                 return textoValidado;
             }
             return null;
-        } catch (ValidarCampoAsientoException e) {
+        } catch (validarCampoAsientoException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return null;
         } catch (DisponibilidadAsientosException e) {
@@ -354,7 +357,7 @@ public class ControlDeNavegacion {
             List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
             this.asientos = asientosReservados;
             return asientosReservados;
-        } catch (ReservarAsientoFuncionException e) {
+        } catch (reservarAsientoFuncionException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return null;
         }
@@ -369,7 +372,7 @@ public class ControlDeNavegacion {
         try {
             List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
             return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
-        } catch (GenerarBoletoException e) {
+        } catch (generarBoletoException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             mostrarMenuPrincipal();
             return null;
