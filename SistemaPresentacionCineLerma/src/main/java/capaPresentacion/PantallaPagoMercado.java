@@ -184,7 +184,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     }//GEN-LAST:event_textMontoAPagarActionPerformed
 
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
-
+        //Al presionar el boton se van a hacer las validaciones de los campos, la cuenta y el pago, si se logran pasar todas exitosamente entonces se mostrata la pantalla de detalles del boleto, es decir el resumen de la compra
         //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
         if (!validarCampos()) {
             return;
@@ -238,7 +238,8 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
+        
+        //Se valida que el id ingresado sea una combinacion de digitos enteros y nada mas
         if (!textClienteID.getText().trim().matches("-?\\d+")) {
             JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un ID de cliente valida", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -251,7 +252,10 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         }
         
         CuentaMercadoDTO cuentaMercado = construirDTO();
-
+        
+        //El metodo de mercadoPago tiene la peculiaridad de que se tiene que ingresar el monto que se desea pagar, aunque mas adelante se valida
+        //que el monto a pagar que se ingresa sea el mismo que el monto que se debe pagar, como los precios se manejan en double
+        //se tiene que parsear el contenido de textMontoAPagar (numero entero) a un valor double
         Double monto = Double.valueOf(textMontoAPagar.getText().trim());
         double costoTotal = control.calcularCostoTotal();
         
@@ -280,6 +284,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     private CuentaMercadoDTO construirDTO() {
         //Crear DTO
         CuentaMercadoDTO cuentaMercado = new CuentaMercadoDTO();
+        //El id que se utilizara para validar la cuenta se obtiene de parsear en contenido del field en un valor entero
         int clienteID = Integer.parseInt(textClienteID.getText().trim());
         cuentaMercado.setClienteID(clienteID);
         return cuentaMercado;
@@ -318,9 +323,10 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         if (pagoloco.getMonto() > cuentaMercadoExistente.getSaldo()) {
             return false;
         }
-
+        //Llama a los metodos de control para procesar el pago y finalmente actualizar el saldo de la cuenta segun la transaccion
         control.procesarPagoMercado(cuentaMercadoExistente, pagoloco);
         control.actualizarSaldoMercado(cuentaMercadoExistente, pagoloco);
+        //Regresa un valor true por que el pago se valido exitosamente
         return true;
 
     }

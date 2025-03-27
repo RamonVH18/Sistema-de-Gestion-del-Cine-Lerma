@@ -186,12 +186,13 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         }
 
         //DESPUES SE DEBE VALIDAR EL PAGO
+        //En caso de que el pago falle entonces se enviara a la pantalla de pago rechazado
         if (!validarPagoPaypal()) {
             dispose();
             control.mostrarPantallaPagoRechazado();
             return;
         }
-        //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
+        //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos y validados
 
         control.mostrarDetalleBoleto();
         dispose();
@@ -214,6 +215,12 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     private javax.swing.JPasswordField textContrasenia;
     private javax.swing.JTextField textCorreo;
     // End of variables declaration//GEN-END:variables
+    /**
+ * Valida los campos de entrada para asegurarse de que no estén vacíos y que el formato del correo sea correcto.
+ * 
+ * @return true si todos los campos son válidos; 
+ *         false si hay algún error en la validación.
+ */
     public boolean validarCampos() {
         //Se verifica que no hayan campos vacios
         //primero se convierten los chars a string
@@ -234,10 +241,17 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         return true;
     }
 
+    /**
+ * Construye un objeto PaypalDTO a partir de los datos ingresados en los campos de texto del correo y la contraseña.
+ * 
+ * @return un objeto PaypalDTO con el correo y la contraseña establecidos.
+ */
     private PaypalDTO construirDTO() {
+        //En esta parte la contraseña se escribe en forma de **********, por lo que hay que sacar un arreglo de char[] con .getPassword
         char[] contraseniaChars = textContrasenia.getPassword();
+        //Ese arreglo de Chars se parsea a String
         String contrasenia = new String(contraseniaChars);
-        //Crear DTO
+        //Crear DTO, se contruye el DTO con los datos ingresados por el usuario
         PaypalDTO cuentaPaypal = new PaypalDTO();
         String correoVerificado = textCorreo.getText();
         String contraseniaVerificada = contrasenia;
@@ -246,10 +260,17 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         return cuentaPaypal;
     }
 
+    /**
+ * Construye un objeto PagoDTO a partir del costo total calculado.
+ * 
+ * @return un objeto PagoDTO con el monto y la fecha/hora del pago establecidos.
+ */
     private PagoDTO construirPagoDTO() {
         //Crear DTO
+        //La fecha del pago es la de hoy, para obtener la fecha actual del sistema se crea un Date
         Date fechaHoy = new Date();
         PagoDTO pago = new PagoDTO();
+        //Para obtener el monto del pago se necesita llamar al metodo de control para calcular el costo total de los asientos segun el precio del asiento y la cantidad, regresara un double
         Double monto = control.calcularCostoTotal();
         pago.setEstado("");
         pago.setFechaHora(fechaHoy);
@@ -257,24 +278,36 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         return pago;
     }
 
+    /**
+ * Valida el pago a realizar a través de PayPal, asegurándose de que el monto no exceda el saldo de la cuenta de PayPal del cliente.
+ * 
+ * @return true si el pago es válido y se procesa correctamente; 
+ *         false si la cuenta de PayPal no existe o si el monto del pago es mayor que el saldo de la cuenta.
+ */
     public boolean validarPagoPaypal() {
         PagoDTO pagoPaypal = construirPagoDTO();
         PaypalDTO cuentaPaypal = construirDTO();
+        //Se verifica si la cuenta de paypal existe
         PaypalDTO cuentaPaypalExistente = control.verificarCuentaPaypal(cuentaPaypal);
         if (cuentaPaypalExistente == null) {
             return false;
         }
-
+        //Validacion de si el monto a pagar es mayor al saldo de la cuenta, en ese caso regresara false y la validacion del pago fallara
         if (pagoPaypal.getMonto() > cuentaPaypalExistente.getSaldo()) {
             return false;
         }
-
+        
+        //Llama a los metodos de control para procesar el pago y finalmente actualizar el saldo de la cuenta segun la transaccion
         control.procesarPagoPaypal(cuentaPaypalExistente, pagoPaypal);
         control.actualizarSaldoPaypal(cuentaPaypalExistente, pagoPaypal);
         return true;
 
     }
 
+    /**
+ * Establece el total a pagar en la etiqueta correspondiente, 
+ * calculando el costo total a través del control.
+ */
     private void setearTotalPagar() {
         String total = Double.toString(control.calcularCostoTotal());
         labelPago.setText("Total a pagar: " + total);

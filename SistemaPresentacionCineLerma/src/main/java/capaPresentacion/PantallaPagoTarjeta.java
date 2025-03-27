@@ -258,7 +258,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
+        
         if (textCVV.getText().trim().length() > 3 || textCVV.getText().trim().length() < 3) {
             JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un CVV valido, la longitud debe ser estrictamente de 3 numeros", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
