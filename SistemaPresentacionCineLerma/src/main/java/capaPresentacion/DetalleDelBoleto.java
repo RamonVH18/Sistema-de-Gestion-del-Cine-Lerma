@@ -7,6 +7,7 @@ package capaPresentacion;
 import DTOs.BoletoDTO;
 import Excepciones.GestionReservaException;
 import com.google.zxing.WriterException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.ImageIcon;
@@ -32,7 +33,8 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         setVisible(true);
         Thread.sleep(500); 
         
-        String rutaImagen = utilerias.sacarCapturaJFrame(this, "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema-de-Gestion-del-Cine-Lerma\\SistemaPresentacionCineLerma\\src\\main\\resources\\img\\captura.png");
+        URL url = DetalleDelBoleto.class.getResource("img/captura.png");
+        String rutaImagen = utilerias.sacarCapturaJFrame(this, url);
         ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 200);
         etiquetaImagenQR.setIcon(qrIcon);
         
