@@ -29,26 +29,27 @@ import utilitades.Utilerias;
  * @author Ramon Valencia
  */
 public class SeleccionarAsientos extends javax.swing.JFrame {
-
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
-    private Utilerias utilerias = new Utilerias();
-    private List<FuncionDTO> listaFunciones;
-    private PeliculaDTO pelicula;
-
-//    private JPanel panelFunciones = new JPanel(new GridLayout(1, 1, 5, 5));
+    //Instancia de la clase ControlDeNavegacion
+    private final ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    //Objeto necesario para llamar a los metodos de la clase Utilerias
+    private final Utilerias utilerias = new Utilerias();
+    
+    //Se inicializa la pelicula que sera utilizada, sirve para poder consultar la pelicula que fue seleccionada anteriormente
+    private final PeliculaDTO pelicula = control.consultarPelicula(); 
+    //Se inicializa la Lista de todas Funciones, en base a la pelicula se manda a llamar a un metodo el cual se encarga de obtener las funciones de es pelicula 
+    private final List<FuncionDTO> listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
+    
     private JPanel panelFunciones = new JPanel();
 
     /**
-     * Creates new form SeleccionarAsientos
+     * Creates new form SeleccionarAsientos se inicializa la estructura y se le forma a la a varias partes 
      */
     public SeleccionarAsientos() {
         initComponents();
-
-        this.pelicula = control.consultarPelicula();
-        this.listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
-
+        
+        // Se llama a la funcion que se encarga de darle un formato a la pagina
         generarFormatoPagina();
-
+        // Se llama a la funcion que se encarga de darle un formato al scrollPane donde se ingresaran las funciones
         generarTablaFunciones(jScrollPanel);
 
         if (panelFunciones.getComponentCount() == 0) {
@@ -246,11 +247,13 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         // TODO add your handling code here:
         String texto = jTextFieldNumAsientos.getText();
         FuncionDTO funcion = control.consultarFuncion();
-
+        
+        //funcion que se encarga de validar los campos y que aparte de ello regresa el texto validado
         String textoValidado = control.validarCamposAsientos(texto, funcion);
+        
         if (textoValidado != null) {
             dispose();
-
+            //Se obtiene el numAsientos y se convierto a entero esto para guardarlo y poder registrarlos mas adelante
             int numAsientos = Integer.valueOf(textoValidado);
             control.guardarNumeroAsientos(numAsientos);
             control.mostrarSeleccionarMetodoPago();
@@ -279,27 +282,45 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldNumAsientos;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Metodo para darle formato a la pagina, meterle info a los jText, jLabel y toda la info
+     */
     private void generarFormatoPagina() {
         panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
         jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
+        //Se llama al metodo de utileria encargado de crear la imagen
         ImageIcon imagen = utilerias.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
         jLabelImagenPelicula.setIcon(imagen);
         jLabelNombrePelicula.setText(pelicula.getNombrePelicula());
         jTextAreaDescripcion.setEnabled(false);
         jTextFieldNumAsientos.setText("");
     }
-
+    
+    /**
+     * Metodo que recibe el ScrollPanel y el panel y se encarga de meter uno dentro de otro
+     * @param scrollPanel
+     * @param panel 
+     */
     private void generarScrollPanel(JScrollPane scrollPanel, JPanel panel) {
         scrollPanel.setViewportView(panel);
         scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
     }
-
+    
+    /**
+     * Metodo que se encarga de crear y generar el diseño de los botones de las funciones
+     * @param panelBotones
+     * @param dia
+     * @param diaTexto
+     * @return 
+     */
     private JPanel generarPanelBotones(JPanel panelBotones, Date dia, String diaTexto) {
         panelBotones.setLayout(new GridLayout(2, 0, 10, 10));
         if (listaFunciones != null) {
+            //For que se encarga de recorrer las funciones 
             for (int s = 0; s < listaFunciones.size(); s++) {
                 FuncionDTO funcion = listaFunciones.get(s);
+                //if que se encarga de checar si el dia encaja con la fechaHora de la funcion
                 if (funcion.getFechaHora() == dia) {
                     JButton boton = crearBotonFuncion(funcion, diaTexto);
 
@@ -312,22 +333,32 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         panelBotones.setVisible(true);
         return panelBotones;
     }
-
+    
+    /**
+     * Metodo que se encarga de generar el panel de cada funcion donde se agrega el texto del dia de la funcion y el boton para seleccionarla
+     * 
+     * @param panelFuncionDia
+     * @param dia
+     * @return 
+     */
     private JPanel generarPanelFuncionDia(JPanel panelFuncionDia, Date dia) {
-
+        //Metodo de utilerias para convertir objeto Date a objeto LocalDate
         LocalDate diaLocal = utilerias.convertirDateALocalDate(dia);
-
+        
+        //Se crea el string para escribir la fecha
         String diaTexto = utilerias.traducirDia(diaLocal.getDayOfWeek()) + ", "
                 + diaLocal.getDayOfMonth() + " de "
                 + utilerias.traducirMes(diaLocal.getMonth());
-
+        
+        
         JLabel labelDia = new JLabel(diaTexto);
         labelDia.setHorizontalAlignment(SwingConstants.CENTER);
 
         Border borde = BorderFactory.createLineBorder(Color.BLACK, 1);
 
         labelDia.setBorder(borde);
-
+        
+        //En esta parte se le da la forma al panelFuncionDia donde se le agregan el boton y el label
         panelFuncionDia.add(labelDia);
         panelFuncionDia.add(generarPanelBotones(new JPanel(), dia, diaTexto));
 
@@ -336,28 +367,41 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         panelFuncionDia.setVisible(true);
         return panelFuncionDia;
     }
-
+    /**
+     * Este metodo es para generar el Panel principal
+     * @param panelPrincipal 
+     */
     public void generarPanelPrincipal(JPanel panelPrincipal) {
+        //Se crea una lista en donde se guardaran las fechas de todas las funciones
         List<Date> fechasFunciones = obtenerFechasFunciones();
-
+        //For que se encarga de retirar una fecha y con esa fecha se crea un panel FuncionDia
         for (int i = 0; i < fechasFunciones.size(); i++) {
             Date dia = fechasFunciones.get(i);
             panelPrincipal.add(generarPanelFuncionDia(new JPanel(), dia));
         }
         panelPrincipal.setVisible(true);
     }
-
+    
+    /**
+     * Metodo para generar las tabla las funciones
+     * @param scrollPanel 
+     */
     private void generarTablaFunciones(JScrollPane scrollPanel) {
         generarPanelPrincipal(panelFunciones);
         generarScrollPanel(scrollPanel, panelFunciones);
     }
 
-    //REVISADO
+    /**
+     * Metodo para crear el boton de la funcion
+     * @param funcion
+     * @param diaTexto
+     * @return 
+     */
     private JButton crearBotonFuncion(FuncionDTO funcion, String diaTexto) {
 
         JButton boton = new JButton();
         Date hora = funcion.getFechaHora();
-
+        //Utilizando el string de la fecha de la funcion
         String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0"
                 + Integer.toString(funcion.getFechaHora().getMinutes())
                 : Integer.toString(funcion.getFechaHora().getMinutes());
@@ -366,28 +410,39 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         boton.setBackground(Color.decode("#A2845E"));
         //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
         boton.addActionListener(e -> {
+            //Se llama a un metodo que se encarga de crear la funcionalidad de un boton
             funcionalidadBoton(boton, funcion, diaTexto);
         });
         boton.setVisible(true);
         return boton;
     }
 
-    //REVISADO
+    /**
+     * Metodo para cargar los datos de la funcion en los labels
+     * @param funcion
+     * @param asientosDisponibles
+     * @param diaTexto 
+     */
     private void cargarDatos(FuncionDTO funcion, int asientosDisponibles, String diaTexto) {
         jLabelCosto.setText("Costo del Boleto: " + String.valueOf(funcion.getPrecio()));
         jLabelAsientosDisp.setText("Asientos Disponibles: " + asientosDisponibles);
         jLabelFuncionSeleccionada.setText("Funcion seleccionada: " + diaTexto);
     }
 
-    //REVISADO
+    /**
+     * Este metodo se encarga de obtener las todas las fechas de cada respectiva funcion
+     * @return 
+     */
     private List<Date> obtenerFechasFunciones() {
         List<Date> fechasFunciones = new ArrayList<>();
 
         if (listaFunciones != null) {
+            //For que se encarga de obtene recorrer la lista de funciones 
             for (int i = 0; i < listaFunciones.size(); i++) {
                 FuncionDTO funcion = listaFunciones.get(i);
                 Date fecha = funcion.getFechaHora();
-
+                
+                //Aqui se ingresan las fechas y al mismo tiempo se compara para revisar que no se repita ninguna fecha
                 if (!fechasFunciones.isEmpty()) {
                     for (int s = 0; s < fechasFunciones.size(); s++) {
                         if (!fechasFunciones.contains(fecha)) {
@@ -402,7 +457,12 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         return fechasFunciones;
     }
 
-    //REVISADO
+    /**
+     * Metodo para dar la funcionalidad de un boton
+     * @param boton
+     * @param funcion
+     * @param diaTexto 
+     */
     private void funcionalidadBoton(JButton boton, FuncionDTO funcion, String diaTexto) {
         SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
         seleccionarAsientos.revalidate();
