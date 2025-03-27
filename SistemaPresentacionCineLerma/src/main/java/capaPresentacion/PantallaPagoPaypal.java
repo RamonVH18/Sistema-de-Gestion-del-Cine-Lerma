@@ -179,30 +179,23 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
-        try {
-            //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
-            if (!validarCampos()) {
-                return;
-            }
-            
-            //DESPUES SE DEBE VALIDAR EL PAGO
-            if (!validarPagoPaypal()) {
-                dispose();
-                control.mostrarPantallaPagoRechazado();
-                return;
-            }
-            //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
 
-            control.mostrarDetalleBoleto();
-            dispose();
-
-        } catch (ValidarCuentaException ex) {
-            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PagoException ex) {
-            Logger.getLogger(PantallaPagoPaypal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (GestionReservaException ex) {
-            Logger.getLogger(PantallaPagoPaypal.class.getName()).log(Level.SEVERE, null, ex);
+        //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
+        if (!validarCampos()) {
+            return;
         }
+
+        //DESPUES SE DEBE VALIDAR EL PAGO
+        if (!validarPagoPaypal()) {
+            dispose();
+            control.mostrarPantallaPagoRechazado();
+            return;
+        }
+        //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
+
+        control.mostrarDetalleBoleto();
+        dispose();
+
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     /**
@@ -221,7 +214,7 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     private javax.swing.JPasswordField textContrasenia;
     private javax.swing.JTextField textCorreo;
     // End of variables declaration//GEN-END:variables
-    public boolean validarCampos() throws ValidarCuentaException {
+    public boolean validarCampos() {
         //Se verifica que no hayan campos vacios
         //primero se convierten los chars a string
         char[] contraseniaChars = textContrasenia.getPassword();
@@ -235,15 +228,6 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         //Se verifica si el formato del correo ingresado en el campo es correcto
         if (!textCorreo.getText().trim().matches("^[\\w.-]+@([a-zA-Z\\d-]+\\.)+[a-zA-Z]{2,6}$")) {
             JOptionPane.showMessageDialog(null, "ERROR: Por favor ingresa un Correo valido", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        PaypalDTO cuentaPaypal = construirDTO();
-
-        //Se valida la cuenta segun el dto creado 
-        if (control.verificarCuentaPaypal(cuentaPaypal) == null) {
-            JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
-            Arrays.fill(contraseniaChars, '\0');
             return false;
         }
         Arrays.fill(contraseniaChars, '\0');
@@ -261,8 +245,8 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         cuentaPaypal.setContrasenia(contraseniaVerificada);
         return cuentaPaypal;
     }
-    
-    private PagoDTO construirPagoDTO() throws GestionReservaException {
+
+    private PagoDTO construirPagoDTO() {
         //Crear DTO
         Date fechaHoy = new Date();
         PagoDTO pago = new PagoDTO();
@@ -272,24 +256,26 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         pago.setMonto(monto);
         return pago;
     }
-    
-    public boolean validarPagoPaypal() throws PagoException, GestionReservaException, ValidarCuentaException {       
+
+    public boolean validarPagoPaypal() {
         PagoDTO pagoPaypal = construirPagoDTO();
         PaypalDTO cuentaPaypal = construirDTO();
         PaypalDTO cuentaPaypalExistente = control.verificarCuentaPaypal(cuentaPaypal);
-        
-        if (pagoPaypal.getMonto() > cuentaPaypalExistente.getSaldo()){ 
+        if (cuentaPaypalExistente == null) {
             return false;
         }
-        
+
+        if (pagoPaypal.getMonto() > cuentaPaypalExistente.getSaldo()) {
+            return false;
+        }
+
         control.procesarPagoPaypal(cuentaPaypalExistente, pagoPaypal);
         control.actualizarSaldoPaypal(cuentaPaypalExistente, pagoPaypal);
-        return true;   
-        
+        return true;
+
     }
-    
-    
-    private void setearTotalPagar() throws GestionReservaException {
+
+    private void setearTotalPagar() {
         String total = Double.toString(control.calcularCostoTotal());
         labelPago.setText("Total a pagar: " + total);
     }

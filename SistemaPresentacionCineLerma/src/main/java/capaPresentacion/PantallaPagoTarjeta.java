@@ -34,9 +34,6 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         setearTotalPagar();
     }
 
-    
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -212,30 +209,23 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     }//GEN-LAST:event_textPropietarioActionPerformed
 
     private void btnCompletarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompletarPagoActionPerformed
-        try {
-            //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
-            if (!validarCampos()) {
-                return;
-            }
-            
-            //DESPUES SE DEBE VALIDAR EL PAGO
-            if (!validarPagoTarjeta()) {
-                dispose();
-                control.mostrarPantallaPagoRechazado();
-                return;
-            }
-            //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
 
-            control.mostrarDetalleBoleto();
-            dispose();
-
-        } catch (ValidarCuentaException ex) {
-            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PagoException ex) {
-            Logger.getLogger(PantallaPagoPaypal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (GestionReservaException ex) {
-            Logger.getLogger(PantallaPagoPaypal.class.getName()).log(Level.SEVERE, null, ex);
+        //PRIMERO SE DEBEN VALIDAR LOS CAMPOS
+        if (!validarCampos()) {
+            return;
         }
+
+        //DESPUES SE DEBE VALIDAR EL PAGO
+        if (!validarPagoTarjeta()) {
+            dispose();
+            control.mostrarPantallaPagoRechazado();
+            return;
+        }
+        //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
+
+        control.mostrarDetalleBoleto();
+        dispose();
+
     }//GEN-LAST:event_btnCompletarPagoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -262,7 +252,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     private javax.swing.JLabel txtPropietario;
     // End of variables declaration//GEN-END:variables
 
-    public boolean validarCampos() throws ValidarCuentaException {
+    public boolean validarCampos() {
         //Se muestra un error si alguno de los campos estan vacios
         if (textNumeroTarjeta.getText().trim().isEmpty() || textFechaVencimiento.getText().trim().isEmpty() || textCVV.getText().trim().isEmpty() || textPropietario.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
@@ -303,7 +293,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         }
         return true;
     }
-    
+
     private TarjetaDTO construirDTO() {
         //CONVERTIR LA FECHA INGRESADA POR EL USUARIO A UN DATE REAL
         String fechaVencimientoStr = textFechaVencimiento.getText().trim();
@@ -334,8 +324,8 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         cuentaTarjeta.setFechaVencimiento(fechaVencimiento);
         return cuentaTarjeta;
     }
-    
-    private PagoDTO construirPagoDTO() throws GestionReservaException {
+
+    private PagoDTO construirPagoDTO() {
         //Crear DTO
         Date fechaHoy = new Date();
         PagoDTO pago = new PagoDTO();
@@ -345,26 +335,29 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         pago.setMonto(monto);
         return pago;
     }
-    
-    public boolean validarPagoTarjeta() throws PagoException, GestionReservaException, ValidarCuentaException {       
+
+    public boolean validarPagoTarjeta() {
         PagoDTO pagoTarjeta = construirPagoDTO();
         TarjetaDTO cuentaTarjeta = construirDTO();
         TarjetaDTO cuentaTarjetaExistente = control.verificarCuentaTarjeta(cuentaTarjeta);
         
-        if (pagoTarjeta.getMonto() > cuentaTarjetaExistente.getSaldo()){ 
+        if (cuentaTarjetaExistente == null) {
             return false;
         }
-        
+
+        if (pagoTarjeta.getMonto() > cuentaTarjetaExistente.getSaldo()) {
+            return false;
+        }
+
         control.procesarPagoTarjeta(cuentaTarjetaExistente, pagoTarjeta);
         control.actualizarSaldoTarjeta(cuentaTarjetaExistente, pagoTarjeta);
-        return true;   
-        
+        return true;
+
     }
-    
-    private void setearTotalPagar() throws GestionReservaException {
+
+    private void setearTotalPagar() {
         String total = Double.toString(control.calcularCostoTotal());
         labelPago.setText("Total a pagar: " + total);
     }
-    
-    
+
 }
