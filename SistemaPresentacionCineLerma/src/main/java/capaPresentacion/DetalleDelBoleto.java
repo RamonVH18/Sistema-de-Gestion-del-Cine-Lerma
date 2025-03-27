@@ -33,10 +33,11 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         setVisible(true);
         Thread.sleep(500); 
         
-        URL url = DetalleDelBoleto.class.getResource("img/captura.png");
-        String rutaImagen = utilerias.sacarCapturaJFrame(this, url);
-        ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 200);
-        etiquetaImagenQR.setIcon(qrIcon);
+        //Esta parte servira para la creacion del codigo qr
+//        URL url = DetalleDelBoleto.class.getResource("img/captura.png");
+//        String rutaImagen = utilerias.sacarCapturaJFrame(this, url);
+//        ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 200);
+//        etiquetaImagenQR.setIcon(qrIcon);
         
         btnRegresoMenu.setVisible(true);
         
