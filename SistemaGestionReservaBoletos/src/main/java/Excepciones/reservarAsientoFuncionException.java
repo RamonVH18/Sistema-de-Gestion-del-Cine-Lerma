@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author isaac
  */
-public class ReservarAsientoFuncionException extends Exception {
+public class reservarAsientoFuncionException extends Exception {
 
-    public ReservarAsientoFuncionException(String message) {
+    public reservarAsientoFuncionException(String message) {
         super(message);
     }
 
-    public ReservarAsientoFuncionException(String message, Throwable cause) {
+    public reservarAsientoFuncionException(String message, Throwable cause) {
         super(message, cause);
     }
     

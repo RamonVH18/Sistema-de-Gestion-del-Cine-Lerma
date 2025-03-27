@@ -17,9 +17,12 @@ import Excepciones.DisponibilidadAsientosException;
 import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
-import Excepciones.GenerarBoletoException;
-import Excepciones.ReservarAsientoFuncionException;
-import Excepciones.ValidarCampoAsientoException;
+import Excepciones.generarBoletoException;
+import Excepciones.reservarAsientoFuncionException;
+import Excepciones.validarCampoAsientoException;
+import Excepciones.generarBoletoException;
+import Excepciones.reservarAsientoFuncionException;
+import Excepciones.validarCampoAsientoException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -245,22 +248,22 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
 
     @Override //Metodo para validar el campoAsiento de la pantalla Seleccionar Asientos
-    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws ValidarCampoAsientoException {
+    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws validarCampoAsientoException {
         try {
             if (funcion == null) {
-                throw new ValidarCampoAsientoException("Debe de ingresar una funcion.");
+                throw new validarCampoAsientoException("Debe de ingresar una funcion.");
             }
             if (campoAsiento == null || campoAsiento.isBlank()) {
-                throw new ValidarCampoAsientoException("El campo de numero de asientos no puede estar vacio.");
+                throw new validarCampoAsientoException("El campo de numero de asientos no puede estar vacio.");
             }
 
             if (!campoAsiento.matches("\\d+")) {
-                throw new ValidarCampoAsientoException("Solo puede ingresar digitos en el campo numero de asientos.");
+                throw new validarCampoAsientoException("Solo puede ingresar digitos en el campo numero de asientos.");
             }
 
             return true;
         } catch (Exception e) {
-            throw new ValidarCampoAsientoException("ERROR: " + e.getMessage());
+            throw new validarCampoAsientoException("ERROR: " + e.getMessage());
         }
     }
 
@@ -340,38 +343,38 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
     
     @Override
-    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException {
+    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws generarBoletoException {
         try {
             if (pelicula == null) {
-                throw new GenerarBoletoException("Hubo un problema al guardar la pelicula en el boleto. Intente mas tarde.");
+                throw new generarBoletoException("Hubo un problema al guardar la pelicula en el boleto. Intente mas tarde.");
             }
             if (funcion == null) {
-                throw new GenerarBoletoException("Hubo un problema al guardar la funcion en el boleto. Intente mas tarde.");
+                throw new generarBoletoException("Hubo un problema al guardar la funcion en el boleto. Intente mas tarde.");
             }
             if (asientos == null || asientos.isEmpty()) {
-                throw new GenerarBoletoException("Hubo un problema al guardar los asientos en el boleto. Intente mas tarde.");
+                throw new generarBoletoException("Hubo un problema al guardar los asientos en el boleto. Intente mas tarde.");
             }
             //Aqui abajo se añadira un metodo que registre el Boleto 
             return new BoletoDTO(pelicula.getNombrePelicula(), pelicula.getPeliculaImagen(), funcion.getFechaHora(), funcion.getSala(), asientos, cliente.getNombre());
 
         } catch (Exception e) {
-            throw new GenerarBoletoException("ERROR: " + e.getMessage());
+            throw new generarBoletoException("ERROR: " + e.getMessage());
         }
     }
 
     //ESTE METODO CAMBIARA CASI POR COMPLETO
     @Override
-    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws ReservarAsientoFuncionException {
+    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws reservarAsientoFuncionException {
         
         try {
             if (funcion == null) {
-                throw new ReservarAsientoFuncionException("La funcion no puede ser nula.");
+                throw new reservarAsientoFuncionException("La funcion no puede ser nula.");
             }
             if (numAsiento < 1) {
-                throw new ReservarAsientoFuncionException("No puede haber menos de 1 asiento.");
+                throw new reservarAsientoFuncionException("No puede haber menos de 1 asiento.");
             }
             if (cliente == null) {
-                throw new ReservarAsientoFuncionException("El cliente no puede ser nula.");
+                throw new reservarAsientoFuncionException("El cliente no puede ser nula.");
             }
 
             List<String> numAsientos = new ArrayList<>();
@@ -403,7 +406,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
             return numAsientos;
         } catch (Exception e) {
-            throw new ReservarAsientoFuncionException("ERROR: " + e.getMessage());
+            throw new reservarAsientoFuncionException("ERROR: " + e.getMessage());
         }
 
     }
