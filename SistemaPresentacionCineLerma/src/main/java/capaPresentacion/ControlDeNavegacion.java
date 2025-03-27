@@ -64,8 +64,6 @@ public class ControlDeNavegacion {
     private ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx");
 
     private static ControlDeNavegacion instancia;
-    private JFrame instanciaJFrame;
-    private JDialog instanciaJDialog;
 
     private ControlDeNavegacion() {
         // Constructor privado para evitar múltiples instancias 
@@ -163,7 +161,6 @@ public class ControlDeNavegacion {
     //Metodo que se encarga de abrir la pantalla de DetalleBoleto
     public void mostrarDetalleBoleto() {
         SwingUtilities.invokeLater(() -> {
-
             DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
             pantallaDetalleDelBoleto.setLocationRelativeTo(null);
             pantallaDetalleDelBoleto.setVisible(true);
@@ -332,7 +329,7 @@ public class ControlDeNavegacion {
      * @return
      * @throws GestionReservaException
      */
-    private List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) throws ReservarAsientoFuncionException {
+    private List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) {
         try {
             List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
             this.asientos = asientosReservados;
@@ -351,10 +348,6 @@ public class ControlDeNavegacion {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             mostrarMenuPrincipal();
             return null;
-        } catch (ReservarAsientoFuncionException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            mostrarMenuPrincipal();
-            return null;
         }
     }
 
@@ -368,11 +361,11 @@ public class ControlDeNavegacion {
         }
     }
 
-    public PaypalDTO verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws ValidarCuentaException {
+    public PaypalDTO verificarCuentaPaypal(PaypalDTO cuentaPaypal){
         return gestionDePagos.validarCuentaPaypal(cuentaPaypal);
     }
 
-    public TarjetaDTO verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws ValidarCuentaException {
+    public TarjetaDTO verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) {
         return gestionDePagos.validarTarjeta(cuentaTarjeta);
     }
 
@@ -409,11 +402,11 @@ public class ControlDeNavegacion {
         }
     }
 
-    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException {
+    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) {
         gestionDePagos.procesarPagoPaypal(paypal, pago);
     }
 
-    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException, ValidarCuentaException {
+    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) {
         gestionDePagos.procesarPagoTarjeta(tarjeta, pago);
     }
 

@@ -304,7 +304,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     }
 
     private String obtenerUrlPelicula(String nombrePelicula) {
-        for (PeliculaDTO pelicula : control.obtenerPeliculas(panelCartelera)) {
+        for (PeliculaDTO pelicula : control.obtenerPeliculas()) {
             if (pelicula.getNombrePelicula().equals(nombrePelicula)) {
                 return pelicula.getPeliculaImagen();
             }
