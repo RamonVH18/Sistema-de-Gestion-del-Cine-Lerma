@@ -5,9 +5,6 @@
 package capaPresentacion;
 
 import DTOs.BoletoDTO;
-import Excepciones.GestionReservaException;
-import com.google.zxing.WriterException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.ImageIcon;
@@ -18,12 +15,15 @@ import utilitades.Utilerias;
  * @author Abraham Coronel Bringas
  */
 public class DetalleDelBoleto extends javax.swing.JFrame {
-    
+    /*Instancia que nos permite llamar los metodos de control*/
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    /*Objeto que nos permite invocar a los metodos de utilidades*/
     private Utilerias utilerias = new Utilerias();
     /**
      * Creates new form DetalleDelBoleto
      */
+    
+    /*Constructor de la clase DetalleDelBoleto*/
     public DetalleDelBoleto(){
         initComponents();
         
@@ -202,6 +202,7 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
     private javax.swing.JLabel labelSala;
     // End of variables declaration//GEN-END:variables
     
+    /*Metodo que llena los campos que requiere el boleto seteando cada atributo en un label*/
     public void llenarCamposBoleto(BoletoDTO boleto) {
         
         ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
