@@ -362,11 +362,21 @@ public class ControlDeNavegacion {
     }
 
     public PaypalDTO verificarCuentaPaypal(PaypalDTO cuentaPaypal){
-        return gestionDePagos.validarCuentaPaypal(cuentaPaypal);
+        try {
+            return gestionDePagos.validarCuentaPaypal(cuentaPaypal);
+        } catch (ValidarCuentaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public TarjetaDTO verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) {
-        return gestionDePagos.validarTarjeta(cuentaTarjeta);
+        try {
+            return gestionDePagos.validarTarjeta(cuentaTarjeta);
+        } catch (ValidarCuentaException ex) {
+            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     public double calcularCostoTotal() {
@@ -396,18 +406,30 @@ public class ControlDeNavegacion {
         try {
             gestionDePagos.procesarPagoMercado(mercadoPago, pago);
         } catch (PagoException e) {
-            JOptionPane.showMessageDialog(null, pago, titulo, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         } catch (ValidarCuentaException e) {
-            JOptionPane.showMessageDialog(null, pago, titulo, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) {
-        gestionDePagos.procesarPagoPaypal(paypal, pago);
+        try {
+            gestionDePagos.procesarPagoPaypal(paypal, pago);
+        } catch (PagoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+        } catch (ValidarCuentaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) {
-        gestionDePagos.procesarPagoTarjeta(tarjeta, pago);
+        try {
+            gestionDePagos.procesarPagoTarjeta(tarjeta, pago);
+        } catch (PagoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+        } catch (ValidarCuentaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }
