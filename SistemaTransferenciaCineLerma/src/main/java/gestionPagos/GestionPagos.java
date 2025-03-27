@@ -107,19 +107,26 @@ public class GestionPagos implements IGestionPagos {
 
     //METODOS DE VALIDACIONES
     @Override
-    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException {
-//        if (!validarPaypal(paypal)) {
-//            throw new TransferenciaException("Error: Los datos de la cuenta de paypal son incorrectos");
-//        }
+    public boolean procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException{
+        boolean pagoExitoso = false;
+        Date fechaHoy = new Date();
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new ValidarCuentaException("Error: El monto debe ser mayor a 0");
+            throw new PagoException("Error: El monto debe ser mayor a 0");
+        }
+        
+        if (!pago.getFechaHora().equals(fechaHoy)) {
+            throw new PagoException("Error: La fecha del pago debe ser la del dia de hoy");
         }
 
         System.out.println("Procesando pago de " + pago.getMonto() + "con Paypal");
         System.out.println("Correo: " + paypal.getCorreo());
-
-        boolean pagoExitoso = true; //Para que sea exitoso
+        
+        if (pago.getMonto() > paypal.getSaldo()) {
+            throw new PagoException("Error: El saldo de la cuenta de mercadoPago es insuficiente");
+        }else {
+            pagoExitoso = true;
+        }
 
         if (pagoExitoso) {
             pago.setEstado("EXITOSO");
@@ -127,31 +134,32 @@ public class GestionPagos implements IGestionPagos {
         } else {
             pago.setEstado("FALLIDO");
             System.out.println("Pago no realizado, " + pago.getEstado());
-//            PantallaPagoRechazado pagoRechazado = new PantallaPagoRechazado(new JFrame(), true);
-//            pagoRechazado.setVisible(true);
         }
+        return pagoExitoso;
 
     }
 
     @Override
-    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException {
+    public boolean procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException{
+        boolean pagoExitoso = false;
         Date fechaHoy = new Date();
-        if (!validarMercado(mercadoPago)) {
-            throw new ValidarCuentaException("Error: Los datos de la cuenta de MercadoPago son incorrectos");
-        }
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new ValidarCuentaException("Error: El monto debe ser mayor a 0");
+            throw new PagoException("Error: El monto debe ser mayor a 0");
         }
 
         if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new ValidarCuentaException("Error: La fecha del pago debe ser la del dia de hoy");
+            throw new PagoException("Error: La fecha del pago debe ser la del dia de hoy");
         }
 
         System.out.println("Procesando pago de " + pago.getMonto() + "con MercadoPago");
         System.out.println("Correo: " + mercadoPago.getCorreo());
-
-        boolean pagoExitoso = true; //Para que sea exitoso siempre, si se quiere probar que el pago falle este valor debera cambiarse a false
+        
+        if (pago.getMonto() > mercadoPago.getSaldo()) {
+            throw new PagoException("Error: El saldo de la cuenta de mercadoPago es insuficiente");
+        }else {
+            pagoExitoso = true;
+        }
 
         if (pagoExitoso) {
             pago.setEstado("EXITOSO");
@@ -160,28 +168,32 @@ public class GestionPagos implements IGestionPagos {
             pago.setEstado("FALLIDO");
             System.out.println("Pago no realizado, " + pago.getEstado());
         }
+        return pagoExitoso;
 
     }
 
     @Override
-    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException, ValidarCuentaException {
+    public boolean procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException{
+        boolean pagoExitoso = false;
         Date fechaHoy = new Date();
-        if (!validarTarjeta(tarjeta)) {
-            throw new ValidarCuentaException("Error: Los datos de tarjeta son incorrectos");
-        }
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new ValidarCuentaException("Error: El monto debe ser mayor a 0");
+            throw new PagoException("Error: El monto debe ser mayor a 0");
         }
 
         if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new ValidarCuentaException("Error: La fecha del pago debe ser la del dia de hoy");
+            throw new PagoException("Error: La fecha del pago debe ser la del dia de hoy");
         }
 
         System.out.println("Procesando pago de: $" + pago.getMonto() + "con tarjeta");
         System.out.println("Titular: " + tarjeta.getTitular());
+        
+        if (pago.getMonto() > tarjeta.getSaldo()) {
+            throw new PagoException("Error: El saldo de la cuenta de mercadoPago es insuficiente");
+        }else {
+            pagoExitoso = true;
+        }
 
-        boolean pagoExitoso = true;
 
         if (pagoExitoso) {
             pago.setEstado("EXITOSO");
@@ -190,103 +202,106 @@ public class GestionPagos implements IGestionPagos {
             pago.setEstado("FALLIDO");
             System.out.println("Pago no realizado, " + pago.getEstado());
         }
+        
+        return pagoExitoso;
     }
     
     //Metodo para validar una cuenta de paypal, este metodo recibe un PaypalDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
     //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
-    public boolean validarCuentaPaypal(PaypalDTO paypal) throws ValidarCuentaException {
+    public PaypalDTO validarCuentaPaypal(PaypalDTO paypal) throws ValidarCuentaException {
         Optional<PaypalDTO> cuentaPaypalEncontrada = paypals.stream().filter(p -> p.equals(paypal)).findFirst();
         if (!cuentaPaypalEncontrada.isPresent()) {
-            return false;
+            return null;
         }
         PaypalDTO cuentaPaypal = cuentaPaypalEncontrada.get();
 
         if (cuentaPaypal == null) {
-            return false;
+            throw new ValidarCuentaException("Error: La cuenta no existe");
         }
 
         if (cuentaPaypal.getCorreo() == null || cuentaPaypal.getCorreo().isEmpty() || cuentaPaypal.getCorreo().isBlank()) {
-            return false;
+            throw new ValidarCuentaException("Error: La cuenta no tiene correo");
         }
 
         if (cuentaPaypal.getContrasenia() == null || cuentaPaypal.getContrasenia().isEmpty() || cuentaPaypal.getContrasenia().isBlank()) {
-            return false;
+            throw new ValidarCuentaException("Error: La cuenta no tiene contrasenia");
         }
 
-        return true;
+        return cuentaPaypal;
     }
     
     //Metodo para validar una cuenta de mercadoPago, este metodo recibe un CuentaMercadoDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
     //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
-    public boolean validarMercado(CuentaMercadoDTO mercadoPago) throws ValidarCuentaException {
+    public CuentaMercadoDTO validarMercado(CuentaMercadoDTO mercadoPago) throws ValidarCuentaException {
         Optional<CuentaMercadoDTO> cuentaMercadoEncontrada = mercados.stream().filter(p -> p.equals(mercadoPago)).findFirst();
         if (!cuentaMercadoEncontrada.isPresent()) {
-            return false;
+            return null;
         }
         CuentaMercadoDTO cuentaMercado = cuentaMercadoEncontrada.get();
 
         if (cuentaMercado == null) {
-            return false;
+            throw new ValidarCuentaException("Error: La cuenta no existe");
         }
         if (cuentaMercado.getTitular() == null || cuentaMercado.getTitular().isEmpty() || cuentaMercado.getTitular().isBlank()) {
-            return false;
+            throw new ValidarCuentaException("Error: La cuenta no tiene un titular");
         }
 
         if (cuentaMercado.getClienteID() == null) {
-            return false;
+            throw new ValidarCuentaException("Error: La cuenta no tiene un ID");
         }
 
         if (cuentaMercado.getCorreo() == null || cuentaMercado.getCorreo().isEmpty()) {
-            return false;
+            throw new ValidarCuentaException("Error: La cuenta no tiene un correo");
         }
 
-        return true;
+        return cuentaMercado;
 
     }
     
     //Metodo para validar una tarjeta, este metodo recibe un TarjetaDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
     //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
-    public boolean validarTarjeta(TarjetaDTO tarjeta) throws ValidarCuentaException {
+    public TarjetaDTO validarTarjeta(TarjetaDTO tarjeta) throws ValidarCuentaException {
         Optional<TarjetaDTO> tarjetaEncontrada = tarjetas.stream().filter(p -> p.equals(tarjeta)).findFirst();
         if (!tarjetaEncontrada.isPresent()) {
-            return false;
+            return null;
+        }
+        TarjetaDTO cuentaTarjeta= tarjetaEncontrada.get();
+
+        if (cuentaTarjeta == null) {
+            throw new ValidarCuentaException("Error: La cuenta no existe");
         }
 
-        if (tarjeta == null) {
-            return false;
+        if (cuentaTarjeta.getTitular() == null || cuentaTarjeta.getNumeroTarjeta() == null || cuentaTarjeta.getFechaVencimiento() == null || cuentaTarjeta.getCvv() == null) {
+            throw new ValidarCuentaException("Error: La tarjeta no tiene numero de tarjeta");
         }
 
-        if (tarjeta.getTitular() == null || tarjeta.getNumeroTarjeta() == null || tarjeta.getFechaVencimiento() == null || tarjeta.getCvv() == null) {
-            return false;
+        if (cuentaTarjeta.getTitular().isBlank() || cuentaTarjeta.getNumeroTarjeta().isBlank()) {
+            throw new ValidarCuentaException("Error: La cuenta no existe");
         }
 
-        if (tarjeta.getTitular().isBlank() || tarjeta.getNumeroTarjeta().isBlank()) {
-            return false;
-        }
-
-        if (tarjeta.getFechaVencimiento().before(new Date())) {
-            return false;
+        if (cuentaTarjeta.getFechaVencimiento().before(new Date())) {
+            throw new ValidarCuentaException("Error: La fecha de vencimiento no puede ser antes de la fecha actual del sistema");
         }
         
         //Revisa si el cvv de la tarjeta es de 3 digitos
-        String cvv = String.valueOf(tarjeta.getCvv());
+        String cvv = String.valueOf(cuentaTarjeta.getCvv());
         if (cvv.length() < 3 || cvv.length() > 4) {
-            return false;
+            throw new ValidarCuentaException("Error: El cvv de la tarjeta tiene menos de 3 digitos o mas de 4");
         }
 
         if (!tarjeta.getNumeroTarjeta().matches("\\d+")) {
-            return false;
+            throw new ValidarCuentaException("Error: El numero de la tarjeta no es valido");
         }
 
         int longitudNumeroTarjeta = tarjeta.getNumeroTarjeta().length();
         if (longitudNumeroTarjeta < 15 || longitudNumeroTarjeta > 16) {
-            return false;
+            throw new ValidarCuentaException("Error: La longitud del numero de la tarjeta no es correcta");
         }
 
-        return true;
+        return cuentaTarjeta;
     }
 
     @Override
@@ -298,6 +313,29 @@ public class GestionPagos implements IGestionPagos {
         String estado = pago.getEstado().toUpperCase();
 
         return estado.equals("EXITOSO");
+    }
+
+    @Override
+    public void actualizarSaldoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) {
+        Optional<CuentaMercadoDTO> cuentaMercadoEncontrada = mercados.stream().filter(p -> p.equals(mercadoPago)).findFirst();
+        CuentaMercadoDTO cuentaMercado = cuentaMercadoEncontrada.get();
+        cuentaMercado.setSaldo(cuentaMercado.getSaldo() - pago.getMonto());
+        
+    }
+
+    @Override
+    public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) {
+        Optional<PaypalDTO> cuentaPaypalEncontrada = paypals.stream().filter(p -> p.equals(paypal)).findFirst();
+        PaypalDTO cuentaPaypal = cuentaPaypalEncontrada.get();
+        cuentaPaypal.setSaldo(cuentaPaypal.getSaldo() - pago.getMonto());
+           
+    }
+
+    @Override
+    public void actualizarSaldoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) {
+        Optional<TarjetaDTO> tarjetaEncontrada = tarjetas.stream().filter(p -> p.equals(tarjeta)).findFirst();
+        TarjetaDTO cuentaTarjeta= tarjetaEncontrada.get();
+        cuentaTarjeta.setSaldo(cuentaTarjeta.getSaldo() - pago.getMonto());
     }
 
 }

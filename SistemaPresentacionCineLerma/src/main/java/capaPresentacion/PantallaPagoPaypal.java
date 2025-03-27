@@ -5,10 +5,13 @@
 package capaPresentacion;
 
 import DTOs.CuentaMercadoDTO;
+import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import Excepciones.GestionReservaException;
+import Excepciones.PagoException;
 import Excepciones.ValidarCuentaException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -25,8 +28,9 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     /**
      * Creates new form PantallaPagoPaypal
      */
-    public PantallaPagoPaypal() {
+    public PantallaPagoPaypal() throws GestionReservaException {
         initComponents();
+        setearTotalPagar();
     }
 
     /**
@@ -47,6 +51,7 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         btnIniciarSesion = new javax.swing.JButton();
         btnRegresoMenu = new javax.swing.JButton();
         textContrasenia = new javax.swing.JPasswordField();
+        labelPago = new javax.swing.JLabel();
 
         jPasswordField1.setText("jPasswordField1");
 
@@ -101,6 +106,8 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
             }
         });
 
+        labelPago.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,11 +115,13 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(137, 137, 137)
-                        .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelPago)
+                            .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -145,7 +154,9 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
                 .addComponent(textContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addComponent(labelPago)
+                .addGap(32, 32, 32)
                 .addComponent(btnRegresoMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
         );
@@ -173,6 +184,13 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
             if (!validarCampos()) {
                 return;
             }
+            
+            //DESPUES SE DEBE VALIDAR EL PAGO
+            if (!validarPagoPaypal()) {
+                dispose();
+                control.mostrarPantallaPagoRechazado();
+                return;
+            }
             //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
 
             control.mostrarDetalleBoleto();
@@ -180,6 +198,10 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
 
         } catch (ValidarCuentaException ex) {
             Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PagoException ex) {
+            Logger.getLogger(PantallaPagoPaypal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GestionReservaException ex) {
+            Logger.getLogger(PantallaPagoPaypal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
@@ -194,6 +216,7 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel labelContrasenia;
     private javax.swing.JLabel labelCorreo;
+    private javax.swing.JLabel labelPago;
     private javax.swing.JLabel labelTextoIniciarSesion;
     private javax.swing.JPasswordField textContrasenia;
     private javax.swing.JTextField textCorreo;
@@ -218,7 +241,7 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         PaypalDTO cuentaPaypal = construirDTO();
 
         //Se valida la cuenta segun el dto creado 
-        if (!control.verificarCuentaPaypal(cuentaPaypal)) {
+        if (control.verificarCuentaPaypal(cuentaPaypal) == null) {
             JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
             Arrays.fill(contraseniaChars, '\0');
             return false;
@@ -237,6 +260,38 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
         cuentaPaypal.setCorreo(correoVerificado);
         cuentaPaypal.setContrasenia(contraseniaVerificada);
         return cuentaPaypal;
+    }
+    
+    private PagoDTO construirPagoDTO() throws GestionReservaException {
+        //Crear DTO
+        Date fechaHoy = new Date();
+        PagoDTO pago = new PagoDTO();
+        Double monto = control.calcularCostoTotal();
+        pago.setEstado("");
+        pago.setFechaHora(fechaHoy);
+        pago.setMonto(monto);
+        return pago;
+    }
+    
+    public boolean validarPagoPaypal() throws PagoException, GestionReservaException, ValidarCuentaException {       
+        PagoDTO pagoPaypal = construirPagoDTO();
+        PaypalDTO cuentaPaypal = construirDTO();
+        PaypalDTO cuentaPaypalExistente = control.verificarCuentaPaypal(cuentaPaypal);
+        
+        if (pagoPaypal.getMonto() > cuentaPaypalExistente.getSaldo()){ 
+            return false;
+        }
+        
+        control.procesarPagoPaypal(cuentaPaypalExistente, pagoPaypal);
+        control.actualizarSaldoPaypal(cuentaPaypalExistente, pagoPaypal);
+        return true;   
+        
+    }
+    
+    
+    private void setearTotalPagar() throws GestionReservaException {
+        String total = Double.toString(control.calcularCostoTotal());
+        labelPago.setText("Total a pagar: " + total);
     }
 
 }

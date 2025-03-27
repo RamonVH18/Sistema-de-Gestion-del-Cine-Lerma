@@ -5,9 +5,12 @@
 package capaPresentacion;
 
 import DTOs.CuentaMercadoDTO;
+import DTOs.PagoDTO;
 import Excepciones.GestionReservaException;
+import Excepciones.PagoException;
 import Excepciones.ValidarCuentaException;
 import java.awt.Graphics;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -25,12 +28,13 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     /**
      * Creates new form PantallaPagoMercado
      */
-    public PantallaPagoMercado(int numero) {
+    public PantallaPagoMercado(int numero) throws GestionReservaException {
         initComponents();
-
+        setearTotalPagar();
+        
         this.numAsientos = numero;
     }
-
+    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -55,6 +59,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         btnPagar = new javax.swing.JButton();
         labelimagen = new javax.swing.JLabel();
         btnRegresoMenu1 = new javax.swing.JButton();
+        labelPago = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(514, 632));
@@ -108,6 +113,8 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
             }
         });
 
+        labelPago.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -137,7 +144,9 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
                         .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelPago)
+                            .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -157,7 +166,9 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
                 .addComponent(textMontoAPagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(60, 60, 60)
                 .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addComponent(labelPago)
+                .addGap(33, 33, 33)
                 .addComponent(btnRegresoMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37))
         );
@@ -180,12 +191,23 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
                 return;
             }
             
+            //DESPUES SE DEBE VALIDAR EL PAGO
+            if (!validarPago()) {
+                dispose();
+                control.mostrarPantallaPagoRechazado();
+                return;
+            }
+
             //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
             control.mostrarDetalleBoleto();
             dispose();
             
             
         } catch (ValidarCuentaException ex) {
+            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PagoException ex) {
+            Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GestionReservaException ex) {
             Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -206,11 +228,12 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     private javax.swing.JButton btnRegresoMenu1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel labelPago;
     private javax.swing.JLabel labelimagen;
     private javax.swing.JTextField textClienteID;
     private javax.swing.JTextField textMontoAPagar;
     // End of variables declaration//GEN-END:variables
-    public boolean validarCampos() throws ValidarCuentaException {
+    public boolean validarCampos() throws ValidarCuentaException, GestionReservaException {
         //Se muestra un error si alguno de los dos campos estan vacios
         if (textClienteID.getText().trim().isEmpty() || textMontoAPagar.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);
@@ -229,9 +252,15 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         }
         
         CuentaMercadoDTO cuentaMercado = construirDTO();
+        
+        Double monto = Double.valueOf(textMontoAPagar.getText().trim());
+        if (monto > control.calcularCostoTotal() || monto < control.calcularCostoTotal()) {
+            JOptionPane.showMessageDialog(null, "ERROR: El monto a pagar es mayor o menor que el total a pagar (debe ser el mismo)", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
         //Se valida la cuenta segun el dto creado 
-        if (!control.verificarCuentaMercado(cuentaMercado)) {
+        if (control.verificarCuentaMercado(cuentaMercado) == null) {
             JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -244,6 +273,37 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
         int clienteID = Integer.parseInt(textClienteID.getText().trim());
         cuentaMercado.setClienteID(clienteID);
         return cuentaMercado;
+    }
+    
+    private PagoDTO construirPagoDTO() {
+        //Crear DTO
+        Date fechaHoy = new Date();
+        PagoDTO pago = new PagoDTO();
+        Double monto = Double.valueOf(textMontoAPagar.getText().trim());
+        pago.setEstado("");
+        pago.setFechaHora(fechaHoy);
+        pago.setMonto(monto);
+        return pago;
+    }
+    
+    public boolean validarPago() throws PagoException, GestionReservaException, ValidarCuentaException {       
+        PagoDTO pagoloco = construirPagoDTO();
+        CuentaMercadoDTO cuentaMercado = construirDTO();
+        CuentaMercadoDTO cuentaMercadoExistente = control.verificarCuentaMercado(cuentaMercado);
+        
+        if (pagoloco.getMonto() > cuentaMercadoExistente.getSaldo()){ 
+            return false;
+        }
+        
+        control.procesarPagoMercado(cuentaMercadoExistente, pagoloco);
+        control.actualizarSaldoMercado(cuentaMercadoExistente, pagoloco);
+        return true;   
+        
+    }
+    
+    private void setearTotalPagar() throws GestionReservaException {
+        String total = Double.toString(control.calcularCostoTotal());
+        labelPago.setText("Total a pagar: " + total);
     }
 
 

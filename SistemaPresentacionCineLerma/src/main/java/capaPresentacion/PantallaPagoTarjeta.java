@@ -5,8 +5,10 @@
 package capaPresentacion;
 
 import DTOs.CuentaMercadoDTO;
+import DTOs.PagoDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.GestionReservaException;
+import Excepciones.PagoException;
 import Excepciones.ValidarCuentaException;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -27,8 +29,9 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     /**
      * Creates new form PantallaPagoTarjeta
      */
-    public PantallaPagoTarjeta() {
+    public PantallaPagoTarjeta() throws GestionReservaException {
         initComponents();
+        setearTotalPagar();
     }
 
     
@@ -54,6 +57,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         txtPropietario = new javax.swing.JLabel();
         btnCompletarPago = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
+        labelPago = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setSize(new java.awt.Dimension(420, 550));
@@ -123,14 +127,12 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
             }
         });
 
+        labelPago.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(183, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,6 +155,12 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
                                     .addComponent(textPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(textNumeroTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(174, 174, 174))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelPago)
+                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,7 +185,9 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
                 .addComponent(textPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(94, 94, 94)
                 .addComponent(btnCompletarPago, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addComponent(labelPago)
+                .addGap(47, 47, 47)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
         );
@@ -207,6 +217,13 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
             if (!validarCampos()) {
                 return;
             }
+            
+            //DESPUES SE DEBE VALIDAR EL PAGO
+            if (!validarPagoTarjeta()) {
+                dispose();
+                control.mostrarPantallaPagoRechazado();
+                return;
+            }
             //Mostrar pantalla de detalle de la compra hecha, en caso de que el pago y la cuenta ingresada sean correctos
 
             control.mostrarDetalleBoleto();
@@ -214,6 +231,10 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
 
         } catch (ValidarCuentaException ex) {
             Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PagoException ex) {
+            Logger.getLogger(PantallaPagoPaypal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GestionReservaException ex) {
+            Logger.getLogger(PantallaPagoPaypal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCompletarPagoActionPerformed
 
@@ -230,6 +251,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnCompletarPago;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JLabel labelPago;
     private javax.swing.JTextField textCVV;
     private javax.swing.JTextField textFechaVencimiento;
     private javax.swing.JTextField textNumeroTarjeta;
@@ -275,7 +297,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         TarjetaDTO cuentaTarjeta = construirDTO();
 
         //Se valida la cuenta segun el dto creado 
-        if (!control.verificarCuentaTarjeta(cuentaTarjeta)) {
+        if (control.verificarCuentaTarjeta(cuentaTarjeta) == null) {
             JOptionPane.showMessageDialog(null, "ERROR: Cuenta invalida", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -312,4 +334,37 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
         cuentaTarjeta.setFechaVencimiento(fechaVencimiento);
         return cuentaTarjeta;
     }
+    
+    private PagoDTO construirPagoDTO() throws GestionReservaException {
+        //Crear DTO
+        Date fechaHoy = new Date();
+        PagoDTO pago = new PagoDTO();
+        Double monto = control.calcularCostoTotal();
+        pago.setEstado("");
+        pago.setFechaHora(fechaHoy);
+        pago.setMonto(monto);
+        return pago;
+    }
+    
+    public boolean validarPagoTarjeta() throws PagoException, GestionReservaException, ValidarCuentaException {       
+        PagoDTO pagoTarjeta = construirPagoDTO();
+        TarjetaDTO cuentaTarjeta = construirDTO();
+        TarjetaDTO cuentaTarjetaExistente = control.verificarCuentaTarjeta(cuentaTarjeta);
+        
+        if (pagoTarjeta.getMonto() > cuentaTarjetaExistente.getSaldo()){ 
+            return false;
+        }
+        
+        control.procesarPagoTarjeta(cuentaTarjetaExistente, pagoTarjeta);
+        control.actualizarSaldoTarjeta(cuentaTarjetaExistente, pagoTarjeta);
+        return true;   
+        
+    }
+    
+    private void setearTotalPagar() throws GestionReservaException {
+        String total = Double.toString(control.calcularCostoTotal());
+        labelPago.setText("Total a pagar: " + total);
+    }
+    
+    
 }

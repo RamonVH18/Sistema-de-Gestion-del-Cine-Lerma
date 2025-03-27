@@ -21,17 +21,17 @@ import java.util.List;
 //Interfaz para todos los metodos de GestionPagos 
 public interface IGestionPagos {
     
-    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException;
+    public boolean procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException;
     
-    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException;
+    public boolean procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException;
     
-    public void procesarPagoTarjeta(TarjetaDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException;
+    public boolean procesarPagoTarjeta(TarjetaDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException;
     
-    public boolean validarCuentaPaypal(PaypalDTO paypal) throws ValidarCuentaException;
+    public PaypalDTO validarCuentaPaypal(PaypalDTO paypal) throws ValidarCuentaException;
     
-    public boolean validarMercado(CuentaMercadoDTO mercadoPago) throws ValidarCuentaException;
+    public CuentaMercadoDTO validarMercado(CuentaMercadoDTO mercadoPago) throws ValidarCuentaException;
     
-    public boolean validarTarjeta(TarjetaDTO tarjeta) throws ValidarCuentaException;
+    public TarjetaDTO validarTarjeta(TarjetaDTO tarjeta) throws ValidarCuentaException;
     
     public boolean consultarEstadoPago(PagoDTO pago) throws PagoException;
     
@@ -40,5 +40,11 @@ public interface IGestionPagos {
     public List<PaypalDTO> agregarCuentasPaypal() throws AgregarCuentaException;
     
     public List<TarjetaDTO> agregarCuentasTarjeta() throws AgregarCuentaException;
+    
+    public void actualizarSaldoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) ;
+    
+    public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) ;
+    
+    public void actualizarSaldoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) ;
         
 }

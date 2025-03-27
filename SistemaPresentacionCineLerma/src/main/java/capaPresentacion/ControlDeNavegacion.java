@@ -9,11 +9,13 @@ import DTOs.ClienteDTO;
 import DTOs.CuentaMercadoDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
+import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
+import Excepciones.PagoException;
 import Excepciones.PeliculasCargaException;
 import Excepciones.ValidarCuentaException;
 import com.google.zxing.WriterException;
@@ -24,6 +26,8 @@ import gestionReservaBoletos.ManejoDeBoletos;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -115,27 +119,39 @@ public class ControlDeNavegacion {
     //Metodo que se encarga de abrir el JDialog para el pago con tarjeta
     public void mostrarPagoTarjeta() {
         SwingUtilities.invokeLater(() -> {
-            PantallaPagoTarjeta pantallaPagoTarjeta = new PantallaPagoTarjeta();
-            pantallaPagoTarjeta.setLocationRelativeTo(null);
-            pantallaPagoTarjeta.setVisible(true);
+            try {
+                PantallaPagoTarjeta pantallaPagoTarjeta = new PantallaPagoTarjeta();
+                pantallaPagoTarjeta.setLocationRelativeTo(null);
+                pantallaPagoTarjeta.setVisible(true);
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 
     //Metodo que se encarga de abrir el JDialog para el pago con Paypal
     public void mostrarPagoPaypal() {
         SwingUtilities.invokeLater(() -> {
-            PantallaPagoPaypal pantallaPagoPaypal = new PantallaPagoPaypal();
-            pantallaPagoPaypal.setLocationRelativeTo(null);
-            pantallaPagoPaypal.setVisible(true);
+            try {
+                PantallaPagoPaypal pantallaPagoPaypal = new PantallaPagoPaypal();
+                pantallaPagoPaypal.setLocationRelativeTo(null);
+                pantallaPagoPaypal.setVisible(true);
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 
     //Metodo que se encarga de abrir el JDialog para el pago con Mercado pago
     public void mostrarPagoMercado() {
         SwingUtilities.invokeLater(() -> {
-            PantallaPagoMercado pantallaPagoMercado = new PantallaPagoMercado(numAsientos);
-            pantallaPagoMercado.setLocationRelativeTo(null);
-            pantallaPagoMercado.setVisible(true);
+            try {
+                PantallaPagoMercado pantallaPagoMercado = new PantallaPagoMercado(numAsientos);
+                pantallaPagoMercado.setLocationRelativeTo(null);
+                pantallaPagoMercado.setVisible(true);
+            } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 
@@ -154,6 +170,16 @@ public class ControlDeNavegacion {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+        });
+    }
+    
+    //faltan los try catch no tira ninguna excepcion la pantalla de pago rechazado
+    //Metodo que se encarga de abrir la pantalla de pago rechazado
+    public void mostrarPantallaPagoRechazado() {
+        SwingUtilities.invokeLater(() -> {
+                PantallaPagoRechazado pantallaPagoRechazado = new PantallaPagoRechazado();
+                pantallaPagoRechazado.setLocationRelativeTo(null);
+                pantallaPagoRechazado.setVisible(true);
         });
     }
 
@@ -314,19 +340,46 @@ public class ControlDeNavegacion {
     }
 
     //Metodos de gestion de pagos
-    public boolean verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws ValidarCuentaException  {
-        boolean esValida = gestionDePagos.validarMercado(cuentaMercado);
-        return esValida;
+    public CuentaMercadoDTO verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws ValidarCuentaException  {
+        return gestionDePagos.validarMercado(cuentaMercado);
     }
 
-    public boolean verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws ValidarCuentaException {
-        boolean esValida = gestionDePagos.validarCuentaPaypal(cuentaPaypal);
-        return esValida;
+    public PaypalDTO verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws ValidarCuentaException {
+        return gestionDePagos.validarCuentaPaypal(cuentaPaypal);
     }
 
-    public boolean verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws ValidarCuentaException {
-        boolean esValida = gestionDePagos.validarTarjeta(cuentaTarjeta);
-        return esValida;
+    public TarjetaDTO verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws ValidarCuentaException {
+        return gestionDePagos.validarTarjeta(cuentaTarjeta);
+    }
+    
+    public double calcularCostoTotal() throws GestionReservaException {
+        double costoTotal = manejoDeBoletos.calcularCostoTotal(numAsientos, funcionSeleccionada);
+        return costoTotal;        
+    }
+    
+    public void actualizarSaldoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) {
+        gestionDePagos.actualizarSaldoMercado(mercadoPago, pago); 
+    }
+
+    public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) {
+        gestionDePagos.actualizarSaldoPaypal(paypal, pago);
+           
+    }
+
+    public void actualizarSaldoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) {
+        gestionDePagos.actualizarSaldoTarjeta(tarjeta, pago);
+    }
+    
+    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException{
+        gestionDePagos.procesarPagoMercado(mercadoPago, pago);
+    }
+    
+    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException{
+        gestionDePagos.procesarPagoPaypal(paypal, pago);
+    }
+    
+    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException, ValidarCuentaException{
+        gestionDePagos.procesarPagoTarjeta(tarjeta, pago);
     }
 
 }
