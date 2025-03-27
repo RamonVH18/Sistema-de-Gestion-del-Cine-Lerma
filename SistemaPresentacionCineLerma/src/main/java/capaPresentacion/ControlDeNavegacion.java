@@ -15,7 +15,7 @@ import DTOs.TarjetaDTO;
 import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
-import Excepciones.TransferenciaException;
+import Excepciones.ValidarCuentaException;
 import com.google.zxing.WriterException;
 import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
@@ -313,17 +313,17 @@ public class ControlDeNavegacion {
     }
 
     //Metodos de gestion de pagos
-    public boolean verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws TransferenciaException {
+    public boolean verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) throws ValidarCuentaException  {
         boolean esValida = gestionDePagos.validarMercado(cuentaMercado);
         return esValida;
     }
 
-    public boolean verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws TransferenciaException {
+    public boolean verificarCuentaPaypal(PaypalDTO cuentaPaypal) throws ValidarCuentaException {
         boolean esValida = gestionDePagos.validarCuentaPaypal(cuentaPaypal);
         return esValida;
     }
 
-    public boolean verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws TransferenciaException {
+    public boolean verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) throws ValidarCuentaException {
         boolean esValida = gestionDePagos.validarTarjeta(cuentaTarjeta);
         return esValida;
     }

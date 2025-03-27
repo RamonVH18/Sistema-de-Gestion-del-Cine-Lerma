@@ -10,16 +10,16 @@ package Excepciones;
  */
 
 //Clase de excepcion en general para todo el subsistema
-public class TransferenciaException extends Exception {
+public class ValidarCuentaException extends Exception {
 
-    public TransferenciaException() {
+    public ValidarCuentaException() {
     }
 
-    public TransferenciaException(String message) {
+    public ValidarCuentaException(String message) {
         super(message);
     }
 
-    public TransferenciaException(String message, Throwable cause) {
+    public ValidarCuentaException(String message, Throwable cause) {
         super(message, cause);
     }
 

@@ -6,11 +6,11 @@ package capaPresentacion;
 
 import DTOs.CuentaMercadoDTO;
 import Excepciones.GestionReservaException;
+import Excepciones.ValidarCuentaException;
 import java.awt.Graphics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import Excepciones.TransferenciaException;
 
 /**
  *
@@ -185,7 +185,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
             dispose();
             
             
-        } catch (TransferenciaException ex) {
+        } catch (ValidarCuentaException ex) {
             Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -210,7 +210,7 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
     private javax.swing.JTextField textClienteID;
     private javax.swing.JTextField textMontoAPagar;
     // End of variables declaration//GEN-END:variables
-    public boolean validarCampos() throws TransferenciaException {
+    public boolean validarCampos() throws ValidarCuentaException {
         //Se muestra un error si alguno de los dos campos estan vacios
         if (textClienteID.getText().trim().isEmpty() || textMontoAPagar.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);

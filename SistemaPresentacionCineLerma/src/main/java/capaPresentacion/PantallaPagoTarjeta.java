@@ -7,7 +7,7 @@ package capaPresentacion;
 import DTOs.CuentaMercadoDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.GestionReservaException;
-import Excepciones.TransferenciaException;
+import Excepciones.ValidarCuentaException;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -212,7 +212,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
             control.mostrarDetalleBoleto();
             dispose();
 
-        } catch (TransferenciaException ex) {
+        } catch (ValidarCuentaException ex) {
             Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCompletarPagoActionPerformed
@@ -240,7 +240,7 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
     private javax.swing.JLabel txtPropietario;
     // End of variables declaration//GEN-END:variables
 
-    public boolean validarCampos() throws TransferenciaException {
+    public boolean validarCampos() throws ValidarCuentaException {
         //Se muestra un error si alguno de los campos estan vacios
         if (textNumeroTarjeta.getText().trim().isEmpty() || textFechaVencimiento.getText().trim().isEmpty() || textCVV.getText().trim().isEmpty() || textPropietario.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "ERROR: No pueden haber campos vacios", "Error", JOptionPane.ERROR_MESSAGE);

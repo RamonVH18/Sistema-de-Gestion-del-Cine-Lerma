@@ -8,7 +8,8 @@ import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.TarjetaDTO;
-import Excepciones.TransferenciaException;
+import Excepciones.PagoException;
+import Excepciones.ValidarCuentaException;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -106,13 +107,13 @@ public class GestionPagos implements IGestionPagos {
 
     //METODOS DE VALIDACIONES
     @Override
-    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws TransferenciaException {
+    public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException {
 //        if (!validarPaypal(paypal)) {
 //            throw new TransferenciaException("Error: Los datos de la cuenta de paypal son incorrectos");
 //        }
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new TransferenciaException("Error: El monto debe ser mayor a 0");
+            throw new ValidarCuentaException("Error: El monto debe ser mayor a 0");
         }
 
         System.out.println("Procesando pago de " + pago.getMonto() + "con Paypal");
@@ -133,18 +134,18 @@ public class GestionPagos implements IGestionPagos {
     }
 
     @Override
-    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws TransferenciaException {
+    public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException {
         Date fechaHoy = new Date();
         if (!validarMercado(mercadoPago)) {
-            throw new TransferenciaException("Error: Los datos de la cuenta de MercadoPago son incorrectos");
+            throw new ValidarCuentaException("Error: Los datos de la cuenta de MercadoPago son incorrectos");
         }
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new TransferenciaException("Error: El monto debe ser mayor a 0");
+            throw new ValidarCuentaException("Error: El monto debe ser mayor a 0");
         }
 
         if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new TransferenciaException("Error: La fecha del pago debe ser la del dia de hoy");
+            throw new ValidarCuentaException("Error: La fecha del pago debe ser la del dia de hoy");
         }
 
         System.out.println("Procesando pago de " + pago.getMonto() + "con MercadoPago");
@@ -163,18 +164,18 @@ public class GestionPagos implements IGestionPagos {
     }
 
     @Override
-    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws TransferenciaException {
+    public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException, ValidarCuentaException {
         Date fechaHoy = new Date();
         if (!validarTarjeta(tarjeta)) {
-            throw new TransferenciaException("Error: Los datos de tarjeta son incorrectos");
+            throw new ValidarCuentaException("Error: Los datos de tarjeta son incorrectos");
         }
 
         if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new TransferenciaException("Error: El monto debe ser mayor a 0");
+            throw new ValidarCuentaException("Error: El monto debe ser mayor a 0");
         }
 
         if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new TransferenciaException("Error: La fecha del pago debe ser la del dia de hoy");
+            throw new ValidarCuentaException("Error: La fecha del pago debe ser la del dia de hoy");
         }
 
         System.out.println("Procesando pago de: $" + pago.getMonto() + "con tarjeta");
@@ -194,7 +195,7 @@ public class GestionPagos implements IGestionPagos {
     //Metodo para validar una cuenta de paypal, este metodo recibe un PaypalDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
     //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
-    public boolean validarCuentaPaypal(PaypalDTO paypal) {
+    public boolean validarCuentaPaypal(PaypalDTO paypal) throws ValidarCuentaException {
         Optional<PaypalDTO> cuentaPaypalEncontrada = paypals.stream().filter(p -> p.equals(paypal)).findFirst();
         if (!cuentaPaypalEncontrada.isPresent()) {
             return false;
@@ -219,7 +220,7 @@ public class GestionPagos implements IGestionPagos {
     //Metodo para validar una cuenta de mercadoPago, este metodo recibe un CuentaMercadoDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
     //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
-    public boolean validarMercado(CuentaMercadoDTO mercadoPago) {
+    public boolean validarMercado(CuentaMercadoDTO mercadoPago) throws ValidarCuentaException {
         Optional<CuentaMercadoDTO> cuentaMercadoEncontrada = mercados.stream().filter(p -> p.equals(mercadoPago)).findFirst();
         if (!cuentaMercadoEncontrada.isPresent()) {
             return false;
@@ -248,7 +249,7 @@ public class GestionPagos implements IGestionPagos {
     //Metodo para validar una tarjeta, este metodo recibe un TarjetaDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
     //Si se pasan todas las validaciones entonces se regresa un valor true para indicar que la cuenta es valida
     @Override
-    public boolean validarTarjeta(TarjetaDTO tarjeta) {
+    public boolean validarTarjeta(TarjetaDTO tarjeta) throws ValidarCuentaException {
         Optional<TarjetaDTO> tarjetaEncontrada = tarjetas.stream().filter(p -> p.equals(tarjeta)).findFirst();
         if (!tarjetaEncontrada.isPresent()) {
             return false;
@@ -289,7 +290,7 @@ public class GestionPagos implements IGestionPagos {
     }
 
     @Override
-    public boolean consultarEstadoPago(PagoDTO pago) {
+    public boolean consultarEstadoPago(PagoDTO pago) throws PagoException{
         if (pago == null || pago.getEstado() == null) {
             return false;
         }

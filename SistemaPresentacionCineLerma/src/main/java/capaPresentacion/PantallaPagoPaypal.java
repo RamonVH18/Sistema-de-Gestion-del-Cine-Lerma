@@ -7,7 +7,7 @@ package capaPresentacion;
 import DTOs.CuentaMercadoDTO;
 import DTOs.PaypalDTO;
 import Excepciones.GestionReservaException;
-import Excepciones.TransferenciaException;
+import Excepciones.ValidarCuentaException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -178,7 +178,7 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
             control.mostrarDetalleBoleto();
             dispose();
 
-        } catch (TransferenciaException ex) {
+        } catch (ValidarCuentaException ex) {
             Logger.getLogger(PantallaPagoMercado.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
@@ -198,7 +198,7 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     private javax.swing.JPasswordField textContrasenia;
     private javax.swing.JTextField textCorreo;
     // End of variables declaration//GEN-END:variables
-    public boolean validarCampos() throws TransferenciaException {
+    public boolean validarCampos() throws ValidarCuentaException {
         //Se verifica que no hayan campos vacios
         //primero se convierten los chars a string
         char[] contraseniaChars = textContrasenia.getPassword();
