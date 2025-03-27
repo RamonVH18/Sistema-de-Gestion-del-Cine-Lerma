@@ -11,6 +11,10 @@ import java.util.Objects;
  *
  * @author Daniel Miribe
  */
+/**
+ * 
+ * Clase que representa una tarjeta de pago.
+ */
 public class TarjetaDTO {
 
     private String numeroTarjeta;
@@ -19,9 +23,24 @@ public class TarjetaDTO {
     private Date fechaVencimiento;
     private double saldo;
 
+    /**
+     * Constructor por defecto.
+     */
     public TarjetaDTO() {
     }
 
+    /**
+     * 
+     * 
+     * Constructor que inicializa todos los atributos de la tarjeta.
+     *
+     * 
+     * @param numeroTarjeta el numero de la tarjeta.
+     * @param titular el nombre del titular de la tarjeta.
+     * @param cvv el código de verificación de la tarjeta.
+     * @param fechaVencimiento la fecha de vencimiento de la tarjeta.
+     * @param saldo el saldo disponible en la tarjeta.
+     */
     public TarjetaDTO(String numeroTarjeta, String titular, Integer cvv, Date fechaVencimiento, double saldo) {
         this.numeroTarjeta = numeroTarjeta;
         this.titular = titular;
@@ -29,8 +48,6 @@ public class TarjetaDTO {
         this.fechaVencimiento = fechaVencimiento;
         this.saldo = saldo;
     }
-
-    
 
     public String getNumeroTarjeta() {
         return numeroTarjeta;
@@ -71,10 +88,15 @@ public class TarjetaDTO {
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
-    
-    
-    
+
     //Estos metodos hash y equals se utilizan para buscar la cuenta dentro de las listas de cuentas registradas, se hacen comparaciones, en este caso se comparan todos los atributos
+    /**
+     * 
+     * 
+     * Calcula el código hash de la tarjeta basado en sus atributos.
+     *
+     * @return el codigo hash de la tarjeta.
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -85,6 +107,16 @@ public class TarjetaDTO {
         return hash;
     }
 
+    /**
+     * 
+     * 
+     * Compara esta tarjeta con otra para determinar si son iguales. Dos
+     * tarjetas son iguales si tienen el mismo número de tarjeta, titular, CVV y
+     * fecha de vencimiento.
+     *
+     * @param obj el objeto a comparar.
+     * @return true si son iguales, false en caso contrario.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -113,11 +145,5 @@ public class TarjetaDTO {
     public String toString() {
         return "TarjetaDTO{" + "numeroTarjeta=" + numeroTarjeta + ", titular=" + titular + ", cvv=" + cvv + ", fechaVencimiento=" + fechaVencimiento + ", saldo=" + saldo + '}';
     }
-
-    
-    
-    
-
-    
 
 }
