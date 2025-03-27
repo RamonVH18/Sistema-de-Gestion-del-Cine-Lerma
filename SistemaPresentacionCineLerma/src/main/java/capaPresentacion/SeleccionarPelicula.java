@@ -5,7 +5,6 @@
 package capaPresentacion;
 
 import DTOs.PeliculaDTO;
-import Excepciones.GestionReservaException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -28,12 +27,17 @@ import utilitades.Utilerias;
 
 /**
  *
+ * Clase que crea la pantalla de selección de películas y le da formato, a su
+ * vez le da la lógica para su correcto funcionamiento y cargar la cartelera
+ * correctamente.
+ *
  * @author Daniel Miribe
  */
 public class SeleccionarPelicula extends javax.swing.JFrame {
 
     //Instancia que nos permite llamar los metodos de control
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+
     //Objeto que nos permite invocar a los metodos de utilidades
     private Utilerias utilidades = new Utilerias();
 
@@ -45,6 +49,8 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     public SeleccionarPelicula() {
         initComponents();
+
+        // Metodos para cargar todos los elementos necesarios
         configurarLayout();
         generarScrollPane(jScrollPane1);
         configurarPanelCartelera();
@@ -55,16 +61,28 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         verificarCarteleraVacia();
     }
 
+    /**
+     * Este método configura el Frame dandole el formato de BorderLayout.
+     */
     private void configurarLayout() {
         getContentPane().setLayout(new BorderLayout());
     }
 
+    /**
+     * Metodo que configura el panel de la cartelera, dandole formato de
+     * GridLayout con Scroll.
+     */
     private void configurarPanelCartelera() {
         panelCartelera.setLayout(new GridLayout(0, 3, 15, 15));
         panelCartelera.setBackground(Color.BLACK);
         panelCartelera.setAutoscrolls(true);
     }
 
+    /**
+     * Metodo que configura el redimensionamiento al cambiar el tamaño de la
+     * pantalla, esto para que las peliculas se vean correctamente a cualquier
+     * tamaño de pantalla.
+     */
     private void configurarRedimensionamiento() {
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -75,6 +93,10 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Metodo que agrega los componentes necesarios al Frame como titulo,
+     * botones, paneles, entre otros.
+     */
     private void agregarComponentesAlFrame() {
         JPanel topPanel = new JPanel();
         topPanel.add(Titulo);
@@ -85,6 +107,10 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Metodo para aplicar ajustes el Frame, tales como tamaño por defecto,
+     * tamaño minimo, posicion, entre otros.
+     */
     private void aplicarAjustesFrame() {
         setSize(800, 600);
         setMinimumSize(new Dimension(640, 480));
@@ -93,6 +119,10 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         setVisible(true);
     }
 
+    /**
+     * Metodo que verifica si la cartelera esta vacia, si es asi se cerrara la
+     * pantalla pues no hay nada que mostrar.
+     */
     private void verificarCarteleraVacia() {
         if (panelCartelera.getComponentCount() == 0) {
             SwingUtilities.invokeLater(() -> {
@@ -180,10 +210,6 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnVolverMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton btnVolver;
@@ -192,9 +218,9 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     /**
-     * Metodo que se encarga de la generacion de la cartelera, recibe un JPanel
+     * Metodo que se encarga de la generacion de la cartelera, recibe un JPanel.
      *
-     * @param panel
+     * @param panel Panel a recibir
      */
     public void generarCartelera(JPanel panel) {
         //Se llama a un metodo de control que es el encargado de obtenernos las Peliculas y guardardalas como una Lista de Peliculas DTO
@@ -221,10 +247,11 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
     }
 
     /**
-     * Metodo para crear un boton con la imagen de una pelicula
+     * Metodo para crear un boton con la imagen de una pelicula.
      *
-     * @param pelicula
-     * @return boton
+     * @param pelicula Pelicula dada por el parametro
+     * @param ancho Ancho dado por el parametro
+     * @return boton Boton con formato completo
      */
     private JButton crearBotonPelicula(PeliculaDTO pelicula, int ancho) {
         ImageIcon imagen = utilidades.crearImagen(
@@ -246,6 +273,12 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         return boton;
     }
 
+    /**
+     * Metodo auxiliar que le da formato al boton.
+     *
+     * @param boton Boton dado por el parametro
+     * @param ancho Ancho dado por el parametro
+     */
     private void configurarBoton(JButton boton, int ancho) {
         boton.setLayout(new BorderLayout());
         boton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -258,6 +291,10 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         boton.setPreferredSize(new Dimension(ancho, (int) (ancho * 1.6)));
     }
 
+    /**
+     * Metodo que ajusta el tamaño del scrollPanel donde se encuentran las
+     * peliculas.
+     */
     private void ajustarTamSeleccionPeliculas() {
         int alturaDisponible = getHeight() - btnVolver.getHeight() - Titulo.getHeight() - 50;
         jScrollPane1.setPreferredSize(new Dimension(panelCartelera.getPreferredSize().width,
@@ -265,6 +302,11 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         revalidate();
     }
 
+    /**
+     * Metodo que calcula el ancho de los botones.
+     *
+     * @return El ancho total de un boton
+     */
     private int calcularAnchoBotones() {
         int anchoVentana = this.getWidth();
         int margen = 40; // Margen total izquierdo + derecho
@@ -273,10 +315,21 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         return (anchoVentana - margen - (columnas - 1) * espacioEntre) / columnas;
     }
 
+    /**
+     * Metodo que calcula el tamaño de fuente correcto mediante el ancho del
+     * boton.
+     *
+     * @param anchoBoton Ancho del boton dado por el parametro
+     * @return El tamaño de la fuente proporcional al ancho del boton
+     */
     private int calcularTamanioFuente(int anchoBoton) {
         return Math.max(12, anchoBoton / 15); // Tamaño de fuente proporcional
     }
 
+    /**
+     * Metodo que regenera la cartelera en el panel correspondiente colocando
+     * las imagenes en los botones.
+     */
     private void regenerarCartelera() {
         int columnas = Math.max(3, getWidth() / 250);
         ((GridLayout) panelCartelera.getLayout()).setColumns(columnas);
@@ -303,6 +356,14 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         panelCartelera.repaint();
     }
 
+    /**
+     * Metodo que obtiene la URL de una pelicula para poder sacar la imagen de
+     * la misma, esto mediante busqueda con el nombre de la pelicula dado en el
+     * parametro.
+     *
+     * @param nombrePelicula Nombre de la pelicula que se buscara
+     * @return La imagen de la pelicula encontrada
+     */
     private String obtenerUrlPelicula(String nombrePelicula) {
         for (PeliculaDTO pelicula : control.obtenerPeliculas()) {
             if (pelicula.getNombrePelicula().equals(nombrePelicula)) {
@@ -312,6 +373,12 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         return "default_poster.jpg";
     }
 
+    /**
+     * Metodo que genera el scrollPane donde iran las peliculas, generando a su
+     * vez los scrolls verticales y horizontales.
+     *
+     * @param scrollPane Scroll Pane a recibir
+     */
     private void generarScrollPane(JScrollPane scrollPane) {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
