@@ -6,18 +6,16 @@ package Excepciones;
 
 /**
  *
- * @author isaac
+ * @author Ramon Valencia
  */
-public class ValidarCampoAsientoException extends Exception {
+public class PeliculaActualizacionException extends Exception{
 
-    public ValidarCampoAsientoException(String message) {
+    public PeliculaActualizacionException(String message) {
         super(message);
     }
 
-    public ValidarCampoAsientoException(String message, Throwable cause) {
+    public PeliculaActualizacionException(String message, Throwable cause) {
         super(message, cause);
     }
-
-  
     
 }

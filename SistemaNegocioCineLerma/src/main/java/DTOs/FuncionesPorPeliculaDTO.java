@@ -13,7 +13,7 @@ import java.util.List;
 public class FuncionesPorPeliculaDTO {
 
     private String nombrePelicula;
-
+    private String genero;
     private List<FuncionDTO> listaFuncionesDelDia;
     /**
      * Constructor vacio
@@ -25,12 +25,14 @@ public class FuncionesPorPeliculaDTO {
      * @param nombrePelicula
      * @param listaFuncionesDelDia 
      */
-    public FuncionesPorPeliculaDTO(String nombrePelicula, List<FuncionDTO> listaFuncionesDelDia) {
+    public FuncionesPorPeliculaDTO(String nombrePelicula, String genero, List<FuncionDTO> listaFuncionesDelDia) {    
         this.nombrePelicula = nombrePelicula;
+        this.genero = genero;
         this.listaFuncionesDelDia = listaFuncionesDelDia;
     }
+
     /**
-     * 
+     *
      * @return 
      */
     public String getNombrePelicula() {
@@ -58,4 +60,11 @@ public class FuncionesPorPeliculaDTO {
         this.listaFuncionesDelDia = listaFuncionesDelDia;
     }
 
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
 }

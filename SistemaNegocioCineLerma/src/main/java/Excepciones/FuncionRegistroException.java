@@ -6,18 +6,16 @@ package Excepciones;
 
 /**
  *
- * @author isaac
+ * @author Ramon Valencia
  */
-public class ValidarCampoAsientoException extends Exception {
+public class FuncionRegistroException extends Exception{
 
-    public ValidarCampoAsientoException(String message) {
+    public FuncionRegistroException(String message) {
         super(message);
     }
 
-    public ValidarCampoAsientoException(String message, Throwable cause) {
+    public FuncionRegistroException(String message, Throwable cause) {
         super(message, cause);
     }
 
-  
-    
 }

@@ -12,7 +12,7 @@ import DTOs.PeliculaDTO;
 import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
-import Excepciones.reservarAsientoFuncionException;
+import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.*;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface IManejoDeBoletos {
     
     public List<FuncionDTO> cargarFuncionesPelicula(String nombrePelicula) throws FuncionCargaException;
     
-    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws validarCampoAsientoException;
+    public boolean validarCampoAsiento(String campoAsiento, FuncionDTO funcion) throws ValidarCampoAsientoException;
     
     public int consultarDisponibilidadAsientos(FuncionDTO funcion) throws DisponibilidadAsientosException;
     
@@ -36,7 +36,7 @@ public interface IManejoDeBoletos {
     
     public List<MetodoPagoDTO> cargarMetodosPago();
     
-    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws generarBoletoException;
+    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException;
     
-    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws reservarAsientoFuncionException;
+    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws ReservarAsientoFuncionException;
 }
