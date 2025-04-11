@@ -14,6 +14,7 @@ import Interfaces.IPeliculaBO;
 import Interfaces.IPeliculaDAO;
 import Mappers.PeliculaMapper;
 import entidades.Pelicula;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,13 +63,17 @@ public class PeliculaBO implements IPeliculaBO{
     public List<PeliculaDTO> buscarTodasPeliculasActivas() throws PeliculaBusquedaException {
         try {
             List<Pelicula> peliculas = peliculaDAO.mostrarListaPelicula();
+            List<PeliculaDTO> peliculasMapeadas = new ArrayList<>();
             
             for (int i = 0; i < peliculas.size(); i++) {
                 PeliculaDTO peliculaMap = PeliculaMapper.toDTO(peliculas.get(i));
+                peliculasMapeadas.add(peliculaMap);
             }
+            return peliculasMapeadas;
         } catch (PersistenciaException e) {
             throw new PeliculaBusquedaException("Hubo un error al buscar las peliculas activas");
         }
+        
     }
 
     @Override
