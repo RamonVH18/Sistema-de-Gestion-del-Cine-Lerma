@@ -26,7 +26,7 @@ public class CompraDAO implements ICompraDAO {
         inicializarDatos();
     }
 
-    public CompraDAO getInstanceDAO() {
+    public static CompraDAO getInstanceDAO() {
         if (instance == null) {
             instance = new CompraDAO();
         }
