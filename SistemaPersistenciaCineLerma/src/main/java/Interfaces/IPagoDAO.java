@@ -5,15 +5,17 @@
 package Interfaces;
 
 import entidades.Funcion;
-import java.util.List;
+import entidades.Pago;
 
 /**
  *
- * @author Ramon Valencia
+ * @author sonic
  */
-public interface IFuncionDAO {
+public interface IPagoDAO {
     
-    public Funcion buscarFuncion(Long funcionId);
+    public Pago registrarPagoExitoso(Pago pago);
     
-    public List<Funcion> mostrarHistorialFunciones();
+    public Double calcularMontoTotal(Integer boletos, Funcion funcion);
+    
+    
 }

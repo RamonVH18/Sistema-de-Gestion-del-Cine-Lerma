@@ -13,6 +13,7 @@ public class PeliculaDTO {
     private String nombrePelicula;
     private String peliculaImagen; // ESTE DEBE SER DE TIPO IMAGEN
     public String descripcionPelicula;
+    private Double duracion;
     /**
      * Cosntructor vacio
      */
@@ -24,13 +25,15 @@ public class PeliculaDTO {
      * @param peliculaImagen
      * @param descripcionPelicula 
      */
-    public PeliculaDTO(String nombrePelicula, String peliculaImagen, String descripcionPelicula) {
+    public PeliculaDTO(String nombrePelicula, String peliculaImagen, String descripcionPelicula, Double duracion) {    
         this.nombrePelicula = nombrePelicula;
         this.peliculaImagen = peliculaImagen;
         this.descripcionPelicula = descripcionPelicula;
+        this.duracion = duracion;
     }
+
     /**
-     * 
+     *
      * @return 
      */
     public String getNombrePelicula() {
@@ -71,5 +74,15 @@ public class PeliculaDTO {
     public void setDescripcionPelicula(String descripcionPelicula) {
         this.descripcionPelicula = descripcionPelicula;
     }
+
+    public Double getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(Double duracion) {
+        this.duracion = duracion;
+    }
+    
+    
 
 }
