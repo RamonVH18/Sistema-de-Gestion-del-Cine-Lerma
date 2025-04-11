@@ -2,19 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Excepciones;
+package Excepciones.asientoFuncion;
 
 /**
  *
  * @author Ramon Valencia
  */
-public class PeliculaActualizacionException extends Exception{
+public class AsientoFuncionRegistroException extends Exception{
 
-    public PeliculaActualizacionException(String message) {
+    public AsientoFuncionRegistroException(String message) {
         super(message);
     }
 
-    public PeliculaActualizacionException(String message, Throwable cause) {
+    public AsientoFuncionRegistroException(String message, Throwable cause) {
         super(message, cause);
     }
     

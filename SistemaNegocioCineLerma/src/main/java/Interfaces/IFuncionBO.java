@@ -4,11 +4,11 @@
  */
 package Interfaces;
 
-import Excepciones.FuncionEliminacionException;
+import Excepciones.funciones.FuncionEliminacionException;
 import DTOs.FuncionDTO;
 import DTOs.FuncionesPorPeliculaDTO;
-import Excepciones.FuncionBusquedaException;
-import Excepciones.FuncionRegistroException;
+import Excepciones.funciones.FuncionBusquedaException;
+import Excepciones.funciones.FuncionRegistroException;
 import java.util.List;
 
 /**

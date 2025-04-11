@@ -5,9 +5,9 @@
 package Interfaces;
 
 import DTOs.PeliculaDTO;
-import Excepciones.PeliculaActualizacionException;
-import Excepciones.PeliculaBusquedaException;
-import Excepciones.PeliculaRegistroException;
+import Excepciones.peliculas.PeliculaActualizacionException;
+import Excepciones.peliculas.PeliculaBusquedaException;
+import Excepciones.peliculas.PeliculaRegistroException;
 import java.util.List;
 
 /**

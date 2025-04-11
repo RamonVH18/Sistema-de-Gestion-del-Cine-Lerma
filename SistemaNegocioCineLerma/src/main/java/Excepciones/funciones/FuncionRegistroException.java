@@ -2,20 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Excepciones;
+package Excepciones.funciones;
 
 /**
  *
  * @author Ramon Valencia
  */
-public class PeliculaBusquedaException extends Exception{
+public class FuncionRegistroException extends Exception{
 
-    public PeliculaBusquedaException(String message) {
+    public FuncionRegistroException(String message) {
         super(message);
     }
 
-    public PeliculaBusquedaException(String message, Throwable cause) {
+    public FuncionRegistroException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }
