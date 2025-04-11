@@ -4,7 +4,7 @@
  */
 package DTOs;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -18,7 +18,7 @@ public class FuncionDTO {
 
     private String nombre;
 
-    private Date fechaHora;
+    private LocalDateTime fechaHora;
     
     private double precio;
 
@@ -35,13 +35,14 @@ public class FuncionDTO {
      * @param fechaHora
      * @param precio 
      */
-    public FuncionDTO(Long id, String sala, String nombre, Date fechaHora, double precio) {
+    public FuncionDTO(Long id, String sala, String nombre, LocalDateTime fechaHora, double precio) {    
         this.id = id;
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
         this.precio = precio;
     }
+
     /**
      * Constructor con todos los atributos sin el id
      * @param sala
@@ -49,14 +50,15 @@ public class FuncionDTO {
      * @param fechaHora
      * @param precio 
      */
-    public FuncionDTO(String sala, String nombre, Date fechaHora, double precio) {
+    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio) {    
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
         this.precio = precio;
     }
+
     /**
-     * 
+     *
      * @return 
      */
     public Long getId() {
@@ -101,18 +103,20 @@ public class FuncionDTO {
      * 
      * @return 
      */
-    public Date getFechaHora() {
+    public LocalDateTime getFechaHora() {    
         return fechaHora;
     }
+
     /**
-     * 
+     *
      * @param fechaHora 
      */
-    public void setFechaHora(Date fechaHora) {
+    public void setFechaHora(LocalDateTime fechaHora) {    
         this.fechaHora = fechaHora;
     }
+
     /**
-     * 
+     *
      * @return 
      */
     public double getPrecio() {
