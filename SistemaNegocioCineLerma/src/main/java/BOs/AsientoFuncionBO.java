@@ -21,7 +21,7 @@ public class AsientoFuncionBO implements IAsientoFuncionBO{
         
     }
     
-    public AsientoFuncionBO getInstance() {
+    public static AsientoFuncionBO getInstance() {
         if (instance == null) {
             instance = new AsientoFuncionBO();
         }

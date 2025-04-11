@@ -7,6 +7,9 @@ package capaPresentacion;
 import DTOs.PagoDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.GestionReservaException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -342,10 +345,10 @@ public class PantallaPagoTarjeta extends javax.swing.JDialog {
      */
     private PagoDTO construirPagoDTO() {
         //Crear DTO
-        Date fechaHoy = new Date();
+        LocalDateTime fechaHoy = LocalDateTime.now();
         PagoDTO pago = new PagoDTO();
         Double monto = control.calcularCostoTotal();
-        pago.setEstado("");
+        pago.setEstado(true);
         pago.setFechaHora(fechaHoy);
         pago.setMonto(monto);
         return pago;

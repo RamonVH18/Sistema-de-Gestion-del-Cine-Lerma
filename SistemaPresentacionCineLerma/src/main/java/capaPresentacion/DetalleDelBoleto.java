@@ -6,6 +6,7 @@ package capaPresentacion;
 
 import DTOs.BoletoDTO;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import javax.swing.ImageIcon;
 import utilitades.Utilerias;
@@ -209,17 +210,18 @@ public class DetalleDelBoleto extends javax.swing.JFrame {
         etiquetaImagen.setIcon(imagen);
         
         labelPelicula.setText("Pelicula: " + boleto.getNombrePelicula());
-        LocalDate fecha = boleto.getFechaHoraFuncion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        LocalDateTime fecha = boleto.getFechaHoraFuncion();
         
         labelFecha.setText("Fecha: " + utilerias.traducirDia(fecha.getDayOfWeek()) + ", " + 
                                     fecha.getDayOfMonth() + " de " + 
                                     utilerias.traducirMes(fecha.getMonth()));
         
-        String funcionMinutos = (boleto.getFechaHoraFuncion().getMinutes() < 10) ? "0" + 
-                Integer.toString(boleto.getFechaHoraFuncion().getMinutes()) : 
-                Integer.toString(boleto.getFechaHoraFuncion().getMinutes());
+        String funcionMinutos = (boleto.getFechaHoraFuncion().getMinute()< 10) ? "0" + 
+                Integer.toString(boleto.getFechaHoraFuncion().getMinute()) : 
+                Integer.toString(boleto.getFechaHoraFuncion().getMinute());
         
-        labelHora.setText("Hora: " + boleto.getFechaHoraFuncion().getHours() + ":" + funcionMinutos);
+        labelHora.setText("Hora: " + boleto.getFechaHoraFuncion().getHour() + ":" + funcionMinutos);
         
         labelSala.setText("Sala: " + boleto.getNumeroSala());
         

@@ -4,6 +4,7 @@
  */
 package gestionReservaBoletos;
 
+import BOs.AsientoFuncionBO;
 import BOs.FuncionBO;
 import BOs.PeliculaBO;
 import DTOs.AsientoFuncionDTO;
@@ -22,13 +23,12 @@ import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
 import Excepciones.funciones.FuncionBusquedaException;
 import Excepciones.peliculas.PeliculaBusquedaException;
+import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -41,6 +41,8 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
     private final IFuncionBO funcionBO = FuncionBO.getInstanceDAO();
     private final IPeliculaBO peliculaBO = PeliculaBO.getInstanceBO();
+    private final IAsientoFuncionBO asientoBO = AsientoFuncionBO.getInstance();
+    
     List<AsientoFuncionDTO> asientos = new ArrayList<>();
     List<MetodoPagoDTO> metodosPago = new ArrayList<>();
     
@@ -167,7 +169,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         // Aqui se llamaria un metodo para consultar a los asientos de la respectiva funcion, pero eso sera hasta que agreguemos los BOs
         
         //Lista que servira para guardar aquellos asientos vacios
-        asientos = asientosHarcodeados();
+        asientos = asientoBO.obtenerAsientosDisponibles(funcion);
         List<AsientoFuncionDTO> asientosDisponibles = new ArrayList<>();
         for (int i = 0; i < asientos.size(); i++) {
             AsientoFuncionDTO asiento = asientos.get(i);
@@ -275,7 +277,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             List<String> numAsientos = new ArrayList<>();
             
             int conta = 0;
-            asientos = asientosHarcodeados();
+            asientos = asientoBO.obtenerAsientosFuncion(funcion);
 
             for (int i = 0; i < asientos.size(); i++) {
                 if (conta == numAsiento) {

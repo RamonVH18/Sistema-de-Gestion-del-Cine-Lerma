@@ -4,6 +4,7 @@
  */
 package DTOs;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class BoletoDTO {
     
     private String imagenPelicula; // LUEGO LO CAMBIAMOS A UN ARREGLO DE BYTES
     
-    private Date fechaHoraFuncion;
+    private LocalDateTime fechaHoraFuncion;
     
     private String numeroSala;
     
@@ -40,7 +41,7 @@ public class BoletoDTO {
      * @param listaAsientosSeleccionados
      * @param nombreCliente 
      */
-    public BoletoDTO(String nombrePelicula, String imagenPelicula, Date fechaHoraFuncion, String numeroSala, List<String> listaAsientosSeleccionados, String nombreCliente) {
+    public BoletoDTO(String nombrePelicula, String imagenPelicula, LocalDateTime fechaHoraFuncion, String numeroSala, List<String> listaAsientosSeleccionados, String nombreCliente) {
         this.nombrePelicula = nombrePelicula;
         this.imagenPelicula = imagenPelicula;
         this.fechaHoraFuncion = fechaHoraFuncion;
@@ -81,14 +82,14 @@ public class BoletoDTO {
      * 
      * @return 
      */
-    public Date getFechaHoraFuncion() {
+    public LocalDateTime getFechaHoraFuncion() {
         return fechaHoraFuncion;
     }
     /**
      * 
      * @param fechaHoraFuncion 
      */
-    public void setFechaHoraFuncion(Date fechaHoraFuncion) {
+    public void setFechaHoraFuncion(LocalDateTime fechaHoraFuncion) {
         this.fechaHoraFuncion = fechaHoraFuncion;
     }
     /**

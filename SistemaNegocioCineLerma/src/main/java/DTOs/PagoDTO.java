@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class PagoDTO {
     
-  private Double monto;
+    private Double monto;
     
     private LocalDateTime fechaHora;
     

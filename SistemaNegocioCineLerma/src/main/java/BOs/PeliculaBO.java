@@ -4,12 +4,19 @@
  */
 package BOs;
 
+import DAOs.PeliculaDAO;
 import DTOs.PeliculaDTO;
+import Excepciones.PersistenciaException;
 import Excepciones.peliculas.PeliculaActualizacionException;
 import Excepciones.peliculas.PeliculaBusquedaException;
 import Excepciones.peliculas.PeliculaRegistroException;
 import Interfaces.IPeliculaBO;
+import Interfaces.IPeliculaDAO;
+import Mappers.PeliculaMapper;
+import entidades.Pelicula;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,6 +25,8 @@ import java.util.List;
 public class PeliculaBO implements IPeliculaBO{
     
     private static PeliculaBO instancePeliculaBO;
+    private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO();
+    private final PeliculaMapper mapperPeli = new PeliculaMapper();
 
     private PeliculaBO() {
     }
@@ -51,7 +60,15 @@ public class PeliculaBO implements IPeliculaBO{
 
     @Override
     public List<PeliculaDTO> buscarTodasPeliculasActivas() throws PeliculaBusquedaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            List<Pelicula> peliculas = peliculaDAO.mostrarListaPelicula();
+            
+            for (int i = 0; i < peliculas.size(); i++) {
+                PeliculaDTO peliculaMap = PeliculaMapper.toDTO(peliculas.get(i));
+            }
+        } catch (PersistenciaException e) {
+            throw new PeliculaBusquedaException("Hubo un error al buscar las peliculas activas");
+        }
     }
 
     @Override

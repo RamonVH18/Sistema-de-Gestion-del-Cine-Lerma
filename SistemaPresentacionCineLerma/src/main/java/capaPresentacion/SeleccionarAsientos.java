@@ -9,6 +9,7 @@ import DTOs.PeliculaDTO;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -314,7 +315,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      * @param diaTexto
      * @return 
      */
-    private JPanel generarPanelBotones(JPanel panelBotones, Date dia, String diaTexto) {
+    private JPanel generarPanelBotones(JPanel panelBotones, LocalDateTime dia, String diaTexto) {
         panelBotones.setLayout(new GridLayout(2, 0, 10, 10));
         if (listaFunciones != null) {
             //For que se encarga de recorrer las funciones 
@@ -341,14 +342,13 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      * @param dia
      * @return 
      */
-    private JPanel generarPanelFuncionDia(JPanel panelFuncionDia, Date dia) {
+    private JPanel generarPanelFuncionDia(JPanel panelFuncionDia, LocalDateTime dia) {
         //Metodo de utilerias para convertir objeto Date a objeto LocalDate
-        LocalDate diaLocal = utilerias.convertirDateALocalDate(dia);
         
         //Se crea el string para escribir la fecha
-        String diaTexto = utilerias.traducirDia(diaLocal.getDayOfWeek()) + ", "
-                + diaLocal.getDayOfMonth() + " de "
-                + utilerias.traducirMes(diaLocal.getMonth());
+        String diaTexto = utilerias.traducirDia(dia.getDayOfWeek()) + ", "
+                + dia.getDayOfMonth() + " de "
+                + utilerias.traducirMes(dia.getMonth());
         
         
         JLabel labelDia = new JLabel(diaTexto);
@@ -373,10 +373,10 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      */
     public void generarPanelPrincipal(JPanel panelPrincipal) {
         //Se crea una lista en donde se guardaran las fechas de todas las funciones
-        List<Date> fechasFunciones = obtenerFechasFunciones();
+        List<LocalDateTime> fechasFunciones = obtenerFechasFunciones();
         //For que se encarga de retirar una fecha y con esa fecha se crea un panel FuncionDia
         for (int i = 0; i < fechasFunciones.size(); i++) {
-            Date dia = fechasFunciones.get(i);
+            LocalDateTime dia = fechasFunciones.get(i);
             panelPrincipal.add(generarPanelFuncionDia(new JPanel(), dia));
         }
         panelPrincipal.setVisible(true);
@@ -400,13 +400,13 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private JButton crearBotonFuncion(FuncionDTO funcion, String diaTexto) {
 
         JButton boton = new JButton();
-        Date hora = funcion.getFechaHora();
+        LocalDateTime hora = funcion.getFechaHora();
         //Utilizando el string de la fecha de la funcion
-        String funcionMinutos = (funcion.getFechaHora().getMinutes() < 10) ? "0"
-                + Integer.toString(funcion.getFechaHora().getMinutes())
-                : Integer.toString(funcion.getFechaHora().getMinutes());
+        String funcionMinutos = (funcion.getFechaHora().getMinute() < 10) ? "0"
+                + Integer.toString(funcion.getFechaHora().getMinute())
+                : Integer.toString(funcion.getFechaHora().getMinute());
 
-        boton.setText(hora.getHours() + ":" + funcionMinutos);
+        boton.setText(hora.getHour() + ":" + funcionMinutos);
         boton.setBackground(Color.decode("#A2845E"));
         //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
         boton.addActionListener(e -> {
@@ -433,14 +433,14 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      * Este metodo se encarga de obtener las todas las fechas de cada respectiva funcion
      * @return 
      */
-    private List<Date> obtenerFechasFunciones() {
-        List<Date> fechasFunciones = new ArrayList<>();
+    private List<LocalDateTime> obtenerFechasFunciones() {
+        List<LocalDateTime> fechasFunciones = new ArrayList<>();
 
         if (listaFunciones != null) {
             //For que se encarga de obtene recorrer la lista de funciones 
             for (int i = 0; i < listaFunciones.size(); i++) {
                 FuncionDTO funcion = listaFunciones.get(i);
-                Date fecha = funcion.getFechaHora();
+                LocalDateTime fecha = funcion.getFechaHora();
                 
                 //Aqui se ingresan las fechas y al mismo tiempo se compara para revisar que no se repita ninguna fecha
                 if (!fechasFunciones.isEmpty()) {

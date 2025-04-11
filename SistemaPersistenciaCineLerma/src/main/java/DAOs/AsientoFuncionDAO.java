@@ -67,6 +67,12 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO{
     public Boolean ocuparAsiento(AsientoFuncion asiento) throws PersistenciaException {
         
         int indice = asientos.indexOf(asiento);
+        
+        asiento.setDisponibilidad(Boolean.FALSE);
+        
+        asientos.set(indice, asiento);
+        
+        return true;
     }
     
        

@@ -7,6 +7,7 @@ package capaPresentacion;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import Excepciones.GestionReservaException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -266,11 +267,11 @@ public class PantallaPagoPaypal extends javax.swing.JDialog {
     private PagoDTO construirPagoDTO() {
         //Crear DTO
         //La fecha del pago es la de hoy, para obtener la fecha actual del sistema se crea un Date
-        Date fechaHoy = new Date();
+        LocalDateTime fechaHoy =  LocalDateTime.now();
         PagoDTO pago = new PagoDTO();
         //Para obtener el monto del pago se necesita llamar al metodo de control para calcular el costo total de los asientos segun el precio del asiento y la cantidad, regresara un double
         Double monto = control.calcularCostoTotal();
-        pago.setEstado("");
+        pago.setEstado(true);
         pago.setFechaHora(fechaHoy);
         pago.setMonto(monto);
         return pago;

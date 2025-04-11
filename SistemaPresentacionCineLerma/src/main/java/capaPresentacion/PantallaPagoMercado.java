@@ -8,6 +8,7 @@ import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
 import Excepciones.GestionReservaException;
 import java.awt.Graphics;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
@@ -296,10 +297,10 @@ public class PantallaPagoMercado extends javax.swing.JDialog {
      */
     private PagoDTO construirPagoDTO() {
         //Crear DTO
-        Date fechaHoy = new Date();
+        LocalDateTime fechaHoy = LocalDateTime.now();
         PagoDTO pago = new PagoDTO();
         Double monto = Double.valueOf(textMontoAPagar.getText().trim());
-        pago.setEstado("");
+        pago.setEstado(true);
         pago.setFechaHora(fechaHoy);
         pago.setMonto(monto);
         return pago;
