@@ -4,6 +4,8 @@
  */
 package entidades;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author sonic
@@ -81,12 +83,5 @@ public class Compra {
     @Override
     public String toString() {
         return "Compra{" + "idCompra=" + idCompra + ", pago=" + pago + ", metodoPago=" + metodoPago + ", cliente=" + cliente + ", fecha=" + fecha + '}';
-    }
-
-    
-    
-    
-    
-    
-    
+    }    
 }
