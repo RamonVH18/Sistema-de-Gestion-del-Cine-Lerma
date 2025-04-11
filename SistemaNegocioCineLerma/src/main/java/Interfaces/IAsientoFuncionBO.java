@@ -5,6 +5,7 @@
 package Interfaces;
 
 import DTOs.AsientoFuncionDTO;
+import DTOs.FuncionDTO;
 import java.util.List;
 
 /**
@@ -12,5 +13,13 @@ import java.util.List;
  * @author Ramon Valencia
  */
 public interface IAsientoFuncionBO {
+    
     public List<AsientoFuncionDTO> registrarAsientosFuncion(List<AsientoFuncionDTO> asientos);
+    
+    public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientos);
+    
+    public List<AsientoFuncionDTO> obtenerAsientosFuncion(FuncionDTO funcion);
+    
+    public List<AsientoFuncionDTO> obtenerAsientosDisponibles(FuncionDTO funcion);
+    
 }
