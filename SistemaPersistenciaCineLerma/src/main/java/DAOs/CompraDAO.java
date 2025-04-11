@@ -8,9 +8,7 @@ import Interfaces.ICompraDAO;
 import entidades.Cliente;
 import entidades.Compra;
 import entidades.Pago;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +72,5 @@ public class CompraDAO implements ICompraDAO {
     public List<Compra> obtenerTodasLasCompras() {
         return compras;
     }
-
-
 
 }

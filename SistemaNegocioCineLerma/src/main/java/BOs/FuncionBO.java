@@ -6,6 +6,7 @@ package BOs;
 
 import DTOs.FuncionDTO;
 import DTOs.FuncionesPorPeliculaDTO;
+import Excepciones.PersistenciaException;
 import Excepciones.funciones.FuncionBusquedaException;
 import Excepciones.funciones.FuncionEliminacionException;
 import Excepciones.funciones.FuncionRegistroException;
@@ -21,17 +22,17 @@ import java.util.List;
  */
 public class FuncionBO implements IFuncionBO {
 
-//    private static FuncionDAO instanceFuncionDAO;
-//
-//    private FuncionBO() {
-//    }
-//
-//    public static FuncionDAO getInstanceDAO() {
-//        if (instanceFuncionDAO == null) { // para la primera vez que se llama
-//            instanceFuncionDAO = new FuncionDAO();
-//        }
-//        return instanceFuncionDAO;
-//    }
+    private static FuncionBO instanceFuncionDAO;
+
+    private FuncionBO() {
+    }
+
+    public static FuncionBO getInstanceDAO() {
+        if (instanceFuncionDAO == null) { // para la primera vez que se llama
+            instanceFuncionDAO = new FuncionBO();
+        }
+        return instanceFuncionDAO;
+    }
 
     @Override
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistroException {
@@ -76,7 +77,7 @@ public class FuncionBO implements IFuncionBO {
 //        } catch (PersistenciaException ex) {
 //            throw new FuncionRegistroException("Error: No se puedo registrar la funcion", ex);
 //        }
-        
+//        
         return null;
 
     }

@@ -4,7 +4,9 @@
  */
 package Interfaces;
 
+import Excepciones.PersistenciaException;
 import entidades.Funcion;
+import entidades.Pelicula;
 import java.util.List;
 
 /**
@@ -13,7 +15,13 @@ import java.util.List;
  */
 public interface IFuncionDAO {
     
-    public Funcion buscarFuncion(Long funcionId);
+//    public Funcion buscarFuncion(Long funcionId);
     
-    public List<Funcion> mostrarHistorialFunciones();
+//    public List<Funcion> mostrarHistorialFunciones();
+    
+      public List<Funcion> mostrarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException;
+      
+      public List<Funcion> mostrarFuncionesActivas() throws PersistenciaException;
+      
+      
 }

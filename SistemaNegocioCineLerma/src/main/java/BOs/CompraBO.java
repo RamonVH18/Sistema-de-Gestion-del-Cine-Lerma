@@ -4,6 +4,7 @@
  */
 package BOs;
 
+import Interfaces.ICompraBO;
 import DAOs.CompraDAO;
 import entidades.Cliente;
 import entidades.Compra;

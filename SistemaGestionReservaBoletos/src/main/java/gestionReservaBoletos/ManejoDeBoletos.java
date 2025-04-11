@@ -4,6 +4,8 @@
  */
 package gestionReservaBoletos;
 
+import BOs.FuncionBO;
+import BOs.PeliculaBO;
 import DTOs.AsientoFuncionDTO;
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
@@ -18,6 +20,10 @@ import Excepciones.PeliculasCargaException;
 import Excepciones.GenerarBoletoException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
+import Excepciones.funciones.FuncionBusquedaException;
+import Excepciones.peliculas.PeliculaBusquedaException;
+import Interfaces.IFuncionBO;
+import Interfaces.IPeliculaBO;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -33,8 +39,8 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
     private static final Logger logger = Logger.getLogger(Logger.class.getName());
 
-    List<PeliculaDTO> peliculas = new ArrayList<>();
-    List<FuncionDTO> funciones = new ArrayList<>();
+    private final IFuncionBO funcionBO = FuncionBO.getInstanceDAO();
+    private final IPeliculaBO peliculaBO = PeliculaBO.getInstanceBO();
     List<AsientoFuncionDTO> asientos = new ArrayList<>();
     List<MetodoPagoDTO> metodosPago = new ArrayList<>();
     
@@ -60,20 +66,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     
 
     //ASIENTOS HARDCODEADOS, ESTE SERA RETIRADO EN LA VERSION FINAL
-    public List<AsientoFuncionDTO> asientosHarcodeados() {
-        if (asientos.isEmpty()) {
-            List<FuncionDTO> funciones = funcionesHarcodeadas();
-            for (int i = 0; i < funciones.size(); i++) {
-                FuncionDTO funcion = funciones.get(i);
-                for (int s = 0; s < 25; s++) {
-                    String numero = String.valueOf(s + 1);
-                    AsientoFuncionDTO asiento = new AsientoFuncionDTO(funcion, numero, true, new ClienteDTO());
-                    asientos.add(asiento);
-                }
-            }
-        }
-        return asientos;
-    }
+    
     
     //METODOS DE PAGO HARDCODEADOS
     public List<MetodoPagoDTO> metodosPagoHarcodeados() {
@@ -101,13 +94,13 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public List<PeliculaDTO> cargarPeliculasActivas() throws PeliculasCargaException {
         try {
             // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
-            List<PeliculaDTO> peliculas = peliculasHarcodeadas();
+            List<PeliculaDTO> peliculas = peliculaBO.buscarTodasPeliculasActivas();
             if (peliculas.isEmpty() || peliculas == null) {
                 throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
             }
             return peliculas;
 
-        } catch (Exception e) {
+        } catch (PeliculaBusquedaException e) {
             throw new PeliculasCargaException("ERROR: " + e.getMessage());
         }
     }
@@ -119,7 +112,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                 throw new FuncionCargaException("El nombre de la pelicula esta vacio o es nulo");
             }
             // aqui se llamaria a un metodo que de una listaFunciones, sin embargo como aun no tenemos la BO, voy hardcodearlas
-            List<FuncionDTO> funciones = funcionesHarcodeadas();
+            List<FuncionDTO> funciones = funcionBO.buscarFuncionesActivas();
             if (funciones.isEmpty() || funciones == null) {
                 throw new FuncionCargaException("Hubo un error al cargar las funciones, favor de ingresar mas al rato.");
             }
@@ -143,6 +136,8 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             
             return funcionesPelicula;
         } catch (FuncionCargaException e) {
+            throw new FuncionCargaException("ERROR: " + e.getMessage());
+        } catch (FuncionBusquedaException e) {
             throw new FuncionCargaException("ERROR: " + e.getMessage());
         }
     }
@@ -176,7 +171,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         List<AsientoFuncionDTO> asientosDisponibles = new ArrayList<>();
         for (int i = 0; i < asientos.size(); i++) {
             AsientoFuncionDTO asiento = asientos.get(i);
-            if (asiento.getFuncion() == funcion && asiento.isDisponibilidad()) {
+            if (asiento.isDisponibilidad()) {
                 asientosDisponibles.add(asiento);
             }
         }
