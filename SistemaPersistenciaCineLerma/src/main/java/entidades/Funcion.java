@@ -88,6 +88,4 @@ public class Funcion {
                 ", precio=" + precio + 
                 '}';
     }
-    
-    
 }
