@@ -23,7 +23,7 @@ public interface IFuncionBO {
     
     public FuncionDTO buscarFuncion(Long id) throws FuncionBusquedaException;
     
-    public FuncionesPorPeliculaDTO buscarFuncionPelicula(String pelicula) throws FuncionBusquedaException;
+    public List<FuncionDTO> buscarFuncionesPelicula(String pelicula) throws FuncionBusquedaException;
     
     public List<FuncionDTO> buscarFuncionesActivas() throws FuncionBusquedaException;
 }

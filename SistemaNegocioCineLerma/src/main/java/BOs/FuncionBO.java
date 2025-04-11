@@ -4,16 +4,17 @@
  */
 package BOs;
 
+import DAOs.FuncionDAO;
 import DTOs.FuncionDTO;
-import DTOs.FuncionesPorPeliculaDTO;
 import Excepciones.PersistenciaException;
 import Excepciones.funciones.FuncionBusquedaException;
 import Excepciones.funciones.FuncionEliminacionException;
 import Excepciones.funciones.FuncionRegistroException;
 import Interfaces.IFuncionBO;
+import Interfaces.IFuncionDAO;
 import Mappers.FuncionMapper;
 import entidades.Funcion;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,16 +23,18 @@ import java.util.List;
  */
 public class FuncionBO implements IFuncionBO {
 
-    private static FuncionBO instanceFuncionDAO;
+    private static FuncionBO instanceFuncionBO;
+    private final IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO();
+    private final FuncionMapper funcionMapper = new FuncionMapper();
 
     private FuncionBO() {
     }
 
     public static FuncionBO getInstanceDAO() {
-        if (instanceFuncionDAO == null) { // para la primera vez que se llama
-            instanceFuncionDAO = new FuncionBO();
+        if (instanceFuncionBO == null) { // para la primera vez que se llama
+            instanceFuncionBO = new FuncionBO();
         }
-        return instanceFuncionDAO;
+        return instanceFuncionBO;
     }
 
     @Override
@@ -97,7 +100,6 @@ public class FuncionBO implements IFuncionBO {
 //        } catch (PersistenciaException ex) {
 //            throw new FuncionEliminacionException("Error: no se pudo eliminar la funcion", ex);
 //        }
-        
         return null;
 
     }
@@ -126,22 +128,34 @@ public class FuncionBO implements IFuncionBO {
 //        } catch (PersistenciaException ex) {
 //            throw new FuncionRegistroException("Error: al buscar la funcion: " + ex.getMessage());
 //        }
-        
+
         return null;
     }
 
     @Override
-    public FuncionesPorPeliculaDTO buscarFuncionPelicula(String pelicula) throws FuncionBusquedaException {
-        
-        return null;
-        
+    public List<FuncionDTO> buscarFuncionesPelicula(String tituloPelicula) throws FuncionBusquedaException {
+        List<FuncionDTO> funcionesPelicula = new ArrayList<>();
+
+        try {
+            List<Funcion> funcionesPeliculas = funcionDAO.mostrarFuncionesPeliculas();
+            for (Funcion funcionPelicula : funcionesPeliculas) {
+                FuncionDTO funcionPeliculaMapeada = funcionMapper.toFuncionDTO(funcionPelicula);
+                if (funcionPeliculaMapeada.getNombre().equals(tituloPelicula)) {
+                    funcionesPelicula.add(funcionPeliculaMapeada);
+                }
+            }
+
+            return funcionesPelicula;
+        } catch (PersistenciaException e) {
+            throw new FuncionBusquedaException("Error al buscar las funciones de la pelicula.");
+        }
     }
 
     @Override
     public List<FuncionDTO> buscarFuncionesActivas() throws FuncionBusquedaException {
-        
+
         return null;
-        
+
     }
 
 }

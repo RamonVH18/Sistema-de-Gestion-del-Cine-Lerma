@@ -19,9 +19,9 @@ public interface IFuncionDAO {
     
 //    public List<Funcion> mostrarHistorialFunciones();
     
-      public List<Funcion> mostrarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException;
+      public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException;
       
       public List<Funcion> mostrarFuncionesActivas() throws PersistenciaException;
       
-      
+      public List<Funcion> mostrarFuncionesPeliculas() throws PersistenciaException;
 }

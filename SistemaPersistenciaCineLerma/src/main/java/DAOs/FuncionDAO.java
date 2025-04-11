@@ -92,7 +92,7 @@ public class FuncionDAO implements IFuncionDAO{
     }
 
     @Override
-    public List<Funcion> mostrarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException {
+    public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException {
         List<Funcion> funcionesPelicula = new ArrayList<>();
         
         for (int i = 0; i < funciones.size(); i++) {
@@ -115,5 +115,14 @@ public class FuncionDAO implements IFuncionDAO{
             }
         }
         return funcionesPelicula;
+    }
+    
+    @Override
+    public List<Funcion> mostrarFuncionesPeliculas() throws PersistenciaException {
+        if (!funciones.isEmpty()) {
+            return funciones;
+        }
+        
+        return null;
     }
 }
