@@ -54,105 +54,10 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     
     
     //PELICULAS HARDCODEADAS, ESTE SERA RETIRADO EN LA VERSION FINAL
-    public List<PeliculaDTO> peliculasHarcodeadas() {
-        if (peliculas.isEmpty()){
-        PeliculaDTO pelicula1 = new PeliculaDTO("Batman El Caballero Loco",
-                "img/batman.jpg",
-                "Pelicula de las God");
-        PeliculaDTO pelicula2 = new PeliculaDTO("Interstellar", "img/interstellar.jpg", "Pelicula algo Bien");
-        PeliculaDTO pelicula3 = new PeliculaDTO("John Wick 3", "img/johnWick3.jpg", "Tercera Pelicula donde sale el John Wick");
-        PeliculaDTO pelicula4 = new PeliculaDTO("La vida es bella", "img/vidaBella.jpg", "La pelicula favorita del jaime");
-        PeliculaDTO pelicula5 = new PeliculaDTO("Wazaa la Pelicula", "img/wazaa.jpg", "WAZAAAAAAAAAAAAAA");
-        PeliculaDTO pelicula6 = new PeliculaDTO("Thor: Ragnarok", "img/thor.jpg", "Thor, mas thor que nunca");
-        PeliculaDTO pelicula7 = new PeliculaDTO("Cholos Empericados 2", "img/CHOLOS_EMPERICADOS.jpg", "Mas empericados que nunca...");
-        PeliculaDTO pelicula8 = new PeliculaDTO("Pancho el perro millonario", "img/PANCHO.jpg", "Pancho se mete en problemas");
-        PeliculaDTO pelicula9 = new PeliculaDTO("Juego de gemelas", "img/JUEGOGEM.jpg", "juego de gemelas");
-        PeliculaDTO pelicula10 = new PeliculaDTO("Tacos al carbon", "img/tacosCarbon.jpg", "Dos amigos con una idea loca, haran las cosas un poco diferente y haran tacos al carbon");
-        PeliculaDTO pelicula11 = new PeliculaDTO("James mono: El detective", "img/jamesMono.jpg", "El mayor detective de la historia");
-
-        peliculas.add(pelicula1);
-        peliculas.add(pelicula2);
-        peliculas.add(pelicula3);
-        peliculas.add(pelicula4);
-        peliculas.add(pelicula5);
-        peliculas.add(pelicula6);
-        peliculas.add(pelicula7);
-        peliculas.add(pelicula8);
-        peliculas.add(pelicula9);
-        peliculas.add(pelicula10);
-        peliculas.add(pelicula11);
-        }
-        return peliculas;
-    }
+    
 
     //FUNCIONES HARDCODEADAS, ESTE SERA RETIRADO EN LA VERSION FINAL
-    public List<FuncionDTO> funcionesHarcodeadas() {
-        if (funciones.isEmpty()) {
-            FuncionDTO funcion1 = new FuncionDTO("A1", "Batman El Caballero Loco", new Date(125, 02, 24, 14, 30, 0), 80.00);
-            FuncionDTO funcion2 = new FuncionDTO("B1", "Batman El Caballero Loco", new Date(125, 02, 25, 17, 00, 0), 75.00);
-
-            FuncionDTO funcion3 = new FuncionDTO("A2", "Interstellar", new Date(125, 02, 25, 16, 00, 0), 75.00);
-            FuncionDTO funcion4 = new FuncionDTO("B1", "Interstellar", new Date(125, 02, 29, 19, 30, 0), 75.00);
-
-            FuncionDTO funcion5 = new FuncionDTO("A3", "John Wick 3", new Date(125, 02, 27, 18, 45, 0), 80.00);
-            FuncionDTO funcion6 = new FuncionDTO("B3", "John Wick 3", new Date(125, 02, 26, 21, 00, 0), 80.00);
-
-            FuncionDTO funcion7 = new FuncionDTO("A2", "Interstellar", new Date(125, 02, 28, 13, 00, 0), 60.00);
-            FuncionDTO funcion8 = new FuncionDTO("B2", "Interstellar", new Date(125, 02, 25, 23, 59, 0), 60.00);
-
-            FuncionDTO funcion9 = new FuncionDTO("A1", "Wazaa la Pelicula", new Date(125, 02, 26, 20, 00, 0), 90.00);
-            FuncionDTO funcion10 = new FuncionDTO("B3", "Wazaa la Pelicula", new Date(125, 02, 26, 22, 15, 0), 75.00);
-
-            FuncionDTO funcion11 = new FuncionDTO("A2", "Thor: Ragnarok", new Date(125, 02, 27, 17, 30, 0), 65.00);
-            FuncionDTO funcion12 = new FuncionDTO("B2", "Thor: Ragnarok", new Date(125, 02, 26, 20, 45, 0), 75.00);
-            
-            FuncionDTO funcion13 = new FuncionDTO("A2", "La vida es bella", new Date(125, 02, 27, 17, 30, 0), 65.00);
-            FuncionDTO funcion14 = new FuncionDTO("B2", "La vida es bella", new Date(125, 02, 26, 20, 45, 0), 75.00);
-            
-            FuncionDTO funcion15 = new FuncionDTO("A1", "Cholos Empericados 2", new Date(125, 02, 27, 17, 30, 0), 65.00);
-            FuncionDTO funcion16 = new FuncionDTO("B1", "Cholos Empericados 2", new Date(125, 02, 26, 20, 45, 0), 75.00);
-            
-            FuncionDTO funcion17 = new FuncionDTO("A1", "Pancho el perro millonario", new Date(125, 02, 27, 17, 30, 0), 65.00);
-            FuncionDTO funcion18 = new FuncionDTO("B1", "Pancho el perro millonario", new Date(125, 02, 26, 20, 45, 0), 75.00);
-            
-            FuncionDTO funcion19 = new FuncionDTO("A1", "Juego de gemelas", new Date(125, 02, 27, 17, 30, 0), 65.00);
-            FuncionDTO funcion20 = new FuncionDTO("B1", "Juego de gemelas", new Date(125, 02, 26, 20, 45, 0), 75.00);
-            
-            FuncionDTO funcion21 = new FuncionDTO("A1", "Tacos al carbon", new Date(125, 02, 27, 17, 30, 0), 65.00);
-            FuncionDTO funcion22 = new FuncionDTO("B1", "Tacos al carbon", new Date(125, 02, 26, 20, 45, 0), 75.00);
-            
-            FuncionDTO funcion23 = new FuncionDTO("A1", "James mono: El detective", new Date(125, 02, 27, 17, 30, 0), 65.00);
-            FuncionDTO funcion24 = new FuncionDTO("B1", "James mono: El detective", new Date(125, 02, 26, 20, 45, 0), 75.00);
-
-            funciones.add(funcion1);
-            funciones.add(funcion2);
-            funciones.add(funcion3);
-            funciones.add(funcion4);
-            funciones.add(funcion5);
-            funciones.add(funcion6);
-            funciones.add(funcion7);
-            funciones.add(funcion8);
-            funciones.add(funcion9);
-            funciones.add(funcion10);
-            funciones.add(funcion11);
-            funciones.add(funcion12);
-            funciones.add(funcion13);
-            funciones.add(funcion14);
-            funciones.add(funcion15);
-            funciones.add(funcion16);
-            funciones.add(funcion17);
-            funciones.add(funcion18);
-            funciones.add(funcion19);
-            funciones.add(funcion20);
-            funciones.add(funcion21);
-            funciones.add(funcion22);
-            funciones.add(funcion23);
-            funciones.add(funcion24);
-           
-        }
-
-        return funciones;
-    }
+    
 
     //ASIENTOS HARDCODEADOS, ESTE SERA RETIRADO EN LA VERSION FINAL
     public List<AsientoFuncionDTO> asientosHarcodeados() {
