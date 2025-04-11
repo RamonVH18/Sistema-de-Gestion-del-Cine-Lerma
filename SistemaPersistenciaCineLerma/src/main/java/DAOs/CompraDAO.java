@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Interfaces.ICompraDAO;
 import entidades.Cliente;
 import entidades.Compra;
 import entidades.Pago;
