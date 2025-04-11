@@ -5,23 +5,25 @@
 package Mappers;
 
 import DTOs.FuncionDTO;
+import Interfaces.mappers.IFuncionMapper;
 import entidades.Funcion;
 
 /**
  *
- * @author sonic
+ * @author Abraham Coronel Bringas
  */
-public class FuncionMapper {
+public class FuncionMapper implements IFuncionMapper {
 
-    public static FuncionDTO toFuncionDTO(Funcion funcion) {
+    @Override
+    public FuncionDTO toFuncionDTO(Funcion funcion) {
         //Primero se valida si la funcion recibida es null, entonces se retornara un null
         if (funcion == null) {
             return null;
         }
-        
+
         //Se crea la instancia de funciondto
         FuncionDTO funcionDTO = new FuncionDTO();
-        
+
         //Se le setea a la entidad sus datos segun los del dto recibido
         funcionDTO.setId(funcion.getIdFuncion());
         funcionDTO.setFechaHora(funcion.getFechaHora());
@@ -32,24 +34,25 @@ public class FuncionMapper {
         return funcionDTO;
 
     }
-    
-    public static Funcion toFuncionEntidad(FuncionDTO funciondto) {
+
+    @Override
+    public Funcion toFuncionEntidad(FuncionDTO funciondto) {
         //Primero se valida si la funcion recibida es null, entonces se retornara un null
         if (funciondto == null) {
             return null;
         }
         //Se crea la instancia de funcion
         Funcion funcion = new Funcion();
-        
+
         //Se le setea a la entidad sus datos segun los del dto recibido
         funcion.setIdFuncion(funciondto.getId());
         funcion.setFechaHora(funciondto.getFechaHora());
         funcion.setPelicula(null);
         funcion.setSala(null);
         funcion.setPrecio(funciondto.getPrecio());
-        
+
         return funcion;
-        
+
     }
-    
+
 }
