@@ -5,15 +5,17 @@
 package Mappers;
 
 import DTOs.ClienteDTO;
+import Interfaces.mappers.IClienteMapper;
 import entidades.Cliente;
 
 /**
  *
  * @author sonic
  */
-public class ClienteMapper {
+public class ClienteMapper implements IClienteMapper{
     
-    public static ClienteDTO toClienteDTO(Cliente cliente) {
+    @Override
+    public ClienteDTO toClienteDTO(Cliente cliente) {
         //Primero se valida si el cliente recibido es null, entonces se retornara un null
         if (cliente == null) {
             return null;
@@ -32,7 +34,8 @@ public class ClienteMapper {
 
     }
     
-    public static Cliente toClienteEntidad(ClienteDTO clientedto) {
+    @Override
+    public Cliente toClienteEntidad(ClienteDTO clientedto) {
         //Primero se valida si el cliente recibido es null, entonces se retornara un null
         if (clientedto == null) {
             return null;

@@ -4,17 +4,16 @@
  */
 package Interfaces.mappers;
 
-import DTOs.ClienteDTO;
-import entidades.Cliente;
+import DTOs.FuncionDTO;
+import entidades.Funcion;
 
 /**
  *
- * @author Ramon Valencia
+ * @author Abraham Coronel Bringas
  */
-public interface IClienteMapper {
-    
-    public ClienteDTO toClienteDTO(Cliente cliente);
-    
-    public Cliente toClienteEntidad(ClienteDTO clientedto);
-    
+public interface IFuncionMapper {
+
+    public FuncionDTO toFuncionDTO(Funcion funcion);
+
+    public Funcion toFuncionEntidad(FuncionDTO funciondto);
 }

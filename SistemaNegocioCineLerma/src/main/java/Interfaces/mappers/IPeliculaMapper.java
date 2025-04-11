@@ -4,17 +4,17 @@
  */
 package Interfaces.mappers;
 
-import DTOs.ClienteDTO;
-import entidades.Cliente;
+import DTOs.PeliculaDTO;
+import entidades.Pelicula;
 
 /**
  *
- * @author Ramon Valencia
+ * @author sonic
  */
-public interface IClienteMapper {
+public interface IPeliculaMapper {
     
-    public ClienteDTO toClienteDTO(Cliente cliente);
+    public PeliculaDTO toPeliculaDTO (Pelicula pelicula);
     
-    public Cliente toClienteEntidad(ClienteDTO clientedto);
+    public Pelicula toPeliculaEntidad (PeliculaDTO dto);
     
 }
