@@ -8,6 +8,9 @@ import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.TarjetaDTO;
+import EstrategiasPago.MercadoPagoEstrategia;
+import EstrategiasPago.PaypalEstrategia;
+import EstrategiasPago.TarjetaEstrategia;
 import Excepciones.PagoException;
 import Excepciones.ValidarCuentaException;
 import java.time.YearMonth;
@@ -150,36 +153,23 @@ public class GestionPagos implements IGestionPagos {
      * @return true si el pago se procesa exitosamente, false en caso contrario.
      * @throws PagoException si hay un error en el pago.
      */
-    public boolean procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException {
-        boolean pagoExitoso = false;
-        Date fechaHoy = new Date();
+    public boolean procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) throws PagoException, ValidarCuentaException {
+        IEstrategiaPago estrategia = new PaypalEstrategia(paypal);
+        return ejecutarEstrategia(estrategia, pago);
 
-        if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new PagoException("Error: El monto debe ser mayor a 0");
-        }
+    }
 
-        if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new PagoException("Error: La fecha del pago debe ser la del dia de hoy");
-        }
+    private Boolean ejecutarEstrategia(IEstrategiaPago estrategia, PagoDTO pago)
+            throws PagoException, ValidarCuentaException {
 
-        System.out.println("Procesando pago de " + pago.getMonto() + "con Paypal");
-        System.out.println("Correo: " + paypal.getCorreo());
-
-        if (pago.getMonto() > paypal.getSaldo()) {
-            throw new PagoException("Error: El saldo de la cuenta de mercadoPago es insuficiente");
+        Boolean exito = estrategia.procesarPago(pago);
+        if (exito) {
+            estrategia.actualizarSaldo(pago);
+            pago.setEstado(true); // Estado Exitoso
         } else {
-            pagoExitoso = true;
+            pago.setEstado(false); // Estado Fallido
         }
-
-        if (pagoExitoso) {
-            pago.setEstado("EXITOSO");
-            System.out.println("Pago realizando con exito, " + pago.getEstado());
-        } else {
-            pago.setEstado("FALLIDO");
-            System.out.println("Pago no realizado, " + pago.getEstado());
-        }
-        return pagoExitoso;
-
+        return exito;
     }
 
     @Override
@@ -193,35 +183,9 @@ public class GestionPagos implements IGestionPagos {
      * @return true si el pago se procesa exitosamente, false en caso contrario.
      * @throws PagoException si hay un error en el pago.
      */
-    public boolean procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException {
-        boolean pagoExitoso = false;
-        Date fechaHoy = new Date();
-
-        if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new PagoException("Error: El monto debe ser mayor a 0");
-        }
-
-        if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new PagoException("Error: La fecha del pago debe ser la del dia de hoy");
-        }
-
-        System.out.println("Procesando pago de " + pago.getMonto() + "con MercadoPago");
-        System.out.println("Correo: " + mercadoPago.getCorreo());
-
-        if (pago.getMonto() > mercadoPago.getSaldo()) {
-            throw new PagoException("Error: El saldo de la cuenta de mercadoPago es insuficiente");
-        } else {
-            pagoExitoso = true;
-        }
-
-        if (pagoExitoso) {
-            pago.setEstado("EXITOSO");
-            System.out.println("Pago realizando con exito, " + pago.getEstado());
-        } else {
-            pago.setEstado("FALLIDO");
-            System.out.println("Pago no realizado, " + pago.getEstado());
-        }
-        return pagoExitoso;
+    public boolean procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) throws PagoException, ValidarCuentaException {
+        IEstrategiaPago estrategia = new MercadoPagoEstrategia(mercadoPago);
+        return ejecutarEstrategia(estrategia, pago);
 
     }
 
@@ -235,37 +199,9 @@ public class GestionPagos implements IGestionPagos {
      * @return true si el pago se procesa exitosamente, false en caso contrario.
      * @throws PagoException si hay un error en el procesamiento del pago.
      */
-    public boolean procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException {
-        boolean pagoExitoso = false;
-        Date fechaHoy = new Date();
-        //Se valida que el monto a pagar sea mayor que 0
-        if (pago.getMonto() == null || pago.getMonto() <= 0) {
-            throw new PagoException("Error: El monto debe ser mayor a 0");
-        }
-
-        if (!pago.getFechaHora().equals(fechaHoy)) {
-            throw new PagoException("Error: La fecha del pago debe ser la del dia de hoy");
-        }
-
-        System.out.println("Procesando pago de: $" + pago.getMonto() + "con tarjeta");
-        System.out.println("Titular: " + tarjeta.getTitular());
-
-        //Checar que el saldo de la cuenta sea suficiente
-        if (pago.getMonto() > tarjeta.getSaldo()) {
-            throw new PagoException("Error: El saldo de la cuenta de mercadoPago es insuficiente");
-        } else {
-            pagoExitoso = true;
-        }
-
-        if (pagoExitoso) {
-            pago.setEstado("EXITOSO");
-            System.out.println("Pago realizando con exito, " + pago.getEstado());
-        } else {
-            pago.setEstado("FALLIDO");
-            System.out.println("Pago no realizado, " + pago.getEstado());
-        }
-
-        return pagoExitoso;
+    public boolean procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) throws PagoException, ValidarCuentaException {
+        IEstrategiaPago estrategia = new TarjetaEstrategia(tarjeta);
+        return ejecutarEstrategia(estrategia, pago);
     }
 
     //Metodo para validar una cuenta de paypal, este metodo recibe un PaypalDTO y lo que hace es buscar este dto dentro de la lista de cuentas existentes, en caso de encontrarla entonces se definira como una cuenta real, una vez se verifica que si existe se hacen algunas validaciones para la cuenta
@@ -407,12 +343,9 @@ public class GestionPagos implements IGestionPagos {
     @Override
     public boolean consultarEstadoPago(PagoDTO pago) throws PagoException {
         if (pago == null || pago.getEstado() == null) {
-            return false;
+            throw new PagoException("Error: El pago no tiene estado definido");
         }
-
-        String estado = pago.getEstado().toUpperCase();
-
-        return estado.equals("EXITOSO");
+        return pago.getEstado();
     }
 
     //METODOS PARA ACTUALIZAR LOS SALDOS DE LAS CUENTAS
