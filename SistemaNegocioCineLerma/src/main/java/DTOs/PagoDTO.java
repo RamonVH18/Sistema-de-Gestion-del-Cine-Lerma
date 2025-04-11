@@ -4,7 +4,6 @@
  */
 package DTOs;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -15,9 +14,9 @@ public class PagoDTO {
     
   private Double monto;
     
-    private LocalDateTime fechaHora;
+    private Date fechaHora;
     
-    private Boolean estado;
+    private String estado;
     
     /**
      * 
@@ -31,35 +30,51 @@ public class PagoDTO {
      * @param fechaHora
      * @param estado 
      */
-    public PagoDTO(Double monto, LocalDateTime fechaHora, Boolean estado) {    
+    public PagoDTO(Double monto, Date fechaHora, String estado) {
         this.monto = monto;
         this.fechaHora = fechaHora;
         this.estado = estado;
     }
-
+    /**
+     * 
+     * @return 
+     */
     public Double getMonto() {
         return monto;
     }
-
+    /**
+     * 
+     * @param monto 
+     */
     public void setMonto(Double monto) {
         this.monto = monto;
     }
-
-    public LocalDateTime getFechaHora() {
+    /**
+     * 
+     * @return 
+     */
+    public Date getFechaHora() {
         return fechaHora;
     }
-
-    public void setFechaHora(LocalDateTime fechaHora) {
+    /**
+     * 
+     * @param fechaHora 
+     */
+    public void setFechaHora(Date fechaHora) {
         this.fechaHora = fechaHora;
     }
-
-    public Boolean getEstado() {
+    /**
+     * 
+     * @return 
+     */
+    public String getEstado() {
         return estado;
     }
-
-    public void setEstado(Boolean estado) {
+    /**
+     * 
+     * @param estado 
+     */
+    public void setEstado(String estado) {
         this.estado = estado;
     }
-
-    
 }

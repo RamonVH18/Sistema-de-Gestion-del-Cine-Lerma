@@ -4,16 +4,10 @@
  */
 package Interfaces;
 
-import entidades.Funcion;
-import java.util.List;
-
 /**
  *
  * @author Ramon Valencia
  */
 public interface IFuncionDAO {
     
-    public Funcion buscarFuncion(Long funcionId);
-    
-    public List<Funcion> mostrarHistorialFunciones();
 }

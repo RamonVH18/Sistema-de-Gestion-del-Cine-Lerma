@@ -37,14 +37,6 @@ public class Funcion {
         this.precio = precio;
     }
 
-    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Boolean estado, Double precio) {
-        this.sala = sala;
-        this.pelicula = pelicula;
-        this.fechaHora = fechaHora;
-        this.estado = estado;
-        this.precio = precio;
-    }
-
     public Long getIdFuncion() {
         return idFuncion;
     }
@@ -77,14 +69,6 @@ public class Funcion {
         this.fechaHora = fechaHora;
     }
 
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
-    }
-
     public Double getPrecio() {
         return precio;
     }
@@ -92,10 +76,6 @@ public class Funcion {
     public void setPrecio(Double precio) {
         this.precio = precio;
     }
-    
-    
-
-    
 
     @Override
     public String toString() {

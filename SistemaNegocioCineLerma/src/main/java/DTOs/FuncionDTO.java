@@ -21,8 +21,6 @@ public class FuncionDTO {
     private LocalDateTime fechaHora;
     
     private double precio;
-    
-    private Boolean estado;
 
     /**
      * Constructor vacio
@@ -58,16 +56,6 @@ public class FuncionDTO {
         this.fechaHora = fechaHora;
         this.precio = precio;
     }
-
-    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio, Boolean estado) {
-        this.sala = sala;
-        this.nombre = nombre;
-        this.fechaHora = fechaHora;
-        this.precio = precio;
-        this.estado = estado;
-    }
-    
-    
 
     /**
      *
@@ -141,16 +129,6 @@ public class FuncionDTO {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
-
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
-    }
-    
-    
     
     
 

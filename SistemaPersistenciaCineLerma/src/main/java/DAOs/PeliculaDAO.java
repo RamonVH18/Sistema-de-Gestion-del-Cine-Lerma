@@ -24,7 +24,7 @@ public class PeliculaDAO implements IPeliculaDAO {
         peliculasHarcodeadas();
     }
 
-    public static PeliculaDAO getInstanceDAO() {
+    public PeliculaDAO getInstanceDAO() {
         if (instance == null) {
             instance = new PeliculaDAO();
         }

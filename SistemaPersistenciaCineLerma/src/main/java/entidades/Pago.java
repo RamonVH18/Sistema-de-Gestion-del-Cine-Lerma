@@ -36,12 +36,6 @@ public class Pago {
         this.estado = estado;
     }
 
-    public Pago(Double monto) {
-        this.monto = monto;
-    }
-    
-    
-    
     public Long getIdPago() {
         return idPago;
     }

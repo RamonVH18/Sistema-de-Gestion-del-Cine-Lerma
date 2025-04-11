@@ -103,7 +103,4 @@ public class FuncionDAO {
 
         return funciones;
     }
-    
-    
-    
 }
