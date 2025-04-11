@@ -19,9 +19,9 @@ public interface IFuncionBO {
     
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistroException;
     
-    public Boolean eliminarFuncion() throws FuncionEliminacionException;
+    public Boolean eliminarFuncion(Long id) throws FuncionEliminacionException;
     
-    public FuncionDTO buscarFuncion() throws FuncionBusquedaException;
+    public FuncionDTO buscarFuncion(Long id) throws FuncionBusquedaException;
     
     public FuncionesPorPeliculaDTO buscarFuncionPelicula(String pelicula) throws FuncionBusquedaException;
     
