@@ -472,9 +472,9 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         control.guardarFuncionSeleccionada(funcion);
         asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
 
-        if (asientosDisponibles == 0) {
-            return;
-        }
+//        if (asientosDisponibles == 0) {
+//            return;
+//        }
         cargarDatos(funcion, asientosDisponibles, diaTexto);
 
     }

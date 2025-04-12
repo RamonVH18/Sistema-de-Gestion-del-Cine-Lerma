@@ -14,6 +14,7 @@ import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.*;
+import entidades.Cliente;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public interface IManejoDeBoletos {
     
     public List<MetodoPagoDTO> cargarMetodosPago();
     
-    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException;
+    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, Cliente cliente) throws GenerarBoletoException;
     
-    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws ReservarAsientoFuncionException;
+    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, Cliente cliente) throws ReservarAsientoFuncionException;
 }

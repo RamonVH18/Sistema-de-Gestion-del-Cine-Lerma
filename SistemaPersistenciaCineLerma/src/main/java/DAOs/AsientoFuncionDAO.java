@@ -41,7 +41,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
                     String numero = String.valueOf(s + 1);
                     int id = (i * 25) + s;
                     long idL = id;
-                    AsientoFuncion asiento = new AsientoFuncion(idL, funcion, funcion.getSala(), true, null);
+                    AsientoFuncion asiento = new AsientoFuncion(idL, funcion, numero, true, null);
                     asientos.add(asiento);
                 }
             }

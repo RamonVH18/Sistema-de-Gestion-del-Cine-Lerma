@@ -26,6 +26,7 @@ import Excepciones.peliculas.PeliculaBusquedaException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
+import entidades.Cliente;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -241,7 +242,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
     
     @Override
-    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException {
+    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, Cliente cliente) throws GenerarBoletoException {
         try {
             if (pelicula == null) {
                 throw new GenerarBoletoException("Hubo un problema al guardar la pelicula en el boleto. Intente mas tarde.");
@@ -262,7 +263,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
     //ESTE METODO CAMBIARA CASI POR COMPLETO
     @Override
-    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws ReservarAsientoFuncionException {
+    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, Cliente cliente) throws ReservarAsientoFuncionException {
         
         try {
             if (funcion == null) {

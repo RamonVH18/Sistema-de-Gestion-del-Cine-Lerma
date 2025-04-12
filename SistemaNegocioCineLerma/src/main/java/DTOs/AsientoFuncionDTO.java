@@ -4,16 +4,19 @@
  */
 package DTOs;
 
+import entidades.Cliente;
+import entidades.Funcion;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class AsientoFuncionDTO {
 
-    private FuncionDTO funcion;
+    private Funcion funcion;
     private String asiento;
     private boolean disponibilidad;
-    private ClienteDTO cliente;
+    private Cliente cliente;
 
     /**
      * Constructor vacio
@@ -29,7 +32,7 @@ public class AsientoFuncionDTO {
      * @param disponibilidad
      * @param cliente
      */
-    public AsientoFuncionDTO(FuncionDTO funcion, String asiento, boolean disponibilidad, ClienteDTO cliente) {
+    public AsientoFuncionDTO(Funcion funcion, String asiento, boolean disponibilidad, Cliente cliente) {
         this.funcion = funcion;
         this.asiento = asiento;
         this.disponibilidad = disponibilidad;
@@ -39,7 +42,7 @@ public class AsientoFuncionDTO {
     /**
      * Getters y setters
      */
-    public FuncionDTO getFuncion() {
+    public Funcion getFuncion() {
         return funcion;
     }
 
@@ -47,7 +50,7 @@ public class AsientoFuncionDTO {
      *
      * @param funcion
      */
-    public void setFuncion(FuncionDTO funcion) {
+    public void setFuncion(Funcion funcion) {
         this.funcion = funcion;
     }
 
@@ -87,7 +90,7 @@ public class AsientoFuncionDTO {
      *
      * @return
      */
-    public ClienteDTO getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
@@ -95,7 +98,7 @@ public class AsientoFuncionDTO {
      *
      * @param cliente
      */
-    public void setCliente(ClienteDTO cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 }

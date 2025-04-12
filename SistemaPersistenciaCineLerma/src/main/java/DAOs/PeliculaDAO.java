@@ -32,7 +32,7 @@ public class PeliculaDAO implements IPeliculaDAO {
         return instance;
     }
 
-    public List<Pelicula> peliculasHarcodeadas() {
+    private List<Pelicula> peliculasHarcodeadas() {
         if (peliculas.isEmpty()) {
             Pelicula pelicula1 = new Pelicula(1L,
                     "Batman El Caballero Loco",

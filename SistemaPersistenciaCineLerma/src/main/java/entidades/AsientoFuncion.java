@@ -14,7 +14,7 @@ public class AsientoFuncion {
 
     private Funcion funcion;
 
-    private Asiento asiento;
+    private String asiento;
 
     private Boolean disponibilidad;
 
@@ -23,7 +23,7 @@ public class AsientoFuncion {
     public AsientoFuncion() {
     }
 
-    public AsientoFuncion(Long idAsientoFuncion, Funcion funcion, Asiento asiento, Boolean disponibilidad, Cliente cliente) {
+    public AsientoFuncion(Long idAsientoFuncion, Funcion funcion, String asiento, Boolean disponibilidad, Cliente cliente) {
         this.idAsientoFuncion = idAsientoFuncion;
         this.funcion = funcion;
         this.asiento = asiento;
@@ -31,7 +31,7 @@ public class AsientoFuncion {
         this.cliente = cliente;
     }
 
-    public AsientoFuncion(Funcion funcion, Asiento asiento, Boolean disponibilidad, Cliente cliente) {
+    public AsientoFuncion(Funcion funcion, String asiento, Boolean disponibilidad, Cliente cliente) {
         this.funcion = funcion;
         this.asiento = asiento;
         this.disponibilidad = disponibilidad;
@@ -54,11 +54,11 @@ public class AsientoFuncion {
         this.funcion = funcion;
     }
 
-    public Asiento getAsiento() {
+    public String getAsiento() {
         return asiento;
     }
 
-    public void setAsiento(Asiento asiento) {
+    public void setAsiento(String asiento) {
         this.asiento = asiento;
     }
 
@@ -68,6 +68,14 @@ public class AsientoFuncion {
 
     public void setDisponibilidad(Boolean disponibilidad) {
         this.disponibilidad = disponibilidad;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     @Override

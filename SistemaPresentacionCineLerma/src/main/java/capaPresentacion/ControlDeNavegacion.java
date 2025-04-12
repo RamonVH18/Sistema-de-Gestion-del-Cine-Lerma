@@ -24,6 +24,7 @@ import Excepciones.GenerarBoletoException;
 import Excepciones.PresentacionException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
+import entidades.Cliente;
 import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
@@ -55,7 +56,7 @@ public class ControlDeNavegacion {
     
     private int numAsientos;
     
-    private final ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx", "jaimico");
+    private final Cliente cliente = new Cliente("Jaime Flores Valenzuela", "jaime@lerma.com.mx", "jaimico");
     
     private static ControlDeNavegacion instancia;
 
