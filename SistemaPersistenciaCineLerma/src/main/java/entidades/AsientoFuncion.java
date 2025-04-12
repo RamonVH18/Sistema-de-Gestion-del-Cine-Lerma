@@ -9,15 +9,15 @@ package entidades;
  * @author Ramon Valencia
  */
 public class AsientoFuncion {
-    
+
     private Long idAsientoFuncion;
-    
+
     private Funcion funcion;
-    
+
     private Sala sala;
-    
+
     private Boolean disponibilidad;
-    
+
     private Cliente cliente;
 
     public AsientoFuncion() {
@@ -25,6 +25,13 @@ public class AsientoFuncion {
 
     public AsientoFuncion(Long idAsientoFuncion, Funcion funcion, Sala sala, Boolean disponibilidad, Cliente cliente) {
         this.idAsientoFuncion = idAsientoFuncion;
+        this.funcion = funcion;
+        this.sala = sala;
+        this.disponibilidad = disponibilidad;
+        this.cliente = cliente;
+    }
+
+    public AsientoFuncion(Funcion funcion, Sala sala, Boolean disponibilidad, Cliente cliente) {
         this.funcion = funcion;
         this.sala = sala;
         this.disponibilidad = disponibilidad;
@@ -65,15 +72,13 @@ public class AsientoFuncion {
 
     @Override
     public String toString() {
-        return "AsientoFuncion{" + 
-                "idAsientoFuncion=" + idAsientoFuncion + 
-                ", funcion=" + funcion + 
-                ", sala=" + sala + 
-                ", disponibilidad=" + disponibilidad + 
-                ", cliente=" + cliente + 
-                '}';
+        return "AsientoFuncion{"
+                + "idAsientoFuncion=" + idAsientoFuncion
+                + ", funcion=" + funcion
+                + ", sala=" + sala
+                + ", disponibilidad=" + disponibilidad
+                + ", cliente=" + cliente
+                + '}';
     }
-    
-    
-    
+
 }

@@ -20,6 +20,7 @@ import Excepciones.PeliculasCargaException;
 import Excepciones.GenerarBoletoException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
+import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.funciones.FuncionBusquedaException;
 import Excepciones.peliculas.PeliculaBusquedaException;
 import Interfaces.IAsientoFuncionBO;
@@ -28,6 +29,8 @@ import Interfaces.IPeliculaBO;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -160,18 +163,22 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
     // Metodo que solo se utilizara en esta clase, sera uitilizado para filtrar la lista de asientos y guardar unicamente los asientos que esten disponibles
     public List<AsientoFuncionDTO> listaAsientosDisponibles(FuncionDTO funcion) throws DisponibilidadAsientosException {
-        // Aqui se llamaria un metodo para consultar a los asientos de la respectiva funcion, pero eso sera hasta que agreguemos los BOs
-        
-        //Lista que servira para guardar aquellos asientos vacios
-        asientos = asientoBO.obtenerAsientosDisponibles(funcion);
-        List<AsientoFuncionDTO> asientosDisponibles = new ArrayList<>();
-        for (int i = 0; i < asientos.size(); i++) {
-            AsientoFuncionDTO asiento = asientos.get(i);
-            if (asiento.isDisponibilidad()) {
-                asientosDisponibles.add(asiento);
+        try {
+            // Aqui se llamaria un metodo para consultar a los asientos de la respectiva funcion, pero eso sera hasta que agreguemos los BOs
+            
+            //Lista que servira para guardar aquellos asientos vacios
+            asientos = asientoBO.obtenerAsientosDisponibles(funcion);
+            List<AsientoFuncionDTO> asientosDisponibles = new ArrayList<>();
+            for (int i = 0; i < asientos.size(); i++) {
+                AsientoFuncionDTO asiento = asientos.get(i);
+                if (asiento.isDisponibilidad()) {
+                    asientosDisponibles.add(asiento);
+                }
             }
+            return asientosDisponibles;
+        } catch (AsientoFuncionBusquedaException e) {
+            throw new DisponibilidadAsientosException("ERROR: " + e.getMessage());
         }
-        return asientosDisponibles;
     }
 
     @Override //Metodo para consultar cuantos Asientos disponibles haya para cierta funcion
@@ -296,7 +303,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
 
             return numAsientos;
-        } catch (ReservarAsientoFuncionException e) {
+        } catch (ReservarAsientoFuncionException | AsientoFuncionBusquedaException e) {
             throw new ReservarAsientoFuncionException("ERROR: " + e.getMessage());
         }
 
