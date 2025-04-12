@@ -14,7 +14,7 @@ public class AsientoFuncion {
 
     private Funcion funcion;
 
-    private Sala sala;
+    private Asiento asiento;
 
     private Boolean disponibilidad;
 
@@ -23,17 +23,17 @@ public class AsientoFuncion {
     public AsientoFuncion() {
     }
 
-    public AsientoFuncion(Long idAsientoFuncion, Funcion funcion, Sala sala, Boolean disponibilidad, Cliente cliente) {
+    public AsientoFuncion(Long idAsientoFuncion, Funcion funcion, Asiento asiento, Boolean disponibilidad, Cliente cliente) {
         this.idAsientoFuncion = idAsientoFuncion;
         this.funcion = funcion;
-        this.sala = sala;
+        this.asiento = asiento;
         this.disponibilidad = disponibilidad;
         this.cliente = cliente;
     }
 
-    public AsientoFuncion(Funcion funcion, Sala sala, Boolean disponibilidad, Cliente cliente) {
+    public AsientoFuncion(Funcion funcion, Asiento asiento, Boolean disponibilidad, Cliente cliente) {
         this.funcion = funcion;
-        this.sala = sala;
+        this.asiento = asiento;
         this.disponibilidad = disponibilidad;
         this.cliente = cliente;
     }
@@ -54,12 +54,12 @@ public class AsientoFuncion {
         this.funcion = funcion;
     }
 
-    public Sala getSala() {
-        return sala;
+    public Asiento getAsiento() {
+        return asiento;
     }
 
-    public void setSala(Sala sala) {
-        this.sala = sala;
+    public void setAsiento(Asiento asiento) {
+        this.asiento = asiento;
     }
 
     public Boolean getDisponibilidad() {
@@ -75,7 +75,7 @@ public class AsientoFuncion {
         return "AsientoFuncion{"
                 + "idAsientoFuncion=" + idAsientoFuncion
                 + ", funcion=" + funcion
-                + ", sala=" + sala
+                + ", asiento=" + asiento
                 + ", disponibilidad=" + disponibilidad
                 + ", cliente=" + cliente
                 + '}';

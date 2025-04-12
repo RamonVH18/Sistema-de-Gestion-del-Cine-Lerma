@@ -9,7 +9,7 @@ package DTOs;
  * @author Ramon Valencia
  */
 public class AsientoFuncionDTO {
-    
+
     private FuncionDTO funcion;
     private String asiento;
     private boolean disponibilidad;
@@ -20,12 +20,14 @@ public class AsientoFuncionDTO {
      */
     public AsientoFuncionDTO() {
     }
+
     /**
      * Constructor con todos los metodos
+     *
      * @param funcion
      * @param asiento
      * @param disponibilidad
-     * @param cliente 
+     * @param cliente
      */
     public AsientoFuncionDTO(FuncionDTO funcion, String asiento, boolean disponibilidad, ClienteDTO cliente) {
         this.funcion = funcion;
@@ -33,59 +35,67 @@ public class AsientoFuncionDTO {
         this.disponibilidad = disponibilidad;
         this.cliente = cliente;
     }
+
     /**
      * Getters y setters
      */
     public FuncionDTO getFuncion() {
         return funcion;
     }
+
     /**
-     * 
-     * @param funcion 
+     *
+     * @param funcion
      */
     public void setFuncion(FuncionDTO funcion) {
         this.funcion = funcion;
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getAsiento() {
         return asiento;
     }
+
     /**
-     * 
-     * @param asiento 
+     *
+     * @param asiento
      */
     public void setAsiento(String asiento) {
         this.asiento = asiento;
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean isDisponibilidad() {
         return disponibilidad;
     }
+
     /**
-     * 
-     * @param disponibilidad 
+     *
+     * @param disponibilidad
      */
     public void setDisponibilidad(boolean disponibilidad) {
         this.disponibilidad = disponibilidad;
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public ClienteDTO getCliente() {
         return cliente;
     }
+
     /**
-     * 
-     * @param cliente 
+     *
+     * @param cliente
      */
     public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
-    } 
+    }
 }
