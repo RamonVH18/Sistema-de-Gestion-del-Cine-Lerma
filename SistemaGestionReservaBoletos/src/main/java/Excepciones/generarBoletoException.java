@@ -8,7 +8,7 @@ package Excepciones;
  *
  * @author isaac
  */
-public class GenerarBoletoException extends Exception{
+public class GenerarBoletoException extends Exception {
 
     public GenerarBoletoException(String message) {
         super(message);
@@ -17,5 +17,5 @@ public class GenerarBoletoException extends Exception{
     public GenerarBoletoException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

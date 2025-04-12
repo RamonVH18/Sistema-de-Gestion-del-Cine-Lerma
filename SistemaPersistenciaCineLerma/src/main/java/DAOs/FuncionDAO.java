@@ -108,6 +108,8 @@ public class FuncionDAO implements IFuncionDAO{
     public List<Funcion> mostrarFuncionesActivas() throws PersistenciaException {
         List<Funcion> funcionesPelicula = new ArrayList<>();
         
+        funcionesHarcodeadas();
+        
         for (int i = 0; i < funciones.size(); i++) {
             Funcion funcion = funciones.get(i);
             if (funcion.getEstado()) {

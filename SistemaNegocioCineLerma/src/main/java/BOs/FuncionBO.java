@@ -153,8 +153,20 @@ public class FuncionBO implements IFuncionBO {
 
     @Override
     public List<FuncionDTO> buscarFuncionesActivas() throws FuncionBusquedaException {
+        List<FuncionDTO> funcionesActivasDTO = new ArrayList<>();
 
-        return null;
+        try {
+            List<Funcion> funcionesActivasEntity = funcionDAO.mostrarFuncionesActivas();
+            for (Funcion funcionActivaEntity : funcionesActivasEntity) {
+                FuncionDTO funcionActivaDTO = funcionMapper.toFuncionDTO(funcionActivaEntity);
+
+                funcionesActivasDTO.add(funcionActivaDTO);
+            }
+
+            return funcionesActivasDTO;
+        } catch (PersistenciaException e) {
+            throw new FuncionBusquedaException("Error al buscar las funciones activas.");
+        }
 
     }
 

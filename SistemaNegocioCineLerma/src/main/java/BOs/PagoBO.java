@@ -22,6 +22,7 @@ public class PagoBO {
 
     private static PagoBO instance;
     private PagoDAO pagoDAO;
+    private final FuncionMapper funcionMapper = new FuncionMapper();
 
     private PagoBO() {
         // Inicializar el DAO
@@ -62,7 +63,7 @@ public class PagoBO {
             throw new PagoValidacionException("La funcion es pasada");
         }
         
-        Funcion funcionEntidad = FuncionMapper.toFuncionEntidad(funcion);
+        Funcion funcionEntidad = funcionMapper.toFuncionEntidad(funcion);
         
         Double montoTotal = pagoDAO.calcularMontoTotal(boletos, funcionEntidad);
 

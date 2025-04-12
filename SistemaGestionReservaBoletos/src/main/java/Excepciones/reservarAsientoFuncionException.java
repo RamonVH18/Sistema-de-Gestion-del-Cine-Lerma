@@ -17,5 +17,5 @@ public class ReservarAsientoFuncionException extends Exception {
     public ReservarAsientoFuncionException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

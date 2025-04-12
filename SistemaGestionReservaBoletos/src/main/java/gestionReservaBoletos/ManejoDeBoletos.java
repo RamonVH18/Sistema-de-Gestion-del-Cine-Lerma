@@ -115,7 +115,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
             // aqui se llamaria a un metodo que de una listaFunciones, sin embargo como aun no tenemos la BO, voy hardcodearlas
             List<FuncionDTO> funciones = funcionBO.buscarFuncionesActivas();
-            if (funciones.isEmpty() || funciones == null) {
+            if (funciones == null || funciones.isEmpty()) {
                 throw new FuncionCargaException("Hubo un error al cargar las funciones, favor de ingresar mas al rato.");
             }
             //Lista donde se guardada las funciones del dia
@@ -125,7 +125,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
-                if (funcion.getNombre() == nombrePelicula) {
+                if (funcion.getNombre().equals(nombrePelicula)) {
                     funcionesPelicula.add(funcion);
                 }
             }

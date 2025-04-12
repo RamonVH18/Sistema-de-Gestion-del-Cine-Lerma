@@ -18,6 +18,4 @@ public class ValidarCampoAsientoException extends Exception {
         super(message, cause);
     }
 
-  
-    
 }

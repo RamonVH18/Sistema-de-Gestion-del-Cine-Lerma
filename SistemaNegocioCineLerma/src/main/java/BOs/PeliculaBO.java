@@ -27,7 +27,7 @@ public class PeliculaBO implements IPeliculaBO{
     
     private static PeliculaBO instancePeliculaBO;
     private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO();
-    private final PeliculaMapper mapperPeli = new PeliculaMapper();
+    private final PeliculaMapper peliculaMapper = new PeliculaMapper();
 
     private PeliculaBO() {
     }
@@ -66,7 +66,7 @@ public class PeliculaBO implements IPeliculaBO{
             List<PeliculaDTO> peliculasMapeadas = new ArrayList<>();
             
             for (int i = 0; i < peliculas.size(); i++) {
-                PeliculaDTO peliculaMap = PeliculaMapper.toDTO(peliculas.get(i));
+                PeliculaDTO peliculaMap = peliculaMapper.toPeliculaDTO(peliculas.get(i));
                 peliculasMapeadas.add(peliculaMap);
             }
             return peliculasMapeadas;
