@@ -7,21 +7,26 @@ package DAOs;
 import Excepciones.PersistenciaException;
 import Interfaces.IFuncionDAO;
 import Interfaces.IPeliculaDAO;
+import Interfaces.ObservadorFuncion;
 import entidades.Funcion;
 import entidades.Pelicula;
 import entidades.Sala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  *
  * @author Ramon Valencia
  */
-public class FuncionDAO implements IFuncionDAO{
+public class FuncionDAO implements IFuncionDAO {
 
     private static FuncionDAO instance;
     private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO();
+    private Map<Long, List<ObservadorFuncion>> observadores = new HashMap();
 
     private FuncionDAO() {
     }
@@ -93,7 +98,7 @@ public class FuncionDAO implements IFuncionDAO{
     @Override
     public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException {
         List<Funcion> funcionesPelicula = new ArrayList<>();
-        
+
         for (int i = 0; i < funciones.size(); i++) {
             Funcion funcion = funciones.get(i);
             if (funcion.getPelicula() == pelicula) {
@@ -102,7 +107,7 @@ public class FuncionDAO implements IFuncionDAO{
         }
         return funcionesPelicula;
     }
-    
+
     @Override
     public List<Funcion> mostrarFuncionesActivas() throws PersistenciaException {
         List<Funcion> funcionesPelicula = new ArrayList<>();
@@ -115,13 +120,106 @@ public class FuncionDAO implements IFuncionDAO{
         }
         return funcionesPelicula;
     }
-    
+
     @Override
     public List<Funcion> mostrarFuncionesPeliculas() throws PersistenciaException {
         if (!funciones.isEmpty()) {
             return funciones;
         }
-        
+
         return null;
+    }
+
+    // metodo para actualizar una funcion con notificacion
+    @Override
+    public boolean actualizarFuncion(Funcion funcionActualizada) throws PersistenciaException {
+        // Nuevo método implementado
+        for (int i = 0; i < funciones.size(); i++) {
+            Funcion funcionExistente = funciones.get(i);
+
+            if (funcionExistente.getIdFuncion().equals(funcionActualizada.getIdFuncion())) {
+                // Detectar cambios para enviar notificaciones
+                detectarYNotificarCambios(funcionExistente, funcionActualizada);
+
+                // Actualizar la función
+                funciones.set(i, funcionActualizada);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // metodo de buscar funcion por id
+    public Funcion buscarFuncionPorId(Long idFuncion) throws PersistenciaException {
+        for (Funcion funcion : funciones) {
+            if (funcion.getIdFuncion().equals(idFuncion)) {
+                return funcion;
+            }
+        }
+        return null;
+    }
+
+    // metodo privado para detectar cambios y notificar
+    private void detectarYNotificarCambios(Funcion funcionOriginal, Funcion funcionActualizada) {
+        // Verificar cambio de estado
+        if (!funcionOriginal.getEstado().equals(funcionActualizada.getEstado())) {
+            String mensaje = funcionActualizada.getEstado()
+                    ? "La función ha sido activada"
+                    : "La función ha sido cancelada";
+            notificarObservadores(funcionActualizada.getIdFuncion(), "CAMBIO_ESTADO", mensaje);
+        }
+
+        // Verificar cambio de horario
+        if (!funcionOriginal.getFechaHora().equals(funcionActualizada.getFechaHora())) {
+            String mensaje = "Cambio de horario: de "
+                    + funcionOriginal.getFechaHora() + " a "
+                    + funcionActualizada.getFechaHora();
+            notificarObservadores(funcionActualizada.getIdFuncion(), "CAMBIO_HORARIO", mensaje);
+        }
+
+        // Verificar cambio de sala
+        if (!funcionOriginal.getSala().equals(funcionActualizada.getSala())) {
+            String mensaje = "Cambio de sala: de sala #"
+                    + funcionOriginal.getSala().getNumSala() + " a sala #"
+                    + funcionActualizada.getSala().getNumSala();
+            notificarObservadores(funcionActualizada.getIdFuncion(), "CAMBIO_SALA", mensaje);
+        }
+
+        // Verificar cambio de precio
+        if (!funcionOriginal.getPrecio().equals(funcionActualizada.getPrecio())) {
+            String mensaje = "Cambio de precio: de $"
+                    + funcionOriginal.getPrecio() + " a $"
+                    + funcionActualizada.getPrecio();
+            notificarObservadores(funcionActualizada.getIdFuncion(), "CAMBIO_PRECIO", mensaje);
+        }
+    }
+
+    @Override
+    public void agregarObservador(Long idFuncion, ObservadorFuncion observador) {
+        observadores.computeIfAbsent(idFuncion, k -> new ArrayList<>()).add(observador);
+    }
+
+    @Override
+    public void eliminarObservador(Long idFuncion, ObservadorFuncion observador) {
+        if (observadores.containsKey(idFuncion)) {
+            observadores.get(idFuncion).remove(observador);
+        }
+    }
+
+    // metodo de eliminar oobservcador por filtro
+    @Override
+    public void eliminarObservadorPorFiltro(Long idFuncion, Predicate<ObservadorFuncion> filtro) {
+        if (observadores.containsKey(idFuncion)) {
+            observadores.get(idFuncion).removeIf(filtro);
+        }
+    }
+
+    @Override
+    public void notificarObservadores(Long idFuncion, String tipoEvento, String mensaje) {
+        if (observadores.containsKey(idFuncion)) {
+            for (ObservadorFuncion observador : observadores.get(idFuncion)) {
+                observador.actualizar(idFuncion, tipoEvento, mensaje);
+            }
+        }
     }
 }
