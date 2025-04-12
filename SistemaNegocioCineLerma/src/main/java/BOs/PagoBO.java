@@ -8,6 +8,7 @@ import DAOs.PagoDAO;
 import DTOs.FuncionDTO;
 import DTOs.PagoDTO;
 import Excepciones.pagos.PagoValidacionException;
+import Interfaces.mappers.IFuncionMapper;
 import Mappers.FuncionMapper;
 import Mappers.PagoMapper;
 import entidades.Funcion;
@@ -22,6 +23,7 @@ public class PagoBO {
 
     private static PagoBO instance;
     private PagoDAO pagoDAO;
+    private IFuncionMapper funcionMapper = new FuncionMapper();
 
     private PagoBO() {
         // Inicializar el DAO
@@ -62,7 +64,7 @@ public class PagoBO {
             throw new PagoValidacionException("La funcion es pasada");
         }
         
-        Funcion funcionEntidad = FuncionMapper.toFuncionEntidad(funcion);
+        Funcion funcionEntidad = funcionMapper.toFuncionEntidad(funcion);
         
         Double montoTotal = pagoDAO.calcularMontoTotal(boletos, funcionEntidad);
 

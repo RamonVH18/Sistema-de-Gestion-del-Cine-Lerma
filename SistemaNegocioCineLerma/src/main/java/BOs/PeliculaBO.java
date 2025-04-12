@@ -12,6 +12,7 @@ import Excepciones.peliculas.PeliculaBusquedaException;
 import Excepciones.peliculas.PeliculaRegistroException;
 import Interfaces.IPeliculaBO;
 import Interfaces.IPeliculaDAO;
+import Interfaces.mappers.IPeliculaMapper;
 import Mappers.PeliculaMapper;
 import entidades.Pelicula;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class PeliculaBO implements IPeliculaBO{
     
     private static PeliculaBO instancePeliculaBO;
     private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO();
-    private final PeliculaMapper mapperPeli = new PeliculaMapper();
+    private final IPeliculaMapper mapperPeli = new PeliculaMapper();
 
     private PeliculaBO() {
     }
@@ -66,7 +67,7 @@ public class PeliculaBO implements IPeliculaBO{
             List<PeliculaDTO> peliculasMapeadas = new ArrayList<>();
             
             for (int i = 0; i < peliculas.size(); i++) {
-                PeliculaDTO peliculaMap = PeliculaMapper.toDTO(peliculas.get(i));
+                PeliculaDTO peliculaMap = mapperPeli.toPeliculaDTO(peliculas.get(i));
                 peliculasMapeadas.add(peliculaMap);
             }
             return peliculasMapeadas;
