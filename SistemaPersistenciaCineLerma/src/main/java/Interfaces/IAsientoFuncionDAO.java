@@ -18,4 +18,6 @@ public interface IAsientoFuncionDAO {
     public List<AsientoFuncion> mostrarAsientosFunciones(Funcion funcion) throws PersistenciaException;
     
     public Boolean ocuparAsiento(AsientoFuncion asiento) throws PersistenciaException;
+    
+    public List<AsientoFuncion> mostrarAsientosDisponibles(Funcion funcion) throws PersistenciaException;
 }
