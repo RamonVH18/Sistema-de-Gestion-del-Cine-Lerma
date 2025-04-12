@@ -29,6 +29,7 @@ public class FuncionMapper implements IFuncionMapper {
         funcionDTO.setFechaHora(funcion.getFechaHora());
         funcionDTO.setNombre(funcion.getPelicula().getTitulo());
         funcionDTO.setPrecio(funcion.getPrecio());
+        funcionDTO.setEstado(funcion.getEstado());
         funcionDTO.setSala("SALA: " + funcion.getSala().getNumSala().toString());
 
         return funcionDTO;
@@ -50,6 +51,7 @@ public class FuncionMapper implements IFuncionMapper {
         funcion.setPelicula(null);
         funcion.setSala(null);
         funcion.setPrecio(funciondto.getPrecio());
+        funcion.setEstado(funciondto.getEstado());
 
         return funcion;
 

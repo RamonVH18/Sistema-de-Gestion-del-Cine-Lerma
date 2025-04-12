@@ -12,7 +12,6 @@ import entidades.Pelicula;
 import entidades.Sala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -107,7 +106,7 @@ public class FuncionDAO implements IFuncionDAO{
     @Override
     public List<Funcion> mostrarFuncionesActivas() throws PersistenciaException {
         List<Funcion> funcionesPelicula = new ArrayList<>();
-        
+        funcionesHarcodeadas();
         for (int i = 0; i < funciones.size(); i++) {
             Funcion funcion = funciones.get(i);
             if (funcion.getEstado()) {

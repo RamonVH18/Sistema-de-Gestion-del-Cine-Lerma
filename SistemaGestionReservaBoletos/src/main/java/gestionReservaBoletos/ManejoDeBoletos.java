@@ -16,7 +16,6 @@ import DTOs.PeliculaDTO;
 import Excepciones.CalcularCostoTotalException;
 import Excepciones.DisponibilidadAsientosException;
 import Excepciones.FuncionCargaException;
-import Excepciones.GestionReservaException;
 import Excepciones.PeliculasCargaException;
 import Excepciones.GenerarBoletoException;
 import Excepciones.ReservarAsientoFuncionException;
@@ -29,15 +28,12 @@ import Interfaces.IPeliculaBO;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Ramon Valencia
  */
 public class ManejoDeBoletos implements IManejoDeBoletos {
-
-    private static final Logger logger = Logger.getLogger(Logger.class.getName());
 
     private final IFuncionBO funcionBO = FuncionBO.getInstanceDAO();
     private final IPeliculaBO peliculaBO = PeliculaBO.getInstanceBO();
@@ -90,14 +86,14 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
      * mostrar en Cartelera, AUN NO ES LA VERSION FINAL DEL METODO
      *
      * @return
-     * @throws GestionReservaException
+     * @throws Excepciones.PeliculasCargaException
      */
     @Override
     public List<PeliculaDTO> cargarPeliculasActivas() throws PeliculasCargaException {
         try {
             // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
             List<PeliculaDTO> peliculas = peliculaBO.buscarTodasPeliculasActivas();
-            if (peliculas.isEmpty() || peliculas == null) {
+            if (peliculas == null || peliculas.isEmpty()) {
                 throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
             }
             return peliculas;
@@ -125,21 +121,19 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
-                if (funcion.getNombre() == nombrePelicula && funcion.getEstado()) {
+                if (funcion.getNombre().equals(nombrePelicula) && funcion.getEstado()) {
                     funcionesPelicula.add(funcion);
                 }
             }
             
-            if (funcionesPelicula == null || funcionesPelicula.isEmpty()) {
+            if (funcionesPelicula.isEmpty()) {
                 throw new FuncionCargaException("Hubo un error al cargar las funciones de esta pelicula, seleccione otra pelicula o ingrese mas al rato.");
             }
             //Funcion usada para poder ordernar la lista de funciones, para de esa manera mostrar las que van primero en fecha hora
             funcionesPelicula.sort(Comparator.comparing(e -> e.getFechaHora()));
             
             return funcionesPelicula;
-        } catch (FuncionCargaException e) {
-            throw new FuncionCargaException("ERROR: " + e.getMessage());
-        } catch (FuncionBusquedaException e) {
+        } catch (FuncionCargaException | FuncionBusquedaException e) {
             throw new FuncionCargaException("ERROR: " + e.getMessage());
         }
     }
@@ -159,7 +153,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
 
             return true;
-        } catch (Exception e) {
+        } catch (ValidarCampoAsientoException e) {
             throw new ValidarCampoAsientoException("ERROR: " + e.getMessage());
         }
     }
@@ -194,7 +188,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                 }
             }
             return cuenta;
-        } catch (Exception e) {
+        } catch (DisponibilidadAsientosException e) {
             throw new DisponibilidadAsientosException("Hubo un error al contabilizar el numero de asientos disponibles.", e.getCause());
         }
     }
@@ -212,7 +206,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                 throw new DisponibilidadAsientosException("Ingreso mas asientos de los que hay disponibles.");
             }
             return true;
-        } catch (Exception e) {
+        } catch (DisponibilidadAsientosException e) {
             throw new DisponibilidadAsientosException("ERROR: " + e.getMessage());
         }
     }
@@ -228,7 +222,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
             double precio = funcion.getPrecio();
             return precio * numAsientos;
-        } catch (Exception e) {
+        } catch (CalcularCostoTotalException e) {
             throw new CalcularCostoTotalException("Hubo un problema al calcular el costo total del boleto");
         }
     }
@@ -254,7 +248,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             //Aqui abajo se añadira un metodo que registre el Boleto 
             return new BoletoDTO(pelicula.getNombrePelicula(), pelicula.getPeliculaImagen(), funcion.getFechaHora(), funcion.getSala(), asientos, cliente.getNombre());
 
-        } catch (Exception e) {
+        } catch (GenerarBoletoException e) {
             throw new GenerarBoletoException("ERROR: " + e.getMessage());
         }
     }
@@ -302,7 +296,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
 
             return numAsientos;
-        } catch (Exception e) {
+        } catch (ReservarAsientoFuncionException e) {
             throw new ReservarAsientoFuncionException("ERROR: " + e.getMessage());
         }
 
