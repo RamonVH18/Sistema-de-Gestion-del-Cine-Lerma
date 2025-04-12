@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  *
  * @author Daniel Miribe
  */
-public class PantallaPagoTarjeta extends javax.swing.JDialog {
+public class PantallaPagoTarjeta extends PantallaPago {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
 

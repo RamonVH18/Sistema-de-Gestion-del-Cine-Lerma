@@ -21,6 +21,7 @@ import Excepciones.PagoException;
 import Excepciones.PeliculasCargaException;
 import Excepciones.ValidarCuentaException;
 import Excepciones.GenerarBoletoException;
+import Excepciones.PresentacionException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
 import gestionPagos.GestionPagos;
@@ -47,21 +48,37 @@ public class ControlDeNavegacion {
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
     private PeliculaDTO peliculaSeleccionada = new PeliculaDTO();
     private FuncionDTO funcionSeleccionada = new FuncionDTO();
-
+    
     private String titulo = "¡ERROR!";
-
+    
     private List<String> asientos = new ArrayList<>();
-
+    
     private int numAsientos;
-
+    
     private final ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx", "jaimico");
-
+    
     private static ControlDeNavegacion instancia;
 
     /**
      * Constructor privado para evitar múltiples instancias
      */
     private ControlDeNavegacion() {
+    }
+
+    /**
+     * Factory para crear pantallas de pago
+     */
+    private PantallaPago crearPantallaPago(String tipo) throws GestionReservaException, PresentacionException {
+        switch (tipo) {
+            case "Mercado":
+                return new PantallaPagoMercado(numAsientos);
+            case "Paypal":
+                return new PantallaPagoPaypal();
+            case "Tarjeta":
+                return new PantallaPagoTarjeta();
+            default:
+                throw new PresentacionException("Error: El metodo de pago es incorrecto o invalido");
+        }
     }
 
     /**
@@ -97,7 +114,7 @@ public class ControlDeNavegacion {
             SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
             pantallaSeleccionarPelicula.setLocationRelativeTo(null);
             pantallaSeleccionarPelicula.setVisible(true);
-
+            
         });
     }
 
@@ -110,6 +127,18 @@ public class ControlDeNavegacion {
             pantallaSeleccionarAsientos.setLocationRelativeTo(null);
             pantallaSeleccionarAsientos.setVisible(true);
         });
+    }
+    
+    public void mostrarPantallaPago(String tipo) {
+        try {
+            PantallaPago dialog = crearPantallaPago(tipo);
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+        } catch (GestionReservaException ex) {
+            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PresentacionException ex) {
+            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -133,10 +162,12 @@ public class ControlDeNavegacion {
     public void mostrarPagoTarjeta() {
         SwingUtilities.invokeLater(() -> {
             try {
-                PantallaPagoTarjeta pantallaPagoTarjeta = new PantallaPagoTarjeta();
-                pantallaPagoTarjeta.setLocationRelativeTo(null);
-                pantallaPagoTarjeta.setVisible(true);
+                PantallaPago dialog = crearPantallaPago("Tarjeta");
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
             } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PresentacionException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -148,10 +179,12 @@ public class ControlDeNavegacion {
     public void mostrarPagoPaypal() {
         SwingUtilities.invokeLater(() -> {
             try {
-                PantallaPagoPaypal pantallaPagoPaypal = new PantallaPagoPaypal();
-                pantallaPagoPaypal.setLocationRelativeTo(null);
-                pantallaPagoPaypal.setVisible(true);
+                PantallaPago dialog = crearPantallaPago("Paypal");
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
             } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PresentacionException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -163,10 +196,12 @@ public class ControlDeNavegacion {
     public void mostrarPagoMercado() {
         SwingUtilities.invokeLater(() -> {
             try {
-                PantallaPagoMercado pantallaPagoMercado = new PantallaPagoMercado(numAsientos);
-                pantallaPagoMercado.setLocationRelativeTo(null);
-                pantallaPagoMercado.setVisible(true);
+                PantallaPago dialog = crearPantallaPago("Mercado");
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
             } catch (GestionReservaException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PresentacionException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -180,7 +215,7 @@ public class ControlDeNavegacion {
             DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
             pantallaDetalleDelBoleto.setLocationRelativeTo(null);
             pantallaDetalleDelBoleto.setVisible(true);
-
+            
         });
     }
 
@@ -316,7 +351,7 @@ public class ControlDeNavegacion {
                 String textoValidado = texto.trim();
                 int numAsientos = Integer.parseInt(textoValidado);
                 manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
-
+                
                 return textoValidado;
             }
             return null;
@@ -456,7 +491,7 @@ public class ControlDeNavegacion {
      */
     public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) {
         gestionDePagos.actualizarSaldoPaypal(paypal, pago);
-
+        
     }
 
     /**
@@ -516,5 +551,5 @@ public class ControlDeNavegacion {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
 }

@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
  * @author Abraham Coronel Bringas
  *
  */
-public class PantallaPagoPaypal extends javax.swing.JDialog {
+public class PantallaPagoPaypal extends PantallaPago {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
 

@@ -157,7 +157,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
     }//GEN-LAST:event_btnPruebaActionPerformed
 
     private void btnPruebaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPruebaMouseClicked
-        
+
         control.mostrarDetalleBoleto();
         dispose();
     }//GEN-LAST:event_btnPruebaMouseClicked
@@ -184,7 +184,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
         for (int i = 0; i < metodosPago.size(); i++) {
             MetodoPagoDTO metodoPago = metodosPago.get(i);
             JButton boton = crearBotonMetodoPago(metodoPago.getImagenMetodo(), border, metodoPago.getNombreMetodo());
-            
+
             JLabel label = new JLabel(metodoPago.getNombreMetodo().toUpperCase());
             label.setBorder(border);
             panel.add(label);
@@ -204,23 +204,25 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
             JDialog SeleccionarMetodoPago = (JDialog) SwingUtilities.getWindowAncestor(boton);
             SeleccionarMetodoPago.dispose();
-            
+
             cambioPestañaBoton(nombreMetodo);
         });
         return boton;
     }
-    
-    private void cambioPestañaBoton (String nombreMetodo) {
+
+    private void cambioPestañaBoton(String nombreMetodo) {
+        String tipo = "";
         switch (nombreMetodo) {
-                case "Tarjeta" ->
-                    control.mostrarPagoTarjeta();
-                case "Paypal" ->
-                    control.mostrarPagoPaypal();
-                case "Mercado Pago" ->
-                    control.mostrarPagoMercado();
-                default -> {
-                }
-            }
+            case "Tarjeta" ->
+                tipo = "Tarjeta";
+            case "Paypal" ->
+                tipo = "Paypal";
+            case "Mercado Pago" ->
+                tipo = "Mercado";
+
+        }
+        control.mostrarPantallaPago(tipo);
+        dispose();
     }
-    
+
 }
