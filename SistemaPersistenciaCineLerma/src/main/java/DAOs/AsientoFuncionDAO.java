@@ -51,8 +51,8 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
 
     @Override
     public List<AsientoFuncion> mostrarAsientosFunciones(Funcion funcion) throws PersistenciaException {
-        asientosHarcodeados();
-        List<AsientoFuncion> asientosFuncion = new ArrayList<>();
+
+        List<AsientoFuncion> asientosFuncion = asientosHarcodeados();
         for (int i = 1; i < asientos.size(); i++) {
             AsientoFuncion asiento = asientos.get(i);
             if (asiento.getFuncion() == funcion) {
@@ -77,7 +77,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
     @Override
     public List<AsientoFuncion> mostrarAsientosDisponibles(Funcion funcion) throws PersistenciaException {
         asientosHarcodeados();
-        List<AsientoFuncion> asientosFuncion = new ArrayList<>();
+        List<AsientoFuncion> asientosFuncion = asientosHarcodeados();
         for (int i = 1; i < asientos.size(); i++) {
             AsientoFuncion asiento = asientos.get(i);
             if (asiento.getFuncion() == funcion && asiento.getDisponibilidad() == true) {
