@@ -5,24 +5,28 @@
 package entidades;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Ramon Valencia
  */
 public class Funcion {
-    
+
     private Long idFuncion;
-    
+
     private Sala sala;
-    
+
     private Pelicula pelicula;
-    
+
     private LocalDateTime fechaHora;
-    
+
     private Boolean estado;
-    
+
     private Double precio;
+
+    private List<AsientoFuncion> asientosFuncion;
 
     public Funcion() {
     }
@@ -34,6 +38,7 @@ public class Funcion {
         this.fechaHora = fechaHora;
         this.estado = estado;
         this.precio = precio;
+        this.asientosFuncion = new ArrayList<>();
     }
 
     public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Boolean estado, Double precio) {
@@ -42,6 +47,7 @@ public class Funcion {
         this.fechaHora = fechaHora;
         this.estado = estado;
         this.precio = precio;
+        this.asientosFuncion = new ArrayList<>();
     }
 
     public Long getIdFuncion() {
@@ -91,20 +97,17 @@ public class Funcion {
     public void setPrecio(Double precio) {
         this.precio = precio;
     }
-    
-    
-
-    
 
     @Override
     public String toString() {
-        return "Funcion{" + 
-                "idFuncion=" + idFuncion + 
-                ", sala=" + sala + 
-                ", pelicula=" + pelicula + 
-                ", fechaHora=" + fechaHora + 
-                ", estado=" + estado + 
-                ", precio=" + precio + 
-                '}';
+        return "Funcion{"
+                + "idFuncion=" + idFuncion
+                + ", sala=" + sala
+                + ", pelicula=" + pelicula
+                + ", fechaHora=" + fechaHora
+                + ", estado=" + estado
+                + ", precio=" + precio
+                + ", asientosFuncion=" + asientosFuncion
+                + '}';
     }
 }

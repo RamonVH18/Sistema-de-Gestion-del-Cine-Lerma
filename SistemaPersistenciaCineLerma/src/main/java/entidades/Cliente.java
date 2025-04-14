@@ -9,33 +9,31 @@ package entidades;
  * @author Ramon Valencia
  */
 public class Cliente {
-    
+
     private Long idCliente;
-    
+
     private String nombre;
-    
+
     private String correo;
-    
-    private String contraseña;
+
+    private String contrasenia;
 
     public Cliente() {
     }
 
-    public Cliente(Long idCliente, String nombre, String correo, String contraseña) {
+    public Cliente(Long idCliente, String nombre, String correo, String contrasenia) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.correo = correo;
-        this.contraseña = contraseña;
+        this.contrasenia = contrasenia;
     }
 
-    public Cliente(String nombre, String correo, String contraseña) {
+    public Cliente(String nombre, String correo, String contrasenia) {
         this.nombre = nombre;
         this.correo = correo;
-        this.contraseña = contraseña;
+        this.contrasenia = contrasenia;
     }
 
-    
-    
     public Long getIdCliente() {
         return idCliente;
     }
@@ -60,18 +58,22 @@ public class Cliente {
         this.correo = correo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     @Override
     public String toString() {
-        return "Cliente{" + "idCliente=" + idCliente + ", nombre=" + nombre + ", correo=" + correo + ", contrase\u00f1a=" + contraseña + '}';
+        return "Cliente{"
+                + "idCliente=" + idCliente
+                + ", nombre=" + nombre
+                + ", correo=" + correo
+                + ", contrasenia=" + contrasenia
+                + '}';
     }
-    
-    
+
 }

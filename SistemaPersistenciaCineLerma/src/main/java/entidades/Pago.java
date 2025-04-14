@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
  * @author sonic
  */
 public class Pago {
-    
+
     private Long idPago;
-    
+
     private Double monto;
-    
+
     private LocalDateTime fechaHora;
-    
+
     private Boolean estado;
 
     public Pago() {
@@ -39,9 +39,7 @@ public class Pago {
     public Pago(Double monto) {
         this.monto = monto;
     }
-    
-    
-    
+
     public Long getIdPago() {
         return idPago;
     }
@@ -76,9 +74,12 @@ public class Pago {
 
     @Override
     public String toString() {
-        return "Pago{" + "idPago=" + idPago + ", monto=" + monto + ", fechaHora=" + fechaHora + ", estado=" + estado + '}';
+        return "Pago{"
+                + "idPago=" + idPago
+                + ", monto=" + monto
+                + ", fechaHora=" + fechaHora
+                + ", estado=" + estado
+                + '}';
     }
- 
-    
-    
+
 }

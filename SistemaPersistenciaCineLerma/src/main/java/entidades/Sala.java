@@ -4,19 +4,24 @@
  */
 package entidades;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class Sala {
-    
+
     private Long idSala;
-    
+
     private Integer numAsientos;
-    
+
     private Integer numSala;
-    
+
     private Boolean estado;
+
+    private List<Asiento> asientos;
 
     public Sala() {
     }
@@ -26,12 +31,14 @@ public class Sala {
         this.numAsientos = numAsientos;
         this.numSala = numSala;
         this.estado = estado;
+        this.asientos = new ArrayList<>();
     }
 
     public Sala(Integer numAsientos, Integer numSala, Boolean estado) {
         this.numAsientos = numAsientos;
         this.numSala = numSala;
         this.estado = estado;
+        this.asientos = new ArrayList<>();
     }
 
     public Long getIdSala() {
@@ -66,10 +73,23 @@ public class Sala {
         this.estado = estado;
     }
 
+    public List<Asiento> getAsientos() {
+        return asientos;
+    }
+
+    public void setAsientos(List<Asiento> asientos) {
+        this.asientos = asientos;
+    }
+
     @Override
     public String toString() {
-        return "Sala{" + "idSala=" + idSala + ", numAsientos=" + numAsientos + ", numSala=" + numSala + ", estado=" + estado + '}';
+        return "Sala{"
+                + "idSala=" + idSala
+                + ", numAsientos=" + numAsientos
+                + ", numSala=" + numSala
+                + ", estado=" + estado
+                + ", asientos=" + asientos
+                + '}';
     }
-    
-    
+
 }

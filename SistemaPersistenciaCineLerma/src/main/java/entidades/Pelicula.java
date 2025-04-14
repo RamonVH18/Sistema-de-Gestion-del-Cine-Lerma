@@ -4,13 +4,12 @@
  */
 package entidades;
 
-
 /**
  *
  * @author Ramon Valencia
  */
 public class Pelicula {
-    
+
     private Long id;
     private String titulo;
     private String imagen;
@@ -99,14 +98,14 @@ public class Pelicula {
 
     @Override
     public String toString() {
-        return "Pelicula{" + 
-                "id=" + id + 
-                ", titulo=" + titulo + 
-                ", imagen=" + imagen + 
-                ", genero=" + genero + 
-                ", duracion=" + duracion + 
-                ", sinopsis=" + sinopsis + 
-                ", estado=" + estado + 
-                '}';
+        return "Pelicula{"
+                + "id=" + id
+                + ", titulo=" + titulo
+                + ", imagen=" + imagen
+                + ", genero=" + genero
+                + ", duracion=" + duracion
+                + ", sinopsis=" + sinopsis
+                + ", estado=" + estado
+                + '}';
     }
 }
