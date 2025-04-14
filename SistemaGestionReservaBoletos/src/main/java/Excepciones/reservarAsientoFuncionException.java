@@ -6,7 +6,7 @@ package Excepciones;
 
 /**
  *
- * @author isaac
+ * @author Ramon Valencia
  */
 public class ReservarAsientoFuncionException extends Exception {
 

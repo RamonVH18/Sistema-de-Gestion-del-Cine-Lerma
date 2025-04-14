@@ -6,7 +6,7 @@ package Excepciones;
 
 /**
  *
- * @author isaac
+ * @author Ramon Valencia
  */
 public class ValidarCampoAsientoException extends Exception {
 
@@ -17,7 +17,5 @@ public class ValidarCampoAsientoException extends Exception {
     public ValidarCampoAsientoException(String message, Throwable cause) {
         super(message, cause);
     }
-
-  
     
 }

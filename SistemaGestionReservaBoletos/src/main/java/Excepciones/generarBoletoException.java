@@ -6,9 +6,9 @@ package Excepciones;
 
 /**
  *
- * @author isaac
+ * @author Ramon Valencia
  */
-public class GenerarBoletoException extends Exception{
+public class GenerarBoletoException extends Exception {
 
     public GenerarBoletoException(String message) {
         super(message);
