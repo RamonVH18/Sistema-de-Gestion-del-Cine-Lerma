@@ -7,8 +7,10 @@ package DAOs;
 import Excepciones.PersistenciaException;
 import Interfaces.IAsientoFuncionDAO;
 import Interfaces.IFuncionDAO;
+import entidades.Asiento;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
+import entidades.Sala;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
 
     private static AsientoFuncionDAO instance;
     private final IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO();
-    List<AsientoFuncion> asientos = new ArrayList<>();
+    List<AsientoFuncion> asientosFuncion = new ArrayList<>();
 
     private AsientoFuncionDAO() {
     }
@@ -33,28 +35,30 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
     }
 
     private List<AsientoFuncion> asientosHarcodeados() throws PersistenciaException {
-        if (asientos.isEmpty()) {
+        if (asientosFuncion.isEmpty()) {
             List<Funcion> funciones = funcionDAO.mostrarFuncionesActivas();
             for (int i = 0; i < funciones.size(); i++) {
                 Funcion funcion = funciones.get(i);
-                for (int s = 1; s < 26; s++) {
-                    String numero = String.valueOf(s + 1);
+                Sala sala = funcion.getSala();
+                List<Asiento> asientos = sala.getAsientos();
+                for (int s = 0; s < asientos.size(); s++) {
+                    Asiento asiento = asientos.get(i);
                     int id = (i * 25) + s;
                     long idL = id;
-                    AsientoFuncion asiento = new AsientoFuncion(idL, funcion, numero, true, null);
-                    asientos.add(asiento);
+                    AsientoFuncion asientoF = new AsientoFuncion(idL, funcion, asiento, true, null);
+                    asientosFuncion.add(asientoF);
                 }
             }
         }
-        return asientos;
+        return asientosFuncion;
     }
 
     @Override
     public List<AsientoFuncion> mostrarAsientosFunciones(Funcion funcion) throws PersistenciaException {
 
         List<AsientoFuncion> asientosFuncion = asientosHarcodeados();
-        for (int i = 1; i < asientos.size(); i++) {
-            AsientoFuncion asiento = asientos.get(i);
+        for (int i = 1; i < asientosFuncion.size(); i++) {
+            AsientoFuncion asiento = asientosFuncion.get(i);
             if (asiento.getFuncion() == funcion) {
                 asientosFuncion.add(asiento);
             }
@@ -65,11 +69,11 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
     @Override
     public Boolean ocuparAsiento(AsientoFuncion asiento) throws PersistenciaException {
         asientosHarcodeados();
-        int indice = asientos.indexOf(asiento);
+        int indice = asientosFuncion.indexOf(asiento);
 
         asiento.setDisponibilidad(Boolean.FALSE);
 
-        asientos.set(indice, asiento);
+        asientosFuncion.set(indice, asiento);
 
         return true;
     }
@@ -78,8 +82,8 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
     public List<AsientoFuncion> mostrarAsientosDisponibles(Funcion funcion) throws PersistenciaException {
         asientosHarcodeados();
         List<AsientoFuncion> asientosFuncion = asientosHarcodeados();
-        for (int i = 1; i < asientos.size(); i++) {
-            AsientoFuncion asiento = asientos.get(i);
+        for (int i = 1; i < asientosFuncion.size(); i++) {
+            AsientoFuncion asiento = asientosFuncion.get(i);
             if (asiento.getFuncion() == funcion && asiento.getDisponibilidad() == true) {
                 asientosFuncion.add(asiento);
             }
