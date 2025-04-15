@@ -15,6 +15,8 @@ import gestionPagos.IEstrategiaPago;
  * @author Abraham Coronel Bringas
  */
 public class MercadoPagoEstrategia implements IEstrategiaPago {
+    
+    //Prueba del patron strategy
 
     private final CuentaMercadoDTO cuenta;
 
