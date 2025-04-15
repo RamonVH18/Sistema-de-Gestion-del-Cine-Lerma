@@ -46,7 +46,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     /**
      * Creates new form SeleccionarAsientos se inicializa la estructura y se le forma a la a varias partes 
      */
-    public SeleccionarAsientos() {
+    public SeleccionarAsientos(PeliculaDTO pelicula) {
         initComponents();
         
         // Se llama a la funcion que se encarga de darle un formato a la pagina

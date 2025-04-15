@@ -145,7 +145,8 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
         // TODO add your handling code here:
-        control.mostrarSeleccionarAsientos();
+        
+        control.mostrarSeleccionarAsientos(control.consultarPelicula());
         dispose();
     }//GEN-LAST:event_btnVolverMouseClicked
 

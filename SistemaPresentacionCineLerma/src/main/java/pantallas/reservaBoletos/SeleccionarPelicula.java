@@ -270,7 +270,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
         // 5. accion del boton
         boton.addActionListener(e -> {
             control.guardarPeliculaSeleccionada(pelicula);
-            control.mostrarSeleccionarAsientos();
+            control.mostrarSeleccionarAsientos(pelicula);
             dispose();
         });
         return boton;

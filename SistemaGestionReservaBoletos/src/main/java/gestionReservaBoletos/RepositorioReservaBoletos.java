@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Clase donde se crea una especie de repositorio
- * Este repositorio servira para que guardan los objetos necesarios para el uso del subsistema, ademas de esto
+ * Este repositorio servira para que guardan los objetos necesarios para el uso del subsistema, de esta forma se pueden reutilizar en varias partes  
  * @author Ramon Valencia
  */
 public class RepositorioReservaBoletos {

@@ -131,9 +131,9 @@ public class ControlDeNavegacion {
     /**
      * Metodo que se encarga de abrir la pantalla de SeleccionarAsientos.
      */
-    public void mostrarSeleccionarAsientos() {
+    public void mostrarSeleccionarAsientos(PeliculaDTO pelicula) {
         SwingUtilities.invokeLater(() -> {
-            SeleccionarAsientos pantallaSeleccionarAsientos = new SeleccionarAsientos();
+            SeleccionarAsientos pantallaSeleccionarAsientos = new SeleccionarAsientos(pelicula);
             pantallaSeleccionarAsientos.setLocationRelativeTo(null);
             pantallaSeleccionarAsientos.setVisible(true);
         });
