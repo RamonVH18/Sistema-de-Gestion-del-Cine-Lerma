@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package capaPresentacion;
+package pantallas;
 
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
@@ -56,7 +56,7 @@ public class ControlDeNavegacion {
     
     private int numAsientos;
     
-    private final Cliente cliente = new Cliente("Jaime Flores Valenzuela", "jaime@lerma.com.mx", "jaimico");
+    private final ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx", "jaimico");
     
     private static ControlDeNavegacion instancia;
 
@@ -402,12 +402,11 @@ public class ControlDeNavegacion {
      * @return El boleto generado de la funcion, null en caso de excepcion
      */
     public BoletoDTO cargarBoleto() {
+        List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
         try {
-            List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
             return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
-        } catch (GenerarBoletoException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            mostrarMenuPrincipal();
+        } catch (GenerarBoletoException ex) {
+            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }

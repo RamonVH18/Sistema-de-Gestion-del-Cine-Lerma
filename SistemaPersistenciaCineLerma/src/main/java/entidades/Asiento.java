@@ -12,20 +12,20 @@ public class Asiento {
 
     private Long idAsiento;
 
-    private Integer numero;
+    private String numero;
 
     private Sala sala;
 
     public Asiento() {
     }
 
-    public Asiento(Long idAsiento, Integer numero, Sala sala) {
+    public Asiento(Long idAsiento, String numero, Sala sala) {
         this.idAsiento = idAsiento;
         this.numero = numero;
         this.sala = sala;
     }
 
-    public Asiento(Integer numero, Sala sala) {
+    public Asiento(String numero, Sala sala) {
         this.numero = numero;
         this.sala = sala;
     }
@@ -38,11 +38,11 @@ public class Asiento {
         this.idAsiento = idAsiento;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

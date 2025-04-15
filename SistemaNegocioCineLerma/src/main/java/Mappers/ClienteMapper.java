@@ -27,7 +27,7 @@ public class ClienteMapper implements IClienteMapper{
         //Se le setea al DTO sus datos segun los de la entidad recibida
         clientedto.setCorreo(cliente.getCorreo());
         clientedto.setNombre(cliente.getNombre());
-        clientedto.setContraseña(cliente.getContraseña());
+        clientedto.setContraseña(cliente.getContrasenia());
         
 
         return clientedto;
@@ -46,7 +46,7 @@ public class ClienteMapper implements IClienteMapper{
         
         //Se le setea a la entidad sus datos segun los del dto recibido
         cliente.setCorreo(clientedto.getCorreo());
-        cliente.setContraseña(clientedto.getContraseña());
+        cliente.setContrasenia(clientedto.getContraseña());
         cliente.setNombre(clientedto.getNombre());
         
         return cliente;

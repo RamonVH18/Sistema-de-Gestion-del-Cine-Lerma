@@ -26,12 +26,12 @@ import Excepciones.peliculas.PeliculaBusquedaException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
+import Interfaces.mappers.IClienteMapper;
+import Mappers.ClienteMapper;
 import entidades.Cliente;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -45,6 +45,8 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     
     List<AsientoFuncionDTO> asientos = new ArrayList<>();
     List<MetodoPagoDTO> metodosPago = new ArrayList<>();
+    
+    private IClienteMapper mapeadorSupremo = new ClienteMapper();
     
     private static ManejoDeBoletos instancia;
     
@@ -242,7 +244,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
     
     @Override
-    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, Cliente cliente) throws GenerarBoletoException {
+    public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException {
         try {
             if (pelicula == null) {
                 throw new GenerarBoletoException("Hubo un problema al guardar la pelicula en el boleto. Intente mas tarde.");
@@ -263,7 +265,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
     //ESTE METODO CAMBIARA CASI POR COMPLETO
     @Override
-    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, Cliente cliente) throws ReservarAsientoFuncionException {
+    public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws ReservarAsientoFuncionException {
         
         try {
             if (funcion == null) {
@@ -294,7 +296,8 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                         && asiento.getFuncion().getFechaHora().equals(funcion.getFechaHora())) {
 
                     // Reservar el asiento
-                    asiento.setCliente(cliente);
+                    Cliente clienteNormal = mapeadorSupremo.toClienteEntidad(cliente);
+                    asiento.setCliente(clienteNormal);
                     asiento.setDisponibilidad(false);
                     asientos.set(i, asiento);
                     numAsientos.add(asiento.getAsiento());

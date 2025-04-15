@@ -40,10 +40,23 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             for (int i = 0; i < funciones.size(); i++) {
                 Funcion funcion = funciones.get(i);
                 Sala sala = funcion.getSala();
-                List<Asiento> asientos = sala.getAsientos();
-                for (int s = 0; s < asientos.size(); s++) {
-                    Asiento asiento = asientos.get(i);
+                
+                List<Asiento> asientoNuevos = new ArrayList<>();
+                
+                for (int s = 0; s < 20; s++) {
                     int id = (i * 25) + s;
+                    long idL = id;
+                    String numero = String.valueOf(idL);
+                    
+                    Asiento asiento = new Asiento(idL, numero, sala);
+                    asientoNuevos.add(asiento);
+                }
+                
+                sala.setAsientos(asientoNuevos);
+                List<Asiento> asientos = sala.getAsientos();
+                for (int a = 0; a < asientos.size(); a++) {
+                    Asiento asiento = asientos.get(a);
+                    int id = (i * 25) + a;
                     long idL = id;
                     AsientoFuncion asientoF = new AsientoFuncion(idL, funcion, asiento, true, null);
                     asientosFuncion.add(asientoF);
@@ -82,13 +95,14 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
     public List<AsientoFuncion> mostrarAsientosDisponibles(Funcion funcion) throws PersistenciaException {
         asientosHarcodeados();
         List<AsientoFuncion> asientosFuncion = asientosHarcodeados();
+        List<AsientoFuncion> asientos = new ArrayList<>();
         for (int i = 1; i < asientosFuncion.size(); i++) {
             AsientoFuncion asiento = asientosFuncion.get(i);
-            if (asiento.getFuncion() == funcion && asiento.getDisponibilidad() == true) {
-                asientosFuncion.add(asiento);
+            if (asiento.getFuncion().getIdFuncion() == funcion.getIdFuncion() && asiento.getDisponibilidad() == true) {
+                asientos.add(asiento);
             }
         }
-        return asientosFuncion;
+        return asientos;
     }
 
 }
