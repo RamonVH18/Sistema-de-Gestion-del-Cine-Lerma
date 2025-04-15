@@ -1,9 +1,12 @@
+package pantallas.reservaBoletos;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package pantallas;
 
+
+import control.ControlDeNavegacion;
 import DTOs.PeliculaDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;

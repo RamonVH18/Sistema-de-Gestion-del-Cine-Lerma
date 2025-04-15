@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package pantallas;
+package pantallas.Pagos;
 
+import control.ControlDeNavegacion;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import Excepciones.GestionReservaException;

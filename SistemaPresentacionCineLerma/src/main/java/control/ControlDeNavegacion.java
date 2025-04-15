@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package pantallas;
+package control;
 
+import pantallas.reservaBoletos.SeleccionarPelicula;
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
 import DTOs.CuentaMercadoDTO;
@@ -24,7 +25,6 @@ import Excepciones.GenerarBoletoException;
 import Excepciones.PresentacionException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
-import entidades.Cliente;
 import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
@@ -35,6 +35,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import pantallas.reservaBoletos.DetalleDelBoleto;
+import pantallas.MenuPrincipal;
+import pantallas.Pagos.PantallaPago;
+import pantallas.Pagos.PantallaPagoMercado;
+import pantallas.Pagos.PantallaPagoPaypal;
+import pantallas.Pagos.PantallaPagoRechazado;
+import pantallas.Pagos.PantallaPagoTarjeta;
+import pantallas.reservaBoletos.SeleccionarAsientos;
+import pantallas.reservaBoletos.SeleccionarMetodoPago;
 
 /**
  *
