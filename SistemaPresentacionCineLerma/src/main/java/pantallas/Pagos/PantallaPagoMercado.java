@@ -10,7 +10,6 @@ import DTOs.PagoDTO;
 import Excepciones.GestionReservaException;
 import java.awt.Graphics;
 import java.time.LocalDateTime;
-import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,16 +20,13 @@ public class PantallaPagoMercado extends PantallaPago {
 
     private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
 
-    private int numAsientos = 0;
 
     /**
      * Creates new form PantallaPagoMercado
      */
-    public PantallaPagoMercado(int numero) throws GestionReservaException {
+    public PantallaPagoMercado() throws GestionReservaException {
         initComponents();
         setearTotalPagar();
-
-        this.numAsientos = numero;
     }
 
     @Override

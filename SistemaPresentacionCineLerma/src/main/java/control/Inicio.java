@@ -4,8 +4,6 @@
  */
 package control;
 
-import control.ControlDeNavegacion;
-
 /**
  *
  * @author Ramon Valencia

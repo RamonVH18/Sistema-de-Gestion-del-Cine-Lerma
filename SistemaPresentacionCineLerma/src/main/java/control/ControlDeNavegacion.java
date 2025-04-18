@@ -54,14 +54,14 @@ public class ControlDeNavegacion {
     //Instancias y clases para llamar metodos
     private IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
     private IGestionPagos gestionDePagos = GestionPagos.getInstancia();
-
+    
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
-    private PeliculaDTO peliculaSeleccionada = new PeliculaDTO();
-    private FuncionDTO funcionSeleccionada = new FuncionDTO();
+    private PeliculaDTO peliculaSeleccionada;
+    private FuncionDTO funcionSeleccionada;
     
     private String titulo = "¡ERROR!";
     
-    private List<String> asientos = new ArrayList<>();
+    private List<String> asientos;
     
     private int numAsientos;
     
@@ -73,22 +73,6 @@ public class ControlDeNavegacion {
      * Constructor privado para evitar múltiples instancias
      */
     private ControlDeNavegacion() {
-    }
-
-    /**
-     * Factory para crear pantallas de pago
-     */
-    private PantallaPago crearPantallaPago(String tipo) throws GestionReservaException, PresentacionException {
-        switch (tipo) {
-            case "Mercado":
-                return new PantallaPagoMercado(numAsientos);
-            case "Paypal":
-                return new PantallaPagoPaypal();
-            case "Tarjeta":
-                return new PantallaPagoTarjeta();
-            default:
-                throw new PresentacionException("Error: El metodo de pago es incorrecto o invalido");
-        }
     }
 
     /**
@@ -138,18 +122,6 @@ public class ControlDeNavegacion {
             pantallaSeleccionarAsientos.setVisible(true);
         });
     }
-    
-    public void mostrarPantallaPago(String tipo) {
-        try {
-            PantallaPago dialog = crearPantallaPago(tipo);
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
-        } catch (GestionReservaException ex) {
-            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PresentacionException ex) {
-            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * Metodo que se encarga de abrir la pantalla de SeleccionarMetodoPago.
@@ -165,56 +137,23 @@ public class ControlDeNavegacion {
             }
         });
     }
-
+    
     /**
-     * Metodo que se encarga de abrir el JDialog para el pago con tarjeta.
+     * Metodo que se encarga de mostrar las pantallas de pago, 
+     * Anteriormente solian ser 3 sin embargo utilizando el factory method reducimos eso, de esa manera solo un metodo,
+     * Este metodo recibe de string el tipo de metodo de pago y en base a eso abre el JDailog correspondiente
+     * @param tipo 
      */
-    public void mostrarPagoTarjeta() {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                PantallaPago dialog = crearPantallaPago("Tarjeta");
-                dialog.setLocationRelativeTo(null);
-                dialog.setVisible(true);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (PresentacionException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-    }
-
-    /**
-     * Metodo que se encarga de abrir el JDialog para el pago con Paypal.
-     */
-    public void mostrarPagoPaypal() {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                PantallaPago dialog = crearPantallaPago("Paypal");
-                dialog.setLocationRelativeTo(null);
-                dialog.setVisible(true);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (PresentacionException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-    }
-
-    /**
-     * Metodo que se encarga de abrir el JDialog para el pago con Mercado pago
-     */
-    public void mostrarPagoMercado() {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                PantallaPago dialog = crearPantallaPago("Mercado");
-                dialog.setLocationRelativeTo(null);
-                dialog.setVisible(true);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (PresentacionException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+    public void mostrarPantallaPago(String tipo) {
+        try {
+            PantallaPago dialog = FactoryPantallasPago.crearPantallaPago(tipo);
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+        } catch (GestionReservaException ex) {
+            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PresentacionException ex) {
+            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
