@@ -7,6 +7,7 @@ package pantallas.Pagos;
 import control.ControlDeNavegacion;
 import DTOs.PagoDTO;
 import DTOs.TarjetaDTO;
+import control.IControl;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -20,7 +21,7 @@ import javax.swing.JOptionPane;
  */
 public class PantallaPagoTarjeta extends PantallaPago {
 
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form PantallaPagoTarjeta

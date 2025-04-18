@@ -5,6 +5,7 @@
 package pantallas;
 
 import control.ControlDeNavegacion;
+import control.IControl;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -26,19 +27,19 @@ import javax.swing.SwingConstants;
 public class MenuPrincipal extends javax.swing.JFrame {
 
     //CHECAR EL TAMAÑO DEL MENU PRINCIPAL Y LOS LAYOUTS
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
-    private int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
-    private String nombrePestania = "CINEMA LERMA"; // Variable para escribir el nombre de la pestaña
-    private JPanel panelBotones = new JPanel();
+    private final IControl control = ControlDeNavegacion.getInstancia();
+    private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
+    private final String nombrePestania = "CINEMA LERMA"; // Variable para escribir el nombre de la pestaña
+    private final JPanel panelBotones = new JPanel();
 
-    private int anchoPanelBtns = 200;
-    private int alturaPanelBtns = 400;
-    private Dimension tamañoPanel = new Dimension(anchoPanelBtns, alturaPanelBtns);
-    private int alturaBoton = 40;
-    private int anchoBoton = 200;
-    private Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+    private final int anchoPanelBtns = 200;
+    private final int alturaPanelBtns = 400;
+    private final Dimension tamañoPanel = new Dimension(anchoPanelBtns, alturaPanelBtns);
+    private final int alturaBoton = 40;
+    private final int anchoBoton = 200;
+    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
 
-    private JPanel panelCentral = new JPanel();
+    private final JPanel panelCentral = new JPanel();
 
     /**
      * Creates new form MenuPrincipal

@@ -5,7 +5,6 @@
 package pantallas.Pagos;
 
 import control.ControlDeNavegacion;
-import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import utilitades.Utilerias;
@@ -16,12 +15,12 @@ import utilitades.Utilerias;
  */
 public class PantallaPagoRechazado extends javax.swing.JDialog {
 
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
-    private Utilerias utilerias = new Utilerias();
+    private final ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final Utilerias utilerias = new Utilerias();
     
-    private String url = "img/error-icon.png";
-    private int ancho = 200;
-    private int altura = 200;
+    private final String url = "img/error-icon.png";
+    private final int ancho = 200;
+    private final int altura = 200;
     
     
 

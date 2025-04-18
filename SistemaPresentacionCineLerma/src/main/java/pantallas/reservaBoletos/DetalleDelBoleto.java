@@ -6,9 +6,8 @@ package pantallas.reservaBoletos;
 
 import control.ControlDeNavegacion;
 import DTOs.BoletoDTO;
-import java.time.LocalDate;
+import control.IControl;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import javax.swing.ImageIcon;
 import utilitades.Utilerias;
 
@@ -16,11 +15,11 @@ import utilitades.Utilerias;
  *
  * @author Abraham Coronel Bringas
  */
-public class DetalleDelBoleto extends javax.swing.JFrame {
+public final class DetalleDelBoleto extends javax.swing.JFrame {
     /*Instancia que nos permite llamar los metodos de control*/
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final IControl control = ControlDeNavegacion.getInstancia();
     /*Objeto que nos permite invocar a los metodos de utilidades*/
-    private Utilerias utilerias = new Utilerias();
+    private final Utilerias utilerias = new Utilerias();
     /**
      * Creates new form DetalleDelBoleto
      */

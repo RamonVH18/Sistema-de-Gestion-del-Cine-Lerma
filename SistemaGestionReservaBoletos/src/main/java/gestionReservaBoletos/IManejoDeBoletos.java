@@ -31,7 +31,7 @@ public interface IManejoDeBoletos {
     
     public boolean validarDisponibilidaDeAsientos(int numAsientos, FuncionDTO funcion) throws DisponibilidadAsientosException;
     
-    public double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws CalcularCostoTotalException;
+    public Double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws CalcularCostoTotalException;
     
     public List<MetodoPagoDTO> cargarMetodosPago();
     

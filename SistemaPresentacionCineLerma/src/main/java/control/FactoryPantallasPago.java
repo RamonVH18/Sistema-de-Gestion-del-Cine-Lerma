@@ -4,9 +4,7 @@
  */
 package control;
 
-import Excepciones.GestionReservaException;
 import Excepciones.PresentacionException;
-import javax.swing.JOptionPane;
 import pantallas.Pagos.PantallaPago;
 import pantallas.Pagos.PantallaPagoMercado;
 import pantallas.Pagos.PantallaPagoPaypal;

@@ -8,6 +8,7 @@ package pantallas.reservaBoletos;
 
 import control.ControlDeNavegacion;
 import DTOs.PeliculaDTO;
+import control.IControl;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -39,7 +40,7 @@ import utilitades.Utilerias;
 public final class SeleccionarPelicula extends javax.swing.JFrame {
 
     //Instancia que nos permite llamar los metodos de control
-    private final ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final IControl control = ControlDeNavegacion.getInstancia();
 
     //Objeto que nos permite invocar a los metodos de utilidades
     private final Utilerias utilidades = new Utilerias();

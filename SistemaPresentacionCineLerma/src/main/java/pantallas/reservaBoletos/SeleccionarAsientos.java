@@ -7,6 +7,7 @@ package pantallas.reservaBoletos;
 import control.ControlDeNavegacion;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
+import control.IControl;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.time.LocalDateTime;
@@ -30,7 +31,7 @@ import utilitades.Utilerias;
  */
 public class SeleccionarAsientos extends javax.swing.JFrame {
     //Instancia de la clase ControlDeNavegacion
-    private final ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final IControl control = ControlDeNavegacion.getInstancia();
     //Objeto necesario para llamar a los metodos de la clase Utilerias
     private final Utilerias utilerias = new Utilerias();
     //

@@ -7,6 +7,7 @@ package pantallas.reservaBoletos;
 import control.ControlDeNavegacion;
 import DTOs.MetodoPagoDTO;
 import Excepciones.PresentacionException;
+import control.IControl;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -30,7 +31,7 @@ import utilitades.Utilerias;
  */
 public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
-    private final ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final IControl control = ControlDeNavegacion.getInstancia();
     private final Utilerias utilerias = new Utilerias();
 
     /**

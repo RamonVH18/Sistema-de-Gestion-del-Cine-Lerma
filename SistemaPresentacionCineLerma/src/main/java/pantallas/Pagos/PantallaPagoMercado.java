@@ -7,6 +7,7 @@ package pantallas.Pagos;
 import control.ControlDeNavegacion;
 import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
+import control.IControl;
 import java.awt.Graphics;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
@@ -17,7 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class PantallaPagoMercado extends PantallaPago {
 
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final IControl control = ControlDeNavegacion.getInstancia();
 
 
     /**

@@ -7,10 +7,9 @@ package pantallas.Pagos;
 import control.ControlDeNavegacion;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
-import Excepciones.GestionReservaException;
+import control.IControl;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class PantallaPagoPaypal extends PantallaPago {
 
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form PantallaPagoPaypal

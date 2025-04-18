@@ -46,7 +46,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     List<AsientoFuncionDTO> asientos = new ArrayList<>();
     List<MetodoPagoDTO> metodosPago = new ArrayList<>();
     
-    private IClienteMapper mapeadorSupremo = new ClienteMapper();
+    private final IClienteMapper mapeadorSupremo = new ClienteMapper();
     
     private static ManejoDeBoletos instancia;
     
@@ -211,7 +211,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     }
 
     @Override //Metodo que sirve para calcular el costo final del boleto
-    public double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws CalcularCostoTotalException {
+    public Double calcularCostoTotal(int numAsientos, FuncionDTO funcion) throws CalcularCostoTotalException {
         try {
             if (numAsientos <= 0) {
                 throw new CalcularCostoTotalException("Tiene que ingresar minimo 1 asiento.");
@@ -228,7 +228,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
 
     @Override 
     public List<MetodoPagoDTO> cargarMetodosPago() {
-            List<MetodoPagoDTO> metodosPago = metodosPagoHarcodeados();
+            metodosPago = metodosPagoHarcodeados();
             return metodosPago;
     }
     

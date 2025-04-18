@@ -45,7 +45,7 @@ import pantallas.reservaBoletos.SeleccionarMetodoPago;
  *
  * @author Ramon Valencia
  */
-public class ControlDeNavegacion {
+public class ControlDeNavegacion implements IControl {
 
     //Instancias y clases para llamar metodos
     private final IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
@@ -88,6 +88,7 @@ public class ControlDeNavegacion {
      * Este metodo sirve para regresar al menu Principal, se encontrara la forma
      * de de fusionar
      */
+    @Override
     public void mostrarMenuPrincipal() {
         SwingUtilities.invokeLater(() -> {
             MenuPrincipal pantalla = new MenuPrincipal();
@@ -99,6 +100,7 @@ public class ControlDeNavegacion {
     /**
      * Metodo que se encarga de abrir la pantalla de SeleccionarPelicula
      */
+    @Override
     public void mostrarSeleccionarPelicula() {
         SwingUtilities.invokeLater(() -> {
             SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
@@ -113,6 +115,7 @@ public class ControlDeNavegacion {
      *
      * @param pelicula
      */
+    @Override
     public void mostrarSeleccionarAsientos(PeliculaDTO pelicula) {
         SwingUtilities.invokeLater(() -> {
             peliculaSeleccionada = pelicula;
@@ -127,6 +130,7 @@ public class ControlDeNavegacion {
      *
      * @param funcion
      */
+    @Override
     public void mostrarSeleccionarMetodoPago(FuncionDTO funcion) {
         SwingUtilities.invokeLater(() -> {
             funcionSeleccionada = funcion;
@@ -143,7 +147,9 @@ public class ControlDeNavegacion {
      * de pago y en base a eso abre el JDailog correspondiente
      *
      * @param tipo
+     * @throws Excepciones.PresentacionException
      */
+    @Override
     public void mostrarPantallaPago(String tipo) throws PresentacionException {
         PantallaPago dialog = FactoryPantallasPago.crearPantallaPago(tipo);
         if (dialog != null) {
@@ -157,6 +163,7 @@ public class ControlDeNavegacion {
     /**
      * Metodo que se encarga de abrir la pantalla de DetalleBoleto
      */
+    @Override
     public void mostrarDetalleBoleto() {
         SwingUtilities.invokeLater(() -> {
             DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
@@ -169,6 +176,7 @@ public class ControlDeNavegacion {
     /**
      * Metodo que se encarga de abrir la pantalla de pago rechazado.
      */
+    @Override
     public void mostrarPantallaPagoRechazado() {
         SwingUtilities.invokeLater(() -> {
             PantallaPagoRechazado pantallaPagoRechazado = new PantallaPagoRechazado();
@@ -183,6 +191,7 @@ public class ControlDeNavegacion {
      *
      * @return
      */
+    @Override
     public List<PeliculaDTO> obtenerPeliculas() {
         try {
             List<PeliculaDTO> peliculas = manejoDeBoletos.cargarPeliculasActivas();
@@ -277,6 +286,7 @@ public class ControlDeNavegacion {
      * @param funcion Funcion dada por el parametro
      * @return El texto validado o null en caso de excepcion
      */
+    @Override
     public String validarCamposAsientos(String texto, FuncionDTO funcion) {
         try {
             if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
@@ -299,6 +309,7 @@ public class ControlDeNavegacion {
      *
      * @return Una lista de los metodos de pago
      */
+    @Override
     public List<MetodoPagoDTO> obtenerMetodosPago() {
         List<MetodoPagoDTO> metodosPago = manejoDeBoletos.cargarMetodosPago();
         return metodosPago;
@@ -329,6 +340,7 @@ public class ControlDeNavegacion {
      *
      * @return El boleto generado de la funcion, null en caso de excepcion
      */
+    @Override
     public BoletoDTO cargarBoleto() {
         List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
         try {
@@ -345,6 +357,7 @@ public class ControlDeNavegacion {
      * @param cuentaMercado Cuenta de mercado pago dada por el parametro
      * @return La cuenta de mercado pago existente, null en caso de excepcion
      */
+    @Override
     public CuentaMercadoDTO verificarCuentaMercado(CuentaMercadoDTO cuentaMercado) {
         try {
             return gestionDePagos.validarMercado(cuentaMercado);
@@ -360,6 +373,7 @@ public class ControlDeNavegacion {
      * @param cuentaPaypal Cuenta de PayPal dada por el parametro
      * @return La cuenta de PayPal existente, null en caso de excepcion
      */
+    @Override
     public PaypalDTO verificarCuentaPaypal(PaypalDTO cuentaPaypal) {
         try {
             return gestionDePagos.validarCuentaPaypal(cuentaPaypal);
@@ -375,6 +389,7 @@ public class ControlDeNavegacion {
      * @param cuentaTarjeta Cuenta de tarjeta dada por el parametro
      * @return La cuenta de tarjeta existente, null en caso de excepcion
      */
+    @Override
     public TarjetaDTO verificarCuentaTarjeta(TarjetaDTO cuentaTarjeta) {
         try {
             return gestionDePagos.validarTarjeta(cuentaTarjeta);
@@ -391,13 +406,14 @@ public class ControlDeNavegacion {
      * @return El costo total de los boletos seleccionados, 0 en caso de
      * excepcion
      */
-    public double calcularCostoTotal() {
+    @Override
+    public Double calcularCostoTotal() {
         try {
-            double costoTotal = manejoDeBoletos.calcularCostoTotal(numAsientos, funcionSeleccionada);
+            Double costoTotal = manejoDeBoletos.calcularCostoTotal(numAsientos, funcionSeleccionada);
             return costoTotal;
         } catch (CalcularCostoTotalException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            return 0;
+            return null;
         }
     }
 
@@ -407,6 +423,7 @@ public class ControlDeNavegacion {
      * @param mercadoPago Cuenta de mercado pago dada por el parametro
      * @param pago Pago que contiene el monto, fecha y estado del pago
      */
+    @Override
     public void actualizarSaldoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) {
         gestionDePagos.actualizarSaldoMercado(mercadoPago, pago);
     }
@@ -417,6 +434,7 @@ public class ControlDeNavegacion {
      * @param paypal Cuenta de PayPal dada por el parametro
      * @param pago Pago que contiene el monto, fecha y estado del pago
      */
+    @Override
     public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) {
         gestionDePagos.actualizarSaldoPaypal(paypal, pago);
 
@@ -428,6 +446,7 @@ public class ControlDeNavegacion {
      * @param tarjeta Cuenta de tarjeta dada por el parametro
      * @param pago Pago que contiene el monto, fecha y estado del pago
      */
+    @Override
     public void actualizarSaldoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) {
         gestionDePagos.actualizarSaldoTarjeta(tarjeta, pago);
     }
@@ -438,6 +457,7 @@ public class ControlDeNavegacion {
      * @param mercadoPago Cuenta de mercado pago dada por el parametro
      * @param pago Pago que contiene el monto, fecha y estado del pago
      */
+    @Override
     public void procesarPagoMercado(CuentaMercadoDTO mercadoPago, PagoDTO pago) {
         try {
             gestionDePagos.procesarPagoMercado(mercadoPago, pago);
@@ -454,6 +474,7 @@ public class ControlDeNavegacion {
      * @param paypal Cuenta de PayPal dada por el parametro
      * @param pago Pago que contiene el monto, fecha y estado del pago
      */
+    @Override
     public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago) {
         try {
             gestionDePagos.procesarPagoPaypal(paypal, pago);
@@ -470,6 +491,7 @@ public class ControlDeNavegacion {
      * @param tarjeta Cuenta de tarjeta dada por el parametro
      * @param pago Pago que contiene el monto, fecha y estado del pago
      */
+    @Override
     public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago) {
         try {
             gestionDePagos.procesarPagoTarjeta(tarjeta, pago);
