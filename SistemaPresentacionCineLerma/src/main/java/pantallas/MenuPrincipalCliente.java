@@ -24,7 +24,7 @@ import javax.swing.SwingConstants;
  *
  * @author Sebastian Borquez
  */
-public class MenuPrincipal extends javax.swing.JFrame {
+public class MenuPrincipalCliente extends javax.swing.JFrame {
 
     //CHECAR EL TAMAÑO DEL MENU PRINCIPAL Y LOS LAYOUTS
     private final IControl control = ControlDeNavegacion.getInstancia();
@@ -44,7 +44,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipal
      */
-    public MenuPrincipal() {
+    public MenuPrincipalCliente() {
         initComponents();
         setTitle(nombrePestania);
         setSize(640, 830);

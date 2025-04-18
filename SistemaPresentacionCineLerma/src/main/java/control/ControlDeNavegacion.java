@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import pantallas.reservaBoletos.DetalleDelBoleto;
-import pantallas.MenuPrincipal;
+import pantallas.MenuPrincipalCliente;
 import pantallas.Pagos.PantallaPago;
 import pantallas.Pagos.PantallaPagoRechazado;
 import pantallas.reservaBoletos.SeleccionarAsientos;
@@ -91,7 +91,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarMenuPrincipal() {
         SwingUtilities.invokeLater(() -> {
-            MenuPrincipal pantalla = new MenuPrincipal();
+            MenuPrincipalCliente pantalla = new MenuPrincipalCliente();
             pantalla.setLocationRelativeTo(null);
             pantalla.setVisible(true);
         });
