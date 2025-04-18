@@ -7,7 +7,6 @@ package pantallas.Pagos;
 import control.ControlDeNavegacion;
 import DTOs.CuentaMercadoDTO;
 import DTOs.PagoDTO;
-import Excepciones.GestionReservaException;
 import java.awt.Graphics;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
@@ -24,7 +23,7 @@ public class PantallaPagoMercado extends PantallaPago {
     /**
      * Creates new form PantallaPagoMercado
      */
-    public PantallaPagoMercado() throws GestionReservaException {
+    public PantallaPagoMercado() {
         initComponents();
         setearTotalPagar();
     }
@@ -199,7 +198,7 @@ public class PantallaPagoMercado extends PantallaPago {
     }//GEN-LAST:event_btnPagarActionPerformed
 
     private void btnRegresoMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenu1ActionPerformed
-        control.mostrarSeleccionarMetodoPago();
+        control.mostrarSeleccionarMetodoPago(control.consultarFuncion());
         dispose();
     }//GEN-LAST:event_btnRegresoMenu1ActionPerformed
 

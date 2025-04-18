@@ -50,8 +50,9 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     
     private static ManejoDeBoletos instancia;
     
+    // Constructor privado para evitar múltiples instancias 
     private ManejoDeBoletos() { 
-        // Constructor privado para evitar múltiples instancias 
+        
     }
     
     public static ManejoDeBoletos getInstancia() {
@@ -60,18 +61,6 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         } 
         return instancia;
     }
-    
-    
-    
-    //PELICULAS HARDCODEADAS, ESTE SERA RETIRADO EN LA VERSION FINAL
-    
-
-    //FUNCIONES HARDCODEADAS, ESTE SERA RETIRADO EN LA VERSION FINAL
-    
-
-    //ASIENTOS HARDCODEADOS, ESTE SERA RETIRADO EN LA VERSION FINAL
-    
-    
     //METODOS DE PAGO HARDCODEADOS
     public List<MetodoPagoDTO> metodosPagoHarcodeados() {
         if (metodosPago.isEmpty()) {

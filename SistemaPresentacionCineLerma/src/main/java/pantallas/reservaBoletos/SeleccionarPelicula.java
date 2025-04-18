@@ -36,13 +36,13 @@ import utilitades.Utilerias;
  *
  * @author Daniel Miribe
  */
-public class SeleccionarPelicula extends javax.swing.JFrame {
+public final class SeleccionarPelicula extends javax.swing.JFrame {
 
     //Instancia que nos permite llamar los metodos de control
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
 
     //Objeto que nos permite invocar a los metodos de utilidades
-    private Utilerias utilidades = new Utilerias();
+    private final Utilerias utilidades = new Utilerias();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -269,7 +269,6 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
 
         // 5. accion del boton
         boton.addActionListener(e -> {
-            control.guardarPeliculaSeleccionada(pelicula);
             control.mostrarSeleccionarAsientos(pelicula);
             dispose();
         });
@@ -339,8 +338,7 @@ public class SeleccionarPelicula extends javax.swing.JFrame {
 
         // reconfiguramos todos los botones existentes
         for (Component comp : panelCartelera.getComponents()) {
-            if (comp instanceof JButton) {
-                JButton boton = (JButton) comp;
+            if (comp instanceof JButton boton) {
                 int nuevoAncho = calcularAnchoBotones();
                 ImageIcon iconoOriginal = (ImageIcon) boton.getIcon();
 

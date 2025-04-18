@@ -7,10 +7,7 @@ package pantallas.Pagos;
 import control.ControlDeNavegacion;
 import DTOs.PagoDTO;
 import DTOs.TarjetaDTO;
-import Excepciones.GestionReservaException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +25,7 @@ public class PantallaPagoTarjeta extends PantallaPago {
     /**
      * Creates new form PantallaPagoTarjeta
      */
-    public PantallaPagoTarjeta() throws GestionReservaException {
+    public PantallaPagoTarjeta() {
         initComponents();
         setearTotalPagar();
     }
@@ -229,7 +226,7 @@ public class PantallaPagoTarjeta extends PantallaPago {
     }//GEN-LAST:event_btnCompletarPagoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        control.mostrarSeleccionarMetodoPago();
+        control.mostrarSeleccionarMetodoPago(control.consultarFuncion());
         dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 

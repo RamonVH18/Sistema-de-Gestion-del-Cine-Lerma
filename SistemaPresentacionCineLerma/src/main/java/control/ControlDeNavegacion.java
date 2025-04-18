@@ -30,7 +30,6 @@ import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -38,10 +37,7 @@ import javax.swing.SwingUtilities;
 import pantallas.reservaBoletos.DetalleDelBoleto;
 import pantallas.MenuPrincipal;
 import pantallas.Pagos.PantallaPago;
-import pantallas.Pagos.PantallaPagoMercado;
-import pantallas.Pagos.PantallaPagoPaypal;
 import pantallas.Pagos.PantallaPagoRechazado;
-import pantallas.Pagos.PantallaPagoTarjeta;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
 
@@ -52,21 +48,21 @@ import pantallas.reservaBoletos.SeleccionarMetodoPago;
 public class ControlDeNavegacion {
 
     //Instancias y clases para llamar metodos
-    private IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
-    private IGestionPagos gestionDePagos = GestionPagos.getInstancia();
-    
+    private final IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
+    private final IGestionPagos gestionDePagos = GestionPagos.getInstancia();
+
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
     private PeliculaDTO peliculaSeleccionada;
     private FuncionDTO funcionSeleccionada;
-    
-    private String titulo = "¡ERROR!";
-    
+
+    private final String titulo = "¡ERROR!";
+
     private List<String> asientos;
-    
+
     private int numAsientos;
-    
+
     private final ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx", "jaimico");
-    
+
     private static ControlDeNavegacion instancia;
 
     /**
@@ -108,15 +104,18 @@ public class ControlDeNavegacion {
             SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
             pantallaSeleccionarPelicula.setLocationRelativeTo(null);
             pantallaSeleccionarPelicula.setVisible(true);
-            
+
         });
     }
 
     /**
      * Metodo que se encarga de abrir la pantalla de SeleccionarAsientos.
+     *
+     * @param pelicula
      */
     public void mostrarSeleccionarAsientos(PeliculaDTO pelicula) {
         SwingUtilities.invokeLater(() -> {
+            peliculaSeleccionada = pelicula;
             SeleccionarAsientos pantallaSeleccionarAsientos = new SeleccionarAsientos(pelicula);
             pantallaSeleccionarAsientos.setLocationRelativeTo(null);
             pantallaSeleccionarAsientos.setVisible(true);
@@ -125,34 +124,33 @@ public class ControlDeNavegacion {
 
     /**
      * Metodo que se encarga de abrir la pantalla de SeleccionarMetodoPago.
+     *
+     * @param funcion
      */
-    public void mostrarSeleccionarMetodoPago() {
+    public void mostrarSeleccionarMetodoPago(FuncionDTO funcion) {
         SwingUtilities.invokeLater(() -> {
-            try {
-                SeleccionarMetodoPago pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago();
-                pantallaSeleccionarMetodoPago.setLocationRelativeTo(null);
-                pantallaSeleccionarMetodoPago.setVisible(true);
-            } catch (GestionReservaException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            funcionSeleccionada = funcion;
+            SeleccionarMetodoPago pantallaSeleccionarMetodoPago = new SeleccionarMetodoPago();
+            pantallaSeleccionarMetodoPago.setLocationRelativeTo(null);
+            pantallaSeleccionarMetodoPago.setVisible(true);
         });
     }
-    
+
     /**
-     * Metodo que se encarga de mostrar las pantallas de pago, 
-     * Anteriormente solian ser 3 sin embargo utilizando el factory method reducimos eso, de esa manera solo un metodo,
-     * Este metodo recibe de string el tipo de metodo de pago y en base a eso abre el JDailog correspondiente
-     * @param tipo 
+     * Metodo que se encarga de mostrar las pantallas de pago, Anteriormente
+     * solian ser 3 sin embargo utilizando el factory method reducimos eso, de
+     * esa manera solo un metodo, Este metodo recibe de string el tipo de metodo
+     * de pago y en base a eso abre el JDailog correspondiente
+     *
+     * @param tipo
      */
-    public void mostrarPantallaPago(String tipo) {
-        try {
-            PantallaPago dialog = FactoryPantallasPago.crearPantallaPago(tipo);
+    public void mostrarPantallaPago(String tipo) throws PresentacionException {
+        PantallaPago dialog = FactoryPantallasPago.crearPantallaPago(tipo);
+        if (dialog != null) {
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
-        } catch (GestionReservaException ex) {
-            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PresentacionException ex) {
-            Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            
         }
     }
 
@@ -164,11 +162,10 @@ public class ControlDeNavegacion {
             DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
             pantallaDetalleDelBoleto.setLocationRelativeTo(null);
             pantallaDetalleDelBoleto.setVisible(true);
-            
+
         });
     }
 
-    //faltan los try catch no tira ninguna excepcion la pantalla de pago rechazado   
     /**
      * Metodo que se encarga de abrir la pantalla de pago rechazado.
      */
@@ -183,6 +180,8 @@ public class ControlDeNavegacion {
     /**
      * Metodo que se encarga de obtener todas las peliculas que estan
      * disponibles y lo píde desde el subsistema
+     *
+     * @return
      */
     public List<PeliculaDTO> obtenerPeliculas() {
         try {
@@ -194,13 +193,6 @@ public class ControlDeNavegacion {
             mostrarMenuPrincipal();
             return null;
         }
-    }
-
-    /**
-     * Metodo que se encarga de guardar la pelicula que fue seleccionada
-     */
-    public void guardarPeliculaSeleccionada(PeliculaDTO pelicula) {
-        this.peliculaSeleccionada = pelicula;
     }
 
     /**
@@ -233,15 +225,6 @@ public class ControlDeNavegacion {
     }
 
     /**
-     * Metodo que se encarga de guardar la funcion que fue seleccionada
-     *
-     * @param funcion Funcion dada por el parametro
-     */
-    public void guardarFuncionSeleccionada(FuncionDTO funcion) {
-        this.funcionSeleccionada = funcion;
-    }
-
-    /**
      * Metodo que se usa para cuando una clase Boundary necesite consultar la
      * funcion que fue seleccionada
      *
@@ -262,7 +245,7 @@ public class ControlDeNavegacion {
         try {
             int asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
             return asientosDisponibles;
-        } catch (Exception e) {
+        } catch (DisponibilidadAsientosException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return 0;
         }
@@ -298,16 +281,13 @@ public class ControlDeNavegacion {
         try {
             if (manejoDeBoletos.validarCampoAsiento(texto, funcion)) {
                 String textoValidado = texto.trim();
-                int numAsientos = Integer.parseInt(textoValidado);
+                numAsientos = Integer.parseInt(textoValidado);
                 manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
-                
+
                 return textoValidado;
             }
             return null;
-        } catch (ValidarCampoAsientoException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            return null;
-        } catch (DisponibilidadAsientosException e) {
+        } catch (ValidarCampoAsientoException | DisponibilidadAsientosException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return null;
         }
@@ -439,7 +419,7 @@ public class ControlDeNavegacion {
      */
     public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) {
         gestionDePagos.actualizarSaldoPaypal(paypal, pago);
-        
+
     }
 
     /**
@@ -499,5 +479,5 @@ public class ControlDeNavegacion {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
 }

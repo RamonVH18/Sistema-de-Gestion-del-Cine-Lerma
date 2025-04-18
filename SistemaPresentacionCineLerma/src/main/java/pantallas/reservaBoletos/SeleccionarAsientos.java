@@ -9,10 +9,8 @@ import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -35,19 +33,24 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private final ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
     //Objeto necesario para llamar a los metodos de la clase Utilerias
     private final Utilerias utilerias = new Utilerias();
-    
-    //Se inicializa la pelicula que sera utilizada, sirve para poder consultar la pelicula que fue seleccionada anteriormente
-    private final PeliculaDTO pelicula = control.consultarPelicula(); 
+    //
+    private final PeliculaDTO peliculaSeleccionada;
     //Se inicializa la Lista de todas Funciones, en base a la pelicula se manda a llamar a un metodo el cual se encarga de obtener las funciones de es pelicula 
-    private final List<FuncionDTO> listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
+    private final List<FuncionDTO> listaFunciones;
     
-    private JPanel panelFunciones = new JPanel();
+    private FuncionDTO funcionSeleccionada;
+    
+    private final JPanel panelFunciones = new JPanel();
 
     /**
      * Creates new form SeleccionarAsientos se inicializa la estructura y se le forma a la a varias partes 
+     * @param pelicula
      */
     public SeleccionarAsientos(PeliculaDTO pelicula) {
         initComponents();
+        peliculaSeleccionada = pelicula;
+        //Se obtiene las funciones de la pelicula que fue seleccionada en la pantalla anterior
+        listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
         
         // Se llama a la funcion que se encarga de darle un formato a la pagina
         generarFormatoPagina();
@@ -251,14 +254,14 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         FuncionDTO funcion = control.consultarFuncion();
         
         //funcion que se encarga de validar los campos y que aparte de ello regresa el texto validado
-        String textoValidado = control.validarCamposAsientos(texto, funcion);
+        String textoValidado = control.validarCamposAsientos(texto, funcionSeleccionada);
         
         if (textoValidado != null) {
             dispose();
             //Se obtiene el numAsientos y se convierto a entero esto para guardarlo y poder registrarlos mas adelante
-            int numAsientos = Integer.valueOf(textoValidado);
+            int numAsientos = Integer.parseInt(textoValidado);
             control.guardarNumeroAsientos(numAsientos);
-            control.mostrarSeleccionarMetodoPago();
+            control.mostrarSeleccionarMetodoPago(funcionSeleccionada);
 
         }
 
@@ -289,11 +292,11 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      */
     private void generarFormatoPagina() {
         panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
-        jTextAreaDescripcion.setText(pelicula.getDescripcionPelicula());
+        jTextAreaDescripcion.setText(peliculaSeleccionada.getDescripcionPelicula());
         //Se llama al metodo de utileria encargado de crear la imagen
-        ImageIcon imagen = utilerias.crearImagen(pelicula.getPeliculaImagen(), 200, 300);
+        ImageIcon imagen = utilerias.crearImagen(peliculaSeleccionada.getPeliculaImagen(), 200, 300);
         jLabelImagenPelicula.setIcon(imagen);
-        jLabelNombrePelicula.setText(pelicula.getNombrePelicula());
+        jLabelNombrePelicula.setText(peliculaSeleccionada.getNombrePelicula());
         jTextAreaDescripcion.setEnabled(false);
         jTextFieldNumAsientos.setText("");
     }
@@ -470,7 +473,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         seleccionarAsientos.repaint();
 
         int asientosDisponibles;
-        control.guardarFuncionSeleccionada(funcion);
+        funcionSeleccionada = funcion;
         asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
 
 //        if (asientosDisponibles == 0) {

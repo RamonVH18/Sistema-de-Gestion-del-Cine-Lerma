@@ -25,7 +25,7 @@ public class PantallaPagoPaypal extends PantallaPago {
     /**
      * Creates new form PantallaPagoPaypal
      */
-    public PantallaPagoPaypal() throws GestionReservaException {
+    public PantallaPagoPaypal(){
         initComponents();
         setearTotalPagar();
     }
@@ -166,7 +166,7 @@ public class PantallaPagoPaypal extends PantallaPago {
     }//GEN-LAST:event_textCorreoActionPerformed
 
     private void btnRegresoMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenuActionPerformed
-        control.mostrarSeleccionarMetodoPago();
+        control.mostrarSeleccionarMetodoPago(control.consultarFuncion());
         dispose();
     }//GEN-LAST:event_btnRegresoMenuActionPerformed
 

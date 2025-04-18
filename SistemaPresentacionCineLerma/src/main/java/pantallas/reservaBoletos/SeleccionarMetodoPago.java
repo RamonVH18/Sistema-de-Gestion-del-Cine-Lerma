@@ -6,16 +6,19 @@ package pantallas.reservaBoletos;
 
 import control.ControlDeNavegacion;
 import DTOs.MetodoPagoDTO;
-import Excepciones.GestionReservaException;
+import Excepciones.PresentacionException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -27,16 +30,15 @@ import utilitades.Utilerias;
  */
 public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
-    private ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
-    private Utilerias utilerias = new Utilerias();
+    private final ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+    private final Utilerias utilerias = new Utilerias();
 
     /**
      * Creates new form SeleccionarMetodoPago
      */
-    public SeleccionarMetodoPago() throws GestionReservaException {
+    public SeleccionarMetodoPago(){
         initComponents();
         generarTablaMetodosPago(panelMetodoPago);
-        btnPrueba.setVisible(false);
         panelMetodoPago.setVisible(true);
         revalidate();
         repaint();
@@ -52,7 +54,6 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
     private void initComponents() {
 
         btnVolver = new javax.swing.JButton();
-        btnPrueba = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         panelMetodoPago = new javax.swing.JPanel();
 
@@ -71,22 +72,6 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverActionPerformed(evt);
-            }
-        });
-
-        btnPrueba.setBackground(new java.awt.Color(162, 132, 94));
-        btnPrueba.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
-        btnPrueba.setForeground(new java.awt.Color(255, 255, 255));
-        btnPrueba.setText("Prueba");
-        btnPrueba.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnPrueba.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPruebaMouseClicked(evt);
-            }
-        });
-        btnPrueba.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPruebaActionPerformed(evt);
             }
         });
 
@@ -115,9 +100,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63))
+                .addGap(63, 888, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(217, 217, 217)
                 .addComponent(panelMetodoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,9 +114,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
                 .addGap(63, 63, 63)
                 .addComponent(panelMetodoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
 
@@ -151,28 +132,17 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void btnPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPruebaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPruebaActionPerformed
-
-    private void btnPruebaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPruebaMouseClicked
-
-        control.mostrarDetalleBoleto();
-        dispose();
-    }//GEN-LAST:event_btnPruebaMouseClicked
-
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnPrueba;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel panelMetodoPago;
     // End of variables declaration//GEN-END:variables
 
-    public JPanel generarTablaMetodosPago(JPanel panel) throws GestionReservaException {
+    public JPanel generarTablaMetodosPago(JPanel panel) {
 
         panel.setLayout(new GridLayout(0, 2, 0, 0));
         List<MetodoPagoDTO> metodosPago = control.obtenerMetodosPago();
@@ -220,8 +190,13 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
                 tipo = "Mercado";
 
         }
-        control.mostrarPantallaPago(tipo);
-        dispose();
+        try {
+            control.mostrarPantallaPago(tipo);
+        } catch (PresentacionException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            control.mostrarSeleccionarMetodoPago(control.consultarFuncion());
+        }
+        
     }
 
 }

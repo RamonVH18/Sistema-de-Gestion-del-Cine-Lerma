@@ -6,6 +6,7 @@ package control;
 
 import Excepciones.GestionReservaException;
 import Excepciones.PresentacionException;
+import javax.swing.JOptionPane;
 import pantallas.Pagos.PantallaPago;
 import pantallas.Pagos.PantallaPagoMercado;
 import pantallas.Pagos.PantallaPagoPaypal;
@@ -19,8 +20,11 @@ public class FactoryPantallasPago {
     /**
      * Factory para crear pantallas de pago
      * 
+     * @param tipo
+     * @return 
+     * @throws Excepciones.PresentacionException
      */
-    public static PantallaPago crearPantallaPago(String tipo) throws GestionReservaException, PresentacionException {
+    public static PantallaPago crearPantallaPago(String tipo) throws PresentacionException {
         switch (tipo) {
             case "Mercado" -> {
                 return new PantallaPagoMercado();
