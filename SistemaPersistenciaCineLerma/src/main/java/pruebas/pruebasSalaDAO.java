@@ -4,24 +4,29 @@
  */
 package pruebas;
 
-import Conexion.MongoConexion;
+import DAOs.SalaDAO;
 import Excepciones.PersistenciaException;
-import com.mongodb.client.MongoDatabase;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import Interfaces.ISalaDAO;
+import entidades.Sala;
 
 /**
  *
  * @author Ramon Valencia
  */
 public class pruebasSalaDAO {
-
+    private static ISalaDAO salaDAO = SalaDAO.getInstance();
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws PersistenciaException{
         // TODO code application logic here
-        MongoConexion mongo = new MongoConexion();        
+
+        
+        Sala sala = new Sala(10, "Y4", Boolean.TRUE);
+        
+        Sala superSala = salaDAO.agregarSala(sala);
+        
+        return;
     }
     
 }

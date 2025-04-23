@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -45,12 +46,12 @@ public class FuncionDAO implements IFuncionDAO {
     public List<Funcion> funcionesHarcodeadas() throws PersistenciaException {
         if (funciones.isEmpty()) {
             // Crear salas
-            Sala salaA1 = new Sala(1L, 100, 1, true);
-            Sala salaA2 = new Sala(2L, 90, 2, true);
-            Sala salaA3 = new Sala(3L, 80, 3, true);
-            Sala salaB1 = new Sala(4L, 120, 4, true);
-            Sala salaB2 = new Sala(5L, 110, 5, true);
-            Sala salaB3 = new Sala(6L, 105, 6, true);
+            Sala salaA1 = new Sala(new ObjectId(), 100, "1", true);
+            Sala salaA2 = new Sala(new ObjectId(), 90, "2", true);
+            Sala salaA3 = new Sala(new ObjectId(), 80, "3", true);
+            Sala salaB1 = new Sala(new ObjectId(), 120, "4", true);
+            Sala salaB2 = new Sala(new ObjectId(), 110, "5", true);
+            Sala salaB3 = new Sala(new ObjectId(), 105, "6", true);
 
             // Crear películas
             List<Pelicula> peliculas = peliculaDAO.mostrarListaPelicula();

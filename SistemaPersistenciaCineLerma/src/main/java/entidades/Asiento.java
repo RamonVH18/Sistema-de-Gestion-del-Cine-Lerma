@@ -4,13 +4,15 @@
  */
 package entidades;
 
+import org.bson.types.ObjectId;
+
 /**
  *
  * @author Daniel M
  */
 public class Asiento {
 
-    private Long idAsiento;
+    private ObjectId idAsiento;
 
     private String numero;
 
@@ -19,7 +21,7 @@ public class Asiento {
     public Asiento() {
     }
 
-    public Asiento(Long idAsiento, String numero, Sala sala) {
+    public Asiento(ObjectId idAsiento, String numero, Sala sala) {
         this.idAsiento = idAsiento;
         this.numero = numero;
         this.sala = sala;
@@ -30,11 +32,11 @@ public class Asiento {
         this.sala = sala;
     }
 
-    public Long getIdAsiento() {
+    public ObjectId getIdAsiento() {
         return idAsiento;
     }
 
-    public void setIdAsiento(Long idAsiento) {
+    public void setIdAsiento(ObjectId idAsiento) {
         this.idAsiento = idAsiento;
     }
 

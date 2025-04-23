@@ -6,6 +6,7 @@ package entidades;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -13,11 +14,11 @@ import java.util.List;
  */
 public class Sala {
 
-    private Long idSala;
+    private ObjectId idSala;
 
     private Integer numAsientos;
 
-    private Integer numSala;
+    private String numSala;
 
     private Boolean estado;
 
@@ -26,7 +27,7 @@ public class Sala {
     public Sala() {
     }
 
-    public Sala(Long idSala, Integer numAsientos, Integer numSala, Boolean estado) {
+    public Sala(ObjectId idSala, Integer numAsientos, String numSala, Boolean estado) {
         this.idSala = idSala;
         this.numAsientos = numAsientos;
         this.numSala = numSala;
@@ -34,18 +35,18 @@ public class Sala {
         this.asientos = new ArrayList<>();
     }
 
-    public Sala(Integer numAsientos, Integer numSala, Boolean estado) {
+    public Sala(Integer numAsientos, String numSala, Boolean estado) {
         this.numAsientos = numAsientos;
         this.numSala = numSala;
         this.estado = estado;
         this.asientos = new ArrayList<>();
     }
 
-    public Long getIdSala() {
+    public ObjectId getIdSala() {
         return idSala;
     }
 
-    public void setIdSala(Long idSala) {
+    public void setIdSala(ObjectId idSala) {
         this.idSala = idSala;
     }
 
@@ -57,11 +58,11 @@ public class Sala {
         this.numAsientos = numAsientos;
     }
 
-    public Integer getNumSala() {
+    public String getNumSala() {
         return numSala;
     }
 
-    public void setNumSala(Integer numSala) {
+    public void setNumSala(String numSala) {
         this.numSala = numSala;
     }
 
