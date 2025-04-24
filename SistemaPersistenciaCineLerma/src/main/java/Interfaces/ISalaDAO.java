@@ -4,8 +4,11 @@
  */
 package Interfaces;
 
-import Excepciones.PersistenciaException;
+import Excepciones.salas.BuscarSalaException;
+import Excepciones.salas.CreacionSalaException;
+import Excepciones.salas.ModificarSalaException;
 import entidades.Sala;
+import java.util.List;
 
 /**
  *
@@ -13,6 +16,14 @@ import entidades.Sala;
  */
 public interface ISalaDAO {
     
-    public Sala agregarSala(Sala sala) throws PersistenciaException ;
+    public Sala agregarSala(Sala sala) throws CreacionSalaException;
+    
+    public Sala buscarSala(String numSala) throws BuscarSalaException;
+    
+    public List<Sala> buscarTodasLasSalas() throws BuscarSalaException;
+    
+    public Boolean modificarSala() throws ModificarSalaException;
+    
+    public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException;
     
 }

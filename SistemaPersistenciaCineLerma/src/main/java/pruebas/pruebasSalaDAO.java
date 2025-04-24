@@ -5,7 +5,8 @@
 package pruebas;
 
 import DAOs.SalaDAO;
-import Excepciones.PersistenciaException;
+import Excepciones.salas.BuscarSalaException;
+import Excepciones.salas.CreacionSalaException;
 import Interfaces.ISalaDAO;
 import entidades.Sala;
 
@@ -17,16 +18,19 @@ public class pruebasSalaDAO {
     private static ISalaDAO salaDAO = SalaDAO.getInstance();
     /**
      * @param args the command line arguments
+     * @throws Excepciones.salas.CreacionSalaException
      */
-    public static void main(String[] args) throws PersistenciaException{
+    public static void main(String[] args) throws CreacionSalaException, BuscarSalaException{
         // TODO code application logic here
 
         
-        Sala sala = new Sala(10, "Y4", Boolean.TRUE);
+        Sala sala = new Sala(15, "J1", Boolean.TRUE);
         
         Sala superSala = salaDAO.agregarSala(sala);
         
-        return;
+        Sala ultraSala = salaDAO.buscarSala("J1");
+        
+        System.out.println("");
     }
     
 }

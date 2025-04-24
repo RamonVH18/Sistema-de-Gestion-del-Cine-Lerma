@@ -20,18 +20,18 @@ public class MongoConexion {
     Integer puerto = 27017;
     String nombreBase = "CineLerma";
 
-    public MongoClient crearConexion() throws PersistenciaException {
+    public MongoClient crearConexion() throws MongoException {
         MongoClient conexionMongo = null;
         try {
             conexionMongo = new MongoClient(servidor, puerto);
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Hubo un error al conectarse a la base de datos: " + e.getMessage());
+            throw new MongoException("Hubo un error al conectarse a la base de datos: " + e.getMessage());
         }
         return conexionMongo;
     }
 
-    public MongoDatabase obtenerBaseDatos(MongoClient conexion) throws PersistenciaException {
+    public MongoDatabase obtenerBaseDatos(MongoClient conexion) throws MongoException {
         MongoDatabase baseDatos = null;
         try {
             List<String> nombresBaseDatos = conexion.getDatabaseNames();
@@ -39,11 +39,11 @@ public class MongoConexion {
             if (nombresBaseDatos.contains(nombreBase)) {
                 baseDatos = conexion.getDatabase(nombreBase);
             } else {
-                throw new PersistenciaException("Hubo un error con el nombre de la base de datos");
+                throw new MongoException("Hubo un error con el nombre de la base de datos");
             }
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Hubo un error al conectarse a la base de datos: " + e.getMessage());
+            throw new MongoException("Hubo un error al conectarse a la base de datos: " + e.getMessage());
         }
         return baseDatos;
     }
