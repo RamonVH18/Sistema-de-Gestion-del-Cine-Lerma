@@ -4,17 +4,59 @@
  */
 package pantallas;
 
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class MenuPrincipalAdmin extends javax.swing.JFrame {
+    
+    private final IControl control = ControlDeNavegacion.getInstancia();
+    private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
+    private final String nombrePestania = "MenuAdministrador"; // Variable para escribir el nombre de la pestaña
+    private final JPanel panelBotones = new JPanel();
 
+    private final int alturaBoton = 40;
+    private final int anchoBoton = 200;
+    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+
+    private final JPanel panelCentral = new JPanel();
     /**
      * Creates new form MenuPrincipalAdmin
      */
     public MenuPrincipalAdmin() {
         initComponents();
+        setTitle(nombrePestania);
+        setSize(640, 830);
+        setMinimumSize(new java.awt.Dimension(450, 700));
+        setLocationRelativeTo(null);
+        crearEstructuraMenuPrincipal();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+
+        revalidate();
+        repaint();
+    }
+    
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        dibujarLineasDeDiseño(g);
     }
 
     /**
@@ -26,23 +68,189 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        labelTitulo = new javax.swing.JLabel();
+        btnPelicula = new javax.swing.JButton();
+        btnFuncion = new javax.swing.JButton();
+        btnSala = new javax.swing.JButton();
+        btnReporte = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        labelTitulo.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        labelTitulo.setText("MENU ADMINISTRADOR");
+
+        btnPelicula.setBackground(new java.awt.Color(162, 132, 94));
+        btnPelicula.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnPelicula.setForeground(new java.awt.Color(255, 255, 255));
+        btnPelicula.setText("Peliculas");
+        btnPelicula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPeliculaActionPerformed(evt);
+            }
+        });
+
+        btnFuncion.setBackground(new java.awt.Color(162, 132, 94));
+        btnFuncion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnFuncion.setForeground(new java.awt.Color(255, 255, 255));
+        btnFuncion.setText("Funciones");
+        btnFuncion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFuncionActionPerformed(evt);
+            }
+        });
+
+        btnSala.setBackground(new java.awt.Color(162, 132, 94));
+        btnSala.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnSala.setForeground(new java.awt.Color(255, 255, 255));
+        btnSala.setText("Salas");
+        btnSala.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSalaMouseClicked(evt);
+            }
+        });
+        btnSala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalaActionPerformed(evt);
+            }
+        });
+
+        btnReporte.setBackground(new java.awt.Color(162, 132, 94));
+        btnReporte.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnReporte.setForeground(new java.awt.Color(255, 255, 255));
+        btnReporte.setText("Reportes");
+
+        btnSalir.setBackground(new java.awt.Color(162, 132, 94));
+        btnSalir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
+        btnSalir.setText("Salir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(218, 218, 218)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnSalir)
+                                .addComponent(btnReporte)
+                                .addComponent(btnSala)
+                                .addComponent(btnFuncion))
+                            .addComponent(btnPelicula)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(191, 191, 191)
+                        .addComponent(labelTitulo)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(labelTitulo)
+                .addGap(38, 38, 38)
+                .addComponent(btnPelicula)
+                .addGap(18, 18, 18)
+                .addComponent(btnFuncion)
+                .addGap(18, 18, 18)
+                .addComponent(btnSala)
+                .addGap(18, 18, 18)
+                .addComponent(btnReporte)
+                .addGap(18, 18, 18)
+                .addComponent(btnSalir)
+                .addContainerGap(296, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPeliculaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPeliculaActionPerformed
+
+    private void btnFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFuncionActionPerformed
+
+    private void btnSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalaActionPerformed
+
+    private void btnSalaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalaMouseClicked
+        // TODO add your handling code here:
+        control.mostrarMenuSalas("Menu Salas", this);
+    }//GEN-LAST:event_btnSalaMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFuncion;
+    private javax.swing.JButton btnPelicula;
+    private javax.swing.JButton btnReporte;
+    private javax.swing.JButton btnSala;
+    private javax.swing.JButton btnSalir;
+    private javax.swing.JLabel labelTitulo;
     // End of variables declaration//GEN-END:variables
+    
+    private void crearEstructuraMenuPrincipal() {
+        setLayout(new BorderLayout());
+        
+        labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+
+        labelTitulo.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 52));
+        labelTitulo.setForeground(Color.BLACK);
+        labelTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
+
+        add(labelTitulo, BorderLayout.NORTH);
+        
+        crearEstructuraPanelBotones(panelBotones);
+        
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+
+        panelCentral.add(Box.createVerticalStrut(110)); 
+        panelCentral.add(panelBotones);
+        panelCentral.add(Box.createVerticalGlue());
+
+        add(panelCentral, BorderLayout.CENTER);
+    }
+    
+    private void crearEstructuraPanelBotones(JPanel panelBotones) {
+        panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
+
+        //Agregar cada boton al panel de botones utilizando boxLayout
+        agregarBotonEnBox(btnPelicula, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnPelicula.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        agregarBotonEnBox(btnFuncion, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnFuncion.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        agregarBotonEnBox(btnSala, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnSala.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        agregarBotonEnBox(btnReporte, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnReporte.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        agregarBotonEnBox(btnSalir, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnSalir.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+
+        panelBotones.setVisible(true);
+        panelBotones.revalidate();
+        panelBotones.repaint();
+    }
+    
+    private void dibujarLineasDeDiseño(Graphics g) {
+        super.paint(g);
+        g.setColor(Color.BLACK);
+        //Dibujar las lineas de decoracion
+        g.drawLine(0, 150, getWidth(), 150);
+        g.drawLine(0, 680, getWidth(), 680);
+    }
+
+    private void agregarBotonEnBox(JButton boton, Dimension tamaño, int separacion, JPanel panel) {
+        boton.setMaximumSize(tamaño);
+        boton.setPreferredSize(tamaño);
+        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(boton);
+        if (separacion > 0) {
+            panel.add(Box.createVerticalStrut(separacion)); //Agregar espacios entre los botones
+        }
+
+    }
 }

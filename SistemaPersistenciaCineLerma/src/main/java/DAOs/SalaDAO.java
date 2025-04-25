@@ -5,14 +5,12 @@
 package DAOs;
 
 import Conexion.MongoConexion;
-import Excepciones.PersistenciaException;
 import Excepciones.salas.BuscarSalaException;
 import Excepciones.salas.CreacionSalaException;
 import Excepciones.salas.ModificarSalaException;
 import Interfaces.ISalaDAO;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
@@ -21,8 +19,6 @@ import entidades.Asiento;
 import entidades.Sala;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;

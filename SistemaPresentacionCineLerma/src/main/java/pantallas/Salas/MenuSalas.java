@@ -4,17 +4,38 @@
  */
 package pantallas.Salas;
 
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.xml.transform.Source;
+import utilitades.FrameBase;
+
 /**
  *
  * @author Ramon Valencia
  */
-public class MenuSalas extends javax.swing.JFrame {
+public final class MenuSalas extends FrameBase {
 
-    /**
-     * Creates new form MenuSalas
-     */
-    public MenuSalas() {
-        initComponents();
+    private final IControl control = ControlDeNavegacion.getInstancia();
+
+    private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
+    private final int alturaBoton = 40;
+    private final int anchoBoton = 200;
+    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+
+    public MenuSalas(String titulo) {
+        super(titulo);
+        configurarMenuSalas();
     }
 
     /**
@@ -26,57 +47,146 @@ public class MenuSalas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnAgregar = new javax.swing.JButton();
+        btnEstadisticas = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnConsultas = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        btnAgregar.setText("Agregar Sala");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
+        btnEstadisticas.setText("Estadisticas");
+
+        btnModificar.setText("Modificar Sala");
+
+        btnConsultas.setText("Consultar Reservas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(248, 248, 248)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnConsultas)
+                    .addComponent(btnModificar)
+                    .addComponent(btnEstadisticas)
+                    .addComponent(btnAgregar))
+                .addContainerGap(194, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(239, 239, 239)
+                .addComponent(btnAgregar)
+                .addGap(18, 18, 18)
+                .addComponent(btnEstadisticas)
+                .addGap(18, 18, 18)
+                .addComponent(btnModificar)
+                .addGap(18, 18, 18)
+                .addComponent(btnConsultas)
+                .addContainerGap(262, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuSalas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuSalas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuSalas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuSalas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MenuSalas().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnConsultas;
+    private javax.swing.JButton btnEstadisticas;
+    private javax.swing.JButton btnModificar;
     // End of variables declaration//GEN-END:variables
+    public void configurarMenuSalas() {
+        configurarBotonVolver();
+        JPanel panelBotones = new JPanel();
+        crearEstructuraPanelBotones(panelBotones);
+
+        JPanel panelCentral = new JPanel();
+
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+
+        panelCentral.add(Box.createVerticalStrut(110));
+        panelCentral.add(panelBotones);
+        panelCentral.add(Box.createVerticalGlue());
+
+        add(panelCentral, BorderLayout.CENTER);
+
+    }
+
+    private void crearEstructuraPanelBotones(JPanel panelBotones) {
+        panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
+
+        //Agregar cada boton al panel de botones utilizando boxLayout
+        btnAgregar = new JButton("Agregar Sala");
+        agregarBotonEnBox(btnAgregar, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnAgregar.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        
+        btnEstadisticas = new JButton("Estadisticas");
+        agregarBotonEnBox(btnEstadisticas, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnEstadisticas.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+
+        btnModificar = new JButton("Modificar Sala");
+        agregarBotonEnBox(btnModificar, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnModificar.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+
+        btnConsultas = new JButton("Consultar Reservas");
+        agregarBotonEnBox(btnConsultas, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnConsultas.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+
+        panelBotones.setVisible(true);
+        panelBotones.revalidate();
+        panelBotones.repaint();
+    }
+
+    /**
+     * Metodo para configurar el obtener el boton volver del frameBase y
+     * configurarlo para que nos regrese a la ventana anterior
+     */
+    public void configurarBotonVolver() {
+        Container frame = this.getContentPane();
+        JPanel panel = (JPanel) frame.getComponent(0);
+        JButton btnVolver = (JButton) panel.getComponent(0);
+
+        btnVolver.addActionListener((ActionEvent e) -> {
+            control.mostrarMenuAdministrador();
+            dispose();
+        });
+
+    }
+
+    private void agregarBotonEnBox(JButton boton, Dimension tamaño, int separacion, JPanel panel) {
+        boton.setMaximumSize(tamaño);
+        boton.setPreferredSize(tamaño);
+        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(boton);
+        if (separacion > 0) {
+            panel.add(Box.createVerticalStrut(separacion)); //Agregar espacios entre los botones
+        }
+        String textoBoton = boton.getText();
+        boton.addActionListener((ActionEvent e) -> {
+            switch (textoBoton) {
+                case "Agregar Sala" -> {
+                    control.mostrarAgregarSala("AGREGAR SALA", this);
+                }
+                default -> 
+                    JOptionPane.showMessageDialog(null, "Hubo un problema para cargar esa ventana intente luego", "INFO", JOptionPane.INFORMATION_MESSAGE);
+                   
+            }
+//                    control.mostrarAgregarSala("Agregar Sala", this);
+                    });
+
+    }
+
 }

@@ -210,7 +210,7 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
         // TODO add your handling code here:
-        control.mostrarMenuPrincipal();
+        control.mostrarMenuCliente();
         dispose();
     }//GEN-LAST:event_btnVolverMouseClicked
 

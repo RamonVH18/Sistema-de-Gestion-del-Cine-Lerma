@@ -32,14 +32,19 @@ import gestionReservaBoletos.ManejoDeBoletos;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import pantallas.MenuPrincipalAdmin;
 import pantallas.reservaBoletos.DetalleDelBoleto;
 import pantallas.MenuPrincipalCliente;
 import pantallas.Pagos.PantallaPago;
 import pantallas.Pagos.PantallaPagoRechazado;
+import pantallas.Salas.AgregarSala;
+import pantallas.Salas.MenuSalas;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
+import utilitades.FrameBase;
 
 /**
  *
@@ -89,7 +94,7 @@ public class ControlDeNavegacion implements IControl {
      * de de fusionar
      */
     @Override
-    public void mostrarMenuPrincipal() {
+    public void mostrarMenuCliente() {
         SwingUtilities.invokeLater(() -> {
             MenuPrincipalCliente pantalla = new MenuPrincipalCliente();
             pantalla.setLocationRelativeTo(null);
@@ -184,6 +189,43 @@ public class ControlDeNavegacion implements IControl {
             pantallaPagoRechazado.setVisible(true);
         });
     }
+    
+    /**
+     * Metodo que se encarga de abrir la pantalla de pago rechazado
+     */
+    @Override
+    public void mostrarMenuAdministrador() {
+        SwingUtilities.invokeLater(() -> {
+            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin();
+            pantallaMenuAdmin.setLocationRelativeTo(null);
+            pantallaMenuAdmin.setVisible(true);
+        });
+    }
+    
+    /**
+     * Metodo para abrir el menu del caso de uso de gestion de salas
+     * @param tituloFrame
+     * @param frameAnterior
+     */
+    @Override
+    public void mostrarMenuSalas(String tituloFrame, JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            FrameBase pantallaMenuSalas = new MenuSalas(tituloFrame);
+            pantallaMenuSalas.setLocationRelativeTo(null);
+            pantallaMenuSalas.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
+    @Override
+    public void mostrarAgregarSala(String tituloFrame, JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            FrameBase pantallaAgregarSala = new AgregarSala(tituloFrame);
+            pantallaAgregarSala.setLocationRelativeTo(null);
+            pantallaAgregarSala.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
 
     /**
      * Metodo que se encarga de obtener todas las peliculas que estan
@@ -199,7 +241,7 @@ public class ControlDeNavegacion implements IControl {
         } catch (PeliculasCargaException e) {
             //PONER JOptionPane y cerrar la pantalla actual y volver al menuPrincipal
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            mostrarMenuPrincipal();
+            mostrarMenuCliente();
             return null;
         }
     }
@@ -210,6 +252,7 @@ public class ControlDeNavegacion implements IControl {
      *
      * @return La pelicula seleccionada
      */
+    @Override
     public PeliculaDTO consultarPelicula() {
         return peliculaSeleccionada;
     }
@@ -222,13 +265,14 @@ public class ControlDeNavegacion implements IControl {
      * @param nombrePelicula Nombre de la pelicula dada por el parametro
      * @return Las funciones, null en caso de una excepcion
      */
+    @Override
     public List<FuncionDTO> obtenerFunciones(String nombrePelicula) {
         try {
             List<FuncionDTO> funciones = manejoDeBoletos.cargarFuncionesPelicula(nombrePelicula);
             return funciones;
         } catch (FuncionCargaException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            mostrarMenuPrincipal();
+            mostrarSeleccionarPelicula();
             return null;
         }
     }
@@ -239,6 +283,7 @@ public class ControlDeNavegacion implements IControl {
      *
      * @return La funcion seleccionada
      */
+    @Override
     public FuncionDTO consultarFuncion() {
         return funcionSeleccionada;
     }
@@ -250,6 +295,7 @@ public class ControlDeNavegacion implements IControl {
      * @param funcion Funcion dada por el parametro
      * @return Los asiento disponibles, cero en caso de una excepcion
      */
+    @Override
     public int obtenerAsientosDisponibles(FuncionDTO funcion) {
         try {
             int asientosDisponibles = manejoDeBoletos.consultarDisponibilidadAsientos(funcion);
@@ -265,6 +311,7 @@ public class ControlDeNavegacion implements IControl {
      *
      * @param numAsientos numero de los asientos dado por el parametro
      */
+    @Override
     public void guardarNumeroAsientos(int numAsientos) {
         this.numAsientos = numAsientos;
     }
@@ -274,6 +321,7 @@ public class ControlDeNavegacion implements IControl {
      *
      * @return El numero de los asientos seleccionados
      */
+    @Override
     public int consultarNumeroAsientos() {
         return numAsientos;
     }

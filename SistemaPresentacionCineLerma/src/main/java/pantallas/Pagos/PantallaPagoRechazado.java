@@ -94,7 +94,7 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCambiarMetodopagoActionPerformed
 
     private void btnVolverMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverMenuActionPerformed
-        control.mostrarMenuPrincipal();
+        control.mostrarMenuCliente();
         dispose();
     }//GEN-LAST:event_btnVolverMenuActionPerformed
 

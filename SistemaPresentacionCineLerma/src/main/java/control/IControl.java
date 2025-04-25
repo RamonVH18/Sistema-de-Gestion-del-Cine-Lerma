@@ -14,6 +14,8 @@ import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
 import Excepciones.PresentacionException;
 import java.util.List;
+import javax.swing.JFrame;
+import utilitades.FrameBase;
 
 /**
  *
@@ -21,7 +23,7 @@ import java.util.List;
  */
 public interface IControl {
     
-    public void mostrarMenuPrincipal();
+    public void mostrarMenuCliente();
     
     public void mostrarSeleccionarPelicula();
     
@@ -34,6 +36,12 @@ public interface IControl {
     public void mostrarDetalleBoleto();
     
     public void mostrarPantallaPagoRechazado();
+    
+    public void mostrarMenuAdministrador();
+    
+    public void mostrarMenuSalas(String titulo, JFrame frameAnterior);
+    
+    public void mostrarAgregarSala(String titulo, JFrame frameAnterior);
     
     public List<PeliculaDTO> obtenerPeliculas();
     
