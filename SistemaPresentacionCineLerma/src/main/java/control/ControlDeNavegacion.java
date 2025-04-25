@@ -216,7 +216,11 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+    /**
+     * Metodo para abrir la pantalla de agregar sala
+     * @param tituloFrame
+     * @param frameAnterior 
+     */
     @Override
     public void mostrarAgregarSala(String tituloFrame, JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {

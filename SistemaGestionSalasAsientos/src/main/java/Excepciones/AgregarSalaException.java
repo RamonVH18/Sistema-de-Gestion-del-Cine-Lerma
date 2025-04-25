@@ -8,6 +8,15 @@ package Excepciones;
  *
  * @author Ramon Valencia
  */
-public class SalaException {
+public class AgregarSalaException extends Exception{
+
+    public AgregarSalaException(String message) {
+        super(message);
+    }
+
+    public AgregarSalaException(String message, Throwable cause) {
+        super(message, cause);
+    }
+    
     
 }
