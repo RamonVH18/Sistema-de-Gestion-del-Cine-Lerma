@@ -25,11 +25,13 @@ public interface IManejoDeSalas {
     
     public Boolean validarSala(SalaDTO sala) throws ValidacionSalaException;
     
-    public List<SalaDTO> obtenerTodasLasSalas() throws BuscarSalaException;
+    public List<SalaDTO> cargarSalas() throws BuscarSalaException;
     
-    public List<SalaDTO> buscarSalaPorNumero(String numero) throws BuscarSalaException;
+    public List<SalaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException;
     
-    public List<SalaDTO> buscarSalasPorPeriodo(LocalDate periodoInicio, LocalDate periodoFinal) throws BuscarSalaException;
+    public List<SalaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException;
+    
+    public List<SalaDTO> cargarSalasPorPeriodo(LocalDate periodoInicio, LocalDate periodoFinal) throws BuscarSalaException;
     
     public List<GananciaSalaDTO> obtenerGananciaSala(List<SalaDTO> listaSalas) throws EstadisticasSalaException;
     

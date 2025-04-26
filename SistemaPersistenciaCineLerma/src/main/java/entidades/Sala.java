@@ -4,6 +4,7 @@
  */
 package entidades;
 
+import enums.EstadoSala;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -20,14 +21,14 @@ public class Sala {
 
     private String numSala;
 
-    private Boolean estado;
+    private EstadoSala estado;
 
     private List<Asiento> asientos;
 
     public Sala() {
     }
 
-    public Sala(ObjectId idSala, Integer numAsientos, String numSala, Boolean estado) {
+    public Sala(ObjectId idSala, Integer numAsientos, String numSala, EstadoSala estado) {
         this.idSala = idSala;
         this.numAsientos = numAsientos;
         this.numSala = numSala;
@@ -35,7 +36,7 @@ public class Sala {
         this.asientos = new ArrayList<>();
     }
 
-    public Sala(Integer numAsientos, String numSala, Boolean estado) {
+    public Sala(Integer numAsientos, String numSala, EstadoSala estado) {
         this.numAsientos = numAsientos;
         this.numSala = numSala;
         this.estado = estado;
@@ -66,11 +67,11 @@ public class Sala {
         this.numSala = numSala;
     }
 
-    public Boolean getEstado() {
+    public EstadoSala getEstado() {
         return estado;
     }
 
-    public void setEstado(Boolean estado) {
+    public void setEstado(EstadoSala estado) {
         this.estado = estado;
     }
 

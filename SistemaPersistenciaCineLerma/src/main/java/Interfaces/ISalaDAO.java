@@ -22,7 +22,7 @@ public interface ISalaDAO {
     
     public List<Sala> buscarTodasLasSalas() throws BuscarSalaException;
     
-    public Boolean modificarSala() throws ModificarSalaException;
+    public Boolean modificarEstadoSala(Sala sala) throws ModificarSalaException;
     
     public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException;
     

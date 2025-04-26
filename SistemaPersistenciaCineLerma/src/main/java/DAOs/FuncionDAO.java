@@ -11,6 +11,7 @@ import Interfaces.ObservadorFuncion;
 import entidades.Funcion;
 import entidades.Pelicula;
 import entidades.Sala;
+import enums.EstadoSala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,12 +47,12 @@ public class FuncionDAO implements IFuncionDAO {
     public List<Funcion> funcionesHarcodeadas() throws PersistenciaException {
         if (funciones.isEmpty()) {
             // Crear salas
-            Sala salaA1 = new Sala(new ObjectId(), 100, "1", true);
-            Sala salaA2 = new Sala(new ObjectId(), 90, "2", true);
-            Sala salaA3 = new Sala(new ObjectId(), 80, "3", true);
-            Sala salaB1 = new Sala(new ObjectId(), 120, "4", true);
-            Sala salaB2 = new Sala(new ObjectId(), 110, "5", true);
-            Sala salaB3 = new Sala(new ObjectId(), 105, "6", true);
+            Sala salaA1 = new Sala(new ObjectId(), 100, "1", EstadoSala.ACTIVA);
+            Sala salaA2 = new Sala(new ObjectId(), 90, "2", EstadoSala.ACTIVA);
+            Sala salaA3 = new Sala(new ObjectId(), 80, "3", EstadoSala.ACTIVA);
+            Sala salaB1 = new Sala(new ObjectId(), 120, "4", EstadoSala.ACTIVA);
+            Sala salaB2 = new Sala(new ObjectId(), 110, "5", EstadoSala.ACTIVA);
+            Sala salaB3 = new Sala(new ObjectId(), 105, "6", EstadoSala.ACTIVA);
 
             // Crear películas
             List<Pelicula> peliculas = peliculaDAO.mostrarListaPelicula();

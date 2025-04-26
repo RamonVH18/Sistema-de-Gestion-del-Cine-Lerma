@@ -4,11 +4,27 @@
  */
 package Interfaces;
 
+import DTOs.SalaDTO;
+import Excepciones.Sala.SalaBusquedaException;
+import Excepciones.Sala.SalaModificacionException;
+import Excepciones.Sala.SalaRegistroException;
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  *
  * @author Ramon Valencia
  */
 public interface ISalaBO {
     
+    public SalaDTO agregarSala() throws SalaRegistroException;
+    
+    public SalaDTO buscarSala() throws SalaBusquedaException;
+    
+    public List<SalaDTO> buscarTodasSalas() throws SalaBusquedaException;
+    
+    public Boolean modificarSala() throws SalaModificacionException;
+    
+    public List<SalaDTO> buscarSalasFiltro() throws SalaBusquedaException;
     
 }
