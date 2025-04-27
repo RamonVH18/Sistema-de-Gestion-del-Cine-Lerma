@@ -26,21 +26,119 @@ public class ConsultarFunciones extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        labelTitulo = new javax.swing.JLabel();
+        labelNombrePelicula = new javax.swing.JLabel();
+        btnProgramar = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        panelTablaFunciones = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setSize(new java.awt.Dimension(640, 830));
+
+        labelTitulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
+        labelTitulo.setText("LISTAS FUNCIONES");
+
+        labelNombrePelicula.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        labelNombrePelicula.setText("Funciones de la pelicula: ");
+
+        btnProgramar.setBackground(new java.awt.Color(162, 132, 94));
+        btnProgramar.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        btnProgramar.setForeground(new java.awt.Color(255, 255, 255));
+        btnProgramar.setText("Programar funcion");
+        btnProgramar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProgramarActionPerformed(evt);
+            }
+        });
+
+        btnVolver.setBackground(new java.awt.Color(162, 132, 94));
+        btnVolver.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
+        btnVolver.setText("<Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setBackground(new java.awt.Color(162, 132, 94));
+        btnEliminar.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setText("Eliminar funcion");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelTablaFuncionesLayout = new javax.swing.GroupLayout(panelTablaFunciones);
+        panelTablaFunciones.setLayout(panelTablaFuncionesLayout);
+        panelTablaFuncionesLayout.setHorizontalGroup(
+            panelTablaFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 467, Short.MAX_VALUE)
+        );
+        panelTablaFuncionesLayout.setVerticalGroup(
+            panelTablaFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 348, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(labelTitulo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(btnVolver)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(218, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelNombrePelicula)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnProgramar)
+                        .addGap(100, 100, 100)
+                        .addComponent(btnEliminar))
+                    .addComponent(panelTablaFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(labelTitulo)
+                .addGap(18, 18, 18)
+                .addComponent(labelNombrePelicula)
+                .addGap(18, 18, 18)
+                .addComponent(panelTablaFunciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnProgramar)
+                    .addComponent(btnEliminar))
+                .addGap(32, 32, 32)
+                .addComponent(btnVolver)
+                .addGap(24, 24, 24))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnProgramarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProgramarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnProgramarActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +176,11 @@ public class ConsultarFunciones extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnProgramar;
+    private javax.swing.JButton btnVolver;
+    private javax.swing.JLabel labelNombrePelicula;
+    private javax.swing.JLabel labelTitulo;
+    private javax.swing.JPanel panelTablaFunciones;
     // End of variables declaration//GEN-END:variables
 }
