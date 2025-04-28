@@ -201,12 +201,12 @@ public class FuncionBO implements IFuncionBO {
                 throw new FuncionBusquedaException("La función no existe");
             }
 
-            final Long clienteId = cliente.getIdCliente();
+            final ObjectId clienteId = cliente.getIdUsuario();
 
             // Eliminar el observador del cliente para esta función
             funcionDAO.eliminarObservadorPorFiltro(idFuncion, observador -> {
                 if (observador instanceof ObservadorClienteFuncion) {
-                    return ((ObservadorClienteFuncion) observador).getCliente().getIdCliente().equals(clienteId);
+                    return ((ObservadorClienteFuncion) observador).getCliente().getIdUsuario().equals(clienteId);
                 }
                 return false;
             });

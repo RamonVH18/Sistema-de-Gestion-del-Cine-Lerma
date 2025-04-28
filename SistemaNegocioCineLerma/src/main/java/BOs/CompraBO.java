@@ -130,7 +130,7 @@ public class CompraBO implements ICompraBO {
         List<Compra> todasLasCompras = compraDAO.obtenerTodasLasCompras();
         
         for (Compra compra : todasLasCompras) {
-            if (compra.getCliente().getIdCliente().equals(cliente.getIdCliente())) {
+            if (compra.getCliente().getIdUsuario().equals(cliente.getIdUsuario())) {
                 totalGastado += compra.getPago().getMonto();
             }
         }

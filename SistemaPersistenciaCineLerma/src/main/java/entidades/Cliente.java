@@ -4,76 +4,74 @@
  */
 package entidades;
 
+import enums.EstadoUsuario;
+import enums.Rol;
+import java.time.LocalDateTime;
+
 /**
  *
  * @author Ramon Valencia
  */
-public class Cliente {
+public class Cliente extends Usuario{
 
-    private Long idCliente;
+    private String calle;
 
-    private String nombre;
+    private String CP;
 
-    private String correo;
-
-    private String contrasenia;
+    private String numero;
 
     public Cliente() {
     }
 
-    public Cliente(Long idCliente, String nombre, String correo, String contrasenia) {
-        this.idCliente = idCliente;
-        this.nombre = nombre;
-        this.correo = correo;
-        this.contrasenia = contrasenia;
+    public Cliente(String calle, String CP, String numero, ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+        super(idUsuario, nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, telefono, estado, rol);
+        this.calle = calle;
+        this.CP = CP;
+        this.numero = numero;
     }
 
-    public Cliente(String nombre, String correo, String contrasenia) {
-        this.nombre = nombre;
-        this.correo = correo;
-        this.contrasenia = contrasenia;
+    public Cliente(String calle, String CP, String numero, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+        super(nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, telefono, estado, rol);
+        this.calle = calle;
+        this.CP = CP;
+        this.numero = numero;
     }
 
-    public Long getIdCliente() {
-        return idCliente;
+    public String getCalle() {
+        return calle;
     }
 
-    public void setIdCliente(Long idCliente) {
-        this.idCliente = idCliente;
+    public void setCalle(String calle) {
+        this.calle = calle;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getCP() {
+        return CP;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setCP(String CP) {
+        this.CP = CP;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getContrasenia() {
-        return contrasenia;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
     @Override
     public String toString() {
-        return "Cliente{"
-                + "idCliente=" + idCliente
-                + ", nombre=" + nombre
-                + ", correo=" + correo
-                + ", contrasenia=" + contrasenia
-                + '}';
+        return "Cliente{" + "calle=" + calle + ", CP=" + CP + ", numero=" + numero + '}';
     }
+    
+    
+
+    
+    
+    
+
+    
 
 }

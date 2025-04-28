@@ -8,6 +8,21 @@ package DTOs;
  *
  * @author sonic
  */
-public class AdministradorDTO {
+public class AdministradorDTO extends UsuarioDTO{
+    
+    private String RFC;
+
+    public AdministradorDTO() {
+    }
+
+    public String getRFC() {
+        return RFC;
+    }
+
+    public void setRFC(String RFC) {
+        this.RFC = RFC;
+    }
+    
+    
     
 }

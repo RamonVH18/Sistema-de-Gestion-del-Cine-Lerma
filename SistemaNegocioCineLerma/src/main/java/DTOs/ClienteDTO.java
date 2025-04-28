@@ -8,77 +8,47 @@ package DTOs;
  *
  * @author Ramon Valencia
  */
-public class ClienteDTO {
+public class ClienteDTO extends UsuarioDTO{
     
-    private String nombre;
-    private String correo;
-    private String contraseña; //Maybe
-    
-    /**
-     * Constructor Vacio
-     */
+    private String calle;
+    private String CP;
+    private String numero;
+
     public ClienteDTO() {
     }
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public String getCP() {
+        return CP;
+    }
+
+    public void setCP(String CP) {
+        this.CP = CP;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    @Override
+    public String toString() {
+        return "ClienteDTO{" + "calle=" + calle + ", CP=" + CP + ", numero=" + numero + '}';
+    }
     
-    /**
-     * Constructor con todos los atributos
-     * @param nombre
-     * @param correo 
-     */
-    public ClienteDTO(String nombre, String correo, String contraseña) {    
-        this.nombre = nombre;
-        this.correo = correo;
-        this.contraseña = contraseña;
-    }
-
-    /**
-     *
-     * @return 
-     */
-    public String getNombre() {    
-        return nombre;
-    }
-
-    /**
-     *
-     * @param nombre 
-     */
-    public void setNombre(String nombre) {    
-        this.nombre = nombre;
-    }
-
-    /**
-     *
-     * @return 
-     */
-    public String getCorreo() {    
-        return correo;
-    }
-
-    /**
-     *
-     * @param correo 
-     */
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
     
-    /**
-     *
-     * @return
-     */
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    /**
-     *
-     * @param contraseña 
-     */
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
+    
+    
     
     
 
