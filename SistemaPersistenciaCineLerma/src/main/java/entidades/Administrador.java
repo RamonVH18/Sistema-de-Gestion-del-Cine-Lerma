@@ -7,6 +7,7 @@ package entidades;
 import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -19,15 +20,17 @@ public class Administrador extends Usuario {
     public Administrador() {
     }
 
-    public Administrador(String RFC, ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
-        super(idUsuario, nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, telefono, estado, rol);
+    public Administrador(String RFC, ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+        super(idUsuario, nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, correoElectronico, fechaNacimiento, telefono, estado, rol);
         this.RFC = RFC;
     }
 
-    public Administrador(String RFC, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
-        super(nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, telefono, estado, rol);
+    public Administrador(String RFC, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+        super(nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, correoElectronico, fechaNacimiento, telefono, estado, rol);
         this.RFC = RFC;
     }
+
+    
 
     public String getRFC() {
         return RFC;

@@ -7,6 +7,7 @@ package entidades;
 import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -26,6 +27,8 @@ public class Usuario {
     
     private String apellidoMaterno;
     
+    private String correoElectronico;
+    
     private LocalDateTime fechaNacimiento;
     
     private String telefono;
@@ -37,25 +40,27 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+    public Usuario(ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
         this.idUsuario = idUsuario;
         this.nombreDeUsuario = nombreDeUsuario;
         this.contrasenia = contrasenia;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
+        this.correoElectronico = correoElectronico;
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
         this.estado = estado;
         this.rol = rol;
     }
 
-    public Usuario(String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+    public Usuario(String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
         this.nombreDeUsuario = nombreDeUsuario;
         this.contrasenia = contrasenia;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
+        this.correoElectronico = correoElectronico;
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
         this.estado = estado;
@@ -110,6 +115,14 @@ public class Usuario {
         this.apellidoMaterno = apellidoMaterno;
     }
 
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
     public LocalDateTime getFechaNacimiento() {
         return fechaNacimiento;
     }
@@ -144,8 +157,10 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" + "idUsuario=" + idUsuario + ", nombreDeUsuario=" + nombreDeUsuario + ", contrasenia=" + contrasenia + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", fechaNacimiento=" + fechaNacimiento + ", telefono=" + telefono + ", estado=" + estado + ", rol=" + rol + '}';
+        return "Usuario{" + "idUsuario=" + idUsuario + ", nombreDeUsuario=" + nombreDeUsuario + ", contrasenia=" + contrasenia + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", correoElectronico=" + correoElectronico + ", fechaNacimiento=" + fechaNacimiento + ", telefono=" + telefono + ", estado=" + estado + ", rol=" + rol + '}';
     }
+
+    
     
     
 

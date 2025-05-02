@@ -7,6 +7,7 @@ package entidades;
 import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -23,15 +24,15 @@ public class Cliente extends Usuario{
     public Cliente() {
     }
 
-    public Cliente(String calle, String CP, String numero, ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
-        super(idUsuario, nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, telefono, estado, rol);
+    public Cliente(String calle, String CP, String numero, ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+        super(idUsuario, nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, correoElectronico, fechaNacimiento, telefono, estado, rol);
         this.calle = calle;
         this.CP = CP;
         this.numero = numero;
     }
 
-    public Cliente(String calle, String CP, String numero, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
-        super(nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, telefono, estado, rol);
+    public Cliente(String calle, String CP, String numero, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+        super(nombreDeUsuario, contrasenia, nombre, apellidoPaterno, apellidoMaterno, correoElectronico, fechaNacimiento, telefono, estado, rol);
         this.calle = calle;
         this.CP = CP;
         this.numero = numero;
@@ -65,6 +66,10 @@ public class Cliente extends Usuario{
     public String toString() {
         return "Cliente{" + "calle=" + calle + ", CP=" + CP + ", numero=" + numero + '}';
     }
+
+    
+
+    
     
     
 

@@ -24,7 +24,7 @@ public class ObservadorClienteFuncion implements ObservadorFuncion {
 
         String notificacion = String.format("Notificación para %s (%s): %s - %s",
                 cliente.getNombre(),
-                cliente.getCorreo(),
+                cliente.getCorreoElectronico(),
                 tipoEvento,
                 mensaje);
 
@@ -47,11 +47,11 @@ public class ObservadorClienteFuncion implements ObservadorFuncion {
         }
 
         ObservadorClienteFuncion other = (ObservadorClienteFuncion) obj;
-        return cliente.getIdCliente().equals(other.cliente.getIdCliente());
+        return cliente.getIdUsuario().equals(other.cliente.getIdUsuario());
     }
 
     @Override
     public int hashCode() {
-        return cliente.getIdCliente().hashCode();
+        return cliente.getIdUsuario().hashCode();
     }
 }

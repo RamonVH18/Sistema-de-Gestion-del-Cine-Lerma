@@ -12,6 +12,7 @@ import Interfaces.ISalaDAO;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
@@ -91,7 +92,7 @@ public class SalaDAO implements ISalaDAO {
 
     @Override
     public Sala buscarSala(String numSala) throws BuscarSalaException {
-        MongoClient clienteMongo = new MongoClient();
+        MongoClient clienteMongo = new MongoClient() {};
         try {
             MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
 
