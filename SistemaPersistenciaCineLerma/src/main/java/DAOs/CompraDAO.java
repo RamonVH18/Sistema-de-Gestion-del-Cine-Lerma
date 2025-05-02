@@ -36,14 +36,14 @@ public class CompraDAO implements ICompraDAO {
     
     private void inicializarDatos() {
 
-        Cliente cliente1 = new Cliente(1L, "Abrahamlexis Molina", "abrabo@gmail.com", "freski1");
-        Cliente cliente2 = new Cliente(2L, "John Java", "joja@gmail.com", "javaman1");
+        //Cliente cliente1 = new Cliente(1L, "Abrahamlexis Molina", "abrabo@gmail.com", "freski1");
+        //Cliente cliente2 = new Cliente(2L, "John Java", "joja@gmail.com", "javaman1");
 
         Pago pago1 = new Pago(1L, 150.00, LocalDateTime.now(), true);
         Pago pago2 = new Pago(2L, 200.00, LocalDateTime.now(), true);
 
-        compras.add(new Compra(1L, pago1, "Tarjeta de credito", cliente1, LocalDateTime.now()));
-        compras.add(new Compra(2L, pago2, "Paypal", cliente2, LocalDateTime.now()));
+        //compras.add(new Compra(1L, pago1, "Tarjeta de credito", cliente1, LocalDateTime.now()));
+        //compras.add(new Compra(2L, pago2, "Paypal", cliente2, LocalDateTime.now()));
     }
     
     @Override

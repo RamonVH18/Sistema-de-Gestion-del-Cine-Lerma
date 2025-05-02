@@ -30,13 +30,15 @@ public interface IUsuarioDAO {
     public Boolean eliminarUsuario(Usuario usuario) throws PersistenciaException;
 
     public Boolean bloquearUsuario(Usuario usuario) throws PersistenciaException;
+    
+    public Boolean desbloquearUsuario(Usuario usuario) throws PersistenciaException;
 
     public List<Funcion> cargarHistorialCompras(Cliente cliente) throws PersistenciaException;
     
-    public Usuario validarUsuario(String nombreUsuario, String contrasena) throws PersistenciaException;
+    public Boolean validarUsuario(String nombreUsuario, String contrasena) throws PersistenciaException;
     
     public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws PersistenciaException;
     
-    public Usuario buscarUsuario(String nombreUsuario) throws PersistenciaException; //Este metodo probablemente se use para verificar si existe un usuario concreto en la base y otras operaciones
+    public Usuario obtenerUsuario(String nombreUsuario) throws PersistenciaException; //Este metodo probablemente se use para verificar si existe un usuario concreto en la base y otras operaciones
     
 }

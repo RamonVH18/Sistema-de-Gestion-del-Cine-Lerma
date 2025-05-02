@@ -15,7 +15,7 @@ import org.bson.types.ObjectId;
  */
 public class Usuario {
 
-    private ObjectId idUsuario;
+    private String idUsuario;
     
     private String nombreDeUsuario;
     
@@ -40,7 +40,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+    public Usuario(String idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
         this.idUsuario = idUsuario;
         this.nombreDeUsuario = nombreDeUsuario;
         this.contrasenia = contrasenia;
@@ -53,6 +53,8 @@ public class Usuario {
         this.estado = estado;
         this.rol = rol;
     }
+
+    
 
     public Usuario(String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
         this.nombreDeUsuario = nombreDeUsuario;
@@ -67,13 +69,15 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public ObjectId getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(ObjectId idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
+
+    
 
     public String getNombreDeUsuario() {
         return nombreDeUsuario;
