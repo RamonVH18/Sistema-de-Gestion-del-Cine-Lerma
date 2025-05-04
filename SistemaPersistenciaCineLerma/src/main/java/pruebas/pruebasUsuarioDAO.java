@@ -60,24 +60,26 @@ public class pruebasUsuarioDAO {
             admin.setEstado(EstadoUsuario.ACTIVO);
             admin.setRFC("JAIM851020ABC");
 
-            Administrador adminRegistrado = usuarioDAO.registrarAdministrador(admin);
-            System.out.println("Administrador registrado:" + adminRegistrado.getNombreDeUsuario());
+//            Administrador adminRegistrado = usuarioDAO.registrarAdministrador(admin);
+//            System.out.println("Administrador registrado:" + adminRegistrado.getNombreDeUsuario());
+//
+//           
+//            cliente.setTelefono("5557654321");
+//            cliente.setCalle("Nueva Calle");
+//
+//            Usuario clienteActualizado = usuarioDAO.actualizarUsuario(cliente);
+//            System.out.println("Cliente actualizado con exito: " + clienteActualizado.getNombreDeUsuario());
+//
+//            // Prueba de actualización de Administrador
+//            admin.setCorreoElectronico("emailcambiado@gmail.com");
+//
+//            Usuario adminActualizado = usuarioDAO.actualizarUsuario(admin);
+//            System.out.println("Administrador actualizado con éxito: " + adminActualizado.getNombreDeUsuario());
+//            
+//            Boolean usuarioEliminado = usuarioDAO.eliminarUsuario(clienteActualizado);
+//            System.out.println(usuarioEliminado);
 
-           
-            cliente.setTelefono("5557654321");
-            cliente.setCalle("Nueva Calle");
-
-            Usuario clienteActualizado = usuarioDAO.actualizarUsuario(cliente);
-            System.out.println("Cliente actualizado con exito: " + clienteActualizado.getNombreDeUsuario());
-
-            // Prueba de actualización de Administrador
-            admin.setCorreoElectronico("emailcambiado@gmail.com");
-
-            Usuario adminActualizado = usuarioDAO.actualizarUsuario(admin);
-            System.out.println("Administrador actualizado con éxito: " + adminActualizado.getNombreDeUsuario());
-            
-            Boolean usuarioEliminado = usuarioDAO.eliminarUsuario(clienteActualizado);
-            System.out.println(usuarioEliminado);
+        usuarioDAO.obtenerUsuario("Sebas");
             
             
 

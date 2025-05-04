@@ -13,6 +13,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
@@ -88,26 +89,11 @@ public class UsuarioDAO implements IUsuarioDAO {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            ObjectId clienteId = new ObjectId();
-            Document clienteRegistrar = new Document("_idUsuario", clienteId)
-                    .append("nombreUsuario", cliente.getNombreDeUsuario())
-                    .append("contraseña", cliente.getContrasenia())
-                    .append("nombres", cliente.getNombre())
-                    .append("apellidoPaterno", cliente.getApellidoPaterno())
-                    .append("apellidoMaterno", cliente.getApellidoMaterno())
-                    .append("correoElectronico", cliente.getCorreoElectronico())
-                    .append("fechaNacimiento", cliente.getFechaNacimiento())
-                    .append("telefono", cliente.getTelefono())
-                    .append("rol", cliente.getRol().toString())
-                    .append("estado", cliente.getEstado().toString())
-                    .append("calle", cliente.getCalle())
-                    .append("CP", cliente.getCP())
-                    .append("Numero", cliente.getNumero());
+            MongoCollection<Cliente> coleccionUsuarios = base.getCollection("usuarios", Cliente.class);
 
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
-
-            coleccionUsuarios.insertOne(clienteRegistrar);
+            coleccionUsuarios.insertOne(cliente);
 
             return cliente;
 
@@ -390,7 +376,6 @@ public class UsuarioDAO implements IUsuarioDAO {
 
             // Construir consulta final
             Bson filtro = filtros.isEmpty() ? new Document() : Filters.and(filtros);
-            
 
             MongoCursor<Document> cursor = coleccionUsuarios.find(filtro).iterator();
             while (cursor.hasNext()) {
@@ -416,17 +401,18 @@ public class UsuarioDAO implements IUsuarioDAO {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
             Bson filtro = Filters.eq("nombreUsuario", nombreUsuario);
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
+            MongoCollection<Usuario> coleccionUsuarios = base.getCollection("usuarios", Usuario.class);
 
-            Document documentUsuario = coleccionUsuarios.find(filtro).first();
+            Usuario usuario = coleccionUsuarios.find(filtro).first();
 
-            if (documentUsuario == null) {
-                throw new PersistenciaException("No se encontro el usuario");
+            if (usuario == null) {
+                throw new PersistenciaException("No se encontró el usuario");
             }
 
-            return documentoAUsuario(documentUsuario);
+            return usuario;
 
         } catch (MongoException e) {
             throw new PersistenciaException("Error al obtener el usuario: " + e.getMessage());

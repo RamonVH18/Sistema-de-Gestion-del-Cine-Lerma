@@ -7,6 +7,7 @@ package entidades;
 import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 /**
@@ -15,6 +16,7 @@ import org.bson.types.ObjectId;
  */
 public class Usuario {
 
+    @BsonId
     private String idUsuario;
     
     private String nombreDeUsuario;
