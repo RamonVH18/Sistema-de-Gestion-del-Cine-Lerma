@@ -6,6 +6,8 @@ package pruebas;
 
 import DAOs.UsuarioDAO;
 import Excepciones.PersistenciaException;
+import Excepciones.usuarios.EncontrarUsuarioException;
+import Excepciones.usuarios.RegistrarUsuarioException;
 import entidades.Administrador;
 import entidades.Cliente;
 import entidades.Usuario;
@@ -23,7 +25,7 @@ public class pruebasUsuarioDAO {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RegistrarUsuarioException, EncontrarUsuarioException {
         try {
             UsuarioDAO usuarioDAO = UsuarioDAO.getInstance();
 
@@ -43,7 +45,7 @@ public class pruebasUsuarioDAO {
             cliente.setCP("85150");
             cliente.setNumero("2008");
 
-            Cliente clienteRegistrado = usuarioDAO.registrarCliente(cliente);
+            Usuario clienteRegistrado = usuarioDAO.registrarUsuario(cliente);
             System.out.println("Cliente registrado: " + clienteRegistrado.getNombreDeUsuario());
 
             // Prueba de registro de un administrador
@@ -79,14 +81,17 @@ public class pruebasUsuarioDAO {
 //            Boolean usuarioEliminado = usuarioDAO.eliminarUsuario(clienteActualizado);
 //            System.out.println(usuarioEliminado);
 
-        usuarioDAO.obtenerUsuario("Sebas");
+            System.out.println(usuarioDAO.obtenerUsuario("Sebas"));
             
             
 
-        } catch (PersistenciaException e) {
+        } catch (RegistrarUsuarioException e) {
+            System.err.println("Error en la operación: " + e.getMessage());
+            e.printStackTrace();
+        } catch (EncontrarUsuarioException e) {
             System.err.println("Error en la operación: " + e.getMessage());
             e.printStackTrace();
         }
-    }
+}
 }
 

@@ -2,18 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package Interfaces.mappers;
+package UsuariosStrategy;
 
-import DTOs.UsuarioDTO;
+import com.mongodb.client.MongoDatabase;
 import entidades.Usuario;
 
 /**
  *
  * @author sonic
  */
-public interface IUsuarioMapper {
-    public UsuarioDTO toUsuarioDTO(Usuario usuario);
-        
-    public Usuario toUsuarioEntidad(UsuarioDTO usuariodto);
+public interface IUsuarioStrategy <T extends Usuario> {
+    T ejecutar(MongoDatabase base, T usuario) throws UsuarioStrategyException;
     
 }

@@ -12,54 +12,64 @@ import entidades.Cliente;
  *
  * @author sonic
  */
-public class ClienteMapper implements IClienteMapper{
+public class ClienteMapper implements IClienteMapper {
 
     @Override
     public ClienteDTO toClienteDTO(Cliente cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        //Primero se valida si el cliente recibido es null, entonces se retornara un null
+        if (cliente == null) {
+            return null;
+        }
+
+        ClienteDTO dto = new ClienteDTO();
+
+        // Mapeo de campos heredados de Usuario
+        dto.setNombreUsuario(cliente.getNombreDeUsuario());
+        dto.setContraseña(cliente.getContrasenia());
+        dto.setNombre(cliente.getNombre());
+        dto.setApellidoPaterno(cliente.getApellidoPaterno());
+        dto.setApellidoMaterno(cliente.getApellidoMaterno());
+        dto.setCorreoElectronico(cliente.getCorreoElectronico());
+        dto.setFechaNacimiento(cliente.getFechaNacimiento());
+        dto.setTelefono(cliente.getTelefono());
+        dto.setRol(cliente.getRol());
+        dto.setEstado(cliente.getEstado());
+
+        // Mapeo de campos específicos de Cliente
+        dto.setCalle(cliente.getCalle());
+        dto.setCP(cliente.getCP());
+        dto.setNumero(cliente.getNumero());
+
+        return dto;
     }
 
     @Override
     public Cliente toClienteEntidad(ClienteDTO clientedto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        //Primero se valida si el cliente recibido es null, entonces se retornara un null
+        if (clientedto == null) {
+            return null;
+        }
+
+        Cliente cliente = new Cliente();
+
+        // Campos heredados de Usuario
+        cliente.setNombreDeUsuario(clientedto.getNombreUsuario());
+        cliente.setContrasenia(clientedto.getContraseña());
+        cliente.setNombre(clientedto.getNombre());
+        cliente.setApellidoPaterno(clientedto.getApellidoPaterno());
+        cliente.setApellidoMaterno(clientedto.getApellidoMaterno());
+        cliente.setCorreoElectronico(clientedto.getCorreoElectronico());
+        cliente.setFechaNacimiento(clientedto.getFechaNacimiento());
+        cliente.setTelefono(clientedto.getTelefono());
+        cliente.setRol(clientedto.getRol());
+        cliente.setEstado(clientedto.getEstado());
+
+        // Campos específicos de Cliente
+        cliente.setCalle(clientedto.getCalle());
+        cliente.setCP(clientedto.getCP());
+        cliente.setNumero(clientedto.getNumero());
+
+        return cliente;
     }
-    
-//    @Override
-//    public ClienteDTO toClienteDTO(Cliente cliente) {
-//        //Primero se valida si el cliente recibido es null, entonces se retornara un null
-//        if (cliente == null) {
-//            return null;
-//        }
-//        
-//        //Se crea la instancia de clienteDTO
-//        ClienteDTO clientedto = new ClienteDTO();
-//        
-//        //Se le setea al DTO sus datos segun los de la entidad recibida
-//        clientedto.setCorreo(cliente.getCorreo());
-//        clientedto.setNombre(cliente.getNombre());
-//        clientedto.setContraseña(cliente.getContrasenia());
-//        
-//
-//        return clientedto;
-//
-//    }
-//    
-//    @Override
-//    public Cliente toClienteEntidad(ClienteDTO clientedto) {
-//        //Primero se valida si el cliente recibido es null, entonces se retornara un null
-//        if (clientedto == null) {
-//            return null;
-//        }
-//        
-//        //Se crea la instancia de cliente
-//        Cliente cliente = new Cliente();
-//        
-//        //Se le setea a la entidad sus datos segun los del dto recibido
-//        cliente.setCorreo(clientedto.getCorreo());
-//        cliente.setContrasenia(clientedto.getContraseña());
-//        cliente.setNombre(clientedto.getNombre());
-//        
-//        return cliente;
-//        
-//    }
+
 }

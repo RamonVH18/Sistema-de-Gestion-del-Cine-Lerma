@@ -4,10 +4,16 @@
  */
 package Interfaces.mappers;
 
+import DTOs.AdministradorDTO;
+import entidades.Administrador;
+
 /**
  *
  * @author sonic
  */
 public interface IAdministradorMapper {
     
+    public AdministradorDTO toAdministradorDTO(Administrador admin);
+
+    public Administrador toAdministradorEntidad(AdministradorDTO admindto);
 }

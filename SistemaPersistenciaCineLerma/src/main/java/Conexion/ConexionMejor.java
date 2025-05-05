@@ -47,21 +47,8 @@ public class ConexionMejor {
     }
 
     public MongoDatabase obtenerBaseDatos(MongoClient conexion) throws MongoException {
-        MongoDatabase baseDatos = null;
-        try {
-
-            List<String> nombresBaseDatos = new ArrayList<>();
-            conexion.listDatabaseNames().into(nombresBaseDatos);
-
-            if (nombresBaseDatos.contains(nombreBase)) {
-                baseDatos = conexion.getDatabase(nombreBase);
-            } else {
-                throw new MongoException("La base de datos '" + nombreBase + "' no existe.");
-            }
-        } catch (MongoException e) {
-            throw new MongoException("Error al obtener la base de datos: " + e.getMessage());
-        }
-        return baseDatos;
+        return conexion.getDatabase(nombreBase).withCodecRegistry(codec);
+        
     }
 
     public void cerrarConexion(MongoClient conexion) {

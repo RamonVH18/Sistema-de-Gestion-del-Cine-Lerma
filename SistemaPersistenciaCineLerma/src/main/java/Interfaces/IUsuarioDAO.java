@@ -5,8 +5,14 @@
 package Interfaces;
 
 import Excepciones.PersistenciaException;
+import Excepciones.usuarios.EditarUsuarioException;
+import Excepciones.usuarios.EliminarUsuarioException;
+import Excepciones.usuarios.EncontrarUsuarioException;
+import Excepciones.usuarios.ObtenerUsuariosException;
+import Excepciones.usuarios.RegistrarUsuarioException;
 import entidades.Administrador;
 import entidades.Cliente;
+import entidades.Compra;
 import entidades.Funcion;
 import entidades.Usuario;
 import enums.EstadoUsuario;
@@ -19,26 +25,24 @@ import java.util.List;
  */
 public interface IUsuarioDAO {
     
-    public List<Usuario> mostrarListaUsuarios() throws PersistenciaException;
+    public List<Usuario> mostrarListaUsuarios() throws ObtenerUsuariosException;
     
-    public Cliente registrarCliente(Cliente cliente) throws PersistenciaException;
+    public Usuario registrarUsuario(Usuario usuario) throws RegistrarUsuarioException;
 
-    public Administrador registrarAdministrador(Administrador administrador) throws PersistenciaException;
+    public Usuario actualizarUsuario(Usuario usuario) throws EditarUsuarioException;
 
-    public Usuario actualizarUsuario(Usuario usuario) throws PersistenciaException;
+    public Boolean eliminarUsuario(Usuario usuario) throws EliminarUsuarioException;
 
-    public Boolean eliminarUsuario(Usuario usuario) throws PersistenciaException;
-
-    public Boolean bloquearUsuario(Usuario usuario) throws PersistenciaException;
+    public Boolean bloquearUsuario(Usuario usuario) throws EditarUsuarioException;
     
-    public Boolean desbloquearUsuario(Usuario usuario) throws PersistenciaException;
+    public Boolean desbloquearUsuario(Usuario usuario) throws EditarUsuarioException;
 
-    public List<Funcion> cargarHistorialCompras(Cliente cliente) throws PersistenciaException;
+    public List<Compra> cargarHistorialCompras(Cliente cliente) throws PersistenciaException;
     
-    public Boolean validarUsuario(String nombreUsuario, String contrasena) throws PersistenciaException;
+    public Boolean validarUsuario(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
     
-    public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws PersistenciaException;
+    public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws ObtenerUsuariosException;
     
-    public Usuario obtenerUsuario(String nombreUsuario) throws PersistenciaException; //Este metodo probablemente se use para verificar si existe un usuario concreto en la base y otras operaciones
+    public Usuario obtenerUsuario(String nombreUsuario) throws EncontrarUsuarioException; //Este metodo probablemente se use para verificar si existe un usuario concreto en la base y otras operaciones
     
 }

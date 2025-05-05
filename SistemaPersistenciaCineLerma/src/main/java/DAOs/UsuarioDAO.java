@@ -5,34 +5,38 @@
 package DAOs;
 
 import Conexion.ConexionMejor;
-import Conexion.MongoConexion;
 import Excepciones.PersistenciaException;
+import Excepciones.usuarios.EditarUsuarioException;
+import Excepciones.usuarios.EliminarUsuarioException;
+import Excepciones.usuarios.EncontrarUsuarioException;
+import Excepciones.usuarios.ObtenerUsuariosException;
+import Excepciones.usuarios.RegistrarUsuarioException;
 import Interfaces.IUsuarioDAO;
+import UsuariosStrategy.IUsuarioStrategy;
+import UsuariosStrategy.StrategyFactory;
+import UsuariosStrategy.UsuarioStrategyException;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import entidades.Administrador;
 import entidades.Cliente;
-import entidades.Funcion;
+import entidades.Compra;
 import entidades.Usuario;
 import enums.EstadoUsuario;
-import enums.Rol;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -57,26 +61,25 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public List<Usuario> mostrarListaUsuarios() throws PersistenciaException {
+    public List<Usuario> mostrarListaUsuarios() throws ObtenerUsuariosException {
         MongoClient clienteMongo = null;
         List<Usuario> usuarios = new ArrayList<>();
 
         try {
             clienteMongo = conexion.crearConexion();
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
 
-            MongoCursor<Document> cursor = coleccionUsuarios.find().iterator();
+            MongoCursor<Usuario> cursor = coleccion.find().iterator();
             while (cursor.hasNext()) {
-                Document documentUsuario = cursor.next();
-
-                Usuario usuario = documentoAUsuario(documentUsuario);
-                usuarios.add(usuario);
+                Usuario usuarioEncontrado = cursor.next();
+                usuarios.add(usuarioEncontrado);
             }
 
             return usuarios;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al registrar el cliente: " + e.getMessage());
+            throw new ObtenerUsuariosException ("Error al encontrar usuarios " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -85,143 +88,83 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public Cliente registrarCliente(Cliente cliente) throws PersistenciaException {
+    public Usuario registrarUsuario(Usuario usuario) throws RegistrarUsuarioException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+            IUsuarioStrategy<Usuario> estrategia = StrategyFactory.get("registrar");
+            
 
-            MongoCollection<Cliente> coleccionUsuarios = base.getCollection("usuarios", Cliente.class);
+            Usuario usuarioRegistrado = estrategia.ejecutar(base, usuario);
 
-            coleccionUsuarios.insertOne(cliente);
-
-            return cliente;
+            return usuarioRegistrado;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al registrar el cliente: " + e.getMessage());
+            throw new RegistrarUsuarioException("Error al registrar el cliente: " + e.getMessage());
+        } catch (UsuarioStrategyException ex) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
             }
         }
+        return null;
     }
 
     @Override
-    public Administrador registrarAdministrador(Administrador administrador) throws PersistenciaException {
+    public Usuario actualizarUsuario(Usuario usuario) throws EditarUsuarioException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
 
-            ObjectId adminId = new ObjectId();
-            Document clienteRegistrar = new Document("_idUsuario", adminId)
-                    .append("nombreUsuario", administrador.getNombreDeUsuario())
-                    .append("contraseña", administrador.getContrasenia())
-                    .append("nombres", administrador.getNombre())
-                    .append("apellidoPaterno", administrador.getApellidoPaterno())
-                    .append("apellidoMaterno", administrador.getApellidoMaterno())
-                    .append("correoElectronico", administrador.getCorreoElectronico())
-                    .append("fechaNacimiento", administrador.getFechaNacimiento())
-                    .append("telefono", administrador.getTelefono())
-                    .append("rol", administrador.getRol().toString())
-                    .append("estado", administrador.getEstado().toString())
-                    .append("RFC", administrador.getRFC());
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+            IUsuarioStrategy<Usuario> estrategia = StrategyFactory.get("actualizar");
 
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
+            Usuario usuarioActualizado = estrategia.ejecutar(base, usuario);
 
-            coleccionUsuarios.insertOne(clienteRegistrar);
-
-            return administrador;
+            return usuarioActualizado;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al registrar el administrador: " + e.getMessage());
+            throw new EditarUsuarioException("Error al actualizar el usuario: " + e.getMessage());
+        } catch (UsuarioStrategyException ex) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
             }
         }
+        return null;
     }
 
     @Override
-    public Usuario actualizarUsuario(Usuario usuario) throws PersistenciaException {
+    public Boolean eliminarUsuario(Usuario usuario) throws EliminarUsuarioException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
+
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+
+            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
 
             Bson filtro = Filters.eq("nombreUsuario", usuario.getNombreDeUsuario());
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
 
-            Document documentActualizar = coleccionUsuarios.find(filtro).first();
+            Usuario usuarioEliminar = coleccion.find(filtro).first();
 
-            if (documentActualizar == null) {
-                throw new PersistenciaException("No se encontro el usuario para eliminar");
+            if (usuarioEliminar == null) {
+                throw new EliminarUsuarioException("No se encontro el usuario para eliminar");
             }
 
-            Document actualizacion = new Document()
-                    .append("nombreUsuario", usuario.getNombreDeUsuario())
-                    .append("contraseña", usuario.getContrasenia())
-                    .append("nombres", usuario.getNombre())
-                    .append("apellidoPaterno", usuario.getApellidoPaterno())
-                    .append("apellidoMaterno", usuario.getApellidoMaterno())
-                    .append("correoElectronico", usuario.getCorreoElectronico())
-                    .append("fechaNacimiento", usuario.getFechaNacimiento())
-                    .append("telefono", usuario.getTelefono())
-                    .append("rol", usuario.getRol().toString())
-                    .append("estado", usuario.getEstado().toString());
-
-            if (usuario instanceof Administrador) {
-                actualizacion.append("RFC", ((Administrador) usuario).getRFC());
-            }
-
-            if (usuario instanceof Cliente) {
-                actualizacion.append("Calle", ((Cliente) usuario).getCalle());
-                actualizacion.append("CP", ((Cliente) usuario).getCP());
-                actualizacion.append("Numero", ((Cliente) usuario).getNumero());
-            }
-
-            Bson actualizar = new Document("$set", actualizacion);
-
-            UpdateResult resultado = coleccionUsuarios.updateOne(filtro, actualizar);
-
-            if (resultado.getModifiedCount() == 0) {
-                throw new PersistenciaException("No se encontro el usuario para actualizar");
-            }
-
-            return usuario;
-
-        } catch (MongoException e) {
-            throw new PersistenciaException("Error al actualizar el usuario: " + e.getMessage());
-        } finally {
-            if (clienteMongo != null) {
-                conexion.cerrarConexion(clienteMongo);
-            }
-        }
-    }
-
-    @Override
-    public Boolean eliminarUsuario(Usuario usuario) throws PersistenciaException {
-        MongoClient clienteMongo = null;
-        try {
-            clienteMongo = conexion.crearConexion();
-
-            Bson filtro = Filters.eq("nombreUsuario", usuario.getNombreDeUsuario());
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
-
-            Document documentEliminar = coleccionUsuarios.find(filtro).first();
-
-            if (documentEliminar == null) {
-                throw new PersistenciaException("No se encontro el usuario para eliminar");
-            }
-
-            DeleteResult eliminar = coleccionUsuarios.deleteOne(filtro);
+            DeleteResult eliminar = coleccion.deleteOne(filtro);
 
             if (eliminar.getDeletedCount() == 0) {
-                throw new PersistenciaException("No se elimino el usuario");
+                throw new EliminarUsuarioException("No se elimino el usuario");
             }
 
             return true;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al actualizar el usuario: " + e.getMessage());
+            throw new EliminarUsuarioException("Error al actualizar el usuario: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -231,32 +174,35 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public Boolean bloquearUsuario(Usuario usuario) throws PersistenciaException {
+    public Boolean bloquearUsuario(Usuario usuario) throws EditarUsuarioException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
 
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+
+            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
+
             Bson filtro = Filters.eq("nombreUsuario", usuario.getNombreDeUsuario());
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
 
-            Document documentBloquear = coleccionUsuarios.find(filtro).first();
+            Usuario usuarioBloquear = coleccion.find(filtro).first();
 
-            if (documentBloquear == null) {
-                throw new PersistenciaException("No se encontro el usuario para bloquearlo");
+            if (usuarioBloquear == null) {
+                throw new EditarUsuarioException("No se encontro el usuario para bloquearlo");
             }
 
             Bson bloqueo = Updates.set("estado", EstadoUsuario.BLOQUEADO.toString());
 
-            UpdateResult resultado = coleccionUsuarios.updateOne(filtro, bloqueo);
+            UpdateResult resultado = coleccion.updateOne(filtro, bloqueo);
 
             if (resultado.getModifiedCount() == 0) {
-                throw new PersistenciaException("No se encontro el usuario para bloquearlo");
+                throw new EditarUsuarioException("No se bloqueo al usuario");
             }
 
             return true;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al bloquear el usuario: " + e.getMessage());
+            throw new EditarUsuarioException("Error al bloquear el usuario: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -265,32 +211,35 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public Boolean desbloquearUsuario(Usuario usuario) throws PersistenciaException {
+    public Boolean desbloquearUsuario(Usuario usuario) throws EditarUsuarioException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
 
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+
+            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
+
             Bson filtro = Filters.eq("nombreUsuario", usuario.getNombreDeUsuario());
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
 
-            Document documentDesbloquear = coleccionUsuarios.find(filtro).first();
+            Usuario usuarioBloquear = coleccion.find(filtro).first();
 
-            if (documentDesbloquear == null) {
-                throw new PersistenciaException("No se encontro el usuario para desbloquearlo");
+            if (usuarioBloquear == null) {
+                throw new EditarUsuarioException("No se encontro el usuario para bloquearlo");
             }
 
-            Bson desbloqueo = Updates.set("estado", EstadoUsuario.ACTIVO.toString());
+            Bson bloqueo = Updates.set("estado", EstadoUsuario.ACTIVO.toString());
 
-            UpdateResult resultado = coleccionUsuarios.updateOne(filtro, desbloqueo);
+            UpdateResult resultado = coleccion.updateOne(filtro, bloqueo);
 
             if (resultado.getModifiedCount() == 0) {
-                throw new PersistenciaException("No se encontro el usuario para desbloquearlo");
+                throw new EditarUsuarioException("No se bloqueo al usuario");
             }
 
             return true;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al desbloquear el usuario: " + e.getMessage());
+            throw new EditarUsuarioException("Error al bloquear el usuario: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -299,36 +248,38 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public List<Funcion> cargarHistorialCompras(Cliente cliente) throws PersistenciaException {
+    public List<Compra> cargarHistorialCompras(Cliente cliente) throws PersistenciaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Boolean validarUsuario(String nombreUsuario, String contrasena) throws PersistenciaException {
+    public Boolean validarUsuario(String nombreUsuario, String contrasena) throws EncontrarUsuarioException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
+
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+
+            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
 
             Bson filtro = Filters.and(
                     Filters.eq("nombreUsuario", nombreUsuario),
                     Filters.eq("contrasena", contrasena));
 
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
+            Usuario usuarioEncontrado = coleccion.find(filtro).first();
 
-            Document usuarioEncontrado = coleccionUsuarios.find(filtro).first();
-
-            if (usuarioEncontrado == null && usuarioEncontrado.getString("estado") != EstadoUsuario.BLOQUEADO.toString()) {
-                throw new PersistenciaException("El usuario no se encontro");
+            if (usuarioEncontrado == null && usuarioEncontrado.getEstado() != EstadoUsuario.BLOQUEADO) {
+                throw new EncontrarUsuarioException("El usuario no se encontro");
             }
 
-            if (usuarioEncontrado.getString("estado") == EstadoUsuario.BLOQUEADO.toString()) {
-                throw new PersistenciaException("El usuario esta bloqueado");
+            if (usuarioEncontrado.getEstado() == EstadoUsuario.BLOQUEADO) {
+                throw new EncontrarUsuarioException("El usuario esta bloqueado");
             }
 
             return true;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al desbloquear el usuario: " + e.getMessage());
+            throw new EncontrarUsuarioException("Error al desbloquear el usuario: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -337,13 +288,16 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws PersistenciaException {
+    public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws ObtenerUsuariosException {
         MongoClient clienteMongo = null;
         List<Usuario> usuarios = new ArrayList<>();
 
         try {
             clienteMongo = conexion.crearConexion();
-            MongoCollection<Document> coleccionUsuarios = clienteMongo.getDatabase("CineLerma").getCollection("usuarios");
+
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+
+            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
 
             List<Bson> filtros = new ArrayList<>();
 
@@ -377,18 +331,16 @@ public class UsuarioDAO implements IUsuarioDAO {
             // Construir consulta final
             Bson filtro = filtros.isEmpty() ? new Document() : Filters.and(filtros);
 
-            MongoCursor<Document> cursor = coleccionUsuarios.find(filtro).iterator();
+            MongoCursor<Usuario> cursor = coleccion.find(filtro).iterator();
             while (cursor.hasNext()) {
-                Document documentUsuario = cursor.next();
-
-                Usuario usuario = documentoAUsuario(documentUsuario);
-                usuarios.add(usuario);
+                Usuario usuarioEncontrado = cursor.next();
+                usuarios.add(usuarioEncontrado);
             }
 
             return usuarios;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al registrar el cliente: " + e.getMessage());
+            throw new ObtenerUsuariosException("Error al registrar el cliente: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -397,65 +349,30 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public Usuario obtenerUsuario(String nombreUsuario) throws PersistenciaException {
+    public Usuario obtenerUsuario(String nombreUsuario) throws EncontrarUsuarioException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            Bson filtro = Filters.eq("nombreUsuario", nombreUsuario);
+            Bson filtro = Filters.eq("nombreDeUsuario", nombreUsuario); 
             MongoCollection<Usuario> coleccionUsuarios = base.getCollection("usuarios", Usuario.class);
 
             Usuario usuario = coleccionUsuarios.find(filtro).first();
 
             if (usuario == null) {
-                throw new PersistenciaException("No se encontró el usuario");
+                throw new EncontrarUsuarioException("No se encontró el usuario");
             }
 
             return usuario;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al obtener el usuario: " + e.getMessage());
+            throw new EncontrarUsuarioException("Error al obtener el usuario: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
             }
         }
-    }
-
-    private Usuario documentoAUsuario(Document documentUsuario) {
-        Usuario usuario = new Usuario();
-
-        usuario.setIdUsuario(documentUsuario.getObjectId("_id").toString());
-        usuario.setNombreDeUsuario(documentUsuario.getString("nombreUsuario"));
-        usuario.setContrasenia(documentUsuario.getString("contrasenia"));
-        usuario.setCorreoElectronico(documentUsuario.getString("correoElectronico"));
-        usuario.setNombre(documentUsuario.getString("nombres"));
-        usuario.setApellidoMaterno(documentUsuario.getString("apellidoPaterno"));
-        usuario.setApellidoMaterno(documentUsuario.getString("apellidoMaterno"));
-        usuario.setFechaNacimiento((LocalDateTime) documentUsuario.get("fechaNacimiento"));
-
-        Rol rol = Rol.valueOf(documentUsuario.getString("rol"));
-        usuario.setRol(rol);
-
-        if (rol == Rol.CLIENTE) {
-            Cliente cliente = new Cliente();
-            cliente.setCalle(documentUsuario.getString("calle"));
-            cliente.setCP(documentUsuario.getString("CP"));
-            cliente.setNumero(documentUsuario.getString("numero"));
-            usuario = cliente;
-        } else if (rol == Rol.ADMINISTRADOR) {
-            Administrador admin = new Administrador();
-            admin.setRFC(documentUsuario.getString("RFC"));
-            usuario = admin;
-        }
-
-        EstadoUsuario estado = EstadoUsuario.valueOf(documentUsuario.getString("estado"));
-        usuario.setEstado(estado);
-
-        usuario.setTelefono(documentUsuario.getString("telefono"));
-
-        return usuario;
     }
 
 }

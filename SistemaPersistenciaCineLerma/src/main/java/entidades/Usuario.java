@@ -8,6 +8,7 @@ import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
 /**
@@ -17,7 +18,8 @@ import org.bson.types.ObjectId;
 public class Usuario {
 
     @BsonId
-    private String idUsuario;
+    @BsonProperty("_id")
+    private ObjectId idUsuario;
     
     private String nombreDeUsuario;
     
@@ -29,8 +31,10 @@ public class Usuario {
     
     private String apellidoMaterno;
     
+    @BsonProperty
     private String correoElectronico;
     
+    @BsonProperty
     private LocalDateTime fechaNacimiento;
     
     private String telefono;
@@ -42,7 +46,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
+    public Usuario(ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
         this.idUsuario = idUsuario;
         this.nombreDeUsuario = nombreDeUsuario;
         this.contrasenia = contrasenia;
@@ -71,11 +75,11 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public String getIdUsuario() {
+    public ObjectId getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(String idUsuario) {
+    public void setIdUsuario(ObjectId idUsuario) {
         this.idUsuario = idUsuario;
     }
 
