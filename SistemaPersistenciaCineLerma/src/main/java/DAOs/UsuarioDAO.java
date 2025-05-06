@@ -79,7 +79,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             return usuarios;
 
         } catch (MongoException e) {
-            throw new ObtenerUsuariosException ("Error al encontrar usuarios " + e.getMessage());
+            throw new ObtenerUsuariosException("Error al encontrar usuarios " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -94,7 +94,6 @@ public class UsuarioDAO implements IUsuarioDAO {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
             IUsuarioStrategy<Usuario> estrategia = StrategyFactory.get("registrar");
-            
 
             Usuario usuarioRegistrado = estrategia.ejecutar(base, usuario);
 
@@ -248,8 +247,26 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public List<Compra> cargarHistorialCompras(Cliente cliente) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Compra> cargarHistorialCompras(String nombreUsuario) throws EncontrarUsuarioException {
+        MongoClient clienteMongo = null;
+        try {
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+
+            MongoCollection<Compra> coleccion = base.getCollection("compras", Compra.class);
+
+            Bson filtro = Filters.eq("nombreDeUsuario", nombreUsuario);
+
+
+            return coleccion.find(filtro).into(new ArrayList<>());
+
+        } catch (MongoException e) {
+            throw new EncontrarUsuarioException("Error al cargar historial de compras: " + e.getMessage());
+        } finally {
+            if (clienteMongo != null) {
+                conexion.cerrarConexion(clienteMongo);
+            }
+        }
     }
 
     @Override
@@ -355,7 +372,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            Bson filtro = Filters.eq("nombreDeUsuario", nombreUsuario); 
+            Bson filtro = Filters.eq("nombreDeUsuario", nombreUsuario);
             MongoCollection<Usuario> coleccionUsuarios = base.getCollection("usuarios", Usuario.class);
 
             Usuario usuario = coleccionUsuarios.find(filtro).first();

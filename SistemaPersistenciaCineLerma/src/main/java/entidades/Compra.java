@@ -5,6 +5,9 @@
 package entidades;
 
 import java.time.LocalDateTime;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -12,39 +15,42 @@ import java.time.LocalDateTime;
  */
 public class Compra {
     
-    private Long idCompra;
+    @BsonId
+    @BsonProperty("_id")
+    private ObjectId idCompra;
     
     private Pago pago;
     
     private String metodoPago;
     
-    private Cliente cliente;
+    @BsonProperty("nombreDeUsuario")
+    private String usuarioCliente;
     
     private LocalDateTime fecha;
 
     public Compra() {
     }
 
-    public Compra(Long idCompra, Pago pago, String metodoPago, Cliente cliente, LocalDateTime fecha) {
+    public Compra(ObjectId idCompra, Pago pago, String metodoPago, String usuarioCliente, LocalDateTime fecha) {
         this.idCompra = idCompra;
         this.pago = pago;
         this.metodoPago = metodoPago;
-        this.cliente = cliente;
+        this.usuarioCliente = usuarioCliente;
         this.fecha = fecha;
     }
 
-    public Compra(Pago pago, String metodoPago, Cliente cliente, LocalDateTime fecha) {
+    public Compra(Pago pago, String metodoPago, String cliente, LocalDateTime fecha) {
         this.pago = pago;
         this.metodoPago = metodoPago;
-        this.cliente = cliente;
+        this.usuarioCliente = usuarioCliente;
         this.fecha = fecha;
     }
 
-    public Long getIdCompra() {
+    public ObjectId getIdCompra() {
         return idCompra;
     }
 
-    public void setIdCompra(Long idCompra) {
+    public void setIdCompra(ObjectId idCompra) {
         this.idCompra = idCompra;
     }
 
@@ -64,12 +70,12 @@ public class Compra {
         this.metodoPago = metodoPago;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public String getUsuarioCliente() {
+        return usuarioCliente;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setUsuarioCliente(String usuarioCliente) {
+        this.usuarioCliente = usuarioCliente;
     }
 
     public LocalDateTime getFecha() {
@@ -82,6 +88,6 @@ public class Compra {
 
     @Override
     public String toString() {
-        return "Compra{" + "idCompra=" + idCompra + ", pago=" + pago + ", metodoPago=" + metodoPago + ", cliente=" + cliente + ", fecha=" + fecha + '}';
+        return "Compra{" + "idCompra=" + idCompra + ", pago=" + pago + ", metodoPago=" + metodoPago + ", cliente=" + usuarioCliente + ", fecha=" + fecha + '}';
     }    
 }

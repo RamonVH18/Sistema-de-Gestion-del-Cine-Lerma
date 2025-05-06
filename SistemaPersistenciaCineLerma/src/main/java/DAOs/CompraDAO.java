@@ -50,7 +50,7 @@ public class CompraDAO implements ICompraDAO {
     public Compra registrarCompra(Compra compra) {
 
         Long nuevoId = (long) (compras.size() + 1);
-        compra.setIdCompra(nuevoId);
+//        compra.setIdCompra(nuevoId);
 
         // anadir compras a la lista
         compras.add(compra);

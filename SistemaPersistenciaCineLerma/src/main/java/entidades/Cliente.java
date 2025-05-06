@@ -20,6 +20,7 @@ public class Cliente extends Usuario{
     private String CP;
 
     private String numero;
+    
 
     public Cliente() {
     }

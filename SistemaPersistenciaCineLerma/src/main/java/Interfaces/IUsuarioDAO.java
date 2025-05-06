@@ -37,7 +37,7 @@ public interface IUsuarioDAO {
     
     public Boolean desbloquearUsuario(Usuario usuario) throws EditarUsuarioException;
 
-    public List<Compra> cargarHistorialCompras(Cliente cliente) throws PersistenciaException;
+    public List<Compra> cargarHistorialCompras(String nombreDeUsuario) throws EncontrarUsuarioException;
     
     public Boolean validarUsuario(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
     
