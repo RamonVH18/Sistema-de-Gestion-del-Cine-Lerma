@@ -73,7 +73,7 @@ public class CompraBO implements ICompraBO {
         Compra compra = new Compra();
         compra.setPago(pago);
         compra.setMetodoPago(metodoPago);
-        compra.setCliente(cliente);
+        //compra.setCliente(cliente);
         compra.setFecha(LocalDateTime.now());
         
         // Registrar la compra en el DAO
@@ -90,7 +90,7 @@ public class CompraBO implements ICompraBO {
         }
         
         Compra compraConsulta = new Compra();
-        compraConsulta.setIdCompra(idCompra);
+        //compraConsulta.setIdCompra(idCompra);
         
         return compraDAO.consultarCompra(compraConsulta);
     }
@@ -130,9 +130,9 @@ public class CompraBO implements ICompraBO {
         List<Compra> todasLasCompras = compraDAO.obtenerTodasLasCompras();
         
         for (Compra compra : todasLasCompras) {
-            if (compra.getCliente().getIdUsuario().equals(cliente.getIdUsuario())) {
-                totalGastado += compra.getPago().getMonto();
-            }
+            //if (compra.getCliente().getIdUsuario().equals(cliente.getIdUsuario())) {
+              //  totalGastado += compra.getPago().getMonto();
+            //}
         }
         
         return totalGastado;

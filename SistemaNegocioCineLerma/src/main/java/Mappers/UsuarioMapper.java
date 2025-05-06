@@ -5,15 +5,17 @@
 package Mappers;
 
 import DTOs.UsuarioDTO;
+import Interfaces.mappers.IUsuarioMapper;
 import entidades.Usuario;
 
 /**
  *
  * @author sonic
  */
-public class UsuarioMapper {
+public class UsuarioMapper implements IUsuarioMapper{
 
-    public static UsuarioDTO toUsuarioDTO(Usuario usuario) {
+    @Override
+    public UsuarioDTO toUsuarioDTO(Usuario usuario) {
         //Primero se valida si el pago recibido es null, entonces se retornara un null
         if (usuario == null) {
             return null;
@@ -34,7 +36,8 @@ public class UsuarioMapper {
         return dto;
     }
 
-    public static Usuario toUsuarioEntidad(UsuarioDTO usuariodto) {
+    @Override
+    public Usuario toUsuarioEntidad(UsuarioDTO usuariodto) {
         if (usuariodto == null) {
             return null;
         }

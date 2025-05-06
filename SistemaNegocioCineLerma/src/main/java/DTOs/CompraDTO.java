@@ -4,6 +4,8 @@
  */
 package DTOs;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author Sebastian Borquez
@@ -11,7 +13,8 @@ package DTOs;
 public class CompraDTO {
     private PagoDTO pago;
     private String metodoPago;
-    private ClienteDTO cliente;
+    private String usuarioCliente;
+    private LocalDateTime fecha;
     
     /**
      * Constructor vacio
@@ -23,13 +26,15 @@ public class CompraDTO {
      * Constructor con todos los atributos
      * @param pago
      * @param metodoPago
-     * @param cliente 
+     * @param usuarioCliente
      */
-    public CompraDTO(PagoDTO pago, String metodoPago, ClienteDTO cliente) {
+    public CompraDTO(PagoDTO pago, String metodoPago, String usuarioCliente, LocalDateTime fecha) {    
         this.pago = pago;
         this.metodoPago = metodoPago;
-        this.cliente = cliente;
+        this.usuarioCliente = usuarioCliente;
+        this.fecha = fecha;
     }
+
     /**
      * Getters y setters
      */
@@ -57,20 +62,27 @@ public class CompraDTO {
     public void setMetodoPago(String metodoPago) {
         this.metodoPago = metodoPago;
     }
-    /**
-     * 
-     * @return 
-     */
-    public ClienteDTO getCliente() {
-        return cliente;
+
+    public String getUsuarioCliente() {
+        return usuarioCliente;
     }
-    /**
-     * 
-     * @param cliente 
-     */
-    public void setCliente(ClienteDTO cliente) {
-        this.cliente = cliente;
+
+    public void setUsuarioCliente(String usuarioCliente) {
+        this.usuarioCliente = usuarioCliente;
     }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+    
+    
+    
+    
+    
     
     
 }

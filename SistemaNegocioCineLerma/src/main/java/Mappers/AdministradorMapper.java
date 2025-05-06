@@ -5,14 +5,16 @@
 package Mappers;
 
 import DTOs.AdministradorDTO;
+import Interfaces.mappers.IAdministradorMapper;
 import entidades.Administrador;
 
 /**
  *
  * @author sonic
  */
-public class AdministradorMapper {
-    public static AdministradorDTO toAdministradorDTO(Administrador admin) {
+public class AdministradorMapper implements IAdministradorMapper{
+    @Override
+    public AdministradorDTO toAdministradorDTO(Administrador admin) {
         //Primero se valida si el pago recibido es null, entonces se retornara un null
         if (admin == null) {
             return null;
@@ -40,7 +42,8 @@ public class AdministradorMapper {
 
     }
     
-    public static Administrador toAdministradorEntidad(AdministradorDTO admindto) {
+    @Override
+    public Administrador toAdministradorEntidad(AdministradorDTO admindto) {
         if (admindto == null) {
             return null;
         }
