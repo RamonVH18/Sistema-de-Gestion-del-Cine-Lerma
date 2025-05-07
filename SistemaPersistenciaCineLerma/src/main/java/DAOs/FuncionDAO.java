@@ -225,4 +225,14 @@ public class FuncionDAO implements IFuncionDAO {
             }
         }
     }
+
+    @Override
+    public Funcion registrarFuncion(Funcion funcion) throws PersistenciaException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Funcion eliminarFuncion(Funcion funcion) throws PersistenciaException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

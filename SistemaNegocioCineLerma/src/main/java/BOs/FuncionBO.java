@@ -43,73 +43,43 @@ public class FuncionBO implements IFuncionBO {
 
     @Override
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistroException {
-//        // Validar que funcionDTO no sea nulo o vacio
-//        if (funcionDTO == null) {
-//            throw new FuncionRegistroException("Error: Los datos de la funcion no pueden estar vacios.");
-//        }
-//
-//        // Validar que la fecha y hora no sean nulos
-//        if (funcionDTO.getFechaHora() == null) {
-//            throw new FuncionRegistroException("Error: Los datos de la fecha y hora no pueden ser vacios");
-//        }
-//
-//        // Validar que la fecha no halla pasado
-//        LocalDateTime ahora = LocalDateTime.now();
-//        if (funcionDTO.getFechaHora().isBefore(ahora)) {
-//            throw new FuncionRegistroException("Error: Los datos de la fecha ya pasaron y no son actuales");
-//        }
-//
-//        // Validar que sala exista y no sea nula
-//        if (funcionDTO.getSala() == null || funcionDTO.getSala().trim().isEmpty()) {
-//            throw new FuncionRegistroException("Error: La sala debe ser obligatoria, no puede haber una funcion sin sala asignada.");
-//        }
-//
-//        // Validar el precio para que sea positivo
-//        if (funcionDTO.getPrecio() <= 0) {
-//            throw new FuncionRegistroException("Error: El precio debe ser un valor positivo.");
-//        }
-//
-//        // Se convierte el DTO en una entidad para su almacenamiento en la base de datos
-//        Funcion funcionARegistrar = FuncionMapper.toFuncionEntidad(funcionDTO);
-//
-//        try {
-//            Funcion funcionRegistrada = FuncionDAO.registrarFuncion(funcionARegistrar);
-//
-//            if (funcionRegistrada == null || funcionRegistrada.getId() == null) {
-//                throw new FuncionRegistroException("Error: No se encontro la funcion a registrar.");
-//            }
-//            // Se convierte la entidad de vuelta a DTO y se retorna
-//            return FuncionMapper.toFuncionDTO(funcionRegistrada);
-//
-//        } catch (PersistenciaException ex) {
-//            throw new FuncionRegistroException("Error: No se puedo registrar la funcion", ex);
-//        }
-//        
-        return null;
+
+        try {
+
+            Funcion funcionRegistrar = funcionMapper.toFuncionEntidad(funcionDTO);
+            Funcion funcionRegistrado = funcionDAO.registrarFuncion(funcionRegistrar);
+
+            return funcionMapper.toFuncionDTO(funcionRegistrado);
+
+        } catch (PersistenciaException e) {
+            throw new FuncionRegistroException("Error al registrar usuario", e);
+        }
 
     }
 
     @Override
-    public Boolean eliminarFuncion(Long id) throws FuncionEliminacionException {
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminacionException {
 
-//        // Validar que el id sea valido
-//        if (id == null || id <= 0) {
-//            throw new FuncionEliminacionException("Error: el id es invalido");
-//        }
-//
-//        //Falta validacion que la funcion no tenga boletos vendidos.
-//        try {
-//            return funcionDAO.eliminarFuncion(id);
-//
-//        } catch (PersistenciaException ex) {
-//            throw new FuncionEliminacionException("Error: no se pudo eliminar la funcion", ex);
-//        }
-        return null;
+        try {
+
+            Funcion funcionEliminar = funcionMapper.toFuncionEntidad(funcionDTO);
+
+            Funcion funcionEliminada = funcionDAO.eliminarFuncion(funcionEliminar);
+
+            if (funcionEliminada == null) {
+                return false;
+            }
+
+            return true;
+
+        } catch (PersistenciaException e) {
+            throw new FuncionEliminacionException("Error al eliminar usuario", e);
+        }
 
     }
 
     @Override
-    public FuncionDTO buscarFuncion(Long id) throws FuncionBusquedaException {
+    public FuncionDTO buscarFuncion(String id) throws FuncionBusquedaException {
 //        // Validar que el id sea valido
 //        if (id == null || id <= 0) {
 //            throw new FuncionBusquedaException("Error: el id es invalido");
@@ -202,7 +172,6 @@ public class FuncionBO implements IFuncionBO {
             }
 
             //final ObjectId clienteId = cliente.getIdUsuario();
-
             // Eliminar el observador del cliente para esta función
             funcionDAO.eliminarObservadorPorFiltro(idFuncion, observador -> {
                 if (observador instanceof ObservadorClienteFuncion) {

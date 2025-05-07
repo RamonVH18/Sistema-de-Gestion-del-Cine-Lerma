@@ -9,12 +9,17 @@ import entidades.Funcion;
 import entidades.Pelicula;
 import java.util.List;
 import java.util.function.Predicate;
+import org.bson.types.ObjectId;
 
 /**
  *
  * @author Ramon Valencia
  */
 public interface IFuncionDAO {
+    
+    public Funcion registrarFuncion(Funcion funcion) throws PersistenciaException;
+    
+    public Funcion eliminarFuncion(Funcion funcion) throws PersistenciaException;
 
     public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException;
 
@@ -28,7 +33,7 @@ public interface IFuncionDAO {
     // Nuevos métodos
     Funcion buscarFuncionPorId(Long idFuncion) throws PersistenciaException;
 
-    boolean actualizarFuncion(Funcion funcion) throws PersistenciaException;
+    boolean actualizarFuncion(Funcion funcion) throws PersistenciaException; // Revisar metodo, nose actualiza funcion.
 
     // Métodos para gestión de observadores
     void agregarObservador(Long idFuncion, ObservadorFuncion observador);

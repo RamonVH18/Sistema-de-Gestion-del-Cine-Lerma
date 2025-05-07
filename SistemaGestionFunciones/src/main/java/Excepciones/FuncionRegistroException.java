@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author Abraham Coronel Bringas
  */
-public class FuncionProgramadaException extends Exception {
+public class FuncionRegistroException extends Exception {
 
-    public FuncionProgramadaException(String message) {
+    public FuncionRegistroException(String message) {
         super(message);
     }
 
-    public FuncionProgramadaException(String message, Throwable cause) {
+    public FuncionRegistroException(String message, Throwable cause) {
         super(message, cause);
     }
 

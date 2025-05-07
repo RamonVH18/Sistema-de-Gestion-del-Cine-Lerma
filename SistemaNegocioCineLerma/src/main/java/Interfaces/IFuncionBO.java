@@ -6,7 +6,6 @@ package Interfaces;
 
 import Excepciones.funciones.FuncionEliminacionException;
 import DTOs.FuncionDTO;
-import DTOs.FuncionesPorPeliculaDTO;
 import Excepciones.funciones.FuncionBusquedaException;
 import Excepciones.funciones.FuncionRegistroException;
 import entidades.Cliente;
@@ -22,9 +21,9 @@ public interface IFuncionBO {
 
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistroException;
 
-    public Boolean eliminarFuncion(Long id) throws FuncionEliminacionException;
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminacionException;
 
-    public FuncionDTO buscarFuncion(Long id) throws FuncionBusquedaException;
+    public FuncionDTO buscarFuncion(String id) throws FuncionBusquedaException;
 
     public List<FuncionDTO> buscarFuncionesPelicula(String pelicula) throws FuncionBusquedaException;
 
