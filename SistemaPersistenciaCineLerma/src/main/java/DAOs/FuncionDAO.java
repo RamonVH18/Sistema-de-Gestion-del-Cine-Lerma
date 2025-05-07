@@ -4,6 +4,8 @@
  */
 package DAOs;
 
+import Excepciones.Funciones.FuncionBoletosVendidosException;
+import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.PersistenciaException;
 import Interfaces.IFuncionDAO;
 import Interfaces.IPeliculaDAO;
@@ -99,7 +101,7 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException {
+    public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) {
         List<Funcion> funcionesPelicula = new ArrayList<>();
 
         for (int i = 0; i < funciones.size(); i++) {
@@ -112,7 +114,7 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public List<Funcion> mostrarFuncionesActivas() throws PersistenciaException {
+    public List<Funcion> mostrarFuncionesActivas() {
         List<Funcion> funcionesPelicula = new ArrayList<>();
         funcionesHarcodeadas();
         for (int i = 0; i < funciones.size(); i++) {
@@ -125,7 +127,7 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public List<Funcion> mostrarFuncionesPeliculas() throws PersistenciaException {
+    public List<Funcion> mostrarFuncionesPeliculas() {
         if (!funciones.isEmpty()) {
             return funciones;
         }
@@ -227,12 +229,17 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public Funcion registrarFuncion(Funcion funcion) throws PersistenciaException {
+    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Funcion eliminarFuncion(Funcion funcion) throws PersistenciaException {
+    public Funcion eliminarFuncion(Funcion funcion) throws FuncionBoletosVendidosException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Funcion buscarFuncionPorId(ObjectId idFuncion) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

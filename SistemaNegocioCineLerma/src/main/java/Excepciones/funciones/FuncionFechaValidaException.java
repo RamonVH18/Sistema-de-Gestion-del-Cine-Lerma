@@ -8,14 +8,14 @@ package Excepciones.funciones;
  *
  * @author Ramon Valencia
  */
-public class FuncionRegistroException extends Exception{
+public class FuncionFechaValidaException extends Exception {
 
-    public FuncionRegistroException(String message) {
+    public FuncionFechaValidaException(String message) {
         super(message);
     }
 
-    public FuncionRegistroException(String message, Throwable cause) {
+    public FuncionFechaValidaException(String message, Throwable cause) {
         super(message, cause);
     }
-
+    
 }

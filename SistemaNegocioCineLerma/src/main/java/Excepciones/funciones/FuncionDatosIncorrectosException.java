@@ -8,14 +8,14 @@ package Excepciones.funciones;
  *
  * @author Ramon Valencia
  */
-public class FuncionBusquedaException extends Exception {
+public class FuncionDatosIncorrectosException extends Exception{
 
-    public FuncionBusquedaException(String message) {
+    public FuncionDatosIncorrectosException(String message) {
         super(message);
     }
 
-    public FuncionBusquedaException(String message, Throwable cause) {
+    public FuncionDatosIncorrectosException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

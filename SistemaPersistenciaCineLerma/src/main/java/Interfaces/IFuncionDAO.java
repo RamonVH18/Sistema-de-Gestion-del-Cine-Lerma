@@ -4,6 +4,8 @@
  */
 package Interfaces;
 
+import Excepciones.Funciones.FuncionBoletosVendidosException;
+import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.PersistenciaException;
 import entidades.Funcion;
 import entidades.Pelicula;
@@ -17,21 +19,21 @@ import org.bson.types.ObjectId;
  */
 public interface IFuncionDAO {
     
-    public Funcion registrarFuncion(Funcion funcion) throws PersistenciaException;
+    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException;
     
-    public Funcion eliminarFuncion(Funcion funcion) throws PersistenciaException;
+    public Funcion eliminarFuncion(Funcion funcion) throws FuncionBoletosVendidosException;
 
-    public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) throws PersistenciaException;
+    public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula);
 
-    public List<Funcion> mostrarFuncionesActivas() throws PersistenciaException;
+    public List<Funcion> mostrarFuncionesActivas();
 
-    public List<Funcion> mostrarFuncionesPeliculas() throws PersistenciaException;
+    public List<Funcion> mostrarFuncionesPeliculas();
 
     // Métodos existentes
     List<Funcion> funcionesHarcodeadas() throws PersistenciaException;
 
     // Nuevos métodos
-    Funcion buscarFuncionPorId(Long idFuncion) throws PersistenciaException;
+    Funcion buscarFuncionPorId(ObjectId idFuncion);
 
     boolean actualizarFuncion(Funcion funcion) throws PersistenciaException; // Revisar metodo, nose actualiza funcion.
 
