@@ -21,7 +21,7 @@ public interface IManejoFunciones {
     
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistroException;
 
-    public Boolean eliminarFuncion(Long id) throws FuncionEliminacionException;
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminacionException;
 
     public FuncionDTO buscarFuncion(Long id) throws FuncionBusquedaException;
 

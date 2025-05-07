@@ -59,8 +59,10 @@ public class ManejoFunciones implements IManejoFunciones {
     }
 
     @Override
-    public Boolean eliminarFuncion(Long id) throws FuncionEliminacionException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminacionException {
+
+        return null;
+
     }
 
     @Override
