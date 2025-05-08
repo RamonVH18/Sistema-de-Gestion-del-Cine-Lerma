@@ -252,6 +252,7 @@ public class Utilerias {
         
         Dimension tamañoFrame = new Dimension(640, 830);
         
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
         frame.setPreferredSize(tamañoFrame);
