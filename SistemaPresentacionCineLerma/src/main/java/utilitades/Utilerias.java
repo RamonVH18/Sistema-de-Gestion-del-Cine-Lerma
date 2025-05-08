@@ -11,6 +11,11 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -46,8 +51,14 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 /**
  *
@@ -236,5 +247,64 @@ public class Utilerias {
         g2d.dispose();
         return bufferedEscalada;
     }
+    
+    public void configurarFrameBase(JFrame frame, String titulo) {
+        
+        Dimension tamañoFrame = new Dimension(640, 830);
+        
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new BorderLayout());
+        frame.setPreferredSize(tamañoFrame);
+        frame.setSize(tamañoFrame);
+        frame.setTitle(titulo);
+        JLabel labelTitulo = new JLabel();
+        
+        JPanel panelNorte = new JPanel();
+        JPanel panelSur = new JPanel();
+        configuracionNorte(panelNorte);
+        configuracionSur(panelSur);
+        
+        panelNorte.add(labelTitulo);
+        
+        frame.add(panelSur, BorderLayout.SOUTH);
+        frame.add(panelNorte, BorderLayout.NORTH);
+        panelNorte.setOpaque(false);
+        
+        configurarTitulo(labelTitulo, titulo);
+        
+    }
 
+    private void configurarTitulo(JLabel tituloVentana, String titulo) {
+        tituloVentana.setSize(new Dimension(125, 55));
+        tituloVentana.setText(titulo);
+        tituloVentana.setHorizontalAlignment(SwingConstants.CENTER);
+        tituloVentana.setVerticalAlignment(SwingConstants.CENTER);
+        tituloVentana.setFont(new Font("Regular", Font.BOLD, 32));
+        
+    }
+    /**
+     * Metodo que se encarga de configurar la parte superior de un JFrame
+     * @param panelNorte 
+     */
+    private void configuracionNorte(JPanel panelNorte){
+        Border border = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK);
+        panelNorte.setPreferredSize(new Dimension(650, 70));
+        panelNorte.setBorder(border);
+    }
+    /**
+     * Metodo que se encarga de configurar la parte inferior de un JFrame 
+     * @param panelSur 
+     */
+    private void configuracionSur(JPanel panelSur) {
+        Border border = BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK);
+        panelSur.setPreferredSize(new Dimension(650, 70));
+        panelSur.setBorder(border);
+        
+        JButton btnVolver = new JButton("<- Volver");
+        btnVolver.setPreferredSize(new Dimension(100, 45));
+        btnVolver.setBackground(new Color(162,132,94));
+        
+        panelSur.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelSur.add(btnVolver);
+    }
 }

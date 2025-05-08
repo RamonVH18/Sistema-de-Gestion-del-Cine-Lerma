@@ -17,13 +17,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import utilitades.FrameBase;
+import utilitades.Utilerias;
 
 /**
  *
  * @author Ramon Valencia
  */
-public final class MenuSalas extends FrameBase {
+public final class MenuSalas extends javax.swing.JFrame {
 
     private final IControl control = ControlDeNavegacion.getInstancia();
 
@@ -31,9 +31,10 @@ public final class MenuSalas extends FrameBase {
     private final int alturaBoton = 40;
     private final int anchoBoton = 200;
     private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+    private final Utilerias utilerias = new Utilerias();
 
     public MenuSalas(String titulo) {
-        super(titulo);
+        utilerias.configurarFrameBase(this, titulo);
         configurarMenuSalas();
     }
 

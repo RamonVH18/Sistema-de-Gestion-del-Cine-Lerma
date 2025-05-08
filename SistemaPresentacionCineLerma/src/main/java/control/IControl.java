@@ -15,7 +15,6 @@ import DTOs.TarjetaDTO;
 import Excepciones.PresentacionException;
 import java.util.List;
 import javax.swing.JFrame;
-import utilitades.FrameBase;
 
 /**
  *

@@ -4,17 +4,13 @@
  */
 package pantallas.Salas;
 
-import utilitades.FrameBase;
-
-
 /**
  *
  * @author Ramon Valencia
  */
-public class AgregarSala extends FrameBase {
+public class AgregarSala extends javax.swing.JFrame {
 
     public AgregarSala(String titulo) {
-        super(titulo);
     }
 
     

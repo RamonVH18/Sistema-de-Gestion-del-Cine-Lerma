@@ -44,7 +44,6 @@ import pantallas.Salas.AgregarSala;
 import pantallas.Salas.MenuSalas;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
-import utilitades.FrameBase;
 
 /**
  *
@@ -66,7 +65,7 @@ public class ControlDeNavegacion implements IControl {
 
     private int numAsientos;
 
-    private final ClienteDTO cliente = new ClienteDTO("Jaime Flores Valenzuela", "jaime@lerma.com.mx", "jaimico");
+    private final ClienteDTO cliente = new ClienteDTO();
 
     private static ControlDeNavegacion instancia;
 
@@ -210,7 +209,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarMenuSalas(String tituloFrame, JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
-            FrameBase pantallaMenuSalas = new MenuSalas(tituloFrame);
+            MenuSalas pantallaMenuSalas = new MenuSalas(tituloFrame);
             pantallaMenuSalas.setLocationRelativeTo(null);
             pantallaMenuSalas.setVisible(true);
             frameAnterior.dispose();
@@ -224,7 +223,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarAgregarSala(String tituloFrame, JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
-            FrameBase pantallaAgregarSala = new AgregarSala(tituloFrame);
+            AgregarSala pantallaAgregarSala = new AgregarSala(tituloFrame);
             pantallaAgregarSala.setLocationRelativeTo(null);
             pantallaAgregarSala.setVisible(true);
             frameAnterior.dispose();
