@@ -6,9 +6,14 @@ package BOs;
 
 import DAOs.FuncionDAO;
 import DTOs.FuncionDTO;
+import DTOs.HistorialFuncionesDTO;
+import Excepciones.Funciones.FuncionBoletosVendidosException;
+import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.PersistenciaException;
+import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionFechaValidaException;
-import Excepciones.funciones.FuncionDatosIncorrectosException;
+import Excepciones.funciones.FuncionRegistrarException;
+import Excepciones.funciones.FuncionValidadaException;
 import Interfaces.IFuncionBO;
 import Interfaces.IFuncionDAO;
 import Mappers.FuncionMapper;
@@ -39,90 +44,47 @@ public class FuncionBO implements IFuncionBO {
         }
         return instanceFuncionBO;
     }
-//
-//    @Override
-//    public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionFechaValidaException {
-//
-//        try {
-//
-//            Funcion funcionRegistrar = funcionMapper.toFuncionEntidad(funcionDTO);
-//            Funcion funcionRegistrado = funcionDAO.registrarFuncion(funcionRegistrar);
-//
-//            return funcionMapper.toFuncionDTO(funcionRegistrado);
-//
-//        } catch (FuncionDatosIncorrectosException e) {
-//            throw new FuncionDatosIncorrectosException("Error al registrar usuario", e);
-//        }
-//
-//    }
-//
-//    @Override
-//    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException {
-//
-//        try {
-//
-//            Funcion funcionEliminar = funcionMapper.toFuncionEntidad(funcionDTO);
-//
-//            Funcion funcionEliminada = funcionDAO.eliminarFuncion(funcionEliminar);
-//
-//            if (funcionEliminada == null) {
-//                return false;
-//            }
-//
-//            return true;
-//
-//        } catch (PersistenciaException e) {
-//            throw new FuncionBoletosVendidosException("Error al eliminar usuario", e);
-//        }
-//
-//    }
-//
-//    @Override
-//    public FuncionDTO buscarFuncion(String id) throws FuncionFechaValidaException {
-////        // Validar que el id sea valido
-////        if (id == null || id <= 0) {
-////            throw new FuncionFechaValidaException("Error: el id es invalido");
-////        }
-////
-////        try {
-////            Funcion funcion = funcionDAO.obtenerFuncionPorId(id);
-////
-////            if (funcion == null) {
-////                throw new FuncionFechaValidaException("Error: funcion no encontrada");
-////            }
-////
-////            LocalDateTime ahora = LocalDateTime.now();
-////            if (funcion.getFechaHora().isBefore(ahora)) {
-////                throw new FuncionDatosIncorrectosException("Error: La funcion ya ocurrio");
-////            }
-////
-////            return FuncionMapper.toFuncionDTO(funcion);
-////
-////        } catch (PersistenciaException ex) {
-////            throw new FuncionDatosIncorrectosException("Error: al buscar la funcion: " + ex.getMessage());
-////        }
-//
-//        return null;
-//    }
-//
-//    @Override
-//    public List<FuncionDTO> buscarFuncionesPelicula(String tituloPelicula) throws FuncionFechaValidaException {
-//        List<FuncionDTO> funcionesPelicula = new ArrayList<>();
-//
-//        try {
-//            List<Funcion> funcionesPeliculas = funcionDAO.mostrarFuncionesPeliculas();
-//            for (Funcion funcionPelicula : funcionesPeliculas) {
-//                FuncionDTO funcionPeliculaMapeada = funcionMapper.toFuncionDTO(funcionPelicula);
-//                if (funcionPeliculaMapeada.getNombre().equals(tituloPelicula)) {
-//                    funcionesPelicula.add(funcionPeliculaMapeada);
-//                }
-//            }
-//
-//            return funcionesPelicula;
-//        } catch (PersistenciaException e) {
-//            throw new FuncionFechaValidaException("Error al buscar las funciones de la pelicula.");
-//        }
-//    }
+
+    @Override
+    public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistrarException {
+
+        if (funcionDTO == null) {
+            throw new FuncionRegistrarException("La funcion no puede ser nulo");
+        }
+
+        try {
+            Funcion funcionRegistrar = funcionMapper.toFuncionEntidad(funcionDTO);
+            Funcion funcionRegistrado = funcionDAO.registrarFuncion(funcionRegistrar);
+            return funcionMapper.toFuncionDTO(funcionRegistrado);
+        } catch (FuncionSalaOcupadaException e) {
+            throw new FuncionRegistrarException("Error al registrar la funcion" + e.getMessage(), e);
+        }
+
+    }
+
+    @Override
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminarException {
+        if (funcionDTO == null) {
+            throw new FuncionEliminarException("La funcion no puede ser nulo.");
+        }
+        try {
+            Funcion funcionEliminar = funcionMapper.toFuncionEntidad(funcionDTO);
+            Funcion funcionEliminada = funcionDAO.eliminarFuncion(funcionEliminar);
+
+            if (funcionEliminada == null) {
+                return false;
+            }
+            return true;
+        } catch (FuncionBoletosVendidosException e) {
+            throw new FuncionEliminarException("Error al eliminar usuario", e);
+        }
+
+    }
+
+    @Override
+    public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula) {
+        return null;
+    }
 
     @Override
     public List<FuncionDTO> buscarFuncionesActivas() throws FuncionFechaValidaException {
@@ -140,6 +102,16 @@ public class FuncionBO implements IFuncionBO {
         } catch (Exception e) {
             throw new FuncionFechaValidaException("Error al buscar las funciones activas.");
         }
+    }
+
+    @Override
+    public List<HistorialFuncionesDTO> buscarHistorialFunciones() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public FuncionDTO validarFuncion(FuncionDTO funcionDTO) throws FuncionValidadaException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 //
 //    @Override

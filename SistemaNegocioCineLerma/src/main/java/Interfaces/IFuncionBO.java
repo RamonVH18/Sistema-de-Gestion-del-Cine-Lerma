@@ -6,11 +6,11 @@ package Interfaces;
 
 
 import DTOs.FuncionDTO;
+import DTOs.HistorialFuncionesDTO;
+import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionFechaValidaException;
-import Excepciones.funciones.FuncionDatosIncorrectosException;
-import entidades.Cliente;
-import entidades.Sala;
-import java.time.LocalDateTime;
+import Excepciones.funciones.FuncionRegistrarException;
+import Excepciones.funciones.FuncionValidadaException;
 import java.util.List;
 
 /**
@@ -18,15 +18,17 @@ import java.util.List;
  * @author Ramon Valencia
  */
 public interface IFuncionBO {
-//
-//    public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionFechaValidaException;
-//
-//    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionBoletosVendidosException;
-//
-//    public FuncionDTO buscarFuncion(String id) throws FuncionFechaValidaException;
-//
-//    public List<FuncionDTO> buscarFuncionesPelicula(String pelicula) throws FuncionFechaValidaException;
-//
+
+    public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistrarException;
+
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminarException;
+    
+    public List<HistorialFuncionesDTO> buscarHistorialFunciones();
+    
+    public FuncionDTO validarFuncion(FuncionDTO funcionDTO) throws FuncionValidadaException;
+
+    public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula);
+
     public List<FuncionDTO> buscarFuncionesActivas() throws FuncionFechaValidaException;
 //    
 //    // metodos de observer

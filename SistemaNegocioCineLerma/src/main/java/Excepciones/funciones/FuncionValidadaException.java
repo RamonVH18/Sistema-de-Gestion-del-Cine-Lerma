@@ -6,15 +6,15 @@ package Excepciones.funciones;
 
 /**
  *
- * @author Ramon Valencia
+ * @author Abraham Coronel Bringas
  */
-public class FuncionDatosIncorrectosException extends Exception{
+public class FuncionValidadaException extends Exception {
 
-    public FuncionDatosIncorrectosException(String message) {
+    public FuncionValidadaException(String message) {
         super(message);
     }
 
-    public FuncionDatosIncorrectosException(String message, Throwable cause) {
+    public FuncionValidadaException(String message, Throwable cause) {
         super(message, cause);
     }
 
