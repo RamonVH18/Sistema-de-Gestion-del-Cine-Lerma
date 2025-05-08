@@ -17,9 +17,21 @@ import java.util.List;
  * @author Ramon Valencia
  */
 public class SalaBO implements ISalaBO {
+    
+    private static SalaBO instanceBO;
+    
+    private SalaBO(){
+    }
+    
+    public static SalaBO getInstanceBO() {
+        if (instanceBO == null) {
+            instanceBO = new SalaBO();
+        }
+        return instanceBO;
+    }
 
     @Override
-    public SalaDTO agregarSala() throws SalaRegistroException {
+    public SalaDTO agregarSala(SalaDTO sala) throws SalaRegistroException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

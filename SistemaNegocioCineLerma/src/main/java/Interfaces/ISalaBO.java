@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface ISalaBO {
     
-    public SalaDTO agregarSala() throws SalaRegistroException;
+    public SalaDTO agregarSala(SalaDTO sala) throws SalaRegistroException;
     
     public SalaDTO buscarSala() throws SalaBusquedaException;
     

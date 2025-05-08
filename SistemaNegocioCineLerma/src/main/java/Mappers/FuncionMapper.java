@@ -25,7 +25,7 @@ public class FuncionMapper implements IFuncionMapper {
         FuncionDTO funcionDTO = new FuncionDTO();
 
         //Se le setea a la entidad sus datos segun los del dto recibido
-        funcionDTO.setId(funcion.getIdFuncion());
+        funcionDTO.setId(funcion.getIdExportable());
         funcionDTO.setFechaHora(funcion.getFechaHora());
         funcionDTO.setNombre(funcion.getPelicula().getTitulo());
         funcionDTO.setPrecio(funcion.getPrecio());
@@ -46,7 +46,7 @@ public class FuncionMapper implements IFuncionMapper {
         Funcion funcion = new Funcion();
 
         //Se le setea a la entidad sus datos segun los del dto recibido
-        funcion.setIdFuncion(funciondto.getId());
+        funcion.setIdImportado(funciondto.getId());
         funcion.setFechaHora(funciondto.getFechaHora());
         funcion.setPelicula(null);
         funcion.setSala(null);

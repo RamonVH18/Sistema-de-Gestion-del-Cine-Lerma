@@ -7,6 +7,7 @@ package entidades;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class Funcion {
 
-    private Long idFuncion;
+    private ObjectId idFuncion;
 
     private Sala sala;
 
@@ -31,7 +32,7 @@ public class Funcion {
     public Funcion() {
     }
 
-    public Funcion(Long idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Boolean estado, Double precio) {
+    public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Boolean estado, Double precio) {
         this.idFuncion = idFuncion;
         this.sala = sala;
         this.pelicula = pelicula;
@@ -50,11 +51,11 @@ public class Funcion {
         this.asientosFuncion = new ArrayList<>();
     }
 
-    public Long getIdFuncion() {
+    public ObjectId getIdFuncion() {
         return idFuncion;
     }
 
-    public void setIdFuncion(Long idFuncion) {
+    public void setIdFuncion(ObjectId idFuncion) {
         this.idFuncion = idFuncion;
     }
 
@@ -80,6 +81,14 @@ public class Funcion {
 
     public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;
+    }
+    
+    public String getIdExportable(){
+        return idFuncion.toString();
+    }
+    
+    public void setIdImportado(String idImportado) {
+        this.idFuncion = new ObjectId(idImportado);
     }
 
     public Boolean getEstado() {

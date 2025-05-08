@@ -318,9 +318,9 @@ public class PantallaPagoMercado extends PantallaPago {
             return true;
         }
 
-        if (pagoloco.getMonto() > cuentaMercadoExistente.getSaldo()) {
-            return false;
-        }
+//        if (pagoloco.getMonto() > cuentaMercadoExistente.getSaldo()) {
+//            return false;
+//        }
         //Llama a los metodos de control para procesar el pago y finalmente actualizar el saldo de la cuenta segun la transaccion
         control.procesarPagoMercado(cuentaMercadoExistente, pagoloco);
         control.actualizarSaldoMercado(cuentaMercadoExistente, pagoloco);

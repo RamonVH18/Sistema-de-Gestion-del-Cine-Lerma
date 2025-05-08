@@ -5,7 +5,6 @@
 package DAOs;
 
 import Conexion.ConexionMejor;
-import Excepciones.PersistenciaException;
 import Excepciones.usuarios.EditarUsuarioException;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarUsuarioException;
@@ -318,11 +317,8 @@ public class UsuarioDAO implements IUsuarioDAO {
 
             List<Bson> filtros = new ArrayList<>();
 
-            //filtrar por estado
-            if (estado != null) {
-                filtros.add(Filters.eq("estado", estado.toString()));
-            }
-
+            filtroEstado(estado, filtros);
+            
             // Filtro por fechas
             if (fechaInicio != null && fechaFin != null) {
 
@@ -363,6 +359,13 @@ public class UsuarioDAO implements IUsuarioDAO {
                 conexion.cerrarConexion(clienteMongo);
             }
         }
+    }
+    
+    private void filtroEstado(EstadoUsuario estado, List<Bson> filtros){
+        //filtrar por estado
+            if (estado != null) {
+                filtros.add(Filters.eq("estado", estado.toString()));
+            }
     }
 
     @Override

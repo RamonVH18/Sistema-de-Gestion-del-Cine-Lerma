@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 public class FuncionDTO {
 
-    private Long id;
+    private String idFuncion;
 
     private String sala;
 
@@ -37,8 +37,8 @@ public class FuncionDTO {
      * @param fechaHora
      * @param precio 
      */
-    public FuncionDTO(Long id, String sala, String nombre, LocalDateTime fechaHora, double precio) {    
-        this.id = id;
+    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio) {    
+        this.idFuncion = idFuncion;
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
@@ -73,15 +73,15 @@ public class FuncionDTO {
      *
      * @return 
      */
-    public Long getId() {
-        return id;
+    public String getId() {
+        return idFuncion;
     }
     /**
      * 
      * @param id 
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(String idFuncion) {
+        this.idFuncion = idFuncion;
     }
     /**
      * 

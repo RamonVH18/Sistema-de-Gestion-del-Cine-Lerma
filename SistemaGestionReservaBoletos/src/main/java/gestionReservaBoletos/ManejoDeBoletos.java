@@ -28,7 +28,6 @@ import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
 import Interfaces.mappers.IClienteMapper;
 import Mappers.ClienteMapper;
-import entidades.Cliente;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -281,18 +280,18 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                 
                 
                 // Validar que la función y sala coincidan
-                if (asiento.getFuncion().getSala().equals(funcion.getSala()) && asiento.isDisponibilidad()
-                        && asiento.getFuncion().getFechaHora().equals(funcion.getFechaHora())) {
-
-                    // Reservar el asiento
-                    Cliente clienteNormal = mapeadorSupremo.toClienteEntidad(cliente);
-                    asiento.setCliente(clienteNormal);
-                    asiento.setDisponibilidad(false);
-                    asientos.set(i, asiento);
-                    numAsientos.add(asiento.getAsiento());
-                    conta++;
-
-                }
+//                if (asiento.getFuncion().getSala().equals(funcion.getSala()) && asiento.isDisponibilidad()
+//                        && asiento.getFuncion().getFechaHora().equals(funcion.getFechaHora())) {
+//
+//                    // Reservar el asiento
+////                    ClienteDTO clienteNormal = mapeadorSupremo.toClienteEntidad(cliente);
+////                    asiento.setCliente(clienteNormal);
+////                    asiento.setDisponibilidad(false);
+////                    asientos.set(i, asiento);
+////                    numAsientos.add(asiento.getAsiento());
+////                    conta++;
+//
+//                }
             }
 
             return numAsientos;

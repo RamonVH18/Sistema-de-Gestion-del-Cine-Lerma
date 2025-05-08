@@ -9,9 +9,10 @@ import DTOs.SalaDTO;
 import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
 import Excepciones.EstadisticasSalaException;
-import Excepciones.ValidacionSalaException;
 import Excepciones.ModificarSalaException;
+import Excepciones.ValidacionSalaException;
 import enums.EstadoSala;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface IManejoDeSalas {
     
     public SalaDTO agregarSala(SalaDTO sala) throws AgregarSalaException;
     
-    public Boolean validarSala(SalaDTO sala) throws ValidacionSalaException;
+    public void validarSala(SalaDTO sala) throws ValidacionSalaException;
     
     public List<SalaDTO> cargarSalas() throws BuscarSalaException;
     

@@ -25,7 +25,7 @@ import javax.swing.SwingConstants;
  * @author Ramon Valencia
  */
 public class MenuPrincipalAdmin extends javax.swing.JFrame {
-    
+
     private final IControl control = ControlDeNavegacion.getInstancia();
     private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
     private final String nombrePestania = "MenuAdministrador"; // Variable para escribir el nombre de la pestaña
@@ -36,6 +36,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
     private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
 
     private final JPanel panelCentral = new JPanel();
+
     /**
      * Creates new form MenuPrincipalAdmin
      */
@@ -52,7 +53,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         revalidate();
         repaint();
     }
-    
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -70,10 +71,12 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
         labelTitulo = new javax.swing.JLabel();
         btnPelicula = new javax.swing.JButton();
-        btnFuncion = new javax.swing.JButton();
+        btnUsuarios = new javax.swing.JButton();
         btnSala = new javax.swing.JButton();
         btnReporte = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        btnFuncion = new javax.swing.JButton();
+        btnEmpleados = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,13 +93,13 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
             }
         });
 
-        btnFuncion.setBackground(new java.awt.Color(162, 132, 94));
-        btnFuncion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnFuncion.setForeground(new java.awt.Color(255, 255, 255));
-        btnFuncion.setText("Funciones");
-        btnFuncion.addActionListener(new java.awt.event.ActionListener() {
+        btnUsuarios.setBackground(new java.awt.Color(162, 132, 94));
+        btnUsuarios.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnUsuarios.setForeground(new java.awt.Color(255, 255, 255));
+        btnUsuarios.setText("Usuarios");
+        btnUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFuncionActionPerformed(evt);
+                btnUsuariosActionPerformed(evt);
             }
         });
 
@@ -125,6 +128,26 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setText("Salir");
 
+        btnFuncion.setBackground(new java.awt.Color(162, 132, 94));
+        btnFuncion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnFuncion.setForeground(new java.awt.Color(255, 255, 255));
+        btnFuncion.setText("Funciones");
+        btnFuncion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFuncionActionPerformed(evt);
+            }
+        });
+
+        btnEmpleados.setBackground(new java.awt.Color(162, 132, 94));
+        btnEmpleados.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnEmpleados.setForeground(new java.awt.Color(255, 255, 255));
+        btnEmpleados.setText("Empleados");
+        btnEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmpleadosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -132,17 +155,25 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(218, 218, 218)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnSalir)
-                                .addComponent(btnReporte)
-                                .addComponent(btnSala)
-                                .addComponent(btnFuncion))
-                            .addComponent(btnPelicula)))
+                        .addGap(230, 230, 230)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSalir)
+                            .addComponent(btnReporte))
+                        .addGap(26, 26, 26)
+                        .addComponent(btnEmpleados))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(191, 191, 191)
-                        .addComponent(labelTitulo)))
+                        .addComponent(labelTitulo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(250, 250, 250)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnFuncion)
+                            .addComponent(btnPelicula)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(259, 259, 259)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSala)
+                            .addComponent(btnUsuarios))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -150,17 +181,21 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(labelTitulo)
-                .addGap(38, 38, 38)
+                .addGap(35, 35, 35)
                 .addComponent(btnPelicula)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(btnFuncion)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSala)
                 .addGap(18, 18, 18)
                 .addComponent(btnReporte)
-                .addGap(18, 18, 18)
-                .addComponent(btnSalir)
-                .addContainerGap(296, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUsuarios)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSalir)
+                    .addComponent(btnEmpleados))
+                .addContainerGap(263, Short.MAX_VALUE))
         );
 
         pack();
@@ -170,9 +205,9 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPeliculaActionPerformed
 
-    private void btnFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncionActionPerformed
+    private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnFuncionActionPerformed
+    }//GEN-LAST:event_btnUsuariosActionPerformed
 
     private void btnSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalaActionPerformed
         // TODO add your handling code here:
@@ -183,19 +218,29 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         control.mostrarMenuSalas("Menu Salas", this);
     }//GEN-LAST:event_btnSalaMouseClicked
 
+    private void btnFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFuncionActionPerformed
+
+    private void btnEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEmpleadosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEmpleados;
     private javax.swing.JButton btnFuncion;
     private javax.swing.JButton btnPelicula;
     private javax.swing.JButton btnReporte;
     private javax.swing.JButton btnSala;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton btnUsuarios;
     private javax.swing.JLabel labelTitulo;
     // End of variables declaration//GEN-END:variables
-    
+
     private void crearEstructuraMenuPrincipal() {
         setLayout(new BorderLayout());
-        
+
         labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
         labelTitulo.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 52));
@@ -203,38 +248,42 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
 
         add(labelTitulo, BorderLayout.NORTH);
-        
+
         crearEstructuraPanelBotones(panelBotones);
-        
+
         panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
 
-        panelCentral.add(Box.createVerticalStrut(110)); 
+        panelCentral.add(Box.createVerticalStrut(110));
         panelCentral.add(panelBotones);
         panelCentral.add(Box.createVerticalGlue());
 
         add(panelCentral, BorderLayout.CENTER);
     }
-    
+
     private void crearEstructuraPanelBotones(JPanel panelBotones) {
         panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
-
+        Font fuente = new Font("Tw Cen MT Condensed", Font.BOLD, 24);
         //Agregar cada boton al panel de botones utilizando boxLayout
         agregarBotonEnBox(btnPelicula, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnPelicula.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        btnPelicula.setFont(fuente);
         agregarBotonEnBox(btnFuncion, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnFuncion.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        btnFuncion.setFont(fuente);
         agregarBotonEnBox(btnSala, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnSala.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        btnSala.setFont(fuente);
+        agregarBotonEnBox(btnUsuarios, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnUsuarios.setFont(fuente);
+        agregarBotonEnBox(btnEmpleados, tamañoBoton, tamSeparacionbBtns, panelBotones);
+        btnEmpleados.setFont(fuente);
         agregarBotonEnBox(btnReporte, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnReporte.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        btnReporte.setFont(fuente);
         agregarBotonEnBox(btnSalir, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnSalir.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        btnSalir.setFont(fuente);
 
         panelBotones.setVisible(true);
         panelBotones.revalidate();
         panelBotones.repaint();
     }
-    
+
     private void dibujarLineasDeDiseño(Graphics g) {
         super.paint(g);
         g.setColor(Color.BLACK);

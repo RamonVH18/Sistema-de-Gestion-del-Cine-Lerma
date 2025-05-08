@@ -21,13 +21,10 @@ import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Asiento;
 import entidades.Sala;
-import enums.EstadoSala;
 import enums.EstadoSalaFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -167,7 +164,7 @@ public class SalaDAO implements ISalaDAO {
 
             UpdateResult resultado = coleccionSalas.updateOne(filtro, update);
 
-            return true;
+            return resultado.wasAcknowledged();
         } catch (BuscarSalaException e) {
             throw new ModificarSalaException("Hubo un error al modificar la sala " + sala.getNumSala() + ": " + e.getMessage());
         } finally {
