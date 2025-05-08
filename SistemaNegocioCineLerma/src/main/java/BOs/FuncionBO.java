@@ -39,90 +39,90 @@ public class FuncionBO implements IFuncionBO {
         }
         return instanceFuncionBO;
     }
-
-    @Override
-    public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionFechaValidaException {
-
-        try {
-
-            Funcion funcionRegistrar = funcionMapper.toFuncionEntidad(funcionDTO);
-            Funcion funcionRegistrado = funcionDAO.registrarFuncion(funcionRegistrar);
-
-            return funcionMapper.toFuncionDTO(funcionRegistrado);
-
-        } catch (FuncionDatosIncorrectosException e) {
-            throw new FuncionDatosIncorrectosException("Error al registrar usuario", e);
-        }
-
-    }
-
-    @Override
-    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException {
-
-        try {
-
-            Funcion funcionEliminar = funcionMapper.toFuncionEntidad(funcionDTO);
-
-            Funcion funcionEliminada = funcionDAO.eliminarFuncion(funcionEliminar);
-
-            if (funcionEliminada == null) {
-                return false;
-            }
-
-            return true;
-
-        } catch (PersistenciaException e) {
-            throw new FuncionBoletosVendidosException("Error al eliminar usuario", e);
-        }
-
-    }
-
-    @Override
-    public FuncionDTO buscarFuncion(String id) throws FuncionFechaValidaException {
-//        // Validar que el id sea valido
-//        if (id == null || id <= 0) {
-//            throw new FuncionFechaValidaException("Error: el id es invalido");
-//        }
+//
+//    @Override
+//    public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionFechaValidaException {
 //
 //        try {
-//            Funcion funcion = funcionDAO.obtenerFuncionPorId(id);
 //
-//            if (funcion == null) {
-//                throw new FuncionFechaValidaException("Error: funcion no encontrada");
-//            }
+//            Funcion funcionRegistrar = funcionMapper.toFuncionEntidad(funcionDTO);
+//            Funcion funcionRegistrado = funcionDAO.registrarFuncion(funcionRegistrar);
 //
-//            LocalDateTime ahora = LocalDateTime.now();
-//            if (funcion.getFechaHora().isBefore(ahora)) {
-//                throw new FuncionDatosIncorrectosException("Error: La funcion ya ocurrio");
-//            }
+//            return funcionMapper.toFuncionDTO(funcionRegistrado);
 //
-//            return FuncionMapper.toFuncionDTO(funcion);
-//
-//        } catch (PersistenciaException ex) {
-//            throw new FuncionDatosIncorrectosException("Error: al buscar la funcion: " + ex.getMessage());
+//        } catch (FuncionDatosIncorrectosException e) {
+//            throw new FuncionDatosIncorrectosException("Error al registrar usuario", e);
 //        }
-
-        return null;
-    }
-
-    @Override
-    public List<FuncionDTO> buscarFuncionesPelicula(String tituloPelicula) throws FuncionFechaValidaException {
-        List<FuncionDTO> funcionesPelicula = new ArrayList<>();
-
-        try {
-            List<Funcion> funcionesPeliculas = funcionDAO.mostrarFuncionesPeliculas();
-            for (Funcion funcionPelicula : funcionesPeliculas) {
-                FuncionDTO funcionPeliculaMapeada = funcionMapper.toFuncionDTO(funcionPelicula);
-                if (funcionPeliculaMapeada.getNombre().equals(tituloPelicula)) {
-                    funcionesPelicula.add(funcionPeliculaMapeada);
-                }
-            }
-
-            return funcionesPelicula;
-        } catch (PersistenciaException e) {
-            throw new FuncionFechaValidaException("Error al buscar las funciones de la pelicula.");
-        }
-    }
+//
+//    }
+//
+//    @Override
+//    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException {
+//
+//        try {
+//
+//            Funcion funcionEliminar = funcionMapper.toFuncionEntidad(funcionDTO);
+//
+//            Funcion funcionEliminada = funcionDAO.eliminarFuncion(funcionEliminar);
+//
+//            if (funcionEliminada == null) {
+//                return false;
+//            }
+//
+//            return true;
+//
+//        } catch (PersistenciaException e) {
+//            throw new FuncionBoletosVendidosException("Error al eliminar usuario", e);
+//        }
+//
+//    }
+//
+//    @Override
+//    public FuncionDTO buscarFuncion(String id) throws FuncionFechaValidaException {
+////        // Validar que el id sea valido
+////        if (id == null || id <= 0) {
+////            throw new FuncionFechaValidaException("Error: el id es invalido");
+////        }
+////
+////        try {
+////            Funcion funcion = funcionDAO.obtenerFuncionPorId(id);
+////
+////            if (funcion == null) {
+////                throw new FuncionFechaValidaException("Error: funcion no encontrada");
+////            }
+////
+////            LocalDateTime ahora = LocalDateTime.now();
+////            if (funcion.getFechaHora().isBefore(ahora)) {
+////                throw new FuncionDatosIncorrectosException("Error: La funcion ya ocurrio");
+////            }
+////
+////            return FuncionMapper.toFuncionDTO(funcion);
+////
+////        } catch (PersistenciaException ex) {
+////            throw new FuncionDatosIncorrectosException("Error: al buscar la funcion: " + ex.getMessage());
+////        }
+//
+//        return null;
+//    }
+//
+//    @Override
+//    public List<FuncionDTO> buscarFuncionesPelicula(String tituloPelicula) throws FuncionFechaValidaException {
+//        List<FuncionDTO> funcionesPelicula = new ArrayList<>();
+//
+//        try {
+//            List<Funcion> funcionesPeliculas = funcionDAO.mostrarFuncionesPeliculas();
+//            for (Funcion funcionPelicula : funcionesPeliculas) {
+//                FuncionDTO funcionPeliculaMapeada = funcionMapper.toFuncionDTO(funcionPelicula);
+//                if (funcionPeliculaMapeada.getNombre().equals(tituloPelicula)) {
+//                    funcionesPelicula.add(funcionPeliculaMapeada);
+//                }
+//            }
+//
+//            return funcionesPelicula;
+//        } catch (PersistenciaException e) {
+//            throw new FuncionFechaValidaException("Error al buscar las funciones de la pelicula.");
+//        }
+//    }
 
     @Override
     public List<FuncionDTO> buscarFuncionesActivas() throws FuncionFechaValidaException {
@@ -137,115 +137,115 @@ public class FuncionBO implements IFuncionBO {
             }
 
             return funcionesActivasDTO;
-        } catch (PersistenciaException e) {
+        } catch (Exception e) {
             throw new FuncionFechaValidaException("Error al buscar las funciones activas.");
         }
     }
-
-    @Override
-    public void suscribirClienteAFuncion(Cliente cliente, Long idFuncion) throws FuncionFechaValidaException {
-        try {
-            // Verificar que la función existe
-            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-            if (funcion == null) {
-                throw new FuncionFechaValidaException("La función no existe");
-            }
-
-            // Crear observador para el cliente
-            ObservadorClienteFuncion observador = new ObservadorClienteFuncion(cliente);
-
-            // Registrar el observador
-            funcionDAO.agregarObservador(idFuncion, observador);
-
-        } catch (PersistenciaException e) {
-            throw new FuncionFechaValidaException("Error al suscribir cliente a la función: " + e.getMessage());
-        }
-    }
-
-    public void desuscribirClienteDeFuncion(Cliente cliente, Long idFuncion) throws FuncionFechaValidaException {
-        try {
-            // Verificar que la función existe
-            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-            if (funcion == null) {
-                throw new FuncionFechaValidaException("La función no existe");
-            }
-
-            //final ObjectId clienteId = cliente.getIdUsuario();
-            // Eliminar el observador del cliente para esta función
-            funcionDAO.eliminarObservadorPorFiltro(idFuncion, observador -> {
-                if (observador instanceof ObservadorClienteFuncion) {
-                    return ((ObservadorClienteFuncion) observador).getCliente().getIdUsuario().equals(clienteId);
-                }
-                return false;
-            });
-
-        } catch (PersistenciaException e) {
-            throw new FuncionFechaValidaException("Error al desuscribir cliente de la función: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public boolean cambiarEstadoFuncion(Long idFuncion, boolean nuevoEstado) throws FuncionFechaValidaException {
-        try {
-            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-            if (funcion == null) {
-                throw new FuncionFechaValidaException("La función no existe");
-            }
-
-            funcion.setEstado(nuevoEstado);
-            return funcionDAO.actualizarFuncion(funcion);
-
-        } catch (PersistenciaException e) {
-            throw new FuncionFechaValidaException("Error al cambiar estado de la función: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public boolean cambiarHorarioFuncion(Long idFuncion, LocalDateTime nuevoHorario) throws FuncionFechaValidaException {
-        try {
-            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-            if (funcion == null) {
-                throw new FuncionFechaValidaException("La función no existe");
-            }
-
-            funcion.setFechaHora(nuevoHorario);
-            return funcionDAO.actualizarFuncion(funcion);
-
-        } catch (PersistenciaException e) {
-            throw new FuncionFechaValidaException("Error al cambiar horario de la función: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public boolean cambiarSalaFuncion(Long idFuncion, Sala nuevaSala) throws FuncionFechaValidaException {
-        try {
-            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-            if (funcion == null) {
-                throw new FuncionFechaValidaException("La función no existe");
-            }
-
-            funcion.setSala(nuevaSala);
-            return funcionDAO.actualizarFuncion(funcion);
-
-        } catch (PersistenciaException e) {
-            throw new FuncionFechaValidaException("Error al cambiar sala de la función: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public boolean cambiarPrecioFuncion(Long idFuncion, Double nuevoPrecio) throws FuncionFechaValidaException {
-        try {
-            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-            if (funcion == null) {
-                throw new FuncionFechaValidaException("La función no existe");
-            }
-
-            funcion.setPrecio(nuevoPrecio);
-            return funcionDAO.actualizarFuncion(funcion);
-
-        } catch (PersistenciaException e) {
-            throw new FuncionFechaValidaException("Error al cambiar precio de la función: " + e.getMessage());
-        }
-    }
+//
+//    @Override
+//    public void suscribirClienteAFuncion(Cliente cliente, Long idFuncion) throws FuncionFechaValidaException {
+//        try {
+//            // Verificar que la función existe
+//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
+//            if (funcion == null) {
+//                throw new FuncionFechaValidaException("La función no existe");
+//            }
+//
+//            // Crear observador para el cliente
+//            ObservadorClienteFuncion observador = new ObservadorClienteFuncion(cliente);
+//
+//            // Registrar el observador
+//            funcionDAO.agregarObservador(idFuncion, observador);
+//
+//        } catch (PersistenciaException e) {
+//            throw new FuncionFechaValidaException("Error al suscribir cliente a la función: " + e.getMessage());
+//        }
+//    }
+//
+//    public void desuscribirClienteDeFuncion(Cliente cliente, Long idFuncion) throws FuncionFechaValidaException {
+//        try {
+//            // Verificar que la función existe
+//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
+//            if (funcion == null) {
+//                throw new FuncionFechaValidaException("La función no existe");
+//            }
+//
+//            //final ObjectId clienteId = cliente.getIdUsuario();
+//            // Eliminar el observador del cliente para esta función
+//            funcionDAO.eliminarObservadorPorFiltro(idFuncion, observador -> {
+//                if (observador instanceof ObservadorClienteFuncion) {
+//                    return ((ObservadorClienteFuncion) observador).getCliente().getIdUsuario().equals(clienteId);
+//                }
+//                return false;
+//            });
+//
+//        } catch (PersistenciaException e) {
+//            throw new FuncionFechaValidaException("Error al desuscribir cliente de la función: " + e.getMessage());
+//        }
+//    }
+//
+//    @Override
+//    public boolean cambiarEstadoFuncion(Long idFuncion, boolean nuevoEstado) throws FuncionFechaValidaException {
+//        try {
+//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
+//            if (funcion == null) {
+//                throw new FuncionFechaValidaException("La función no existe");
+//            }
+//
+//            funcion.setEstado(nuevoEstado);
+//            return funcionDAO.actualizarFuncion(funcion);
+//
+//        } catch (PersistenciaException e) {
+//            throw new FuncionFechaValidaException("Error al cambiar estado de la función: " + e.getMessage());
+//        }
+//    }
+//
+//    @Override
+//    public boolean cambiarHorarioFuncion(Long idFuncion, LocalDateTime nuevoHorario) throws FuncionFechaValidaException {
+//        try {
+//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
+//            if (funcion == null) {
+//                throw new FuncionFechaValidaException("La función no existe");
+//            }
+//
+//            funcion.setFechaHora(nuevoHorario);
+//            return funcionDAO.actualizarFuncion(funcion);
+//
+//        } catch (PersistenciaException e) {
+//            throw new FuncionFechaValidaException("Error al cambiar horario de la función: " + e.getMessage());
+//        }
+//    }
+//
+//    @Override
+//    public boolean cambiarSalaFuncion(Long idFuncion, Sala nuevaSala) throws FuncionFechaValidaException {
+//        try {
+//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
+//            if (funcion == null) {
+//                throw new FuncionFechaValidaException("La función no existe");
+//            }
+//
+//            funcion.setSala(nuevaSala);
+//            return funcionDAO.actualizarFuncion(funcion);
+//
+//        } catch (PersistenciaException e) {
+//            throw new FuncionFechaValidaException("Error al cambiar sala de la función: " + e.getMessage());
+//        }
+//    }
+//
+//    @Override
+//    public boolean cambiarPrecioFuncion(Long idFuncion, Double nuevoPrecio) throws FuncionFechaValidaException {
+//        try {
+//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
+//            if (funcion == null) {
+//                throw new FuncionFechaValidaException("La función no existe");
+//            }
+//
+//            funcion.setPrecio(nuevoPrecio);
+//            return funcionDAO.actualizarFuncion(funcion);
+//
+//        } catch (PersistenciaException e) {
+//            throw new FuncionFechaValidaException("Error al cambiar precio de la función: " + e.getMessage());
+//        }
+//    }
 
 }

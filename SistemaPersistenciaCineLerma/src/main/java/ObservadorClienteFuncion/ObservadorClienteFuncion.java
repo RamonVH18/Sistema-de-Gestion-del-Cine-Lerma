@@ -20,7 +20,7 @@ public class ObservadorClienteFuncion implements ObservadorFuncion {
     }
 
     @Override
-    public void actualizar(Long idFuncion, String tipoEvento, String mensaje) {
+    public void actualizar(String idFuncion, String tipoEvento, String mensaje) {
 
         String notificacion = String.format("Notificación para %s (%s): %s - %s",
                 cliente.getNombre(),

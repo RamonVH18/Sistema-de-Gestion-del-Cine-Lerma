@@ -207,9 +207,9 @@ public class ControlDeNavegacion implements IControl {
      * @param frameAnterior
      */
     @Override
-    public void mostrarMenuSalas(String tituloFrame, JFrame frameAnterior) {
+    public void mostrarMenuSalas(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
-            MenuSalas pantallaMenuSalas = new MenuSalas(tituloFrame);
+            MenuSalas pantallaMenuSalas = new MenuSalas();
             pantallaMenuSalas.setLocationRelativeTo(null);
             pantallaMenuSalas.setVisible(true);
             frameAnterior.dispose();
@@ -221,9 +221,9 @@ public class ControlDeNavegacion implements IControl {
      * @param frameAnterior 
      */
     @Override
-    public void mostrarAgregarSala(String tituloFrame, JFrame frameAnterior) {
+    public void mostrarAgregarSala(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
-            AgregarSala pantallaAgregarSala = new AgregarSala(tituloFrame);
+            AgregarSala pantallaAgregarSala = new AgregarSala();
             pantallaAgregarSala.setLocationRelativeTo(null);
             pantallaAgregarSala.setVisible(true);
             frameAnterior.dispose();

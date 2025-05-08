@@ -38,13 +38,13 @@ public interface IFuncionDAO {
     boolean actualizarFuncion(Funcion funcion) throws PersistenciaException; // Revisar metodo, nose actualiza funcion.
 
     // Métodos para gestión de observadores
-    void agregarObservador(Long idFuncion, ObservadorFuncion observador);
+    void agregarObservador(String idFuncion, ObservadorFuncion observador);
 
-    void eliminarObservador(Long idFuncion, ObservadorFuncion observador);
+    void eliminarObservador(String idFuncion, ObservadorFuncion observador);
 
-    void eliminarObservadorPorFiltro(Long idFuncion, Predicate<ObservadorFuncion> filtro);
+    void eliminarObservadorPorFiltro(String idFuncion, Predicate<ObservadorFuncion> filtro);
 
-    void notificarObservadores(Long idFuncion, String tipoEvento, String mensaje);
+    void notificarObservadores(String idFuncion, String tipoEvento, String mensaje);
 
     
 

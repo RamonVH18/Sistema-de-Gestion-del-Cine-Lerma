@@ -38,9 +38,9 @@ public interface IControl {
     
     public void mostrarMenuAdministrador();
     
-    public void mostrarMenuSalas(String titulo, JFrame frameAnterior);
+    public void mostrarMenuSalas(JFrame frameAnterior);
     
-    public void mostrarAgregarSala(String titulo, JFrame frameAnterior);
+    public void mostrarAgregarSala(JFrame frameAnterior);
     
     public List<PeliculaDTO> obtenerPeliculas();
     

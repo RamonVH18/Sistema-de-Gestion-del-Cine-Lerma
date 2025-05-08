@@ -7,6 +7,7 @@ package pantallas.Salas;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -28,13 +29,19 @@ public final class MenuSalas extends javax.swing.JFrame {
     private final IControl control = ControlDeNavegacion.getInstancia();
 
     private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
+    
     private final int alturaBoton = 40;
-    private final int anchoBoton = 200;
+    private final int anchoBoton = 300;
+    private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.BOLD, 24);
     private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+    private final Color colorBoton = new Color(162, 132, 94); 
+    private final Color colorBotonFore = new Color(255, 255, 255);
+            
     private final Utilerias utilerias = new Utilerias();
 
-    public MenuSalas(String titulo) {
-        utilerias.configurarFrameBase(this, titulo);
+    public MenuSalas() {
+        
+        utilerias.configurarFrameBase(this, "MENU SALAS");
         configurarMenuSalas();
     }
 
@@ -130,20 +137,20 @@ public final class MenuSalas extends javax.swing.JFrame {
 
         //Agregar cada boton al panel de botones utilizando boxLayout
         btnAgregar = new JButton("Agregar Sala");
-        agregarBotonEnBox(btnAgregar, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnAgregar.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        configurarBoton(btnAgregar);
+        agregarBotonEnBox(btnAgregar, panelBotones);
         
         btnEstadisticas = new JButton("Estadisticas");
-        agregarBotonEnBox(btnEstadisticas, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnEstadisticas.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        configurarBoton(btnEstadisticas);
+        agregarBotonEnBox(btnEstadisticas, panelBotones);
 
         btnModificar = new JButton("Modificar Sala");
-        agregarBotonEnBox(btnModificar, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnModificar.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        configurarBoton(btnModificar);
+        agregarBotonEnBox(btnModificar, panelBotones);
 
         btnConsultas = new JButton("Consultar Reservas");
-        agregarBotonEnBox(btnConsultas, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnConsultas.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 24));
+        configurarBoton(btnConsultas);
+        agregarBotonEnBox(btnConsultas, panelBotones);
 
         panelBotones.setVisible(true);
         panelBotones.revalidate();
@@ -166,27 +173,31 @@ public final class MenuSalas extends javax.swing.JFrame {
 
     }
 
-    private void agregarBotonEnBox(JButton boton, Dimension tamaño, int separacion, JPanel panel) {
-        boton.setMaximumSize(tamaño);
-        boton.setPreferredSize(tamaño);
-        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+    private void agregarBotonEnBox(JButton boton, JPanel panel) {
         panel.add(boton);
-        if (separacion > 0) {
-            panel.add(Box.createVerticalStrut(separacion)); //Agregar espacios entre los botones
+        if (tamSeparacionbBtns > 0) {
+            panel.add(Box.createVerticalStrut(tamSeparacionbBtns)); //Agregar espacios entre los botones
         }
         String textoBoton = boton.getText();
         boton.addActionListener((ActionEvent e) -> {
             switch (textoBoton) {
                 case "Agregar Sala" -> {
-                    control.mostrarAgregarSala("AGREGAR SALA", this);
+                    control.mostrarAgregarSala(this);
                 }
                 default -> 
                     JOptionPane.showMessageDialog(null, "Hubo un problema para cargar esa ventana intente luego", "INFO", JOptionPane.INFORMATION_MESSAGE);
                    
             }
-//                    control.mostrarAgregarSala("Agregar Sala", this);
-                    });
+        });
 
     }
 
+    private void configurarBoton(JButton boton) {
+        boton.setMaximumSize(tamañoBoton);
+        boton.setPreferredSize(tamañoBoton);
+        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boton.setFont(fuenteBoton);
+        boton.setBackground(colorBoton);
+        boton.setForeground(colorBotonFore);
+    }
 }

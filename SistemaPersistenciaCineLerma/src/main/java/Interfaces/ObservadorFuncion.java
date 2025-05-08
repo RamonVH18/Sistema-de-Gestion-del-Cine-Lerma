@@ -11,7 +11,7 @@ package Interfaces;
 public interface ObservadorFuncion {
 
   
-    public void actualizar(Long idFuncion, String tipoEvento, String mensaje);
+    public void actualizar(String idFuncion, String tipoEvento, String mensaje);
 }
 
 

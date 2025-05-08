@@ -34,6 +34,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
     private final int alturaBoton = 40;
     private final int anchoBoton = 200;
     private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+    private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.BOLD, 24);
 
     private final JPanel panelCentral = new JPanel();
 
@@ -215,7 +216,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
     private void btnSalaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalaMouseClicked
         // TODO add your handling code here:
-        control.mostrarMenuSalas("Menu Salas", this);
+        control.mostrarMenuSalas(this);
     }//GEN-LAST:event_btnSalaMouseClicked
 
     private void btnFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncionActionPerformed
@@ -262,22 +263,28 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
     private void crearEstructuraPanelBotones(JPanel panelBotones) {
         panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
-        Font fuente = new Font("Tw Cen MT Condensed", Font.BOLD, 24);
+        
         //Agregar cada boton al panel de botones utilizando boxLayout
-        agregarBotonEnBox(btnPelicula, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnPelicula.setFont(fuente);
-        agregarBotonEnBox(btnFuncion, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnFuncion.setFont(fuente);
-        agregarBotonEnBox(btnSala, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnSala.setFont(fuente);
-        agregarBotonEnBox(btnUsuarios, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnUsuarios.setFont(fuente);
-        agregarBotonEnBox(btnEmpleados, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnEmpleados.setFont(fuente);
-        agregarBotonEnBox(btnReporte, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnReporte.setFont(fuente);
-        agregarBotonEnBox(btnSalir, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        btnSalir.setFont(fuente);
+        agregarBotonEnBox(btnPelicula, panelBotones);
+        btnPelicula.setFont(fuenteBoton);
+        
+        agregarBotonEnBox(btnFuncion, panelBotones);
+        btnFuncion.setFont(fuenteBoton);
+        
+        agregarBotonEnBox(btnSala,  panelBotones);
+        btnSala.setFont(fuenteBoton);
+        
+        agregarBotonEnBox(btnUsuarios, panelBotones);
+        btnUsuarios.setFont(fuenteBoton);
+        
+        agregarBotonEnBox(btnEmpleados, panelBotones);
+        btnEmpleados.setFont(fuenteBoton);
+        
+        agregarBotonEnBox(btnReporte, panelBotones);
+        btnReporte.setFont(fuenteBoton);
+        
+        agregarBotonEnBox(btnSalir, panelBotones);
+        btnSalir.setFont(fuenteBoton);
 
         panelBotones.setVisible(true);
         panelBotones.revalidate();
@@ -292,13 +299,13 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         g.drawLine(0, 680, getWidth(), 680);
     }
 
-    private void agregarBotonEnBox(JButton boton, Dimension tamaño, int separacion, JPanel panel) {
-        boton.setMaximumSize(tamaño);
-        boton.setPreferredSize(tamaño);
+    private void agregarBotonEnBox(JButton boton, JPanel panel) {
+        boton.setMaximumSize(tamañoBoton);
+        boton.setPreferredSize(tamañoBoton);
         boton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(boton);
-        if (separacion > 0) {
-            panel.add(Box.createVerticalStrut(separacion)); //Agregar espacios entre los botones
+        if (tamSeparacionbBtns > 0) {
+            panel.add(Box.createVerticalStrut(tamSeparacionbBtns)); //Agregar espacios entre los botones
         }
 
     }

@@ -21,7 +21,7 @@ import Excepciones.GenerarBoletoException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
-import Excepciones.funciones.FuncionBusquedaException;
+import Excepciones.funciones.FuncionFechaValidaException;
 import Excepciones.peliculas.PeliculaBusquedaException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
@@ -31,6 +31,8 @@ import Mappers.ClienteMapper;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -127,7 +129,9 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             funcionesPelicula.sort(Comparator.comparing(e -> e.getFechaHora()));
             
             return funcionesPelicula;
-        } catch (FuncionCargaException | FuncionBusquedaException e) {
+        } catch (FuncionCargaException e) {
+            throw new FuncionCargaException("ERROR: " + e.getMessage());
+        } catch (FuncionFechaValidaException e) {
             throw new FuncionCargaException("ERROR: " + e.getMessage());
         }
     }
