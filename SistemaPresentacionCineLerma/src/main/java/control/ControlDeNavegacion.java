@@ -41,6 +41,7 @@ import pantallas.MenuPrincipalCliente;
 import pantallas.Pagos.PantallaPago;
 import pantallas.Pagos.PantallaPagoRechazado;
 import pantallas.Salas.AgregarSala;
+import pantallas.Salas.EstadisticasSala;
 import pantallas.Salas.MenuSalas;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
@@ -226,6 +227,20 @@ public class ControlDeNavegacion implements IControl {
             AgregarSala pantallaAgregarSala = new AgregarSala();
             pantallaAgregarSala.setLocationRelativeTo(null);
             pantallaAgregarSala.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    /**
+     * Metodo para abrir la pantalla de estadisticas de una las sala
+     * @param tituloFrame
+     * @param frameAnterior 
+     */
+    @Override
+    public void mostrarEstadisticasSala(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            EstadisticasSala pantallaEstadisticasSala = new EstadisticasSala();
+            pantallaEstadisticasSala.setLocationRelativeTo(null);
+            pantallaEstadisticasSala.setVisible(true);
             frameAnterior.dispose();
         });
     }

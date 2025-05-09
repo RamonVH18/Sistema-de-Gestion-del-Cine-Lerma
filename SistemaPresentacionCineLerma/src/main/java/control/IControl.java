@@ -42,6 +42,8 @@ public interface IControl {
     
     public void mostrarAgregarSala(JFrame frameAnterior);
     
+    public void mostrarEstadisticasSala(JFrame frameAnterior);
+    
     public List<PeliculaDTO> obtenerPeliculas();
     
     public PeliculaDTO consultarPelicula();

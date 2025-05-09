@@ -4,17 +4,38 @@
  */
 package pantallas.Salas;
 
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import utilitades.Utilerias;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class EstadisticasSala extends javax.swing.JFrame {
-
+    private final IControl control = ControlDeNavegacion.getInstancia();
+    private final Utilerias utilerias = new Utilerias();
+    
+    private final Integer anchoBuscador = 150;
+    private final Integer alturaBuscador = 20;
+    private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
     /**
      * Creates new form EstadisticasSala
      */
     public EstadisticasSala() {
-        initComponents();
+        utilerias.configurarFrameBase(this, "ESTADISTICAS");
+        configurarEstadisticasSala();
     }
 
     /**
@@ -26,57 +47,138 @@ public class EstadisticasSala extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        textFieldBuscador = new javax.swing.JTextField();
+        labelBuscador = new javax.swing.JLabel();
+        labelOrdenamiento = new javax.swing.JLabel();
+        comboBoxOrdenamiento = new javax.swing.JComboBox<>();
+        botonPDF = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        textFieldBuscador.setText("jTextField1");
+
+        labelBuscador.setText("jLabel1");
+
+        labelOrdenamiento.setText("jLabel2");
+
+        comboBoxOrdenamiento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        botonPDF.setText("jButton1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelBuscador)
+                    .addComponent(textFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(85, 85, 85)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(comboBoxOrdenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelOrdenamiento))
+                .addContainerGap(246, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(botonPDF)
+                .addGap(123, 123, 123))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelBuscador)
+                    .addComponent(labelOrdenamiento))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxOrdenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
+                .addComponent(botonPDF)
+                .addGap(221, 221, 221))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EstadisticasSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EstadisticasSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EstadisticasSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EstadisticasSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EstadisticasSala().setVisible(true);
-            }
-        });
+    private void configurarEstadisticasSala() {
+        configurarBotonVolver();
+        configurarPanelCentral();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonPDF;
+    private javax.swing.JComboBox<String> comboBoxOrdenamiento;
+    private javax.swing.JLabel labelBuscador;
+    private javax.swing.JLabel labelOrdenamiento;
+    private javax.swing.JTextField textFieldBuscador;
     // End of variables declaration//GEN-END:variables
+    
+    
+    private void configurarPanelCentral() {
+        JPanel panelCentral = new JPanel();
+        
+        JPanel panelBuscador = new JPanel();
+        configurarPanelBuscador(panelBuscador);
+        JPanel panelTabla = new JPanel();
+        configurarPanelTabla(panelTabla);
+        
+        panelCentral.add(panelBuscador);
+        panelCentral.add(panelTabla);
+        this.add(panelCentral, BorderLayout.CENTER);
+    }
+    
+    private void configurarPanelBuscador(JPanel panel) {
+        JPanel panelBuscador = new JPanel();
+        labelBuscador = new JLabel("BUSCAR SALA: ");
+        textFieldBuscador = new JTextField();
+        textFieldBuscador.setPreferredSize(tamañoBuscador);
+        panelBuscador.add(labelBuscador);
+        panelBuscador.add(textFieldBuscador);
+        
+        JPanel panelOrdenamiento = new JPanel();
+        labelOrdenamiento = new JLabel("ORDENAR POR: ");
+        configurarComboBoxOrdenamiento();
+        panelOrdenamiento.add(labelOrdenamiento);
+        panelOrdenamiento.add(comboBoxOrdenamiento);
+        
+        panel.add(panelBuscador);
+        panel.add(panelOrdenamiento);
+        
+    }
+    
+    private void configurarComboBoxOrdenamiento(){
+        comboBoxOrdenamiento = new JComboBox<>();
+        DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>();
+        modeloComboBox.addElement("Capacidad");
+        modeloComboBox.addElement("Numero de Funciones");
+        modeloComboBox.addElement("Ingresos Totales");
+        modeloComboBox.addElement("Funciones Canceladas");
+        comboBoxOrdenamiento.setModel(modeloComboBox);
+        
+        comboBoxOrdenamiento.addActionListener((ActionEvent e) -> {
+            //actualizarTabla(comboBoxOrdenamiento.getSelectedItem());
+        });
+        
+    }
+    
+    private void configurarPanelTabla(JPanel panelTabla) {
+        
+    }
+    
+    /**
+     * Metodo para configurar el obtener el boton volver del frameBase y
+     * configurarlo para que nos regrese a la ventana anterior
+     */
+    private void configurarBotonVolver() {
+        Container frame = this.getContentPane();
+        JPanel panel = (JPanel) frame.getComponent(0);
+        JButton btnVolver = (JButton) panel.getComponent(0);
+
+        btnVolver.addActionListener((ActionEvent e) -> {
+            control.mostrarMenuSalas(this);
+        });
+
+    }
 }

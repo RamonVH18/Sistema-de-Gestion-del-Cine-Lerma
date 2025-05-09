@@ -29,18 +29,18 @@ public final class MenuSalas extends javax.swing.JFrame {
     private final IControl control = ControlDeNavegacion.getInstancia();
 
     private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
-    
+
     private final int alturaBoton = 40;
     private final int anchoBoton = 300;
     private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.BOLD, 24);
     private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
-    private final Color colorBoton = new Color(162, 132, 94); 
+    private final Color colorBoton = new Color(162, 132, 94);
     private final Color colorBotonFore = new Color(255, 255, 255);
-            
+
     private final Utilerias utilerias = new Utilerias();
 
     public MenuSalas() {
-        
+
         utilerias.configurarFrameBase(this, "MENU SALAS");
         configurarMenuSalas();
     }
@@ -139,7 +139,7 @@ public final class MenuSalas extends javax.swing.JFrame {
         btnAgregar = new JButton("Agregar Sala");
         configurarBoton(btnAgregar);
         agregarBotonEnBox(btnAgregar, panelBotones);
-        
+
         btnEstadisticas = new JButton("Estadisticas");
         configurarBoton(btnEstadisticas);
         agregarBotonEnBox(btnEstadisticas, panelBotones);
@@ -184,9 +184,12 @@ public final class MenuSalas extends javax.swing.JFrame {
                 case "Agregar Sala" -> {
                     control.mostrarAgregarSala(this);
                 }
-                default -> 
+                case "Estadisticas" -> {
+                    control.mostrarEstadisticasSala(this);
+                }
+                default ->
                     JOptionPane.showMessageDialog(null, "Hubo un problema para cargar esa ventana intente luego", "INFO", JOptionPane.INFORMATION_MESSAGE);
-                   
+
             }
         });
 
