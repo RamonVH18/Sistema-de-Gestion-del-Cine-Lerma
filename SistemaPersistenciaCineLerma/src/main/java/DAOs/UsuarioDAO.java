@@ -4,7 +4,9 @@
  */
 package DAOs;
 
-import Conexion.ConexionMejor;
+
+import com.mongodb.client.MongoClient;
+import Conexion.MongoConexion;
 import Excepciones.usuarios.EditarUsuarioException;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarUsuarioException;
@@ -15,7 +17,6 @@ import UsuariosStrategy.IUsuarioStrategy;
 import UsuariosStrategy.StrategyFactory;
 import UsuariosStrategy.UsuarioStrategyException;
 import com.mongodb.MongoException;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -23,7 +24,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import entidades.Cliente;
 import entidades.Compra;
 import entidades.Usuario;
 import enums.EstadoUsuario;
@@ -44,7 +44,7 @@ import org.bson.conversions.Bson;
 public class UsuarioDAO implements IUsuarioDAO {
 
     private static UsuarioDAO instance;
-    private final ConexionMejor conexion = new ConexionMejor();
+    private final MongoConexion conexion = new MongoConexion();
     private final String nombreColeccion = "Usuarios";
 
     //Quizas agregar una proyeccion

@@ -5,10 +5,15 @@
 package Conexion;
 
 import Excepciones.PersistenciaException;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoException;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-import java.util.List;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
 /**
  *
@@ -16,36 +21,33 @@ import java.util.List;
  */
 public class MongoConexion {
 
-    String servidor = "localhost";
-    Integer puerto = 27017;
-    String nombreBase = "CineLerma";
+    private final String servidor = "localhost";
+    private final int puerto = 27017;
+    private final String nombreBase = "CineLerma";
+    private final String connectionString = String.format("mongodb://%s:%d", servidor, puerto);
+
+    private final CodecRegistry codec = fromRegistries(
+            MongoClientSettings.getDefaultCodecRegistry(),
+            fromProviders(PojoCodecProvider.builder().automatic(true).build())
+    );
 
     public MongoClient crearConexion() throws MongoException {
-        MongoClient conexionMongo = null;
         try {
-            conexionMongo = new MongoClient(servidor, puerto);
+            MongoClientSettings settings = MongoClientSettings.builder()
+                    .applyConnectionString(new com.mongodb.ConnectionString(connectionString))
+                    .codecRegistry(codec)
+                    .build();
+
+            return MongoClients.create(settings);
 
         } catch (MongoException e) {
-            throw new MongoException("Hubo un error al conectarse a la base de datos: " + e.getMessage());
+            throw new MongoException("Hubo un error al conectarse a MongoDB: " + e.getMessage());
         }
-        return conexionMongo;
     }
 
     public MongoDatabase obtenerBaseDatos(MongoClient conexion) throws MongoException {
-        MongoDatabase baseDatos = null;
-        try {
-            List<String> nombresBaseDatos = conexion.getDatabaseNames();
+        return conexion.getDatabase(nombreBase).withCodecRegistry(codec);
 
-            if (nombresBaseDatos.contains(nombreBase)) {
-                baseDatos = conexion.getDatabase(nombreBase);
-            } else {
-                throw new MongoException("Hubo un error con el nombre de la base de datos");
-            }
-
-        } catch (MongoException e) {
-            throw new MongoException("Hubo un error al conectarse a la base de datos: " + e.getMessage());
-        }
-        return baseDatos;
     }
 
     public void cerrarConexion(MongoClient conexion) {

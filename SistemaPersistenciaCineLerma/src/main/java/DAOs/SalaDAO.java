@@ -9,7 +9,7 @@ import Excepciones.salas.BuscarSalaException;
 import Excepciones.salas.CreacionSalaException;
 import Excepciones.salas.ModificarSalaException;
 import Interfaces.ISalaDAO;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -57,7 +57,7 @@ public class SalaDAO implements ISalaDAO {
 
     @Override
     public Sala agregarSala(Sala sala) throws CreacionSalaException {
-        MongoClient clienteMongo = new MongoClient();
+        MongoClient clienteMongo = null;
 
         try {
             List<Asiento> asientosSala = new ArrayList();
@@ -88,7 +88,7 @@ public class SalaDAO implements ISalaDAO {
 
     @Override
     public Sala buscarSala(String numSala) throws BuscarSalaException {
-        MongoClient clienteMongo = new MongoClient() {};
+        MongoClient clienteMongo = null;
         try {
             MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
 
@@ -111,7 +111,7 @@ public class SalaDAO implements ISalaDAO {
 
     @Override
     public List<Sala> buscarTodasLasSalas() throws BuscarSalaException {
-        MongoClient clienteMongo = new MongoClient();
+        MongoClient clienteMongo = null;
         try {
             MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
 
@@ -155,7 +155,7 @@ public class SalaDAO implements ISalaDAO {
 
     @Override
     public Boolean modificarEstadoSala(Sala sala) throws ModificarSalaException {
-        MongoClient clienteMongo = new MongoClient();
+        MongoClient clienteMongo = null;
         try {
             MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
 
@@ -174,7 +174,7 @@ public class SalaDAO implements ISalaDAO {
 
     @Override
     public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException {
-        MongoClient clienteMongo = new MongoClient();
+        MongoClient clienteMongo = null;
         try {
             MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
 
@@ -185,26 +185,25 @@ public class SalaDAO implements ISalaDAO {
                     Filters.regex("numeroSala", Pattern.compile(".*" + filtro + "$", Pattern.CASE_INSENSITIVE))
             );
             Bson filtrador = Filters.or(filtradores);
-            
+
             FindIterable<Document> iterador = coleccionSalas.find(filtrador);
-            
+
             List<Sala> salas = new ArrayList<>();
             for (Document salaDoc : iterador) {
                 String numSala = salaDoc.get("numeroSala", String.class);
                 Sala sala = obtenerSalaConAsientos(salaDoc, numSala);
                 salas.add(sala);
             }
-            
+
             return salas;
-            
+
         } catch (BuscarSalaException e) {
             throw new BuscarSalaException("Hubo un error al buscar las salas: " + e.getMessage());
         } finally {
             conexion.cerrarConexion(clienteMongo);
         }
     }
-    
-    
+
     private void creacionAsientos(Sala sala, List<Asiento> asientosSala, List<Document> listaAsientos) {
         for (int i = 1; i <= sala.getNumAsientos(); i++) {
             String numero = String.valueOf(i);
@@ -233,5 +232,5 @@ public class SalaDAO implements ISalaDAO {
             throw new BuscarSalaException("Error al realizar la conexion: " + e.getMessage());
         }
     }
-    
+
 }
