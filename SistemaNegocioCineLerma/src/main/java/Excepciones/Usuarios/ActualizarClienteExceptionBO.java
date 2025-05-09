@@ -8,6 +8,14 @@ package Excepciones.Usuarios;
  *
  * @author sonic
  */
-public class UsuarioBusquedaException {
+public class ActualizarClienteExceptionBO extends Exception {
+
+    public ActualizarClienteExceptionBO(String message) {
+        super(message);
+    }
+
+    public ActualizarClienteExceptionBO(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }

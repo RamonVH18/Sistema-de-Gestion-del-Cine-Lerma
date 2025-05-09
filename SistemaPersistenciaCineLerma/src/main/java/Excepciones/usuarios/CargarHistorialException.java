@@ -8,13 +8,13 @@ package Excepciones.usuarios;
  *
  * @author sonic
  */
-public class EncontrarUsuarioException extends Exception {
+public class CargarHistorialException extends Exception {
 
-    public EncontrarUsuarioException(String message) {
+    public CargarHistorialException(String message) {
         super(message);
     }
 
-    public EncontrarUsuarioException(String message, Throwable cause) {
+    public CargarHistorialException(String message, Throwable cause) {
         super(message, cause);
     }
     

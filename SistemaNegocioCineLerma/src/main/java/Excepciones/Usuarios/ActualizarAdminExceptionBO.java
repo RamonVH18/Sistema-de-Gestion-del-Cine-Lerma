@@ -8,6 +8,14 @@ package Excepciones.Usuarios;
  *
  * @author sonic
  */
-public class UsuarioActualizarExcepcion {
+public class ActualizarAdminExceptionBO extends Exception {
+
+    public ActualizarAdminExceptionBO(String message) {
+        super(message);
+    }
+
+    public ActualizarAdminExceptionBO(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }

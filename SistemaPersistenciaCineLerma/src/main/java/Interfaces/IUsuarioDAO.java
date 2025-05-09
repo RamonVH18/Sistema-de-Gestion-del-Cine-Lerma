@@ -4,16 +4,9 @@
  */
 package Interfaces;
 
-import Excepciones.PersistenciaException;
-import Excepciones.usuarios.EditarUsuarioException;
+import Excepciones.usuarios.ActualizarUsuarioException;
 import Excepciones.usuarios.EliminarUsuarioException;
-import Excepciones.usuarios.EncontrarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
-import Excepciones.usuarios.RegistrarUsuarioException;
-import entidades.Administrador;
-import entidades.Cliente;
-import entidades.Compra;
-import entidades.Funcion;
 import entidades.Usuario;
 import enums.EstadoUsuario;
 import java.time.LocalDateTime;
@@ -26,23 +19,14 @@ import java.util.List;
 public interface IUsuarioDAO {
     
     public List<Usuario> mostrarListaUsuarios() throws ObtenerUsuariosException;
-    
-    public Usuario registrarUsuario(Usuario usuario) throws RegistrarUsuarioException;
-
-    public Usuario actualizarUsuario(Usuario usuario) throws EditarUsuarioException;
 
     public Boolean eliminarUsuario(Usuario usuario) throws EliminarUsuarioException;
 
-    public Boolean bloquearUsuario(Usuario usuario) throws EditarUsuarioException;
+    public Boolean bloquearUsuario(Usuario usuario) throws ActualizarUsuarioException;
     
-    public Boolean desbloquearUsuario(Usuario usuario) throws EditarUsuarioException;
-
-    public List<Compra> cargarHistorialCompras(String nombreDeUsuario) throws EncontrarUsuarioException;
-    
-    public Boolean validarUsuario(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
+    public Boolean desbloquearUsuario(Usuario usuario) throws ActualizarUsuarioException;
     
     public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws ObtenerUsuariosException;
     
-    public Usuario obtenerUsuario(String nombreUsuario) throws EncontrarUsuarioException; //Este metodo probablemente se use para verificar si existe un usuario concreto en la base y otras operaciones
     
 }

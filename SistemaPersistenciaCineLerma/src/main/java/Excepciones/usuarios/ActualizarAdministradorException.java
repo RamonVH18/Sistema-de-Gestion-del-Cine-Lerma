@@ -8,13 +8,13 @@ package Excepciones.usuarios;
  *
  * @author sonic
  */
-public class EditarUsuarioException extends Exception {
+public class ActualizarAdministradorException extends Exception {
 
-    public EditarUsuarioException(String message) {
+    public ActualizarAdministradorException(String message) {
         super(message);
     }
 
-    public EditarUsuarioException(String message, Throwable cause) {
+    public ActualizarAdministradorException(String message, Throwable cause) {
         super(message, cause);
     }
     
