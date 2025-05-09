@@ -18,9 +18,9 @@ import org.bson.types.ObjectId;
  * @author Ramon Valencia
  */
 public interface IFuncionDAO {
-    
+
     public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException;
-    
+
     public Funcion eliminarFuncion(Funcion funcion) throws FuncionBoletosVendidosException;
 
     public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula);
@@ -29,13 +29,8 @@ public interface IFuncionDAO {
 
     public List<Funcion> mostrarFuncionesPeliculas();
 
-    // Métodos existentes
-    List<Funcion> funcionesHarcodeadas() throws PersistenciaException;
-
     // Nuevos métodos
     Funcion buscarFuncionPorId(ObjectId idFuncion);
-
-    boolean actualizarFuncion(Funcion funcion) throws PersistenciaException; // Revisar metodo, nose actualiza funcion.
 
     // Métodos para gestión de observadores
     void agregarObservador(String idFuncion, ObservadorFuncion observador);
@@ -45,7 +40,5 @@ public interface IFuncionDAO {
     void eliminarObservadorPorFiltro(String idFuncion, Predicate<ObservadorFuncion> filtro);
 
     void notificarObservadores(String idFuncion, String tipoEvento, String mensaje);
-
-    
 
 }

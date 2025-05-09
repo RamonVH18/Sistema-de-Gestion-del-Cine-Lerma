@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author abrah
  */
-public class FuncionBusquedaException extends Exception {
+public class FuncionCapacidadSalaException extends Exception {
 
-    public FuncionBusquedaException(String message) {
+    public FuncionCapacidadSalaException(String message) {
         super(message);
     }
 
-    public FuncionBusquedaException(String message, Throwable cause) {
+    public FuncionCapacidadSalaException(String message, Throwable cause) {
         super(message, cause);
     }
 

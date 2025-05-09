@@ -6,15 +6,15 @@ package Excepciones;
 
 /**
  *
- * @author Abraham Coronel Bringas
+ * @author abrah
  */
-public class FuncionRegistroException extends Exception {
+public class FuncionSolapamientoSalaException extends Exception {
 
-    public FuncionRegistroException(String message) {
+    public FuncionSolapamientoSalaException(String message) {
         super(message);
     }
 
-    public FuncionRegistroException(String message, Throwable cause) {
+    public FuncionSolapamientoSalaException(String message, Throwable cause) {
         super(message, cause);
     }
 

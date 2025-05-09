@@ -6,15 +6,15 @@ package Excepciones;
 
 /**
  *
- * @author abrah
+ * @author Abraham Coronel Bringas
  */
-public class FuncionEliminacionException extends Exception {
+public class FuncionDatosIncorrectosException extends Exception {
 
-    public FuncionEliminacionException(String message) {
+    public FuncionDatosIncorrectosException(String message) {
         super(message);
     }
 
-    public FuncionEliminacionException(String message, Throwable cause) {
+    public FuncionDatosIncorrectosException(String message, Throwable cause) {
         super(message, cause);
     }
 

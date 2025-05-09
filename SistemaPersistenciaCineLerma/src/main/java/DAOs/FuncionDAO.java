@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Conexion.MongoConexion;
 import Excepciones.Funciones.FuncionBoletosVendidosException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.PersistenciaException;
@@ -20,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bson.types.ObjectId;
 
 /**
@@ -32,6 +31,8 @@ public class FuncionDAO implements IFuncionDAO {
 
     private static FuncionDAO instance;
     private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO();
+    private final MongoConexion conexion = new MongoConexion();
+    private final String nombreColeccion = "Funciones";
     private Map<String, List<ObservadorFuncion>> observadores;
 
     private FuncionDAO() {
@@ -46,129 +47,25 @@ public class FuncionDAO implements IFuncionDAO {
         return instance;
     }
 
-    List<Funcion> funciones = new ArrayList<>();
-
-    @Override
-    public List<Funcion> funcionesHarcodeadas() throws PersistenciaException {
-        if (funciones.isEmpty()) {
-            // Crear salas
-            Sala salaA1 = new Sala(new ObjectId(), 100, "1", EstadoSala.ACTIVA);
-            Sala salaA2 = new Sala(new ObjectId(), 90, "2", EstadoSala.ACTIVA);
-            Sala salaA3 = new Sala(new ObjectId(), 80, "3", EstadoSala.ACTIVA);
-            Sala salaB1 = new Sala(new ObjectId(), 120, "4", EstadoSala.ACTIVA);
-            Sala salaB2 = new Sala(new ObjectId(), 110, "5", EstadoSala.ACTIVA);
-            Sala salaB3 = new Sala(new ObjectId(), 105, "6", EstadoSala.ACTIVA);
-
-            // Crear películas
-            List<Pelicula> peliculas = peliculaDAO.mostrarListaPelicula();
-
-            // Agregar funciones
-            funciones.add(new Funcion(salaA1, peliculas.get(0), LocalDateTime.of(2025, 3, 24, 14, 30), true, 80.00));
-            funciones.add(new Funcion(salaB1, peliculas.get(0), LocalDateTime.of(2025, 3, 25, 17, 0), true, 75.00));
-
-            funciones.add(new Funcion(salaA2, peliculas.get(1), LocalDateTime.of(2025, 3, 25, 16, 0), true, 75.00));
-            funciones.add(new Funcion(salaB1, peliculas.get(1), LocalDateTime.of(2025, 3, 29, 19, 30), true, 75.00));
-            funciones.add(new Funcion(salaA2, peliculas.get(1), LocalDateTime.of(2025, 3, 28, 13, 0), true, 60.00));
-            funciones.add(new Funcion(salaB2, peliculas.get(1), LocalDateTime.of(2025, 3, 25, 23, 59), true, 60.00));
-
-            funciones.add(new Funcion(salaA3, peliculas.get(2), LocalDateTime.of(2025, 3, 27, 18, 45), true, 80.00));
-            funciones.add(new Funcion(salaB3, peliculas.get(2), LocalDateTime.of(2025, 3, 26, 21, 0), true, 80.00));
-
-            funciones.add(new Funcion(salaA1, peliculas.get(3), LocalDateTime.of(2025, 3, 26, 20, 0), true, 90.00));
-            funciones.add(new Funcion(salaB3, peliculas.get(3), LocalDateTime.of(2025, 3, 26, 22, 15), true, 75.00));
-
-            funciones.add(new Funcion(salaA2, peliculas.get(4), LocalDateTime.of(2025, 3, 27, 17, 30), true, 65.00));
-            funciones.add(new Funcion(salaB2, peliculas.get(4), LocalDateTime.of(2025, 3, 26, 20, 45), true, 75.00));
-
-            funciones.add(new Funcion(salaA2, peliculas.get(5), LocalDateTime.of(2025, 3, 27, 17, 30), true, 65.00));
-            funciones.add(new Funcion(salaB2, peliculas.get(5), LocalDateTime.of(2025, 3, 26, 20, 45), true, 75.00));
-
-            funciones.add(new Funcion(salaA1, peliculas.get(6), LocalDateTime.of(2025, 3, 27, 17, 30), true, 65.00));
-            funciones.add(new Funcion(salaB1, peliculas.get(6), LocalDateTime.of(2025, 3, 26, 20, 45), true, 75.00));
-
-            funciones.add(new Funcion(salaA1, peliculas.get(7), LocalDateTime.of(2025, 3, 27, 17, 30), true, 65.00));
-            funciones.add(new Funcion(salaB1, peliculas.get(7), LocalDateTime.of(2025, 3, 26, 20, 45), true, 75.00));
-
-            funciones.add(new Funcion(salaA1, peliculas.get(8), LocalDateTime.of(2025, 3, 27, 17, 30), true, 65.00));
-            funciones.add(new Funcion(salaB1, peliculas.get(8), LocalDateTime.of(2025, 3, 26, 20, 45), true, 75.00));
-
-            funciones.add(new Funcion(salaA1, peliculas.get(9), LocalDateTime.of(2025, 3, 27, 17, 30), true, 65.00));
-            funciones.add(new Funcion(salaB1, peliculas.get(9), LocalDateTime.of(2025, 3, 26, 20, 45), true, 75.00));
-
-            funciones.add(new Funcion(salaA1, peliculas.get(10), LocalDateTime.of(2025, 3, 27, 17, 30), true, 65.00));
-            funciones.add(new Funcion(salaB1, peliculas.get(10), LocalDateTime.of(2025, 3, 26, 20, 45), true, 75.00));
-
-        }
-
-        return funciones;
-    }
-
     @Override
     public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) {
-        List<Funcion> funcionesPelicula = new ArrayList<>();
 
-        for (int i = 0; i < funciones.size(); i++) {
-            Funcion funcion = funciones.get(i);
-            if (funcion.getPelicula() == pelicula) {
-                funcionesPelicula.add(funcion);
-            }
-        }
-        return funcionesPelicula;
+        return null;
+
     }
 
     @Override
     public List<Funcion> mostrarFuncionesActivas() {
-        List<Funcion> funcionesPelicula = new ArrayList<>();
-        try {
-            funcionesHarcodeadas();
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(FuncionDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        for (int i = 0; i < funciones.size(); i++) {
-            Funcion funcion = funciones.get(i);
-            if (funcion.getEstado()) {
-                funcionesPelicula.add(funcion);
-            }
-        }
-        return funcionesPelicula;
+
+        return null;
+
     }
 
     @Override
     public List<Funcion> mostrarFuncionesPeliculas() {
-        if (!funciones.isEmpty()) {
-            return funciones;
-        }
 
         return null;
-    }
 
-    // metodo para actualizar una funcion con notificacion
-    @Override
-    public boolean actualizarFuncion(Funcion funcionActualizada) throws PersistenciaException {
-        // Nuevo método implementado
-        for (int i = 0; i < funciones.size(); i++) {
-            Funcion funcionExistente = funciones.get(i);
-
-            if (funcionExistente.getIdFuncion().equals(funcionActualizada.getIdFuncion())) {
-                // Detectar cambios para enviar notificaciones
-                detectarYNotificarCambios(funcionExistente, funcionActualizada);
-
-                // Actualizar la función
-                funciones.set(i, funcionActualizada);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // metodo de buscar funcion por id
-    public Funcion buscarFuncionPorId(Long idFuncion) throws PersistenciaException {
-        for (Funcion funcion : funciones) {
-            if (funcion.getIdFuncion().equals(idFuncion)) {
-                return funcion;
-            }
-        }
-        return null;
     }
 
     // metodo privado para detectar cambios y notificar
@@ -237,7 +134,7 @@ public class FuncionDAO implements IFuncionDAO {
 
     @Override
     public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return null;
     }
 
     @Override
