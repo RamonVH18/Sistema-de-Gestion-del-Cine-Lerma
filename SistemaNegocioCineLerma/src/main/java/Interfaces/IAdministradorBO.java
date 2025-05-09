@@ -17,13 +17,13 @@ import Excepciones.Usuarios.ValidarUsuarioExceptionBO;
  */
 public interface IAdministradorBO {
     
-    public AdministradorDTO registrarAdministrador (AdministradorDTO administrador) throws RegistrarAdminExceptionBO;
+    public AdministradorDTO registrarAdministradorBO (AdministradorDTO administrador) throws RegistrarAdminExceptionBO;
     
-    public AdministradorDTO actualizarAdministrador (AdministradorDTO administrador) throws ActualizarAdminExceptionBO;
+    public AdministradorDTO actualizarAdministradorBO (AdministradorDTO administrador) throws ActualizarAdminExceptionBO;
     
-    public Boolean eliminarAdministrador (AdministradorDTO administrador) throws EliminarUsuarioExceptionBO;
+    public Boolean eliminarAdministradorBO (AdministradorDTO administrador) throws EliminarUsuarioExceptionBO;
     
-    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO;
+    public Boolean validarAdministradorBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO;
     
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario) throws EncontrarAdminExceptionBO;
+    public AdministradorDTO obtenerAdministradorBO(String nombreUsuario) throws EncontrarAdminExceptionBO;
 }

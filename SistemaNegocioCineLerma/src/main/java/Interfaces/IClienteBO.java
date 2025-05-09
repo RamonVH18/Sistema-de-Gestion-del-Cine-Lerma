@@ -22,15 +22,15 @@ import java.util.List;
  */
 public interface IClienteBO {
     
-    public ClienteDTO registrarCliente (ClienteDTO cliente) throws RegistrarClienteExceptionBO;
+    public ClienteDTO registrarClienteBO (ClienteDTO cliente) throws RegistrarClienteExceptionBO;
     
-    public ClienteDTO actualizarCliente (ClienteDTO cliente) throws ActualizarClienteExceptionBO;
+    public ClienteDTO actualizarClienteBO (ClienteDTO cliente) throws ActualizarClienteExceptionBO;
     
-    public Boolean eliminarCliente (ClienteDTO cliente) throws EliminarUsuarioExceptionBO;
+    public Boolean eliminarClienteBO (ClienteDTO cliente) throws EliminarUsuarioExceptionBO;
     
-    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO;
+    public Boolean validarClienteBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO;
     
-    public ClienteDTO obtenerCliente(String nombreUsuario) throws EncontrarClienteExceptionBO;
+    public ClienteDTO obtenerClienteBO(String nombreUsuario) throws EncontrarClienteExceptionBO;
     
-    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) throws CargarHistorialExceptionBO;
+    public List<CompraDTO> cargarHistorialComprasBO(ClienteDTO cliente) throws CargarHistorialExceptionBO;
 }
