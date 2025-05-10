@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author sonic
  */
-public class EliminarUsuarioException extends Exception {
+public class CargarHistorialException extends Exception {
 
-    public EliminarUsuarioException(String message) {
+    public CargarHistorialException(String message) {
         super(message);
     }
 
-    public EliminarUsuarioException(String message, Throwable cause) {
+    public CargarHistorialException(String message, Throwable cause) {
         super(message, cause);
     }
     

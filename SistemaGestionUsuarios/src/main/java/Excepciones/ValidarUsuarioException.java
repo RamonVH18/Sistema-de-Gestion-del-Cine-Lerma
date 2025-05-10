@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author sonic
  */
-public class EliminarUsuarioException extends Exception {
+public class ValidarUsuarioException extends Exception {
 
-    public EliminarUsuarioException(String message) {
+    public ValidarUsuarioException (String message) {
         super(message);
     }
 
-    public EliminarUsuarioException(String message, Throwable cause) {
+    public ValidarUsuarioException (String message, Throwable cause) {
         super(message, cause);
     }
     

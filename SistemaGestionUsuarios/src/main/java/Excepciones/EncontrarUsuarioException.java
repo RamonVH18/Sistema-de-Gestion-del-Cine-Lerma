@@ -8,6 +8,14 @@ package Excepciones;
  *
  * @author sonic
  */
-public class EncontrarUsuarioException {
+public class EncontrarUsuarioException extends Exception {
+
+    public EncontrarUsuarioException(String message) {
+        super(message);
+    }
+
+    public EncontrarUsuarioException(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }

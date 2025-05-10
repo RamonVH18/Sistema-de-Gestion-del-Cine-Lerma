@@ -8,6 +8,14 @@ package Excepciones;
  *
  * @author sonic
  */
-public class RegistrarUsuarioException {
+public class RegistrarUsuarioException extends Exception {
+
+    public RegistrarUsuarioException(String message) {
+        super(message);
+    }
+
+    public RegistrarUsuarioException(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }

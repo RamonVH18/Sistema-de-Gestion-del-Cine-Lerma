@@ -8,6 +8,14 @@ package Excepciones;
  *
  * @author sonic
  */
-public class ObtenerUsuariosException {
+public class ObtenerUsuariosException extends Exception {
+
+    public ObtenerUsuariosException(String message) {
+        super(message);
+    }
+
+    public ObtenerUsuariosException(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }
