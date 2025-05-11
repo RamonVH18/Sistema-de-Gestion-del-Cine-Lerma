@@ -21,8 +21,6 @@ public interface IUsuarioBO {
     
     public List<UsuarioDTO> mostrarListaUsuariosBO() throws ObtenerUsuariosException;
 
-    public Boolean eliminarUsuarioBO(UsuarioDTO usuario) throws EliminarUsuarioException;
-
     public Boolean bloquearUsuarioBO(UsuarioDTO usuario) throws ActualizarUsuarioExceptionBO;
     
     public Boolean desbloquearUsuarioBO(UsuarioDTO usuario) throws ActualizarUsuarioExceptionBO;

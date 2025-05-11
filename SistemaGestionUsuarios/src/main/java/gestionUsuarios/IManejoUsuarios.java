@@ -40,8 +40,6 @@ public interface IManejoUsuarios {
     
     public List<UsuarioDTO> mostrarListaUsuarios() throws ObtenerUsuariosException;
 
-    public Boolean eliminarUsuario(UsuarioDTO usuario) throws EliminarUsuarioException;
-
     public Boolean bloquearUsuario(UsuarioDTO usuario) throws ActualizarUsuarioException;
     
     public Boolean desbloquearUsuario(UsuarioDTO usuario) throws ActualizarUsuarioException;

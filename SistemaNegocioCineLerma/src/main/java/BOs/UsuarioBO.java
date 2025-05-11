@@ -62,19 +62,19 @@ public class UsuarioBO implements IUsuarioBO {
     }
 
 
-    @Override
-    public Boolean eliminarUsuarioBO(UsuarioDTO usuario) throws EliminarUsuarioException {
-        try {
-
-            Usuario usuarioEliminar = mapper.toUsuarioEntidad(usuario);
-
-            return usuarioDAO.eliminarUsuario(usuarioEliminar);
-
-        } catch (EliminarUsuarioException e) {
-            throw new EliminarUsuarioException("Error al eliminar usuario", e);
-        }
-
-    }
+//    @Override
+//    public Boolean eliminarUsuarioBO(UsuarioDTO usuario) throws EliminarUsuarioException {
+//        try {
+//
+//            Usuario usuarioEliminar = mapper.toUsuarioEntidad(usuario);
+//
+//            return usuarioDAO.eliminarUsuario(usuarioEliminar);
+//
+//        } catch (EliminarUsuarioException e) {
+//            throw new EliminarUsuarioException("Error al eliminar usuario", e);
+//        }
+//
+//    }
 
     @Override
     public Boolean bloquearUsuarioBO(UsuarioDTO usuario) throws ActualizarUsuarioExceptionBO {

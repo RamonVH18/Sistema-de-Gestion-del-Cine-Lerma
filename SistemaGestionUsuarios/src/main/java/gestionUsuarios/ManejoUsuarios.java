@@ -15,10 +15,13 @@ import Excepciones.ActualizarUsuarioException;
 import Excepciones.CargarHistorialException;
 import Excepciones.EncontrarUsuarioException;
 import Excepciones.RegistrarUsuarioException;
+import Excepciones.Usuarios.ActualizarAdminExceptionBO;
 import Excepciones.Usuarios.ActualizarClienteExceptionBO;
 import Excepciones.Usuarios.EliminarUsuarioExceptionBO;
+import Excepciones.Usuarios.EncontrarAdminExceptionBO;
 import Excepciones.Usuarios.EncontrarClienteExceptionBO;
 import Excepciones.Usuarios.ObtenerUsuariosExceptionBO;
+import Excepciones.Usuarios.RegistrarAdminExceptionBO;
 import Excepciones.Usuarios.RegistrarClienteExceptionBO;
 import Excepciones.Usuarios.ValidarUsuarioExceptionBO;
 import Excepciones.ValidarUsuarioException;
@@ -55,10 +58,6 @@ public class ManejoUsuarios implements IManejoUsuarios {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public Boolean eliminarUsuario(UsuarioDTO usuario) throws EliminarUsuarioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     @Override
     public Boolean bloquearUsuario(UsuarioDTO usuario) throws ActualizarUsuarioException {
@@ -127,27 +126,6 @@ public class ManejoUsuarios implements IManejoUsuarios {
     
     ///////////////////////////////////////////
     //-------------------------------------------------METODOS DE CLIENTES ---------------------------------------------------------------------------------------
-    @Override
-    public ClienteDTO registrarCliente(ClienteDTO cliente) throws RegistrarUsuarioException {
-        //faltaria validar que no se repitan los nombres de usuario i guess osea que no exista uno ya con ese nombre 
-        try {
-
-            if (cliente == null) {
-                throw new RegistrarUsuarioException("El cliente no puede ser null");
-            }
-
-            validarDatosUsuario(cliente);
-            validarDatosCliente(cliente);
-
-            return clienteBO.registrarClienteBO(cliente);
-
-        } catch (ValidarUsuarioException e) {
-            throw new RegistrarUsuarioException("La sala ingresada no cumple con la siguiente validacion: " + e.getMessage());
-        } catch (RegistrarClienteExceptionBO e) {
-            throw new RegistrarUsuarioException("No se pudo registrar el cliente (subsistema): " + e.getMessage(), e);
-        }
-    }
-
     private void validarDatosUsuario(UsuarioDTO usuario) throws ValidarUsuarioException {
 
         if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
@@ -182,7 +160,7 @@ public class ManejoUsuarios implements IManejoUsuarios {
             throw new ValidarUsuarioException("El telefono debe tener una longitud de 10 numeros");
         }
 
-        if (!usuario.getTelefono().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        if (!usuario.getTelefono().matches("^[0-9]+$")) {
             throw new ValidarUsuarioException("El formato del telefono ingresado no es valido");
         }
 
@@ -210,7 +188,7 @@ public class ManejoUsuarios implements IManejoUsuarios {
             throw new ValidarUsuarioException("El CP del cliente es obligatorio");
         }
 
-        if (cliente.getCP().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        if (cliente.getCP().matches("^[0-9]+$")) {
             throw new ValidarUsuarioException("El CP del cliente no es valido");
         }
 
@@ -222,15 +200,54 @@ public class ManejoUsuarios implements IManejoUsuarios {
             throw new ValidarUsuarioException("El numero de domicilio del cliente es obligatorio");
         }
 
-        if (cliente.getNumero().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        if (cliente.getNumero().matches("^[0-9]+$")) {
             throw new ValidarUsuarioException("El numero de domicilio del cliente no es valido");
         }
 
+    }
+    
+    private void validarDatosAdministrador(AdministradorDTO admin) throws ValidarUsuarioException {
+        
+        if (admin.getRFC() == null || admin.getRFC().trim().isEmpty()) {
+            throw new ValidarUsuarioException("El RFC del administrador es obligatorio");
+        }
+        
+    }
+    
+    
+    
+    @Override
+    public ClienteDTO registrarCliente(ClienteDTO cliente) throws RegistrarUsuarioException {
+        //faltaria validar que no se repitan los nombres de usuario i guess osea que no exista uno ya con ese nombre 
+        try {
+
+            if (cliente == null) {
+                throw new RegistrarUsuarioException("El cliente no puede ser null");
+            }
+            
+            if (!validarCliente(cliente.getNombreUsuario(), cliente.getContraseña())) {
+                throw new RegistrarUsuarioException("Ya existe un usuario con ese username o esta bloqueado");               
+            }
+
+            validarDatosUsuario(cliente);
+            validarDatosCliente(cliente);
+
+            return clienteBO.registrarClienteBO(cliente);
+
+        } catch (ValidarUsuarioException e) {
+            throw new RegistrarUsuarioException("La sala ingresada no cumple con la siguiente validacion: " + e.getMessage());
+        } catch (RegistrarClienteExceptionBO e) {
+            throw new RegistrarUsuarioException("No se pudo registrar el cliente (subsistema): " + e.getMessage(), e);
+        }
     }
 
     @Override
     public ClienteDTO actualizarCliente(ClienteDTO cliente) throws ActualizarUsuarioException {
         try {
+            
+            if (obtenerCliente(cliente.getNombreUsuario()) != null) {
+                throw new ActualizarUsuarioException("Ya existe un usuario con ese username");               
+            }
 
             validarDatosUsuario(cliente);
             validarDatosCliente(cliente);
@@ -245,6 +262,8 @@ public class ManejoUsuarios implements IManejoUsuarios {
             throw new ActualizarUsuarioException("La sala ingresada no cumple con la siguiente validacion: " + e.getMessage());
         } catch (ActualizarClienteExceptionBO e) {
             throw new ActualizarUsuarioException("No se pudo registrar el cliente (subsistema): " + e.getMessage(), e);
+        } catch (EncontrarUsuarioException e) {
+            throw new ActualizarUsuarioException("No se pudo actualizar el cliente por: " + e.getMessage());
         }
     }
 
@@ -252,6 +271,8 @@ public class ManejoUsuarios implements IManejoUsuarios {
     public Boolean eliminarCliente(ClienteDTO cliente) throws EliminarUsuarioException {
         try {
 
+            //FALTAN MUCHAS VALIDACIONES AQUI EHHHH XDDDDDDDDDDDDDDDDDDD MUCHAS POR QUE NO SE PUEDE ELIMINAR ASI COMO ASI
+            
             return clienteBO.eliminarClienteBO(cliente);
 
         } catch (EliminarUsuarioExceptionBO e) {
@@ -266,7 +287,7 @@ public class ManejoUsuarios implements IManejoUsuarios {
             return clienteBO.validarClienteBO(nombreUsuario, contrasena);
 
         } catch (ValidarUsuarioExceptionBO e) {
-            throw new ValidarUsuarioException("La sala ingresada no cumple con la siguiente validacion: " + e.getMessage());
+            throw new ValidarUsuarioException("El cliente no es valido: " + e.getMessage());
         }
     }
 
@@ -304,27 +325,86 @@ public class ManejoUsuarios implements IManejoUsuarios {
     //-------------------------------------------------METODOS DE ADMINISTRADOR ---------------------------------------------------------------------------------------
     @Override
     public AdministradorDTO registrarAdministrador(AdministradorDTO administrador) throws RegistrarUsuarioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+
+            if (administrador == null) {
+                throw new RegistrarUsuarioException("El cliente no puede ser null");
+            }
+
+            validarDatosUsuario(administrador);
+            validarDatosAdministrador(administrador);
+
+            return adminBO.registrarAdministradorBO(administrador);
+
+        } catch (ValidarUsuarioException e) {
+            throw new RegistrarUsuarioException("La sala ingresada no cumple con la siguiente validacion: " + e.getMessage());
+        } catch (RegistrarAdminExceptionBO e) {
+            throw new RegistrarUsuarioException("No se pudo registrar el administrador (subsistema): " + e.getMessage(), e);
+        }
     }
 
     @Override
     public AdministradorDTO actualizarAdministrador(AdministradorDTO administrador) throws ActualizarUsuarioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            
+            if (obtenerAdministrador(administrador.getNombreUsuario()) != null) {
+                throw new ActualizarUsuarioException("Ya existe un usuario con ese username");               
+            }
+
+            validarDatosUsuario(administrador);
+            validarDatosAdministrador(administrador);
+
+            if (!validarAdministrador(administrador.getNombreUsuario(), administrador.getContraseña())) {
+                throw new ActualizarUsuarioException("El administrador no es valido");
+            }
+
+            return adminBO.actualizarAdministradorBO(administrador);
+
+        } catch (ValidarUsuarioException e) {
+            throw new ActualizarUsuarioException("La sala ingresada no cumple con la siguiente validacion: " + e.getMessage());
+        } catch (ActualizarAdminExceptionBO e) {
+            throw new ActualizarUsuarioException("No se pudo actualizar el admin (subsistema): " + e.getMessage(), e);
+        } catch (EncontrarUsuarioException e) {
+            throw new ActualizarUsuarioException("No se pudo actualizar el cliente por: " + e.getMessage());
+        }
     }
 
     @Override
     public Boolean eliminarAdministrador(AdministradorDTO administrador) throws EliminarUsuarioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+
+            //FALTAN MUCHAS VALIDACIONES AQUI EHHHH XDDDDDDDDDDDDDDDDDDD MUCHAS POR QUE NO SE PUEDE ELIMINAR ASI COMO ASI
+            
+            return adminBO.eliminarAdministradorBO(administrador);
+
+        } catch (EliminarUsuarioExceptionBO e) {
+            throw new EliminarUsuarioException("No se pudo eliminar al cliente : " + e.getMessage());
+        }
     }
 
     @Override
     public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+
+            return adminBO.validarAdministradorBO(nombreUsuario, contrasena);
+
+        } catch (ValidarUsuarioExceptionBO e) {
+            throw new ValidarUsuarioException("El cliente no es valido: " + e.getMessage());
+        }
     }
 
     @Override
     public AdministradorDTO obtenerAdministrador(String nombreUsuario) throws EncontrarUsuarioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (nombreUsuario == null || nombreUsuario.trim().isEmpty()) {
+            throw new EncontrarUsuarioException("El nombre de usuario es obligatorio");
+        }
+        
+        try {
+            return adminBO.obtenerAdministradorBO(nombreUsuario);
+            
+        } catch (EncontrarAdminExceptionBO e) {
+            throw new EncontrarUsuarioException("No se pudo obtener el administrador: " + e.getMessage(), e);
+        }
     }
 
 }

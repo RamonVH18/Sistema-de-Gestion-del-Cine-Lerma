@@ -20,7 +20,7 @@ public interface IUsuarioDAO {
     
     public List<Usuario> mostrarListaUsuarios() throws ObtenerUsuariosException;
 
-    public Boolean eliminarUsuario(Usuario usuario) throws EliminarUsuarioException;
+//    public Boolean eliminarUsuario(Usuario usuario) throws EliminarUsuarioException;
 
     public Boolean bloquearUsuario(Usuario usuario) throws ActualizarUsuarioException;
     
