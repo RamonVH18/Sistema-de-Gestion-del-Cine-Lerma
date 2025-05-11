@@ -9,14 +9,24 @@ import control.IControl;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import utilitades.ModeladoTablas;
 import utilitades.Utilerias;
 
 /**
@@ -24,12 +34,21 @@ import utilitades.Utilerias;
  * @author Ramon Valencia
  */
 public class EstadisticasSala extends javax.swing.JFrame {
+
     private final IControl control = ControlDeNavegacion.getInstancia();
     private final Utilerias utilerias = new Utilerias();
-    
+
     private final Integer anchoBuscador = 150;
     private final Integer alturaBuscador = 20;
     private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
+    private final Map<Integer, Number> tamañoColumnas = Map.of(
+            0, 50,
+            1, 75,
+            2, 90,
+            3, 85,
+            4, 90
+    );
+    
     /**
      * Creates new form EstadisticasSala
      */
@@ -114,21 +133,25 @@ public class EstadisticasSala extends javax.swing.JFrame {
     private javax.swing.JLabel labelOrdenamiento;
     private javax.swing.JTextField textFieldBuscador;
     // End of variables declaration//GEN-END:variables
-    
-    
+
     private void configurarPanelCentral() {
         JPanel panelCentral = new JPanel();
-        
+
         JPanel panelBuscador = new JPanel();
         configurarPanelBuscador(panelBuscador);
         JPanel panelTabla = new JPanel();
         configurarPanelTabla(panelTabla);
-        
+
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+
+        panelCentral.add(Box.createVerticalStrut(75));
         panelCentral.add(panelBuscador);
+        panelCentral.add(Box.createVerticalGlue());
         panelCentral.add(panelTabla);
+
         this.add(panelCentral, BorderLayout.CENTER);
     }
-    
+
     private void configurarPanelBuscador(JPanel panel) {
         JPanel panelBuscador = new JPanel();
         labelBuscador = new JLabel("BUSCAR SALA: ");
@@ -136,19 +159,19 @@ public class EstadisticasSala extends javax.swing.JFrame {
         textFieldBuscador.setPreferredSize(tamañoBuscador);
         panelBuscador.add(labelBuscador);
         panelBuscador.add(textFieldBuscador);
-        
+
         JPanel panelOrdenamiento = new JPanel();
         labelOrdenamiento = new JLabel("ORDENAR POR: ");
         configurarComboBoxOrdenamiento();
         panelOrdenamiento.add(labelOrdenamiento);
         panelOrdenamiento.add(comboBoxOrdenamiento);
-        
+
         panel.add(panelBuscador);
         panel.add(panelOrdenamiento);
-        
+
     }
-    
-    private void configurarComboBoxOrdenamiento(){
+
+    private void configurarComboBoxOrdenamiento() {
         comboBoxOrdenamiento = new JComboBox<>();
         DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>();
         modeloComboBox.addElement("Capacidad");
@@ -156,17 +179,57 @@ public class EstadisticasSala extends javax.swing.JFrame {
         modeloComboBox.addElement("Ingresos Totales");
         modeloComboBox.addElement("Funciones Canceladas");
         comboBoxOrdenamiento.setModel(modeloComboBox);
-        
+
         comboBoxOrdenamiento.addActionListener((ActionEvent e) -> {
             //actualizarTabla(comboBoxOrdenamiento.getSelectedItem());
         });
-        
+
     }
-    
+
     private void configurarPanelTabla(JPanel panelTabla) {
+        String[] columnas = {"SALA", "CAPACIDAD", "<html>NUMERO DE<br>FUNCIONES</html>", "<html>INGRESOS<br>TOTALES</html>", "<html>FUNCIONES<br>CANCELADAS</html>"};
+        Object[][] datos = {
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+            {"SALA A1", 25, 12, 1254.9, 45},
+        };
+
+        DefaultTableModel modeloTabla = new DefaultTableModel(datos, columnas);
         
+        JTable tablaSalas = ModeladoTablas.creacionTablaEstadisticas(columnas, datos);
+        
+        ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas);
+
+        JScrollPane scrollPane = new JScrollPane(tablaSalas);
+        panelTabla.add(scrollPane);
+
     }
-    
+
     /**
      * Metodo para configurar el obtener el boton volver del frameBase y
      * configurarlo para que nos regrese a la ventana anterior

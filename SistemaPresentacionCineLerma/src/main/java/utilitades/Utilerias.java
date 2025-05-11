@@ -67,7 +67,6 @@ import javax.swing.border.Border;
 public class Utilerias {
 
     public Utilerias() {
-
     }
 
     public ImageIcon crearImagen(String url, int ancho, int altura) {
