@@ -1,0 +1,9 @@
+Excepciones\EliminarUsuarioException.class
+Excepciones\RegistrarUsuarioException.class
+Excepciones\ValidarUsuarioException.class
+Excepciones\CargarHistorialException.class
+gestionUsuarios\IManejoUsuarios.class
+gestionUsuarios\ManejoUsuarios.class
+Excepciones\EncontrarUsuarioException.class
+Excepciones\ActualizarUsuarioException.class
+Excepciones\ObtenerUsuariosException.class

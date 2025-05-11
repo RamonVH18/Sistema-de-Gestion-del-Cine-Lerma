@@ -4,6 +4,8 @@
  */
 package control;
 
+import DTOs.AdministradorDTO;
+
 
 /**
  *
@@ -14,7 +16,9 @@ public class InicioAdministrador {
     public static void main(String[] args) {
         ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
         
-        control.mostrarMenuAdministrador();
+        AdministradorDTO admin = new AdministradorDTO();
+        
+        control.mostrarMenuAdministrador(null, admin);
     }
     
 }

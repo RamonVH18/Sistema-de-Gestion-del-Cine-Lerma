@@ -4,6 +4,7 @@
  */
 package pantallas;
 
+import DTOs.AdministradorDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
@@ -26,6 +27,8 @@ import javax.swing.SwingConstants;
  */
 public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
+    private AdministradorDTO administrador;
+    
     private final IControl control = ControlDeNavegacion.getInstancia();
     private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
     private final String nombrePestania = "MenuAdministrador"; // Variable para escribir el nombre de la pestaña
@@ -41,7 +44,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipalAdmin
      */
-    public MenuPrincipalAdmin() {
+    public MenuPrincipalAdmin(AdministradorDTO administrador) {
         initComponents();
         setTitle(nombrePestania);
         setSize(640, 830);
@@ -50,6 +53,8 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         crearEstructuraMenuPrincipal();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        
+        this.administrador = administrador;
 
         revalidate();
         repaint();

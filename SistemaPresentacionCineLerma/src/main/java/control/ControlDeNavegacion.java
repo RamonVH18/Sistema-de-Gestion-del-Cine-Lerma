@@ -4,6 +4,7 @@
  */
 package control;
 
+import DTOs.AdministradorDTO;
 import pantallas.reservaBoletos.SeleccionarPelicula;
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
@@ -35,6 +36,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import pantallas.IniciarSesion;
 import pantallas.MenuPrincipalAdmin;
 import pantallas.reservaBoletos.DetalleDelBoleto;
 import pantallas.MenuPrincipalCliente;
@@ -43,6 +45,11 @@ import pantallas.Pagos.PantallaPagoRechazado;
 import pantallas.Salas.AgregarSala;
 import pantallas.Salas.EstadisticasSala;
 import pantallas.Salas.MenuSalas;
+import pantallas.Usuarios.AdministracionDeUsuario;
+import pantallas.Usuarios.ConsultarUsuarios;
+import pantallas.Usuarios.EditarUsuario;
+import pantallas.Usuarios.HistorialCliente;
+import pantallas.Usuarios.RegistrarUsuario;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
 
@@ -94,7 +101,7 @@ public class ControlDeNavegacion implements IControl {
      * de de fusionar
      */
     @Override
-    public void mostrarMenuCliente() {
+    public void mostrarMenuCliente(JFrame frameAnterior, ClienteDTO cliente) {
         SwingUtilities.invokeLater(() -> {
             MenuPrincipalCliente pantalla = new MenuPrincipalCliente();
             pantalla.setLocationRelativeTo(null);
@@ -194,9 +201,9 @@ public class ControlDeNavegacion implements IControl {
      * Metodo que se encarga de abrir la pantalla de pago rechazado
      */
     @Override
-    public void mostrarMenuAdministrador() {
+    public void mostrarMenuAdministrador(JFrame frameAnterior, AdministradorDTO admin) {
         SwingUtilities.invokeLater(() -> {
-            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin();
+            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin(admin);
             pantallaMenuAdmin.setLocationRelativeTo(null);
             pantallaMenuAdmin.setVisible(true);
         });
@@ -259,7 +266,7 @@ public class ControlDeNavegacion implements IControl {
         } catch (PeliculasCargaException e) {
             //PONER JOptionPane y cerrar la pantalla actual y volver al menuPrincipal
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            mostrarMenuCliente();
+            mostrarMenuCliente(null, null);
             return null;
         }
     }
@@ -567,5 +574,90 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //METODOS DE NAVEGACION DE LA GESTION DE USUARIOS
+    
+//    @Override
+//    public void mostrarMenuAdministrador() {
+//        SwingUtilities.invokeLater(() -> {
+//            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin();
+//            pantallaMenuAdmin.setLocationRelativeTo(null);
+//            pantallaMenuAdmin.setVisible(true);
+//        });
+//    }
+//    
+//    /**
+//     * Metodo para abrir el menu del caso de uso de gestion de salas
+//     * @param tituloFrame
+//     * @param frameAnterior
+//     */
+//    @Override
+//    public void mostrarMenuSalas(JFrame frameAnterior) {
+//        SwingUtilities.invokeLater(() -> {
+//            MenuSalas pantallaMenuSalas = new MenuSalas();
+//            pantallaMenuSalas.setLocationRelativeTo(null);
+//            pantallaMenuSalas.setVisible(true);
+//            frameAnterior.dispose();
+//        });
+//    }
+    
+    @Override
+    public void mostrarIniciarSesion() {
+        SwingUtilities.invokeLater(() -> {
+            IniciarSesion pantallaIniciarSecion = new IniciarSesion();
+            pantallaIniciarSecion.setLocationRelativeTo(null);
+            pantallaIniciarSecion.setVisible(true);
+        });
+    }
+    
+    @Override
+    public void mostrarAdministracionDeUsuario(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            AdministracionDeUsuario pantallaAdministrarUsuario = new AdministracionDeUsuario();
+            pantallaAdministrarUsuario.setLocationRelativeTo(null);
+            pantallaAdministrarUsuario.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
+    @Override
+    public void mostrarEditarUsuario(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            EditarUsuario pantallaEditarUsuario = new EditarUsuario();
+            pantallaEditarUsuario.setLocationRelativeTo(null);
+            pantallaEditarUsuario.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
+    @Override
+    public void mostrarRegistrarUsuario(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            RegistrarUsuario pantallaRegistrarUsuario = new RegistrarUsuario();
+            pantallaRegistrarUsuario.setLocationRelativeTo(null);
+            pantallaRegistrarUsuario.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
+    @Override
+    public void mostrarHistorialCliente(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            HistorialCliente pantallaHistorialCliente = new HistorialCliente();
+            pantallaHistorialCliente.setLocationRelativeTo(null);
+            pantallaHistorialCliente.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
 
 }

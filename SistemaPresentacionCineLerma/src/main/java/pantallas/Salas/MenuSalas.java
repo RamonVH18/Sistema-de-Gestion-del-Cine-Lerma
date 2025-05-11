@@ -167,7 +167,7 @@ public final class MenuSalas extends javax.swing.JFrame {
         JButton btnVolver = (JButton) panel.getComponent(0);
 
         btnVolver.addActionListener((ActionEvent e) -> {
-            control.mostrarMenuAdministrador();
+            control.mostrarMenuAdministrador(this, null);
             dispose();
         });
 

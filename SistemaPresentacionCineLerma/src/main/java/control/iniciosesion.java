@@ -4,25 +4,21 @@
  */
 package control;
 
-import DTOs.ClienteDTO;
-
 /**
  *
- * @author Ramon Valencia
+ * @author sonic
  */
-public class Inicio {
+public class iniciosesion {
 
-    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
         ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
-        ClienteDTO cliente = new ClienteDTO();
         
-        control.mostrarMenuCliente(null, cliente);
+        control.mostrarIniciarSesion();
+        
     }
     
 }

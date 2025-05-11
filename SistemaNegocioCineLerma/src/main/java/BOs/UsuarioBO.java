@@ -47,7 +47,7 @@ public class UsuarioBO implements IUsuarioBO {
     }
 
     @Override
-    public List<UsuarioDTO> mostrarListaUsuariosBO() throws ObtenerUsuariosException {
+    public List<UsuarioDTO> mostrarListaUsuariosBO() throws ObtenerUsuariosExceptionBO {
         try {
 
             List<Usuario> usuarios = usuarioDAO.mostrarListaUsuarios();
@@ -57,7 +57,7 @@ public class UsuarioBO implements IUsuarioBO {
                     .collect(Collectors.toList());
 
         } catch (ObtenerUsuariosException e) {
-            throw new ObtenerUsuariosException("Error al obtener lista de usuarios", e);
+            throw new ObtenerUsuariosExceptionBO("Error al obtener lista de usuarios", e);
         }
     }
 

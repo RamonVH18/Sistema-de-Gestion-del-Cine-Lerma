@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface IUsuarioBO {
     
-    public List<UsuarioDTO> mostrarListaUsuariosBO() throws ObtenerUsuariosException;
+    public List<UsuarioDTO> mostrarListaUsuariosBO() throws ObtenerUsuariosExceptionBO;
 
     public Boolean bloquearUsuarioBO(UsuarioDTO usuario) throws ActualizarUsuarioExceptionBO;
     

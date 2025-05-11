@@ -181,7 +181,7 @@ public final class DetalleDelBoleto extends javax.swing.JFrame {
 
     private void btnRegresoMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresoMenuMouseClicked
         // TODO add your handling code here:
-        control.mostrarMenuCliente();
+        control.mostrarMenuCliente(this, null);
         dispose();
     }//GEN-LAST:event_btnRegresoMenuMouseClicked
 

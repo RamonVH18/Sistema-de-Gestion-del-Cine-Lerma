@@ -4,7 +4,9 @@
  */
 package control;
 
+import DTOs.AdministradorDTO;
 import DTOs.BoletoDTO;
+import DTOs.ClienteDTO;
 import DTOs.CuentaMercadoDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
@@ -22,7 +24,7 @@ import javax.swing.JFrame;
  */
 public interface IControl {
     
-    public void mostrarMenuCliente();
+    public void mostrarMenuCliente(JFrame frameAnterior, ClienteDTO cliente);
     
     public void mostrarSeleccionarPelicula();
     
@@ -36,7 +38,7 @@ public interface IControl {
     
     public void mostrarPantallaPagoRechazado();
     
-    public void mostrarMenuAdministrador();
+    public void mostrarMenuAdministrador(JFrame frameAnterior, AdministradorDTO admin);
     
     public void mostrarMenuSalas(JFrame frameAnterior);
     
@@ -83,5 +85,16 @@ public interface IControl {
     public void procesarPagoPaypal(PaypalDTO paypal, PagoDTO pago);
     
     public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago);
+    
+    //Metodos de navegacion de usuarios
+    public void mostrarIniciarSesion();
+    
+    public void mostrarAdministracionDeUsuario(JFrame frameAnterior);
+    
+    public void mostrarEditarUsuario(JFrame frameAnterior);
+    
+    public void mostrarRegistrarUsuario(JFrame frameAnterior);
+    
+    public void mostrarHistorialCliente(JFrame frameAnterior);
     
 }

@@ -17,6 +17,8 @@ import Excepciones.EncontrarUsuarioException;
 import Excepciones.RegistrarUsuarioException;
 import Excepciones.Usuarios.ActualizarAdminExceptionBO;
 import Excepciones.Usuarios.ActualizarClienteExceptionBO;
+import Excepciones.Usuarios.ActualizarUsuarioExceptionBO;
+import Excepciones.Usuarios.CargarHistorialExceptionBO;
 import Excepciones.Usuarios.EliminarUsuarioExceptionBO;
 import Excepciones.Usuarios.EncontrarAdminExceptionBO;
 import Excepciones.Usuarios.EncontrarClienteExceptionBO;
@@ -30,12 +32,9 @@ import Excepciones.usuarios.ObtenerUsuariosException;
 import Interfaces.IAdministradorBO;
 import Interfaces.IClienteBO;
 import Interfaces.IUsuarioBO;
-import entidades.Usuario;
 import enums.EstadoUsuario;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -47,26 +46,48 @@ public class ManejoUsuarios implements IManejoUsuarios {
     private IAdministradorBO adminBO = AdministradorBO.getInstanceBO();
     private IClienteBO clienteBO = ClienteBO.getInstanceBO();
 
-    
-    
-    
-    
+    private static ManejoUsuarios instanceManejoUsuarios;
+
+    private ManejoUsuarios() {
+    }
+
+    public static ManejoUsuarios getInstance() {
+        if (instanceManejoUsuarios == null) { // para la primera vez que se llama
+            instanceManejoUsuarios = new ManejoUsuarios();
+        }
+        return instanceManejoUsuarios;
+    }
+
     /////////////////////////////////
     //-------------------------------------------------METODOS DE USUARIOS ---------------------------------------------------------------------------------------
     @Override
     public List<UsuarioDTO> mostrarListaUsuarios() throws ObtenerUsuariosException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        try {
+            return usuarioBO.mostrarListaUsuariosBO();
 
+        } catch (ObtenerUsuariosExceptionBO e) {
+            throw new ObtenerUsuariosException("No se pudo obtener el cliente: " + e.getMessage(), e);
+        }
+    }
 
     @Override
     public Boolean bloquearUsuario(UsuarioDTO usuario) throws ActualizarUsuarioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return usuarioBO.bloquearUsuarioBO(usuario);
+
+        } catch (ActualizarUsuarioExceptionBO e) {
+            throw new ActualizarUsuarioException("No se pudo bloquear el cliente: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public Boolean desbloquearUsuario(UsuarioDTO usuario) throws ActualizarUsuarioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return usuarioBO.desbloquearUsuarioBO(usuario);
+
+        } catch (ActualizarUsuarioExceptionBO e) {
+            throw new ActualizarUsuarioException("No se pudo bloquear el cliente: " + e.getMessage(), e);
+        }
     }
 
     //METODOS QUE SIRVEN PARA FILTRAR LA LISTA DE USUARIOS
@@ -118,12 +139,6 @@ public class ManejoUsuarios implements IManejoUsuarios {
         }
     }
 
-    
-    
-    
-    
-    
-    
     ///////////////////////////////////////////
     //-------------------------------------------------METODOS DE CLIENTES ---------------------------------------------------------------------------------------
     private void validarDatosUsuario(UsuarioDTO usuario) throws ValidarUsuarioException {
@@ -205,17 +220,15 @@ public class ManejoUsuarios implements IManejoUsuarios {
         }
 
     }
-    
+
     private void validarDatosAdministrador(AdministradorDTO admin) throws ValidarUsuarioException {
-        
+
         if (admin.getRFC() == null || admin.getRFC().trim().isEmpty()) {
             throw new ValidarUsuarioException("El RFC del administrador es obligatorio");
         }
-        
+
     }
-    
-    
-    
+
     @Override
     public ClienteDTO registrarCliente(ClienteDTO cliente) throws RegistrarUsuarioException {
         //faltaria validar que no se repitan los nombres de usuario i guess osea que no exista uno ya con ese nombre 
@@ -224,9 +237,9 @@ public class ManejoUsuarios implements IManejoUsuarios {
             if (cliente == null) {
                 throw new RegistrarUsuarioException("El cliente no puede ser null");
             }
-            
+
             if (!validarCliente(cliente.getNombreUsuario(), cliente.getContraseña())) {
-                throw new RegistrarUsuarioException("Ya existe un usuario con ese username o esta bloqueado");               
+                throw new RegistrarUsuarioException("Ya existe un usuario con ese username o esta bloqueado");
             }
 
             validarDatosUsuario(cliente);
@@ -244,9 +257,9 @@ public class ManejoUsuarios implements IManejoUsuarios {
     @Override
     public ClienteDTO actualizarCliente(ClienteDTO cliente) throws ActualizarUsuarioException {
         try {
-            
+
             if (obtenerCliente(cliente.getNombreUsuario()) != null) {
-                throw new ActualizarUsuarioException("Ya existe un usuario con ese username");               
+                throw new ActualizarUsuarioException("Ya existe un usuario con ese username");
             }
 
             validarDatosUsuario(cliente);
@@ -272,7 +285,6 @@ public class ManejoUsuarios implements IManejoUsuarios {
         try {
 
             //FALTAN MUCHAS VALIDACIONES AQUI EHHHH XDDDDDDDDDDDDDDDDDDD MUCHAS POR QUE NO SE PUEDE ELIMINAR ASI COMO ASI
-            
             return clienteBO.eliminarClienteBO(cliente);
 
         } catch (EliminarUsuarioExceptionBO e) {
@@ -296,10 +308,10 @@ public class ManejoUsuarios implements IManejoUsuarios {
         if (nombreUsuario == null || nombreUsuario.trim().isEmpty()) {
             throw new EncontrarUsuarioException("El nombre de usuario es obligatorio");
         }
-        
+
         try {
             return clienteBO.obtenerClienteBO(nombreUsuario);
-            
+
         } catch (EncontrarClienteExceptionBO e) {
             throw new EncontrarUsuarioException("No se pudo obtener el cliente: " + e.getMessage(), e);
         }
@@ -307,19 +319,13 @@ public class ManejoUsuarios implements IManejoUsuarios {
 
     @Override
     public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) throws CargarHistorialException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return clienteBO.cargarHistorialComprasBO(cliente);
+
+        } catch (CargarHistorialExceptionBO e) {
+            throw new CargarHistorialException("No se pudo obtener el cliente: " + e.getMessage(), e);
+        }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     //////////////////////////////////////////////
     //-------------------------------------------------METODOS DE ADMINISTRADOR ---------------------------------------------------------------------------------------
@@ -346,9 +352,9 @@ public class ManejoUsuarios implements IManejoUsuarios {
     @Override
     public AdministradorDTO actualizarAdministrador(AdministradorDTO administrador) throws ActualizarUsuarioException {
         try {
-            
+
             if (obtenerAdministrador(administrador.getNombreUsuario()) != null) {
-                throw new ActualizarUsuarioException("Ya existe un usuario con ese username");               
+                throw new ActualizarUsuarioException("Ya existe un usuario con ese username");
             }
 
             validarDatosUsuario(administrador);
@@ -374,7 +380,6 @@ public class ManejoUsuarios implements IManejoUsuarios {
         try {
 
             //FALTAN MUCHAS VALIDACIONES AQUI EHHHH XDDDDDDDDDDDDDDDDDDD MUCHAS POR QUE NO SE PUEDE ELIMINAR ASI COMO ASI
-            
             return adminBO.eliminarAdministradorBO(administrador);
 
         } catch (EliminarUsuarioExceptionBO e) {
@@ -395,13 +400,20 @@ public class ManejoUsuarios implements IManejoUsuarios {
 
     @Override
     public AdministradorDTO obtenerAdministrador(String nombreUsuario) throws EncontrarUsuarioException {
-        if (nombreUsuario == null || nombreUsuario.trim().isEmpty()) {
-            throw new EncontrarUsuarioException("El nombre de usuario es obligatorio");
-        }
-        
+
         try {
-            return adminBO.obtenerAdministradorBO(nombreUsuario);
+            if (nombreUsuario == null || nombreUsuario.trim().isEmpty()) {
+                throw new EncontrarUsuarioException("El nombre de usuario es obligatorio");
+            }
+
+            AdministradorDTO adminEncontrado = adminBO.obtenerAdministradorBO(nombreUsuario);
+            if (adminEncontrado == null) {
+                throw new EncontrarUsuarioException("No se encontro el administrador");
+            }
             
+
+            return adminEncontrado;
+
         } catch (EncontrarAdminExceptionBO e) {
             throw new EncontrarUsuarioException("No se pudo obtener el administrador: " + e.getMessage(), e);
         }
