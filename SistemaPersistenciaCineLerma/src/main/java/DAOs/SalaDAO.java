@@ -71,7 +71,7 @@ public class SalaDAO implements ISalaDAO {
         try {
             List<Asiento> asientosSala = new ArrayList(); // Se crea una lista para guardar aqui adentro los asientos
 
-            creacionAsientos(sala, asientosSala); // Se llama la metodo para crear los asientos y guardarlos en la anterior lista
+            creacionAsientos(sala, asientosSala); // Se llama al metodo para crear los asientos y guardarlos en la anterior lista
 
             sala.setAsientos(asientosSala); // Se introduce la lista de asientos en la sala
 

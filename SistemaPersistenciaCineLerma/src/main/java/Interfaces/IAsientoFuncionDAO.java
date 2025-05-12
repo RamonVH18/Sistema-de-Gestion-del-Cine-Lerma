@@ -4,6 +4,7 @@
  */
 package Interfaces;
 
+import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
 import Excepciones.PersistenciaException;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
@@ -14,6 +15,8 @@ import java.util.List;
  * @author Ramon Valencia
  */
 public interface IAsientoFuncionDAO {
+    
+    public List<AsientoFuncion> agregarAsientosFuncion(List<AsientoFuncion> asientosFuncion) throws FalloCreacionAsientosFuncionException;
     
     public List<AsientoFuncion> mostrarAsientosFunciones(Funcion funcion) throws PersistenciaException;
     
