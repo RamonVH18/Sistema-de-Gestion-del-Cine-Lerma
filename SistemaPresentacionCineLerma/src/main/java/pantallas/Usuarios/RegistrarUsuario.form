@@ -36,6 +36,8 @@
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Component id="btnVolver" min="-2" pref="91" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="178" max="-2" attributes="0"/>
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
@@ -49,8 +51,8 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="comboRol" alignment="0" min="-2" pref="239" max="-2" attributes="0"/>
+                                  <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
+                                  <Component id="comboRol" min="-2" pref="239" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="108" max="-2" attributes="0"/>
                               <Component id="btnConfirmar" min="-2" pref="194" max="-2" attributes="0"/>
@@ -61,11 +63,11 @@
                                   <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="1" attributes="0">
                                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="nombrelbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="domiciliolbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="callelbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="telefonolbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="maternolbl" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="nombreField" alignment="0" max="32767" attributes="0"/>
                                               <Component id="NumDomicilioFIeld" alignment="0" max="32767" attributes="0"/>
                                               <Component id="CalleField" alignment="0" max="32767" attributes="0"/>
@@ -75,7 +77,7 @@
                                           <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+                                          <Component id="RFClbl" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -84,19 +86,19 @@
                                       <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="CPField" min="-2" pref="239" max="-2" attributes="0"/>
-                                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="usuarioField" pref="239" max="32767" attributes="0"/>
-                                      <Component id="contrasenaField" max="32767" attributes="0"/>
-                                      <Component id="correoField" max="32767" attributes="0"/>
-                                      <Component id="apellidoPaternoField" max="32767" attributes="0"/>
-                                  </Group>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="CPField" pref="239" max="32767" attributes="0"/>
+                                  <Component id="CPlbl" min="-2" max="-2" attributes="0"/>
+                                  <Component id="usuariolbl" min="-2" max="-2" attributes="0"/>
+                                  <Component id="contrasenalbl" min="-2" max="-2" attributes="0"/>
+                                  <Component id="correolbl" min="-2" max="-2" attributes="0"/>
+                                  <Component id="paternolbl" min="-2" max="-2" attributes="0"/>
+                                  <Component id="usuarioField" pref="239" max="32767" attributes="0"/>
+                                  <Component id="contrasenaField" max="32767" attributes="0"/>
+                                  <Component id="correoField" max="32767" attributes="0"/>
+                                  <Component id="apellidoPaternoField" max="32767" attributes="0"/>
+                                  <Component id="jDateChooser1" max="32767" attributes="0"/>
+                                  <Component id="nacimientolbl" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -113,8 +115,8 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="nombrelbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="paternolbl" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -123,8 +125,8 @@
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="correolbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="maternolbl" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -133,8 +135,8 @@
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="contrasenalbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="telefonolbl" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -143,18 +145,18 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="callelbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="usuariolbl" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="CalleField" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="usuarioField" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="CalleField" min="-2" pref="39" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="domiciliolbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="CPlbl" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -162,20 +164,29 @@
                   <Component id="NumDomicilioFIeld" pref="39" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="RFClbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="nacimientolbl" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="RFCField" min="-2" pref="39" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jDateChooser1" max="32767" attributes="0"/>
+                  <Component id="RFCField" pref="39" max="32767" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                      <Component id="comboRol" min="-2" pref="40" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="comboRol" min="-2" pref="43" max="-2" attributes="0"/>
                   </Group>
                   <Component id="btnConfirmar" min="-2" pref="54" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="123" max="32767" attributes="0"/>
-              <Component id="btnVolver" min="-2" pref="34" max="-2" attributes="0"/>
+              <EmptySpace pref="57" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btnVolver" alignment="1" min="-2" pref="34" max="-2" attributes="0"/>
+                  <Component id="jPanel1" alignment="1" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -187,55 +198,55 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Registrar Cliente"/>
+        <Property name="text" type="java.lang.String" value="Registrar Usuario"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
+    <Component class="javax.swing.JLabel" name="nombrelbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Nombres"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
+    <Component class="javax.swing.JLabel" name="paternolbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Apellido Paterno"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel4">
+    <Component class="javax.swing.JLabel" name="correolbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Correo Electronico"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel5">
+    <Component class="javax.swing.JLabel" name="contrasenalbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel6">
+    <Component class="javax.swing.JLabel" name="CPlbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="CP"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel7">
+    <Component class="javax.swing.JLabel" name="usuariolbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Nombre de Usuario"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel8">
+    <Component class="javax.swing.JLabel" name="domiciliolbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Numero de Domicilio"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel9">
+    <Component class="javax.swing.JLabel" name="callelbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Calle"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel10">
+    <Component class="javax.swing.JLabel" name="telefonolbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Telefono"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel11">
+    <Component class="javax.swing.JLabel" name="maternolbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="Apellido Materno"/>
       </Properties>
@@ -285,22 +296,6 @@
     </Component>
     <Component class="javax.swing.JTextField" name="apellidoMaternoField">
     </Component>
-    <Component class="javax.swing.JComboBox" name="comboRol">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="2">
-            <StringItem index="0" value="CLIENTE"/>
-            <StringItem index="1" value="ADMINISTRADOR"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboRolActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel12">
       <Properties>
         <Property name="text" type="java.lang.String" value="ROL"/>
@@ -311,10 +306,50 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RFCFieldActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel13">
+    <Component class="javax.swing.JLabel" name="RFClbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="RFC"/>
       </Properties>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
+    </Component>
+    <Component class="javax.swing.JLabel" name="nacimientolbl">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Fecha de nacimiento"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+    <Component class="javax.swing.JComboBox" name="comboRol">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="CLIENTE"/>
+            <StringItem index="1" value="ADMINISTRADOR"/>
+            <StringItem index="2" value=" "/>
+          </StringArray>
+        </Property>
+        <Property name="selectedIndex" type="int" value="2"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboRolActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

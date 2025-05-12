@@ -8,6 +8,7 @@ import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
@@ -164,6 +165,7 @@ public class Usuario {
     public void setRol(Rol rol) {
         this.rol = rol;
     }
+    
 
     @Override
     public String toString() {

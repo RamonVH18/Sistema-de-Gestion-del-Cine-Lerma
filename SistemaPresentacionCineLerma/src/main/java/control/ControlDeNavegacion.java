@@ -8,6 +8,7 @@ import DTOs.AdministradorDTO;
 import pantallas.reservaBoletos.SeleccionarPelicula;
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
+import DTOs.CompraDTO;
 import DTOs.CuentaMercadoDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
@@ -15,8 +16,12 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
+import DTOs.UsuarioDTO;
+import Excepciones.ActualizarUsuarioException;
 import Excepciones.CalcularCostoTotalException;
+import Excepciones.CargarHistorialException;
 import Excepciones.DisponibilidadAsientosException;
+import Excepciones.EncontrarUsuarioException;
 import Excepciones.FuncionCargaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PagoException;
@@ -24,12 +29,20 @@ import Excepciones.PeliculasCargaException;
 import Excepciones.ValidarCuentaException;
 import Excepciones.GenerarBoletoException;
 import Excepciones.PresentacionException;
+import Excepciones.RegistrarUsuarioException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
+import Excepciones.ValidarUsuarioException;
+import Excepciones.usuarios.EliminarUsuarioException;
+import Excepciones.usuarios.ObtenerUsuariosException;
+import enums.EstadoUsuario;
 import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
+import gestionUsuarios.IManejoUsuarios;
+import gestionUsuarios.ManejoUsuarios;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +74,7 @@ public class ControlDeNavegacion implements IControl {
     //Instancias y clases para llamar metodos
     private final IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
     private final IGestionPagos gestionDePagos = GestionPagos.getInstancia();
+    private final IManejoUsuarios gestionUsuarios = ManejoUsuarios.getInstance();
 
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
     private PeliculaDTO peliculaSeleccionada;
@@ -167,7 +181,7 @@ public class ControlDeNavegacion implements IControl {
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
         } else {
-            
+
         }
     }
 
@@ -195,7 +209,7 @@ public class ControlDeNavegacion implements IControl {
             pantallaPagoRechazado.setVisible(true);
         });
     }
-    
+
     /**
      * Metodo que se encarga de abrir la pantalla de pago rechazado
      */
@@ -207,9 +221,10 @@ public class ControlDeNavegacion implements IControl {
             pantallaMenuAdmin.setVisible(true);
         });
     }
-    
+
     /**
      * Metodo para abrir el menu del caso de uso de gestion de salas
+     *
      * @param tituloFrame
      * @param frameAnterior
      */
@@ -222,10 +237,12 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
+
     /**
      * Metodo para abrir la pantalla de agregar sala
+     *
      * @param tituloFrame
-     * @param frameAnterior 
+     * @param frameAnterior
      */
     @Override
     public void mostrarAgregarSala(JFrame frameAnterior) {
@@ -236,10 +253,12 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
+
     /**
      * Metodo para abrir la pantalla de estadisticas de una las sala
+     *
      * @param tituloFrame
-     * @param frameAnterior 
+     * @param frameAnterior
      */
     @Override
     public void mostrarEstadisticasSala(JFrame frameAnterior) {
@@ -573,42 +592,8 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     //METODOS DE NAVEGACION DE LA GESTION DE USUARIOS
-    
-//    @Override
-//    public void mostrarMenuAdministrador() {
-//        SwingUtilities.invokeLater(() -> {
-//            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin();
-//            pantallaMenuAdmin.setLocationRelativeTo(null);
-//            pantallaMenuAdmin.setVisible(true);
-//        });
-//    }
-//    
-//    /**
-//     * Metodo para abrir el menu del caso de uso de gestion de salas
-//     * @param tituloFrame
-//     * @param frameAnterior
-//     */
-//    @Override
-//    public void mostrarMenuSalas(JFrame frameAnterior) {
-//        SwingUtilities.invokeLater(() -> {
-//            MenuSalas pantallaMenuSalas = new MenuSalas();
-//            pantallaMenuSalas.setLocationRelativeTo(null);
-//            pantallaMenuSalas.setVisible(true);
-//            frameAnterior.dispose();
-//        });
-//    }
-    
     @Override
     public void mostrarIniciarSesion() {
         SwingUtilities.invokeLater(() -> {
@@ -617,7 +602,7 @@ public class ControlDeNavegacion implements IControl {
             pantallaIniciarSecion.setVisible(true);
         });
     }
-    
+
     @Override
     public void mostrarAdministracionDeUsuario(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -627,7 +612,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarEditarUsuario(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -637,7 +622,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarRegistrarUsuario(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -647,7 +632,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarHistorialCliente(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -657,6 +642,170 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
+    @Override
+    public List<UsuarioDTO> mostrarListaUsuarios() {
+        try {
+            return gestionUsuarios.mostrarListaUsuarios();
+        } catch (ObtenerUsuariosException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean bloquearUsuario(UsuarioDTO usuario) {
+        try {
+            return gestionUsuarios.bloquearUsuario(usuario);
+        } catch (ActualizarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean desbloquearUsuario(UsuarioDTO usuario) {
+        try {
+            return gestionUsuarios.bloquearUsuario(usuario);
+        } catch (ActualizarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public List<UsuarioDTO> mostrarListaUsuariosPorEstado(EstadoUsuario estado) {
+        try {
+            return gestionUsuarios.mostrarListaUsuariosPorEstado(estado);
+        } catch (ObtenerUsuariosException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public List<UsuarioDTO> mostrarListaUsuariosPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+        try {
+            return gestionUsuarios.mostrarListaUsuariosPorPeriodo(fechaInicio, fechaFin);
+        } catch (ObtenerUsuariosException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public List<UsuarioDTO> mostrarListaUsuariosPorCorreo(String correo) {
+        try {
+            return gestionUsuarios.mostrarListaUsuariosPorCorreo(correo);
+        } catch (ObtenerUsuariosException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public List<UsuarioDTO> mostrarListaUsuariosPorNombre(String nombre) {
+        try {
+            return gestionUsuarios.mostrarListaUsuariosPorNombre(nombre);
+        } catch (ObtenerUsuariosException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public ClienteDTO registrarCliente(ClienteDTO cliente) {
+        try {
+            return gestionUsuarios.registrarCliente(cliente);
+        } catch (RegistrarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public ClienteDTO actualizarCliente(ClienteDTO cliente) {
+        try {
+            return gestionUsuarios.actualizarCliente(cliente);
+        } catch (ActualizarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean eliminarCliente(ClienteDTO cliente) {
+        try {
+            return gestionUsuarios.eliminarCliente(cliente);
+        } catch (EliminarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException{
+            return gestionUsuarios.validarCliente(nombreUsuario, contrasena);
+    }
+
+    @Override
+    public ClienteDTO obtenerCliente(String nombreUsuario) throws EncontrarUsuarioException {
+        return gestionUsuarios.obtenerCliente(nombreUsuario);
+    }
+
+    @Override
+    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) {
+        try {
+            return gestionUsuarios.cargarHistorialCompras(cliente);
+        } catch (CargarHistorialException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public AdministradorDTO registrarAdministrador(AdministradorDTO administrador) {
+        try {
+            return gestionUsuarios.registrarAdministrador(administrador);
+        } catch (RegistrarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public AdministradorDTO actualizarAdministrador(AdministradorDTO administrador) {
+        try {
+            return gestionUsuarios.actualizarAdministrador(administrador);
+        } catch (ActualizarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean eliminarAdministrador(AdministradorDTO administrador) {
+        try {
+            return gestionUsuarios.eliminarAdministrador(administrador);
+        } catch (EliminarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException{
+            return gestionUsuarios.validarAdministrador(nombreUsuario, contrasena);
+    }
+
+    @Override
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario) {
+        try {
+            return gestionUsuarios.obtenerAdministrador(nombreUsuario);
+        } catch (EncontrarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
 
 }

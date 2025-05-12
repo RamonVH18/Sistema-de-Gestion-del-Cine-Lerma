@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author sonic
  */
 public class UsuarioDTO {
-    
+
     private String nombreUsuario;
     private String contraseña;
     private String nombre;
@@ -27,8 +27,6 @@ public class UsuarioDTO {
 
     public UsuarioDTO() {
     }
-    
-    
 
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -114,8 +112,5 @@ public class UsuarioDTO {
     public String toString() {
         return "UsuarioDTO{" + "nombreUsuario=" + nombreUsuario + ", contrase\u00f1a=" + contraseña + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", correoElectronico=" + correoElectronico + ", fechaNacimiento=" + fechaNacimiento + ", telefono=" + telefono + ", rol=" + rol + ", estado=" + estado + '}';
     }
-    
-    
-    
-    
+
 }

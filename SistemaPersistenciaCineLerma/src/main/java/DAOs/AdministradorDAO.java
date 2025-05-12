@@ -161,13 +161,16 @@ public class AdministradorDAO implements IAdministradorDAO {
             MongoCollection<Administrador> coleccion = base.getCollection("usuarios", Administrador.class);
 
             Bson filtro = Filters.and(
-                    Filters.eq("nombreUsuario", nombreUsuario),
-                    Filters.eq("contrasena", contrasena));
+                    Filters.eq("nombreDeUsuario", nombreUsuario),
+                    Filters.eq("contrasenia", contrasena),
+                    Filters.eq("rol", "ADMINISTRADOR"));
 
             Administrador adminEncontrado = coleccion.find(filtro).first();
+            
+            System.out.println(adminEncontrado);
 
-            if (adminEncontrado == null && adminEncontrado.getEstado() != EstadoUsuario.BLOQUEADO) {
-                throw new ValidarUsuarioException("El usuario no se encontro");
+            if (adminEncontrado == null) {
+                throw new ValidarUsuarioException("El usuario no se encontró");
             }
 
             if (adminEncontrado.getEstado() == EstadoUsuario.BLOQUEADO) {
@@ -177,7 +180,7 @@ public class AdministradorDAO implements IAdministradorDAO {
             return true;
 
         } catch (MongoException e) {
-            throw new ValidarUsuarioException("Error al desbloquear el usuario: " + e.getMessage());
+            throw new ValidarUsuarioException("Error al validar y encontrar el usuario: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);

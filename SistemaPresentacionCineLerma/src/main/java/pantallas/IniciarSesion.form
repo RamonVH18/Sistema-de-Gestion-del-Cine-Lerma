@@ -147,14 +147,8 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="usuarioField">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="contrasenafield">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField2"/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>

@@ -5,6 +5,7 @@
 package pantallas;
 
 import DTOs.AdministradorDTO;
+import DTOs.ClienteDTO;
 import Excepciones.EncontrarUsuarioException;
 import Excepciones.ValidarUsuarioException;
 import control.ControlDeNavegacion;
@@ -19,9 +20,10 @@ import javax.swing.JOptionPane;
  *
  * @author sonic
  */
+
 public class IniciarSesion extends javax.swing.JFrame {
+
     private final IControl control = ControlDeNavegacion.getInstancia();
-    private final IManejoUsuarios ss = ManejoUsuarios.getInstance();
 
     /**
      * Creates new form IniciarSesion
@@ -87,10 +89,6 @@ public class IniciarSesion extends javax.swing.JFrame {
 
         jLabel4.setText("No tienes una cuenta?");
 
-        usuarioField.setText("jTextField1");
-
-        contrasenafield.setText("jTextField2");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,64 +150,73 @@ public class IniciarSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        String usuario = usuarioField.getText().trim();
+        String contrasena = contrasenafield.getText();
+
         try {
-            // TODO add your handling code here:
-            if (ss.validarAdministrador(usuarioField.getText().trim(), contrasenafield.getText().trim())) {
-                AdministradorDTO adminEncontrado = ss.obtenerAdministrador(usuarioField.getText().trim());
+            Boolean esAdminValido = control.validarAdministrador(usuario, contrasena);
+            Boolean esClienteValido = control.validarCliente(usuario, contrasena);
+
+            if (Boolean.TRUE.equals(esAdminValido)) {
+                AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuario);
                 control.mostrarMenuAdministrador(this, adminEncontrado);
+                dispose();
+                return;
             }
-            
-            
-            
-        } catch (ValidarUsuarioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de Validación", JOptionPane.ERROR_MESSAGE);
-        } catch (EncontrarUsuarioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al Encontrar Usuario", JOptionPane.ERROR_MESSAGE);
+
+            if (Boolean.TRUE.equals(esClienteValido)) {
+                ClienteDTO clienteEncontrado = control.obtenerCliente(usuario);
+                control.mostrarMenuCliente(this, clienteEncontrado);
+                dispose();
+                return;
+            }
+
+        } catch (ValidarUsuarioException | EncontrarUsuarioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
-        
+
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
         control.mostrarRegistrarUsuario(this);
-        
+
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+     */
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(IniciarSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(IniciarSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(IniciarSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(IniciarSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new IniciarSesion().setVisible(true);
-            }
-        });
+    } catch (ClassNotFoundException ex) {
+        java.util.logging.Logger.getLogger(IniciarSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+        java.util.logging.Logger.getLogger(IniciarSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+        java.util.logging.Logger.getLogger(IniciarSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        java.util.logging.Logger.getLogger(IniciarSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
+    //</editor-fold>
+
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new IniciarSesion().setVisible(true);
+        }
+    });
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;

@@ -76,7 +76,6 @@ public class ClienteDAO implements IClienteDAO {
             }
         }
     }
-    
 
     @Override
     public Cliente actualizarCliente(Cliente cliente) throws ActualizarClienteException {
@@ -163,13 +162,14 @@ public class ClienteDAO implements IClienteDAO {
             MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
 
             Bson filtro = Filters.and(
-                    Filters.eq("nombreUsuario", nombreUsuario),
-                    Filters.eq("contrasena", contrasena));
+                    Filters.eq("nombreDeUsuario", nombreUsuario),
+                    Filters.eq("contrasenia", contrasena),
+                    Filters.eq("rol", "CLIENTE"));
 
             Cliente usuarioEncontrado = coleccion.find(filtro).first();
 
-            if (usuarioEncontrado == null && usuarioEncontrado.getEstado() != EstadoUsuario.BLOQUEADO) {
-                throw new ValidarUsuarioException("El usuario no se encontro");
+            if (usuarioEncontrado == null) {
+                throw new ValidarUsuarioException("El usuario no se encontró o la contraseña es incorrecta");
             }
 
             if (usuarioEncontrado.getEstado() == EstadoUsuario.BLOQUEADO) {
@@ -224,7 +224,6 @@ public class ClienteDAO implements IClienteDAO {
             MongoCollection<Compra> coleccion = base.getCollection("compras", Compra.class);
 
             Bson filtro = Filters.eq("nombreDeUsuario", cliente.getNombreDeUsuario());
-
 
             return coleccion.find(filtro).into(new ArrayList<>());
 

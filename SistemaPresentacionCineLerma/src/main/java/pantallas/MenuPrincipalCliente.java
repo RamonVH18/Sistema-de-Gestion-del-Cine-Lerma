@@ -83,6 +83,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         btnSalirMenu = new javax.swing.JButton();
         btnAlimentosMenu = new javax.swing.JButton();
         btnOpcionesMenu1 = new javax.swing.JButton();
+        btnCerrarSesion = new javax.swing.JButton();
 
         btnRegresoMenu1.setBackground(new java.awt.Color(162, 132, 94));
         btnRegresoMenu1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
@@ -178,6 +179,22 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
             }
         });
 
+        btnCerrarSesion.setBackground(new java.awt.Color(162, 132, 94));
+        btnCerrarSesion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrarSesion.setText("Cerrar sesion");
+        btnCerrarSesion.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarSesionMouseClicked(evt);
+            }
+        });
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -202,7 +219,10 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
                         .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnOpcionesMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnOpcionesMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -222,7 +242,9 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
                 .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(183, 183, 183))
+                .addGap(149, 149, 149)
+                .addComponent(btnCerrarSesion)
+                .addContainerGap())
         );
 
         pack();
@@ -269,6 +291,16 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnOpcionesMenu1ActionPerformed
 
+    private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
+        // TODO add your handling code here:
+        control.mostrarIniciarSesion();
+        dispose();
+    }//GEN-LAST:event_btnCerrarSesionMouseClicked
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -276,6 +308,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlimentosMenu;
     private javax.swing.JButton btnCarteleraMenu;
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnCuentaMenu;
     private javax.swing.JButton btnHistorialMenu;
     private javax.swing.JButton btnOpcionesMenu1;

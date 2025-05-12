@@ -199,11 +199,7 @@ public class ManejoUsuarios implements IManejoUsuarios {
             throw new ValidarUsuarioException("El CP del cliente es obligatorio");
         }
 
-        if (cliente.getCP() == null || cliente.getCP().trim().isEmpty()) {
-            throw new ValidarUsuarioException("El CP del cliente es obligatorio");
-        }
-
-        if (cliente.getCP().matches("^[0-9]+$")) {
+        if (!cliente.getCP().matches("^[0-9]+$")) {
             throw new ValidarUsuarioException("El CP del cliente no es valido");
         }
 
@@ -215,7 +211,7 @@ public class ManejoUsuarios implements IManejoUsuarios {
             throw new ValidarUsuarioException("El numero de domicilio del cliente es obligatorio");
         }
 
-        if (cliente.getNumero().matches("^[0-9]+$")) {
+        if (!cliente.getNumero().matches("^[0-9]+$")) {
             throw new ValidarUsuarioException("El numero de domicilio del cliente no es valido");
         }
 
@@ -248,7 +244,7 @@ public class ManejoUsuarios implements IManejoUsuarios {
             return clienteBO.registrarClienteBO(cliente);
 
         } catch (ValidarUsuarioException e) {
-            throw new RegistrarUsuarioException("La sala ingresada no cumple con la siguiente validacion: " + e.getMessage());
+            throw new RegistrarUsuarioException("Error al registrar el cliente: " + e.getMessage());
         } catch (RegistrarClienteExceptionBO e) {
             throw new RegistrarUsuarioException("No se pudo registrar el cliente (subsistema): " + e.getMessage(), e);
         }
@@ -294,6 +290,10 @@ public class ManejoUsuarios implements IManejoUsuarios {
 
     @Override
     public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
+        if (nombreUsuario == null || nombreUsuario == "" || nombreUsuario.trim().isEmpty() || contrasena == null || contrasena == "" || contrasena.trim().isEmpty()) {
+            throw new ValidarUsuarioException("Por favor ingrese los datos de inicio de sesion correctamente");
+        }
+        
         try {
 
             return clienteBO.validarClienteBO(nombreUsuario, contrasena);
@@ -390,6 +390,9 @@ public class ManejoUsuarios implements IManejoUsuarios {
     @Override
     public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
         try {
+            if (nombreUsuario == null || nombreUsuario == "" || nombreUsuario.trim().isEmpty() || contrasena == null || contrasena == "" || contrasena.trim().isEmpty()) {
+                throw new ValidarUsuarioException("Por favor ingrese los datos de inicio de sesion correctamente");
+            }
 
             return adminBO.validarAdministradorBO(nombreUsuario, contrasena);
 
@@ -410,7 +413,6 @@ public class ManejoUsuarios implements IManejoUsuarios {
             if (adminEncontrado == null) {
                 throw new EncontrarUsuarioException("No se encontro el administrador");
             }
-            
 
             return adminEncontrado;
 

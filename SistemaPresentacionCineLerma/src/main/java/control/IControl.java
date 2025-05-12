@@ -7,6 +7,7 @@ package control;
 import DTOs.AdministradorDTO;
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
+import DTOs.CompraDTO;
 import DTOs.CuentaMercadoDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
@@ -14,7 +15,17 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.TarjetaDTO;
+import DTOs.UsuarioDTO;
+import Excepciones.ActualizarUsuarioException;
+import Excepciones.CargarHistorialException;
+import Excepciones.EncontrarUsuarioException;
 import Excepciones.PresentacionException;
+import Excepciones.RegistrarUsuarioException;
+import Excepciones.ValidarUsuarioException;
+import Excepciones.usuarios.EliminarUsuarioException;
+import Excepciones.usuarios.ObtenerUsuariosException;
+import enums.EstadoUsuario;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JFrame;
 
@@ -86,7 +97,9 @@ public interface IControl {
     
     public void procesarPagoTarjeta(TarjetaDTO tarjeta, PagoDTO pago);
     
-    //Metodos de navegacion de usuarios
+    
+    
+    //Metodos de navegacion de usuarios /////////////////////
     public void mostrarIniciarSesion();
     
     public void mostrarAdministracionDeUsuario(JFrame frameAnterior);
@@ -96,5 +109,48 @@ public interface IControl {
     public void mostrarRegistrarUsuario(JFrame frameAnterior);
     
     public void mostrarHistorialCliente(JFrame frameAnterior);
+    
+    //Usuarios:
+    
+    public List<UsuarioDTO> mostrarListaUsuarios();
+
+    public Boolean bloquearUsuario(UsuarioDTO usuario);
+    
+    public Boolean desbloquearUsuario(UsuarioDTO usuario);
+    
+    public List<UsuarioDTO> mostrarListaUsuariosPorEstado(EstadoUsuario estado);
+    
+    public List<UsuarioDTO> mostrarListaUsuariosPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin);
+    
+    public List<UsuarioDTO> mostrarListaUsuariosPorCorreo(String correo);
+    
+    public List<UsuarioDTO> mostrarListaUsuariosPorNombre(String nombre);
+    
+    
+    //Cliente:
+    
+    public ClienteDTO registrarCliente (ClienteDTO cliente);
+    
+    public ClienteDTO actualizarCliente (ClienteDTO cliente);
+    
+    public Boolean eliminarCliente (ClienteDTO cliente);
+    
+    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
+    
+    public ClienteDTO obtenerCliente(String nombreUsuario) throws EncontrarUsuarioException;
+    
+    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente);
+    
+    //Administrador:
+    
+    public AdministradorDTO registrarAdministrador (AdministradorDTO administrador);
+    
+    public AdministradorDTO actualizarAdministrador (AdministradorDTO administrador);
+    
+    public Boolean eliminarAdministrador (AdministradorDTO administrador);
+    
+    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
+    
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario);
     
 }

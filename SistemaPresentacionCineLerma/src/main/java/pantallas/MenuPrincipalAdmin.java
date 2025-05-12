@@ -83,6 +83,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         btnFuncion = new javax.swing.JButton();
         btnEmpleados = new javax.swing.JButton();
+        btnCerrarSesion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -154,6 +155,16 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
             }
         });
 
+        btnCerrarSesion.setBackground(new java.awt.Color(162, 132, 94));
+        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrarSesion.setText("Cerrar sesion");
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -179,7 +190,10 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
                         .addGap(259, 259, 259)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnSala)
-                            .addComponent(btnUsuarios))))
+                            .addComponent(btnUsuarios)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnCerrarSesion)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -201,7 +215,9 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir)
                     .addComponent(btnEmpleados))
-                .addContainerGap(263, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
+                .addComponent(btnCerrarSesion)
+                .addContainerGap())
         );
 
         pack();
@@ -232,8 +248,16 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEmpleadosActionPerformed
 
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        // TODO add your handling code here:
+        control.mostrarIniciarSesion();
+        administrador = null;
+        dispose();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnEmpleados;
     private javax.swing.JButton btnFuncion;
     private javax.swing.JButton btnPelicula;
