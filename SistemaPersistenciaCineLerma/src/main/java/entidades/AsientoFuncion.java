@@ -4,89 +4,144 @@
  */
 package entidades;
 
+import org.bson.types.ObjectId;
+
 /**
- *
+ * Clase AsientoFuncion que hace referencia a un asiento de un funcion en especifica
+ * 
  * @author Ramon Valencia
  */
 public class AsientoFuncion {
 
-    private Long idAsientoFuncion;
+    private ObjectId idAsientoFuncion; // Id del AsientoFuncion
+    
+    private String idFuncion; // Id de la funcion a la que pertenecen
 
-    private Funcion funcion;
+    private String numAsiento; // Asiento al que hace referencia el asientoFuncion
 
-    private Asiento asiento;
+    private Boolean disponibilidad; // Disponibilidad del asiento durante la funcion
 
-    private Boolean disponibilidad;
+    private String idCliente; // Id del cliente que tiene reservado el asiento, este puede ser nulo
 
-    private Cliente cliente;
-
+    /**
+     * Constructor vacio
+     */
     public AsientoFuncion() {
     }
-
-    public AsientoFuncion(Long idAsientoFuncion, Funcion funcion, Asiento asiento, Boolean disponibilidad, Cliente cliente) {
+    /**
+     * Constructor con todos los atributos
+     * @param idAsientoFuncion
+     * @param idFuncion
+     * @param numAsiento
+     * @param disponibilidad
+     * @param idCliente
+     */
+    public AsientoFuncion(ObjectId idAsientoFuncion, String idFuncion, String numAsiento, Boolean disponibilidad, String idCliente) {
         this.idAsientoFuncion = idAsientoFuncion;
-        this.funcion = funcion;
-        this.asiento = asiento;
+        this.idFuncion = idFuncion;
+        this.numAsiento = numAsiento;
         this.disponibilidad = disponibilidad;
-        this.cliente = cliente;
+        this.idCliente = idCliente;
+    }
+    /**
+     * Constructor con todos los atributos sin el id
+     * @param idFuncion
+     * @param numAsiento
+     * @param disponibilidad
+     * @param idCliente
+     */
+    public AsientoFuncion(String idFuncion, String numAsiento, Boolean disponibilidad, String idCliente) {    
+        this.idFuncion = idFuncion;
+        this.numAsiento = numAsiento;
+        this.disponibilidad = disponibilidad;
+        this.idCliente = idCliente;
     }
 
-    public AsientoFuncion(Funcion funcion, Asiento asiento, Boolean disponibilidad, Cliente cliente) {
-        this.funcion = funcion;
-        this.asiento = asiento;
-        this.disponibilidad = disponibilidad;
-        this.cliente = cliente;
-    }
-
-    public Long getIdAsientoFuncion() {
+    /**
+     * Metodo para obtener el id del AsientoFuncion
+     * @return 
+     */
+    public ObjectId getIdAsientoFuncion() {
         return idAsientoFuncion;
     }
-
-    public void setIdAsientoFuncion(Long idAsientoFuncion) {
+    /**
+     * Metodo para guardar el id del AsientoFuncion
+     * @param idAsientoFuncion 
+     */
+    public void setIdAsientoFuncion(ObjectId idAsientoFuncion) {
         this.idAsientoFuncion = idAsientoFuncion;
     }
-
-    public Funcion getFuncion() {
-        return funcion;
+    /**
+     * Metodo para obtener el id de la Funcion a la que pertenece el AsientoFuncion
+     * @return 
+     */
+    public String getIdFuncion() {
+        return idFuncion;
     }
-
-    public void setFuncion(Funcion funcion) {
-        this.funcion = funcion;
+    /**
+     * Metodo para guardar el id de la Funcion a la que pertenece el AsientoFuncion
+     * @param idFuncion 
+     */
+    public void setIdFuncion(String idFuncion) {
+        this.idFuncion = idFuncion;
     }
-
-    public Asiento getAsiento() {
-        return asiento;
+    /**
+     * Metodo para obtener el Asiento al que hace referencia el asientoFuncion
+     * @return 
+     */
+    public String getNumAsiento() {
+        return numAsiento;
     }
-
-    public void setAsiento(Asiento asiento) {
-        this.asiento = asiento;
+    /**
+     * Metodo para guardar el asiento al que hace referencia el asientoFuncion
+     * @param numAsiento 
+     */
+    public void setNumAsiento(String numAsiento) {
+        this.numAsiento = numAsiento;
     }
-
+    /**
+     * Metodo para obtener la disponibilidad del asiento durante la funcion
+     * @return 
+     */
     public Boolean getDisponibilidad() {
         return disponibilidad;
     }
-
+    /**
+     * Metodo para guardar la disponibilidad del asiento durante la funcion
+     * @param disponibilidad 
+     */
     public void setDisponibilidad(Boolean disponibilidad) {
         this.disponibilidad = disponibilidad;
     }
-
-    public Cliente getCliente() {
-        return cliente;
+    /**
+     * Metodo para obtener el id del Cliente al que esta reservado el asiento
+     * @return 
+     */
+    public String getIdCliente() {
+        return idCliente;
     }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    /** 
+     * Metodo para guardar el id del Cliente al que esta reservado el asiento
+     * @param idCliente 
+     */
+    public void setIdCliente(String idCliente) {
+        this.idCliente = idCliente;
     }
-
+    /**
+     * ToString de AsientoFuncion
+     * @return 
+     */
     @Override
     public String toString() {
-        return "AsientoFuncion{"
-                + "idAsientoFuncion=" + idAsientoFuncion
-                + ", funcion=" + funcion
-                + ", asiento=" + asiento
-                + ", disponibilidad=" + disponibilidad
-                + ", cliente=" + cliente
-                + '}';
+        return "AsientoFuncion{" + 
+                "idAsientoFuncion=" + idAsientoFuncion + 
+                ", idFuncion=" + idFuncion + 
+                ", numAsiento=" + numAsiento + 
+                ", disponibilidad=" + disponibilidad + 
+                ", idCliente=" + idCliente + 
+                '}';
     }
+
+    
 
 }

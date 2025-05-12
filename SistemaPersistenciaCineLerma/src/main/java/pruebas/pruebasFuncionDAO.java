@@ -18,10 +18,10 @@ public class pruebasFuncionDAO {
     
     public static void main(String[] args) {
         IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO();
-        List<Funcion> funciones = funcionDAO.mostrarFuncionesActivas();
-        for (Funcion funcion : funciones) {
-            System.out.println(funcion);
-        }
+//        List<Funcion> funciones = funcionDAO.mostrarFuncionesActivas();
+//        for (Funcion funcion : funciones) {
+//            System.out.println(funcion);
+//        }
     }
     
 }

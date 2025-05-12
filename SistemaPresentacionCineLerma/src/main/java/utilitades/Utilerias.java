@@ -42,11 +42,7 @@ import static java.time.Month.SEPTEMBER;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -58,97 +54,85 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 /**
- *
+ * Clase con diferentes metodos usados para la configuracion de diversas pantallas
  * @author Ramon Valencia
  */
 public class Utilerias {
-
+    /**
+     * Constructor vacio
+     */
     public Utilerias() {
     }
-
+    /**
+     * Metodo para cargar una imagen que esta guardad en el sistema
+     * NOTA: Este metodo debe de diferenciarce del metodo para crear las peliculas, 
+     * ya que las imagenes que crea este metodo no estan guardadas en ninguna base de datos
+     * @param url
+     * @param ancho
+     * @param altura
+     * @return 
+     */
     public ImageIcon crearImagen(String url, int ancho, int altura) {
-        URL imageUrl = getClass().getClassLoader().getResource(url);
+        URL imageUrl = getClass().getClassLoader().getResource(url); // Se obtiene la url de la imagen
         ImageIcon imagen = new ImageIcon(imageUrl);
+        // Se define la escala de la imagen
         Image scaledImage = imagen.getImage().getScaledInstance(
                 ancho,
                 altura,
                 Image.SCALE_SMOOTH
         );
-        return imagen = new ImageIcon(scaledImage);
+        imagen = new ImageIcon(scaledImage);
+        
+        return imagen;
     }
-
+    
+    /**
+     * Metodo para traducir un los dias del objeto DayOfWeek 
+     * @param dia
+     * @return 
+     */
     public String traducirDia(DayOfWeek dia) {
         String nuevoDia = new String();
         switch (dia) {
-            case dia.MONDAY:
-                nuevoDia = "Lun";
-                break;
-            case dia.TUESDAY:
-                nuevoDia = "Mar";
-                break;
-            case dia.WEDNESDAY:
-                nuevoDia = "Mie";
-                break;
-            case dia.THURSDAY:
-                nuevoDia = "Jue";
-                break;
-            case dia.FRIDAY:
-                nuevoDia = "Vie";
-                break;
-            case dia.SATURDAY:
-                nuevoDia = "Sab";
-                break;
-            case dia.SUNDAY:
-                nuevoDia = "Dom";
-                break;
-
+            case MONDAY -> nuevoDia = "Lun";
+            case TUESDAY -> nuevoDia = "Mar";
+            case WEDNESDAY -> nuevoDia = "Mie";
+            case THURSDAY -> nuevoDia = "Jue";
+            case FRIDAY -> nuevoDia = "Vie";
+            case SATURDAY -> nuevoDia = "Sab";
+            case SUNDAY -> nuevoDia = "Dom";
         }
         return nuevoDia;
     }
 
+    /**
+     * Metodo para traducir el nombre de los mese del objeto Month
+     * @param mes
+     * @return 
+     */
     public String traducirMes(Month mes) {
         String nuevoMes = new String();
         switch (mes) {
-            case JANUARY:
-                nuevoMes = "Enero";
-                break;
-            case FEBRUARY:
-                nuevoMes = "Febrero";
-                break;
-            case MARCH:
-                nuevoMes = "Marzo";
-                break;
-            case APRIL:
-                nuevoMes = "Abril";
-                break;
-            case MAY:
-                nuevoMes = "Mayo";
-                break;
-            case JUNE:
-                nuevoMes = "Junio";
-                break;
-            case JULY:
-                nuevoMes = "Julio";
-                break;
-            case AUGUST:
-                nuevoMes = "Agosto";
-                break;
-            case SEPTEMBER:
-                nuevoMes = "Septiembre";
-                break;
-            case OCTOBER:
-                nuevoMes = "Octobre";
-                break;
-            case NOVEMBER:
-                nuevoMes = "Noviembre";
-                break;
-            case DECEMBER:
-                nuevoMes = "Diciembre";
-                break;
+            case JANUARY -> nuevoMes = "Enero";
+            case FEBRUARY -> nuevoMes = "Febrero";
+            case MARCH -> nuevoMes = "Marzo";
+            case APRIL -> nuevoMes = "Abril";
+            case MAY -> nuevoMes = "Mayo";
+            case JUNE -> nuevoMes = "Junio";
+            case JULY -> nuevoMes = "Julio";
+            case AUGUST -> nuevoMes = "Agosto";
+            case SEPTEMBER -> nuevoMes = "Septiembre";
+            case OCTOBER -> nuevoMes = "Octobre";
+            case NOVEMBER -> nuevoMes = "Noviembre";
+            case DECEMBER -> nuevoMes = "Diciembre";
         }
         return nuevoMes;
     }
-
+    /**
+     * Metodo para convertir un objeto de tipo Date a un objeto de tipo LocalDate
+     * @param fecha
+     * @return 
+     */
     public LocalDate convertirDateALocalDate(Date fecha) {
         if (fecha == null) {
             return null; // Manejo del caso nulo
@@ -158,6 +142,11 @@ public class Utilerias {
                 .toLocalDate();
     }
 
+    /**
+     * Metodo para convertir un objeto de tipo LocalDate a un objeto de tipo Date
+     * @param localDate
+     * @return 
+     */
     public Date convertirLocalDateADate(LocalDate localDate) {
         if (localDate == null) {
             return null; // Manejo del caso nulo
@@ -167,7 +156,13 @@ public class Utilerias {
                         .toInstant()
         );
     }
-
+    
+    /**
+     * Metodo para sacarle captura de pantalla a un JFrame
+     * @param frame
+     * @param rutaArchivo
+     * @return 
+     */
     public String sacarCapturaJFrame(JFrame frame, String rutaArchivo) {
         try {
             Rectangle rect = frame.getBounds();
@@ -187,6 +182,13 @@ public class Utilerias {
         }
     }
 
+    /**
+     * Metodo para convertir una imagen a base 64
+     * @param rutaImagen
+     * @param nuevoAncho
+     * @param nuevoAlto
+     * @return 
+     */
     public String convertirImagenABase64(String rutaImagen, int nuevoAncho, int nuevoAlto) {
         try {
             BufferedImage imagen = ImageIO.read(new File(rutaImagen));
@@ -204,7 +206,12 @@ public class Utilerias {
         }
     }
 
-    // Generar un código QR desde el texto proporcionado
+    /**
+     * Generar un código QR desde el texto proporcionado
+     * @param texto
+     * @param tamaño
+     * @return 
+     */
     public ImageIcon generarCodigoQR(String texto, int tamaño) {
         try {
             QRCodeWriter qrWriter = new QRCodeWriter();
@@ -225,7 +232,12 @@ public class Utilerias {
         }
     }
 
-    // Generar un código QR desde una imagen en Base64
+    /**
+     * Generar un código QR desde una imagen en Base64
+     * @param rutaImagen
+     * @param tamañoQR
+     * @return 
+     */ 
     public ImageIcon obtenerQRDesdeImagen(String rutaImagen, int tamañoQR) {
         String base64Imagen = convertirImagenABase64(rutaImagen, 10, 10);
         if (base64Imagen == null) {
@@ -234,7 +246,13 @@ public class Utilerias {
         }
         return generarCodigoQR(base64Imagen, tamañoQR);
     }
-
+    /**
+     * Metodo para escalar una imagen
+     * @param original
+     * @param ancho
+     * @param alto
+     * @return 
+     */
     private BufferedImage escalarImagen(BufferedImage original, int ancho, int alto) {
         Image imagenEscalada = original.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         BufferedImage bufferedEscalada = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
@@ -244,22 +262,27 @@ public class Utilerias {
         return bufferedEscalada;
     }
     
+    /**
+     * Metodo para añadirle la configuracion basica de los frames a una pantalla
+     * @param frame
+     * @param titulo 
+     */
     public void configurarFrameBase(JFrame frame, String titulo) {
-        
+        // Se ajusta el tamaño base del frame
         Dimension tamañoFrame = new Dimension(640, 830);
         
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout());
-        frame.setPreferredSize(tamañoFrame);
-        frame.setSize(tamañoFrame);
-        frame.setTitle(titulo);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Configuracion de que cierre al salir
+        frame.setLocationRelativeTo(null); // Se centra el frame en la pantalla
+        frame.setLayout(new BorderLayout()); 
+        frame.setPreferredSize(tamañoFrame); // Se le ajusta el tamaño deseado al frame
+        frame.setSize(tamañoFrame); 
+        frame.setTitle(titulo); // Se añade el titulo que llevara en el borde de la pestaña
         JLabel labelTitulo = new JLabel();
         
         JPanel panelNorte = new JPanel();
         JPanel panelSur = new JPanel();
-        configuracionNorte(panelNorte);
-        configuracionSur(panelSur);
+        configuracionNorte(panelNorte); // Metodo para configurar el panel de arriba
+        configuracionSur(panelSur); // Metodo para configurar panel de abajo
         
         panelNorte.add(labelTitulo);
         
@@ -270,7 +293,12 @@ public class Utilerias {
         configurarTitulo(labelTitulo, titulo);
         
     }
-
+    /**
+     * Metodo para configurar el titulo de la ventana
+     * Aqui tambien se configura el panel que ira en la parte superior del frame
+     * @param tituloVentana
+     * @param titulo 
+     */
     private void configurarTitulo(JLabel tituloVentana, String titulo) {
         tituloVentana.setSize(new Dimension(125, 55));
         tituloVentana.setText(titulo);
