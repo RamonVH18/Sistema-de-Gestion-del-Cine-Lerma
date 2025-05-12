@@ -24,18 +24,21 @@ import javax.swing.JTextField;
 import utilitades.Utilerias;
 
 /**
- *
- * @author Ramon Valencia
+ * Clase AgregarSala 
+ * Esta clase es para crear la pantalla donde se van a agregar nuevas salas que no existan
+ * @author Ramon Valencia 
  */
 public class AgregarSala extends javax.swing.JFrame {
     
-    private final Utilerias utilerias = new Utilerias();
-    private final IControl control = ControlDeNavegacion.getInstancia();
+    private final Utilerias utilerias = new Utilerias(); //Objeto Utilerias para poder obtener sus metodos
+    private final IControl control = ControlDeNavegacion.getInstancia(); //Instancia de la clase ControlDeNavegacion
     
+    //A continuacion se encuentran las dimensiones para configurar el tamaño de los textField
     private final Integer anchoTxField = 100;
     private final Integer alturaTxField = 25;
     private final Dimension tamTextField = new Dimension(anchoTxField, alturaTxField);
     
+    //A continuacion se encuentran las dimensiones para configurar el tamaño del boton para agregar, tambien se configura su fuente y su color
     private final Integer anchoBoton = 200;
     private final Integer alturaBoton = 40;
     private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton); 
@@ -43,7 +46,11 @@ public class AgregarSala extends javax.swing.JFrame {
     
     private final Color colorBotonFore = new Color(255, 255, 255);
 
-    
+    /**
+     * Constructor de la clase
+     * Aqui se se llama dos metodos, configurarFrameBase para poder generar los objetos que comparten todas las pantallas como el titulo o el boton de volver
+     * Y el metodo configurarAgregarSalas este metodo sirve para configurar todos los componetes de esta pantalla
+     */
     public AgregarSala() {
     utilerias.configurarFrameBase(this, "AGREGAR SALA");
     configurarAgregarSalas();
@@ -134,15 +141,20 @@ public class AgregarSala extends javax.swing.JFrame {
     private javax.swing.JTextField textFieldNumAsi;
     // End of variables declaration//GEN-END:variables
     
+    /**
+     * Metodo para configurar la creacion de esta pantalla, aqui se llaman a todos los demas metodos que se usan y 
+     * se da el orden de creacion de los componentes
+     */
     private void configurarAgregarSalas() {
-        configurarBotonVolver();
+        configurarBotonVolver();// Se llama al metodo para configurar el boton de volver
         JPanel panelCampos = new JPanel();
-        configurarPanelCampos(panelCampos);
+        configurarPanelCampos(panelCampos); // Se llama al metodo para configurar el panel donde se van a escribir los campos de la sala
         
         JPanel panelCentral = new JPanel();
         
         panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
         
+        // Se configura el panel central darle forma
         panelCentral.add(Box.createVerticalStrut(150));
         panelCentral.add(panelCampos);
         panelCentral.add(Box.createVerticalGlue());
@@ -151,26 +163,35 @@ public class AgregarSala extends javax.swing.JFrame {
         add(panelCentral, BorderLayout.CENTER);
         
     }
-    
+    /**
+     * Metodo para configurar el panel de los campos
+     * Aqui se configura los textField encargados del nombre de la Sala y del numAsientos
+     * Tambien se configura el comboBox que contiene los estados que puede tener una sala
+     * Y por ultimo se agrega el boton para registrar la sala
+     * @param panelCampos 
+     */
     private void configurarPanelCampos(JPanel panelCampos) {
-        panelCampos.setLayout(new BoxLayout(panelCampos, BoxLayout.Y_AXIS));
+        panelCampos.setLayout(new BoxLayout(panelCampos, BoxLayout.Y_AXIS)); //Layout para que los componentes aparezcan alineados en una columna
         
+        // Configuracion del JTextField encargado de obtener el nombre de la sala
         labelNombreSala = new JLabel("Nombre Sala:");
         textFieldNombreSala = new JTextField();
         textFieldNombreSala.setPreferredSize(tamTextField);
         panelCampos.add(configurarPanelTextField(labelNombreSala, textFieldNombreSala));
         
+        //Configuracion del JTextField encargado de obtener el numero de asientos de una sala
         labelNumAsientos = new JLabel("Numero de Asientos:");
         textFieldNumAsi = new JTextField();
         textFieldNumAsi.setPreferredSize(tamTextField);
         panelCampos.add(configurarPanelTextField(labelNumAsientos, textFieldNumAsi));
         
+        // Configuracion del JComboBox para seleccionar el tipo de estado de una sala
         labelEstado = new JLabel("Estado:");
         JComboBox<EstadoSala> comboBoxEstado = new JComboBox<>(EstadoSala.values());
         panelCampos.add(configurarPanelTextField(labelEstado, comboBoxEstado));
         
-        btnRegistro = new JButton("Registrar Sala");
-        configurarBotonRegistro(btnRegistro);
+        //Se llama al metodo para configurar el boton encargado del registro de la sala
+        configurarBotonRegistro();
         panelCampos.add(btnRegistro);
         
     }
@@ -191,15 +212,25 @@ public class AgregarSala extends javax.swing.JFrame {
 
     }
     
-    private void configurarBotonRegistro(JButton btnRegistro) {
-        btnRegistro.setMaximumSize(tamañoBoton);
+    /**
+     * Metodo para configurar los detalles del boton de registro de la sala
+     */
+    private void configurarBotonRegistro() {
+        btnRegistro = new JButton("Registrar Sala"); // Se crea el boton
+        btnRegistro.setMaximumSize(tamañoBoton); // Configuracion del tamaño
         btnRegistro.setPreferredSize(tamañoBoton);
-        btnRegistro.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnRegistro.setFont(fuenteBoton);
-        btnRegistro.setBackground(Color.BLUE);
-        btnRegistro.setForeground(colorBotonFore);
+        btnRegistro.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrado del texto del boton
+        btnRegistro.setFont(fuenteBoton); // Configuracion del boton
+        btnRegistro.setBackground(Color.BLUE); // Configuracion del color del boton
+        btnRegistro.setForeground(colorBotonFore); // Configuracion del color del contorno del boton
+        
     }
-    
+    /**
+     * Metodo para configurar los paneles donde iran los JTextField o el comboBox
+     * @param label
+     * @param componente
+     * @return 
+     */
     private JPanel configurarPanelTextField(JLabel label, Component componente) {
         JPanel panel = new JPanel();
         panel.add(label);

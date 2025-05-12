@@ -21,28 +21,30 @@ import javax.swing.JPanel;
 import utilitades.Utilerias;
 
 /**
- *
+ * Clase para la creacion del menu del caso de uso de gestion de salas
  * @author Ramon Valencia
  */
 public final class MenuSalas extends javax.swing.JFrame {
-
-    private final IControl control = ControlDeNavegacion.getInstancia();
+    
+    private final Utilerias utilerias = new Utilerias(); //Objeto Utilerias para poder obtener sus metodos
+    private final IControl control = ControlDeNavegacion.getInstancia(); //Instancia del control de navegacion
 
     private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
+    // Variables para la configuracion de los botones
+    private final int alturaBoton = 40; //Altura del boton
+    private final int anchoBoton = 300; // Ancho del boton
+    private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.BOLD, 24); // Fuente del boton
+    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton); // Dimension del boton
+    private final Color colorBoton = new Color(162, 132, 94); // Color general del boton
+    private final Color colorBotonFore = new Color(255, 255, 255); //Color del contorno del boton
 
-    private final int alturaBoton = 40;
-    private final int anchoBoton = 300;
-    private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.BOLD, 24);
-    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
-    private final Color colorBoton = new Color(162, 132, 94);
-    private final Color colorBotonFore = new Color(255, 255, 255);
-
-    private final Utilerias utilerias = new Utilerias();
-
+    
+    /**
+     * Constructor de la clase
+     */
     public MenuSalas() {
-
-        utilerias.configurarFrameBase(this, "MENU SALAS");
-        configurarMenuSalas();
+        utilerias.configurarFrameBase(this, "MENU SALAS"); // Metodo para configurar la base de la pantalla
+        configurarMenuSalas(); // Metodo para toda la configuracion adicional y unica de esta pantalla
     }
 
     /**
@@ -115,39 +117,50 @@ public final class MenuSalas extends javax.swing.JFrame {
     private javax.swing.JButton btnEstadisticas;
     private javax.swing.JButton btnModificar;
     // End of variables declaration//GEN-END:variables
+    
+    /**
+     * Metodo para toda la configuracion especifica de esta pantalla
+     */
     public void configurarMenuSalas() {
         configurarBotonVolver();
         JPanel panelBotones = new JPanel();
-        crearEstructuraPanelBotones(panelBotones);
+        crearEstructuraPanelBotones(panelBotones); // Se llama al metodo para configurar la estructura del panel de botones
 
         JPanel panelCentral = new JPanel();
 
-        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS)); // Layout para alinear los botones en una sola columna
 
-        panelCentral.add(Box.createVerticalStrut(110));
+        panelCentral.add(Box.createVerticalStrut(110)); // Espacio vacio para darle formato a la pantalla
         panelCentral.add(panelBotones);
         panelCentral.add(Box.createVerticalGlue());
 
         add(panelCentral, BorderLayout.CENTER);
 
     }
-
+    /**
+     * Metodo para crear la estructura del panel donde iran todos los botones 
+     * que serviran para ir a otra pagina del caso de uso
+     * @param panelBotones 
+     */
     private void crearEstructuraPanelBotones(JPanel panelBotones) {
         panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
 
-        //Agregar cada boton al panel de botones utilizando boxLayout
+        //Boton que lleva a la pantalla para agregar una sala
         btnAgregar = new JButton("Agregar Sala");
         configurarBoton(btnAgregar);
         agregarBotonEnBox(btnAgregar, panelBotones);
 
+        //Boton que lleva a la pantalla de las estadisticas de las salas
         btnEstadisticas = new JButton("Estadisticas");
         configurarBoton(btnEstadisticas);
         agregarBotonEnBox(btnEstadisticas, panelBotones);
 
+        //Boton que lleva a la pantalla para modificar una sala
         btnModificar = new JButton("Modificar Sala");
         configurarBoton(btnModificar);
         agregarBotonEnBox(btnModificar, panelBotones);
 
+        //Boton que lleva a la pantalla para consultar las reservas de cada sala
         btnConsultas = new JButton("Consultar Reservas");
         configurarBoton(btnConsultas);
         agregarBotonEnBox(btnConsultas, panelBotones);
@@ -165,27 +178,36 @@ public final class MenuSalas extends javax.swing.JFrame {
         Container frame = this.getContentPane();
         JPanel panel = (JPanel) frame.getComponent(0);
         JButton btnVolver = (JButton) panel.getComponent(0);
-
+        // Se le añade un action listener para que cierre esta pantalla y abra la anterior
         btnVolver.addActionListener((ActionEvent e) -> {
             control.mostrarMenuAdministrador(this, null);
             dispose();
         });
 
     }
-
+    /**
+     * Metodo para agregarle la funcionalidad a cada boton, 
+     * de esta manera cada boton llamara al control para que este se encargue de cargar la pagina deseada
+     * @param boton
+     * @param panel 
+     */
     private void agregarBotonEnBox(JButton boton, JPanel panel) {
         panel.add(boton);
+        // Se verifica que el tamaño de separacion de los botones sea mayor a 0
         if (tamSeparacionbBtns > 0) {
             panel.add(Box.createVerticalStrut(tamSeparacionbBtns)); //Agregar espacios entre los botones
         }
         String textoBoton = boton.getText();
+        // Se le añade un action listener y dependiendo del nombre del boton es la pantalla a la que lo va a transportar
         boton.addActionListener((ActionEvent e) -> {
             switch (textoBoton) {
                 case "Agregar Sala" -> {
-                    control.mostrarAgregarSala(this);
+                    control.mostrarAgregarSala(this); // Metodo para abrir la pantalla AgregarSala
+                    break;
                 }
                 case "Estadisticas" -> {
-                    control.mostrarEstadisticasSala(this);
+                    control.mostrarEstadisticasSala(this); // Metodo para abrir la pantalla Estadisticas Sala
+                    break;
                 }
                 default ->
                     JOptionPane.showMessageDialog(null, "Hubo un problema para cargar esa ventana intente luego", "INFO", JOptionPane.INFORMATION_MESSAGE);
@@ -194,13 +216,16 @@ public final class MenuSalas extends javax.swing.JFrame {
         });
 
     }
-
+    /**
+     * Metodo para configurar los botones de seleccion de pagina
+     * @param boton 
+     */
     private void configurarBoton(JButton boton) {
-        boton.setMaximumSize(tamañoBoton);
+        boton.setMaximumSize(tamañoBoton); // Configuracion del tamaño
         boton.setPreferredSize(tamañoBoton);
-        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boton.setFont(fuenteBoton);
-        boton.setBackground(colorBoton);
-        boton.setForeground(colorBotonFore);
+        boton.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrado del texto del boton
+        boton.setFont(fuenteBoton); // Configuracion de la fuente del boton
+        boton.setBackground(colorBoton); // Configuracion del color de fondo del boton
+        boton.setForeground(colorBotonFore); // Configuraciond del color del contorno del boton
     }
 }

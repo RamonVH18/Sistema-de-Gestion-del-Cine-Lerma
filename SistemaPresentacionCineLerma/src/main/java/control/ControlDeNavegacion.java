@@ -46,7 +46,6 @@ import pantallas.Salas.AgregarSala;
 import pantallas.Salas.EstadisticasSala;
 import pantallas.Salas.MenuSalas;
 import pantallas.Usuarios.AdministracionDeUsuario;
-import pantallas.Usuarios.ConsultarUsuarios;
 import pantallas.Usuarios.EditarUsuario;
 import pantallas.Usuarios.HistorialCliente;
 import pantallas.Usuarios.RegistrarUsuario;

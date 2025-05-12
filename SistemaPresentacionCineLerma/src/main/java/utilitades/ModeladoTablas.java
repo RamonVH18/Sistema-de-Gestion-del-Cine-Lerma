@@ -20,57 +20,76 @@ import javax.swing.table.TableColumnModel;
 
 
 /**
- *
+ * Clase con metodos usados para la creacion y configuracion de tabla en las pantallas
  * @author Ramon Valencia
  */
 public class ModeladoTablas {
-
+    /**
+     * Constructor vacio
+     */
     public ModeladoTablas() {
     }
-    
-    public static JTable creacionTablaSencilla(String[] columnas, Object[][] datos, Integer tamañoEncabezado) {
+    /**
+     * Metodo estatico para la creacion de una tabla sencilla, unicamente se ocupa saber el nombre de las columnas y los datos que va a llevar
+     * @param columnas
+     * @param datos
+     * @param tamañoFuente
+     * @param tamañoEncabezado
+     * @return 
+     */
+    public static JTable creacionTablaSencilla(String[] columnas, Object[][] datos, Integer tamañoFuente, Integer tamañoEncabezado) {
         
+        // Se crea el modelo de la tabla en base los datos y al nombre de las columnas
         DefaultTableModel modeloTabla = new DefaultTableModel(datos, columnas);
         
+        // Se crea un JTable normal con la funcionalidad de que las celdas no sean editables
         JTable tablaEstadisticas = new JTable(modeloTabla) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Evita que cualquier celda sea editable
             }
         };
-        
+        // Se obtiene el encabezado de la tabla para poder manipularlo mas facilmente
         JTableHeader encabezado = tablaEstadisticas.getTableHeader();
-
-        encabezado.setReorderingAllowed(false);
-        tablaEstadisticas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        encabezado.setResizingAllowed(false);
         
+        
+        encabezado.setReorderingAllowed(false); // Configuracion para que no se pueda reordenar la columnas con el mouse
+        tablaEstadisticas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Configuracion para que solo se pueda seleccionar una fila a la vez
+        encabezado.setResizingAllowed(false); // Configuracion para que no se le pueda cambiar el tamaño de las columnas con el mouse
+        
+        // Se cambia el tamaño de letra del encabezado
         encabezado.setFont(new Font(
                 encabezado.getFont().getFontName(),
                 encabezado.getFont().getStyle(),
-                tamañoEncabezado)
+                tamañoFuente)
         );
         
-        encabezado.setPreferredSize(new Dimension(encabezado.getWidth(), 40));
+        encabezado.setPreferredSize(new Dimension(encabezado.getWidth(), tamañoEncabezado)); // Configuracion del tamaño del encabezado
         
         return tablaEstadisticas;
         
     }
     
+    // Metodo para configurar el tamaño de las columnas
     public static void ajusteTamañoColumnas(JTable tabla, Map tamañoColumnas) {
-        List<Integer> llaves = new ArrayList<>(tamañoColumnas.keySet());
-        TableColumnModel modeloColumna = tabla.getColumnModel();
+        List<Integer> llaves = new ArrayList<>(tamañoColumnas.keySet()); // Se crea un arrayList que contenga todas las llaves del mapa
+        TableColumnModel modeloColumna = tabla.getColumnModel(); // Se obtiene el modelo de la tabla
         
+        // For usado para la configuracion de cada columna de la tabla
         for (int i = 0; i < tamañoColumnas.size(); i++) {
-            Integer llave = llaves.get(i);
-            Integer tamaño = (Integer) tamañoColumnas.get(llave);
-            TableColumn columna = modeloColumna.getColumn(llave);
-            columna.setPreferredWidth(tamaño);
-            columna.setCellRenderer(new CenterRenderer());
+            Integer llave = llaves.get(i); // Se obtiene llave por llave
+            Integer tamaño = (Integer) tamañoColumnas.get(llave); //En base a la llave se obtiene el tamaño
+            TableColumn columna = modeloColumna.getColumn(llave); // En base a la llave se decide que columna es la que se va a modificar
+            columna.setPreferredWidth(tamaño); // Configuracion del tamaño de la columna
+            columna.setCellRenderer(new CenterRenderer()); // Se centra el texto de la columna usando la clase CenterRenderer
         }
     }
 }
 
+/**
+ * Clase CenterRenderer que sen encarga de centrar los datos de una columna
+ * @author Ramon Valencia 
+ */
 class CenterRenderer extends DefaultTableCellRenderer {
     public CenterRenderer() {
         setHorizontalAlignment(SwingConstants.CENTER); // Alinear al centro

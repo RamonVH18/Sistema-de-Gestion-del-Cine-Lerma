@@ -21,36 +21,40 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 import utilitades.ModeladoTablas;
 import utilitades.Utilerias;
 
 /**
- *
+ * Clase para la creacion de la pantalla que muestra las estadisticas de cada sala
  * @author Ramon Valencia
  */
 public class EstadisticasSala extends javax.swing.JFrame {
 
-    private final IControl control = ControlDeNavegacion.getInstancia();
-    private final Utilerias utilerias = new Utilerias();
-
+    private final Utilerias utilerias = new Utilerias(); // Objeto Utilerias para poder utilizar los metodos de la clase
+    private final IControl control = ControlDeNavegacion.getInstancia(); // Instancia de la clase control de navegacion
+    
+    // Valores del tamaño del buscador de salas
     private final Integer anchoBuscador = 150;
     private final Integer alturaBuscador = 20;
     private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
-    private final Map<Integer, Number> tamañoColumnas = Map.of(
-            0, 50,
-            1, 75,
-            2, 90,
-            3, 85,
-            4, 90
+    /**
+     * Mapa que contiene los valores del tamaño de cada columna de la tabla de estadisticas
+     * El primer valor de cada line es la llave y el segundo valor es el tamaño del ancho del boton
+     */
+     private final Map<Integer, Number> tamañoColumnas = Map.of(
+            0, 50, // Tamaño de la columna de la sala
+            1, 75, // Tamaño de la columna de la capacidad de la sala
+            2, 90, // Tamaño de la columna del Total de funciones de la sala
+            3, 85, // Tamaño de la columna de Ingresos Totales de la sala
+            4, 90 //  Tamaño de la columna del Total de funciones canceladas de la sala
     );
     
     /**
-     * Creates new form EstadisticasSala
+     * Constructor vacio de la pantalla EstadisticasSala
      */
     public EstadisticasSala() {
-        utilerias.configurarFrameBase(this, "ESTADISTICAS");
-        configurarEstadisticasSala();
+        utilerias.configurarFrameBase(this, "ESTADISTICAS"); // Metodo para la configuracion base de una pantalla
+        configurarEstadisticasSala(); // Metodo para la configuracion adicional de esta pantalla
     }
 
     /**
@@ -117,10 +121,7 @@ public class EstadisticasSala extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private void configurarEstadisticasSala() {
-        configurarBotonVolver();
-        configurarPanelCentral();
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonPDF;
@@ -129,15 +130,28 @@ public class EstadisticasSala extends javax.swing.JFrame {
     private javax.swing.JLabel labelOrdenamiento;
     private javax.swing.JTextField textFieldBuscador;
     // End of variables declaration//GEN-END:variables
-
+    
+    /**
+     * Metodo para la configuracion unica de esta pantalla
+     */
+    private void configurarEstadisticasSala() {
+        configurarBotonVolver();
+        configurarPanelCentral();
+    }
+    
+    /**
+     * Metodo para configurar el panel central de esta pantalla
+     */
     private void configurarPanelCentral() {
         JPanel panelCentral = new JPanel();
-
+        // Se configura el buscador de la pantalla
         JPanel panelBuscador = new JPanel();
         configurarPanelBuscador(panelBuscador);
+        // Configuracion de la tabla
         JPanel panelTabla = new JPanel();
         configurarPanelTabla(panelTabla);
 
+        // Se agregan los componentes en cierto orden 
         panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
 
         panelCentral.add(Box.createVerticalStrut(75));
@@ -147,52 +161,86 @@ public class EstadisticasSala extends javax.swing.JFrame {
 
         this.add(panelCentral, BorderLayout.CENTER);
     }
-
+    /** 
+     * Metodo para configurar el panel donde van el buscador y el comboBox encargado del ordenamiento de una sala
+     * @param panel 
+     */
     private void configurarPanelBuscador(JPanel panel) {
+        // Configuracion del buscador
         JPanel panelBuscador = new JPanel();
         labelBuscador = new JLabel("BUSCAR SALA: ");
         textFieldBuscador = new JTextField();
         textFieldBuscador.setPreferredSize(tamañoBuscador);
         panelBuscador.add(labelBuscador);
         panelBuscador.add(textFieldBuscador);
-
+        // Configuracion del comboBox para ordenar el 
         JPanel panelOrdenamiento = new JPanel();
         labelOrdenamiento = new JLabel("ORDENAR POR: ");
         configurarComboBoxOrdenamiento();
         panelOrdenamiento.add(labelOrdenamiento);
         panelOrdenamiento.add(comboBoxOrdenamiento);
 
+        // Se agregan ambos paneles
         panel.add(panelBuscador);
         panel.add(panelOrdenamiento);
 
     }
-
+    /**
+     * Metodo para la configuracion del comboBox encargado del ordenamiento
+     * Aqui lo que se hace es agregar las opciones al modelo del comboBox
+     */
     private void configurarComboBoxOrdenamiento() {
         comboBoxOrdenamiento = new JComboBox<>();
         DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>();
+        // Opciones disponibles del comboBox
+        modeloComboBox.addElement(""); // Se le agrega uno vacio para que se muestren por defecto asi
         modeloComboBox.addElement("Capacidad");
         modeloComboBox.addElement("Numero de Funciones");
         modeloComboBox.addElement("Ingresos Totales");
         modeloComboBox.addElement("Funciones Canceladas");
         comboBoxOrdenamiento.setModel(modeloComboBox);
-
+        // Se le agrega un actionListener para que al momento de que se cambie de opcion simplemente se cambie el orden
         comboBoxOrdenamiento.addActionListener((ActionEvent e) -> {
             //actualizarTabla(comboBoxOrdenamiento.getSelectedItem());
         });
 
     }
-
+    /**
+     * Metodo para configurar la tabla con los datos
+     * @param panelTabla 
+     */
     private void configurarPanelTabla(JPanel panelTabla) {
-        String[] columnas = {"SALA", "CAPACIDAD", "<html>NUMERO DE<br>FUNCIONES</html>", "<html>INGRESOS<br>TOTALES</html>", "<html>FUNCIONES<br>CANCELADAS</html>"};
+        // Arreglo de Strings de una dimension para guardar todas las columnas de la tabla
+        String[] columnas = {
+            "SALA", 
+            "CAPACIDAD",
+            "<html>NUMERO DE<br>FUNCIONES</html>", // A estas tres opciones se le agrego esa escritura de html para poder hacer un salto de linea
+            "<html>INGRESOS<br>TOTALES</html>", 
+            "<html>FUNCIONES<br>CANCELADAS</html>"
+        };
+        // Arreglo de Objetos de dos dimensiones para guardar las estadisticas de cada sala
         Object[][] datos = {};
 
-        DefaultTableModel modeloTabla = new DefaultTableModel(datos, columnas);
-        Integer tamañoEncabezado = 14;
+        // Valor del tamaño del encabezado
+        Integer tamañoEncabezado = 40;
         
-        JTable tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoEncabezado);
+        //Valor del tamaño de la fuente del encabezado
+        Integer tamañoFuente = 14;
         
+        /**
+         * Se llama al metodo estatico de la clase de ModeladoTablas para poder crear una tablaSencilla en base a:
+         * El arreglo de columnas, el arreglo de datos y finalmente el tamaño del encabezado
+         */
+        JTable tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoFuente, tamañoEncabezado);
+
+        /**        
+         * Se llama nuevamente a otro metodo de la clase ModeladoTablas
+         * esto para ajustar el tamaño de la columnas de la tablas
+         * Se necesito del mapa donde vienen el tamaño de las columnas
+         */
         ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas);
 
+        // Se añade la tabla a un scrollpane
         JScrollPane scrollPane = new JScrollPane(tablaSalas);
         panelTabla.add(scrollPane);
 
