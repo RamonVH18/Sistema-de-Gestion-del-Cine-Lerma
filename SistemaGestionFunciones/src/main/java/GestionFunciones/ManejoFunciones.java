@@ -12,10 +12,14 @@ import DTOs.SalaDTO;
 import Excepciones.FuncionSolapamientoSalaException;
 import Excepciones.FuncionCapacidadSalaException;
 import Excepciones.FuncionDatosIncorrectosException;
+import Excepciones.funciones.FuncionEliminarException;
+import Excepciones.funciones.FuncionFechaValidaException;
 import Excepciones.funciones.FuncionRegistrarException;
 import Interfaces.IFuncionBO;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -77,12 +81,20 @@ public class ManejoFunciones implements IManejoFunciones {
 
     @Override
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (funcionDTO == null || funcionDTO.getId() == null) {
+            throw new FuncionDatosIncorrectosException("La funcion no existe o los datos no son validos");
+        }
+
+        try {
+            return funcionBO.eliminarFuncion(funcionDTO);
+        } catch (FuncionEliminarException e) {
+            throw new FuncionDatosIncorrectosException("Error al eliminar funcion" + e.getMessage());
+        }
     }
 
     @Override
     public List<HistorialFuncionesDTO> buscarHistorialFunciones() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return funcionBO.buscarHistorialFunciones();
     }
 
     @Override
@@ -92,12 +104,23 @@ public class ManejoFunciones implements IManejoFunciones {
 
     @Override
     public List<FuncionDTO> buscarFuncionesPelicula(String pelicula) throws FuncionDatosIncorrectosException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (pelicula == null || pelicula.trim().isEmpty()) {
+            throw new FuncionDatosIncorrectosException("El nombre de la pelicula no puede estar vacio");
+        }
+        try {
+            return funcionBO.buscarFuncionesActivas();
+        } catch (FuncionFechaValidaException ex) {
+            throw new FuncionDatosIncorrectosException("No hay funciones para esta pelicula");
+        }
     }
 
     @Override
     public List<FuncionDTO> buscarFuncionesActivas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return funcionBO.buscarFuncionesActivas();
+        } catch (FuncionFechaValidaException e) {
+            throw new RuntimeException("Error al buscar funciones activas");
+        }
     }
 
     @Override

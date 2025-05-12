@@ -48,14 +48,14 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula) {
+    public List<Funcion> buscarFuncionesPelicula(String nombrePelicula) {
 
         return null;
 
     }
 
     @Override
-    public List<Funcion> mostrarFuncionesActivas() {
+    public List<Funcion> buscarFuncionesActivas() {
 
         return null;
 
@@ -146,4 +146,5 @@ public class FuncionDAO implements IFuncionDAO {
     public Funcion buscarFuncionPorId(ObjectId idFuncion) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
 }

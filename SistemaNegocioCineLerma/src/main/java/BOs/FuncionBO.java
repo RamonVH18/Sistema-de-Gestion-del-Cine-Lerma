@@ -83,7 +83,16 @@ public class FuncionBO implements IFuncionBO {
 
     @Override
     public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula) {
-        return null;
+        List<FuncionDTO> funcionesDTO = new ArrayList<>();
+        try {
+            List<Funcion> funcionesEntity = funcionDAO.buscarFuncionesPelicula(nombrePelicula);
+            for (Funcion funcion : funcionesEntity) {
+                funcionesDTO.add(funcionMapper.toFuncionDTO(funcion));
+            }
+        } catch (Exception e) {
+            System.err.println("Error al buscar funciones: " + e.getMessage());
+        }
+        return funcionesDTO;
     }
 
     @Override
@@ -91,7 +100,7 @@ public class FuncionBO implements IFuncionBO {
         List<FuncionDTO> funcionesActivasDTO = new ArrayList<>();
 
         try {
-            List<Funcion> funcionesActivasEntity = funcionDAO.mostrarFuncionesActivas();
+            List<Funcion> funcionesActivasEntity = funcionDAO.buscarFuncionesActivas();
             for (Funcion funcionActivaEntity : funcionesActivasEntity) {
                 FuncionDTO funcionActivaDTO = funcionMapper.toFuncionDTO(funcionActivaEntity);
 
@@ -106,13 +115,9 @@ public class FuncionBO implements IFuncionBO {
 
     @Override
     public List<HistorialFuncionesDTO> buscarHistorialFunciones() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return null;
     }
 
-    @Override
-    public FuncionDTO validarFuncion(FuncionDTO funcionDTO) throws FuncionValidadaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 //
 //    @Override
 //    public void suscribirClienteAFuncion(Cliente cliente, Long idFuncion) throws FuncionFechaValidaException {
@@ -219,5 +224,4 @@ public class FuncionBO implements IFuncionBO {
 //            throw new FuncionFechaValidaException("Error al cambiar precio de la función: " + e.getMessage());
 //        }
 //    }
-
 }

@@ -25,8 +25,6 @@ public interface IFuncionBO {
     
     public List<HistorialFuncionesDTO> buscarHistorialFunciones();
     
-    public FuncionDTO validarFuncion(FuncionDTO funcionDTO) throws FuncionValidadaException;
-
     public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula);
 
     public List<FuncionDTO> buscarFuncionesActivas() throws FuncionFechaValidaException;

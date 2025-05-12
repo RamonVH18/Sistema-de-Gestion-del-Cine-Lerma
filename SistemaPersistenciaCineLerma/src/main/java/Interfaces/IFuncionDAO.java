@@ -23,9 +23,9 @@ public interface IFuncionDAO {
 
     public Funcion eliminarFuncion(Funcion funcion) throws FuncionBoletosVendidosException;
 
-    public List<Funcion> buscarFuncionesPelicula(Pelicula pelicula);
+    public List<Funcion> buscarFuncionesPelicula(String nombrepelicula);
 
-    public List<Funcion> mostrarFuncionesActivas();
+    public List<Funcion> buscarFuncionesActivas();
 
     public List<Funcion> mostrarFuncionesPeliculas();
 
