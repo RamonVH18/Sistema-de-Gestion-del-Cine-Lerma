@@ -9,9 +9,7 @@ import control.IControl;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -23,9 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import utilitades.ModeladoTablas;
 import utilitades.Utilerias;
 
@@ -188,40 +184,12 @@ public class EstadisticasSala extends javax.swing.JFrame {
 
     private void configurarPanelTabla(JPanel panelTabla) {
         String[] columnas = {"SALA", "CAPACIDAD", "<html>NUMERO DE<br>FUNCIONES</html>", "<html>INGRESOS<br>TOTALES</html>", "<html>FUNCIONES<br>CANCELADAS</html>"};
-        Object[][] datos = {
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-            {"SALA A1", 25, 12, 1254.9, 45},
-        };
+        Object[][] datos = {};
 
         DefaultTableModel modeloTabla = new DefaultTableModel(datos, columnas);
+        Integer tamañoEncabezado = 14;
         
-        JTable tablaSalas = ModeladoTablas.creacionTablaEstadisticas(columnas, datos);
+        JTable tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoEncabezado);
         
         ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas);
 

@@ -20,10 +20,10 @@ public interface ISalaDAO {
     
     public Sala buscarSala(String numSala) throws BuscarSalaException;
     
-    public List<Sala> buscarTodasLasSalas() throws BuscarSalaException;
+    public List<Sala> buscarSalas(String filtroNombre) throws BuscarSalaException;
     
     public Boolean modificarEstadoSala(Sala sala) throws ModificarSalaException;
     
-    public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException;
+//    public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException;
     
 }

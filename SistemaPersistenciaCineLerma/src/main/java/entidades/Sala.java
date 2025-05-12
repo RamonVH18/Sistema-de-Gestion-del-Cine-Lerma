@@ -7,6 +7,8 @@ package entidades;
 import enums.EstadoSala;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
 
 /**
@@ -14,7 +16,7 @@ import org.bson.types.ObjectId;
  * @author Ramon Valencia
  */
 public class Sala {
-
+    @BsonId
     private ObjectId idSala;
 
     private Integer numAsientos;
@@ -49,6 +51,17 @@ public class Sala {
 
     public void setIdSala(ObjectId idSala) {
         this.idSala = idSala;
+    }
+    
+    
+    @BsonIgnore
+    public String getIdMapper() {
+        return idSala.toString();
+    }
+    
+    @BsonIgnore
+    public void setIdMapper(String idImportado) {
+        this.idSala = new ObjectId(idImportado);
     }
 
     public Integer getNumAsientos() {

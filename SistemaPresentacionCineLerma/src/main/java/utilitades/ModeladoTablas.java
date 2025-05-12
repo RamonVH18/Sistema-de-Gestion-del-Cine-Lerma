@@ -28,7 +28,7 @@ public class ModeladoTablas {
     public ModeladoTablas() {
     }
     
-    public static JTable creacionTablaEstadisticas(String[] columnas, Object[][] datos) {
+    public static JTable creacionTablaSencilla(String[] columnas, Object[][] datos, Integer tamañoEncabezado) {
         
         DefaultTableModel modeloTabla = new DefaultTableModel(datos, columnas);
         
@@ -48,7 +48,7 @@ public class ModeladoTablas {
         encabezado.setFont(new Font(
                 encabezado.getFont().getFontName(),
                 encabezado.getFont().getStyle(),
-                14)
+                tamañoEncabezado)
         );
         
         encabezado.setPreferredSize(new Dimension(encabezado.getWidth(), 40));

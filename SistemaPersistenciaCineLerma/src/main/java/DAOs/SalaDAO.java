@@ -39,9 +39,10 @@ public class SalaDAO implements ISalaDAO {
     private static SalaDAO instance;
     private final MongoConexion conexion = new MongoConexion();
     private final String nombreColeccion = "Salas";
+    private Bson filtro;
 
     private final Bson projectionNormal = Projections.fields(
-            Projections.include("_id", "numeroSala", "numeroAsientos", "estado", "asientos")
+            Projections.include("_id", "numSala", "numAsientos", "estado", "asientos")
     );
 
     private SalaDAO() {
@@ -61,22 +62,14 @@ public class SalaDAO implements ISalaDAO {
 
         try {
             List<Asiento> asientosSala = new ArrayList();
-            List<Document> listaAsientos = new ArrayList<>();
 
-            creacionAsientos(sala, asientosSala, listaAsientos);
+            creacionAsientos(sala, asientosSala);
 
             sala.setAsientos(asientosSala);
 
-            ObjectId salaId = new ObjectId();
-            Document salaDocument = new Document("_id", salaId)
-                    .append("numeroSala", sala.getNumSala())
-                    .append("numeroAsientos", sala.getNumAsientos())
-                    .append("estado", sala.getEstado().name())
-                    .append("asientos", listaAsientos);
-
             MongoCollection coleccionSalas = obtenerColeccionSalas(clienteMongo);
 
-            coleccionSalas.insertOne(salaDocument);
+            coleccionSalas.insertOne(sala);
 
             return sala;
         } catch (MongoException | BuscarSalaException e) {
@@ -90,18 +83,18 @@ public class SalaDAO implements ISalaDAO {
     public Sala buscarSala(String numSala) throws BuscarSalaException {
         MongoClient clienteMongo = null;
         try {
-            MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
+            MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo);
 
-            Document salaDoc = coleccionSalas.find(eq("numeroSala", numSala)).projection(projectionNormal).first();
+            Sala sala = coleccionSalas.find(
+                    eq("numSala", numSala))
+                    .projection(projectionNormal)
+                    .first();
 
-            if (salaDoc == null) {
+            if (sala == null) {
                 throw new BuscarSalaException("No se encontro la sala con numero: " + numSala);
             }
 
-            Sala sala = obtenerSalaConAsientos(salaDoc, numSala);
-
             return sala;
-
         } catch (MongoException e) {
             throw new BuscarSalaException("Error al buscar las salas en la base de datos: " + e.getMessage());
         } finally {
@@ -110,18 +103,15 @@ public class SalaDAO implements ISalaDAO {
     }
 
     @Override
-    public List<Sala> buscarTodasLasSalas() throws BuscarSalaException {
+    public List<Sala> buscarSalas(String filtroNombre) throws BuscarSalaException {
         MongoClient clienteMongo = null;
         try {
-            MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
+            MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo);
+            
+            filtro = filtroNombre(filtroNombre);
 
-            FindIterable<Document> iterador = coleccionSalas.find();
-            List<Sala> salas = new ArrayList<>();
-            for (Document salaDoc : iterador) {
-                String numSala = salaDoc.get("numeroSala", String.class);
-                Sala sala = obtenerSalaConAsientos(salaDoc, numSala);
-                salas.add(sala);
-            }
+            List<Sala> salas = coleccionSalas.find(filtro).into(new ArrayList<>());
+
             return salas;
         } catch (BuscarSalaException | MongoException e) {
             throw new BuscarSalaException("Hubo un error al buscar las salas: " + e.getMessage());
@@ -130,34 +120,11 @@ public class SalaDAO implements ISalaDAO {
         }
     }
 
-    private Sala obtenerSalaConAsientos(Document salaDoc, String numSala) throws BuscarSalaException {
-        try {
-            List<Document> asientosDoc = salaDoc.getList("asientos", Document.class);
-            List<Asiento> asientos = new ArrayList<>();
-
-            Sala sala = new Sala(
-                    salaDoc.get("_id", ObjectId.class),
-                    asientosDoc.size(),
-                    numSala,
-                    EstadoSalaFactory.obtenerEstadoSala(salaDoc.get("estado", String.class))
-            );
-
-            for (Document asientoDoc : asientosDoc) {
-                asientos.add(new Asiento(asientoDoc.get("_id", ObjectId.class), asientoDoc.getString("numeroAsiento"), sala));
-            }
-
-            sala.setAsientos(asientos);
-            return sala;
-        } catch (MongoException e) {
-            throw new BuscarSalaException("Error al obtener los asientos de la sala " + numSala + ": " + e.getMessage());
-        }
-    }
-
     @Override
     public Boolean modificarEstadoSala(Sala sala) throws ModificarSalaException {
         MongoClient clienteMongo = null;
         try {
-            MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
+            MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo);
 
             Bson filtro = Filters.eq("numeroSala", sala.getNumSala());
             Bson update = Updates.set("estado", sala.getEstado().name());
@@ -172,61 +139,66 @@ public class SalaDAO implements ISalaDAO {
         }
     }
 
-    @Override
-    public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException {
-        MongoClient clienteMongo = null;
-        try {
-            MongoCollection<Document> coleccionSalas = obtenerColeccionSalas(clienteMongo);
-
-            Iterable<Bson> filtradores = Arrays.asList(
-                    Filters.regex("estado", Pattern.compile("^" + filtro, Pattern.CASE_INSENSITIVE)),
-                    Filters.regex("estado", Pattern.compile(".*" + filtro + "$", Pattern.CASE_INSENSITIVE)),
-                    Filters.regex("numeroSala", Pattern.compile("^" + filtro, Pattern.CASE_INSENSITIVE)),
-                    Filters.regex("numeroSala", Pattern.compile(".*" + filtro + "$", Pattern.CASE_INSENSITIVE))
+//    @Override
+//    public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException {
+//        MongoClient clienteMongo = null;
+//        try {
+//            MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo);
+//
+//            Iterable<Bson> filtradores = Arrays.asList(
+//                    Filters.regex("estado", Pattern.compile("^" + filtro, Pattern.CASE_INSENSITIVE)),
+//                    Filters.regex("estado", Pattern.compile(".*" + filtro + "$", Pattern.CASE_INSENSITIVE)),
+//                    Filters.regex("numeroSala", Pattern.compile("^" + filtro, Pattern.CASE_INSENSITIVE)),
+//                    Filters.regex("numeroSala", Pattern.compile(".*" + filtro + "$", Pattern.CASE_INSENSITIVE))
+//            );
+//            Bson filtrador = Filters.or(filtradores);
+//
+//            FindIterable<Sala> iterador = coleccionSalas.find(filtrador);
+//
+//            List<Sala> salas = new ArrayList<>();
+////            for (Sala salaDoc : iterador) {
+////                String numSala = salaDoc.get("numeroSala", String.class);
+////                Sala sala = obtenerSalaConAsientos(salaDoc, numSala);
+////                salas.add(sala);
+////            }
+//
+//            return salas;
+//
+//        } catch (BuscarSalaException e) {
+//            throw new BuscarSalaException("Hubo un error al buscar las salas: " + e.getMessage());
+//        } finally {
+//            conexion.cerrarConexion(clienteMongo);
+//        }
+//    }
+    
+    private Bson filtroNombre(String filtroNombre) {
+        if (filtroNombre != null && !filtroNombre.isBlank()) {
+            List<Bson> filtradores = Arrays.asList(
+                    Filters.regex("numSala", Pattern.compile("^" + filtroNombre, Pattern.CASE_INSENSITIVE)),
+                    Filters.regex("numSala", Pattern.compile(".*" + filtroNombre + "$", Pattern.CASE_INSENSITIVE))
             );
-            Bson filtrador = Filters.or(filtradores);
 
-            FindIterable<Document> iterador = coleccionSalas.find(filtrador);
-
-            List<Sala> salas = new ArrayList<>();
-            for (Document salaDoc : iterador) {
-                String numSala = salaDoc.get("numeroSala", String.class);
-                Sala sala = obtenerSalaConAsientos(salaDoc, numSala);
-                salas.add(sala);
-            }
-
-            return salas;
-
-        } catch (BuscarSalaException e) {
-            throw new BuscarSalaException("Hubo un error al buscar las salas: " + e.getMessage());
-        } finally {
-            conexion.cerrarConexion(clienteMongo);
+            return Filters.or(filtradores);
         }
+        return new Document(); // Si filtroNombre está vacío, no aplica filtros
     }
 
-    private void creacionAsientos(Sala sala, List<Asiento> asientosSala, List<Document> listaAsientos) {
+    private void creacionAsientos(Sala sala, List<Asiento> asientosSala) {
         for (int i = 1; i <= sala.getNumAsientos(); i++) {
             String numero = String.valueOf(i);
-            ObjectId asientoId = new ObjectId();
-            Asiento asiento = new Asiento(asientoId, numero, sala);
-
+            Asiento asiento = new Asiento(numero);
             asientosSala.add(asiento);
-            Document asientoDocument = new Document("_id", asientoId).append("numeroAsiento", numero);
-            listaAsientos.add(asientoDocument);
         }
     }
 
-    private MongoCollection<Document> obtenerColeccionSalas(MongoClient clienteMongo) throws BuscarSalaException {
+    private MongoCollection<Sala> obtenerColeccionSalas(MongoClient clienteMongo) throws BuscarSalaException {
         try {
             clienteMongo = conexion.crearConexion();
 
             MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
 
-            MongoCollection<Document> coleccionSalas = baseDatos.getCollection(nombreColeccion);
+            MongoCollection<Sala> coleccionSalas = baseDatos.getCollection(nombreColeccion, Sala.class);
 
-            if (coleccionSalas.countDocuments() == 0) {
-                throw new BuscarSalaException("No se encontro ninguna sala registrada en la base de datos");
-            }
             return coleccionSalas;
         } catch (MongoException e) {
             throw new BuscarSalaException("Error al realizar la conexion: " + e.getMessage());
