@@ -7,7 +7,7 @@ package BOs;
 import DAOs.FuncionDAO;
 import DTOs.FuncionDTO;
 import DTOs.HistorialFuncionesDTO;
-import Excepciones.Funciones.FuncionBoletosVendidosException;
+import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.PersistenciaException;
 import Excepciones.funciones.FuncionEliminarException;
@@ -75,7 +75,7 @@ public class FuncionBO implements IFuncionBO {
                 return false;
             }
             return true;
-        } catch (FuncionBoletosVendidosException e) {
+        } catch (FuncionNoEncontradaException e) {
             throw new FuncionEliminarException("Error al eliminar usuario", e);
         }
 

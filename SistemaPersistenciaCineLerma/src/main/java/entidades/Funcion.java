@@ -5,13 +5,11 @@
 package entidades;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
  *
- * @author Ramon Valencia
+ * @author Abraham Coronel Bringas
  */
 public class Funcion {
 
@@ -23,27 +21,23 @@ public class Funcion {
 
     private LocalDateTime fechaHora;
 
-    private Boolean estado;
-
     private Double precio;
 
     public Funcion() {
     }
 
-    public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Boolean estado, Double precio) {
+    public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio) {
         this.idFuncion = idFuncion;
         this.sala = sala;
         this.pelicula = pelicula;
         this.fechaHora = fechaHora;
-        this.estado = estado;
         this.precio = precio;
     }
 
-    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Boolean estado, Double precio) {
+    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio) {
         this.sala = sala;
         this.pelicula = pelicula;
         this.fechaHora = fechaHora;
-        this.estado = estado;
         this.precio = precio;
     }
 
@@ -78,21 +72,13 @@ public class Funcion {
     public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;
     }
-    
-    public String getIdString(){
+
+    public String getIdString() {
         return idFuncion.toString();
     }
-    
+
     public void setIdString(String idImportado) {
         this.idFuncion = new ObjectId(idImportado);
-    }
-
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
     }
 
     public Double getPrecio() {
@@ -105,13 +91,7 @@ public class Funcion {
 
     @Override
     public String toString() {
-        return "Funcion{"
-                + "idFuncion=" + idFuncion
-                + ", sala=" + sala
-                + ", pelicula=" + pelicula
-                + ", fechaHora=" + fechaHora
-                + ", estado=" + estado
-                + ", precio=" + precio
-                + '}';
+        return "Funcion{" + "idFuncion=" + idFuncion + ", sala=" + sala + ", pelicula=" + pelicula + ", fechaHora=" + fechaHora + ", precio=" + precio + '}';
     }
+
 }

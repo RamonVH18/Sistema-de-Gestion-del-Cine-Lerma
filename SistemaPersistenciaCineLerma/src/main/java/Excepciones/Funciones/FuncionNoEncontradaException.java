@@ -8,13 +8,13 @@ package Excepciones.Funciones;
  *
  * @author abrah
  */
-public class FuncionBoletosVendidosException extends Exception {
+public class FuncionNoEncontradaException extends Exception {
 
-    public FuncionBoletosVendidosException(String message) {
+    public FuncionNoEncontradaException(String message) {
         super(message);
     }
 
-    public FuncionBoletosVendidosException(String message, Throwable cause) {
+    public FuncionNoEncontradaException(String message, Throwable cause) {
         super(message, cause);
     }
 

@@ -5,27 +5,26 @@
 package DAOs;
 
 import Conexion.MongoConexion;
-import Excepciones.Funciones.FuncionBoletosVendidosException;
+import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
-import Excepciones.PersistenciaException;
 import Interfaces.IFuncionDAO;
 import Interfaces.IPeliculaDAO;
 import Interfaces.ObservadorFuncion;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import entidades.Funcion;
-import entidades.Pelicula;
-import entidades.Sala;
-import enums.EstadoSala;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
  *
- * @author Ramon Valencia
+ * @author Abraham Coronel Bringas
  */
 public class FuncionDAO implements IFuncionDAO {
 
@@ -48,103 +47,86 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public List<Funcion> buscarFuncionesPelicula(String nombrePelicula) {
-
-        return null;
-
-    }
-
-    @Override
-    public List<Funcion> buscarFuncionesActivas() {
-
-        return null;
-
-    }
-
-    @Override
-    public List<Funcion> mostrarFuncionesPeliculas() {
-
-        return null;
-
-    }
-
-    // metodo privado para detectar cambios y notificar
-    private void detectarYNotificarCambios(Funcion funcionOriginal, Funcion funcionActualizada) {
-        // Verificar cambio de estado
-        if (!funcionOriginal.getEstado().equals(funcionActualizada.getEstado())) {
-            String mensaje = funcionActualizada.getEstado()
-                    ? "La función ha sido activada"
-                    : "La función ha sido cancelada";
-            notificarObservadores(funcionActualizada.getIdString(), "CAMBIO_ESTADO", mensaje);
-        }
-
-        // Verificar cambio de horario
-        if (!funcionOriginal.getFechaHora().equals(funcionActualizada.getFechaHora())) {
-            String mensaje = "Cambio de horario: de "
-                    + funcionOriginal.getFechaHora() + " a "
-                    + funcionActualizada.getFechaHora();
-            notificarObservadores(funcionActualizada.getIdString(), "CAMBIO_HORARIO", mensaje);
-        }
-
-        // Verificar cambio de sala
-        if (!funcionOriginal.getSala().equals(funcionActualizada.getSala())) {
-            String mensaje = "Cambio de sala: de sala #"
-                    + funcionOriginal.getSala().getNumSala() + " a sala #"
-                    + funcionActualizada.getSala().getNumSala();
-            notificarObservadores(funcionActualizada.getIdString(), "CAMBIO_SALA", mensaje);
-        }
-
-        // Verificar cambio de precio
-        if (!funcionOriginal.getPrecio().equals(funcionActualizada.getPrecio())) {
-            String mensaje = "Cambio de precio: de $"
-                    + funcionOriginal.getPrecio() + " a $"
-                    + funcionActualizada.getPrecio();
-            notificarObservadores(funcionActualizada.getIdString(), "CAMBIO_PRECIO", mensaje);
-        }
-    }
-
-    @Override
-    public void agregarObservador(String idFuncion, ObservadorFuncion observador) {
-        observadores.computeIfAbsent(idFuncion, k -> new ArrayList<>()).add(observador);
-    }
-
-    @Override
-    public void eliminarObservador(String idFuncion, ObservadorFuncion observador) {
-        if (observadores.containsKey(idFuncion)) {
-            observadores.get(idFuncion).remove(observador);
-        }
-    }
-
-    // metodo de eliminar oobservcador por filtro
-    @Override
-    public void eliminarObservadorPorFiltro(String idFuncion, Predicate<ObservadorFuncion> filtro) {
-        if (observadores.containsKey(idFuncion)) {
-            observadores.get(idFuncion).removeIf(filtro);
-        }
-    }
-
-    @Override
-    public void notificarObservadores(String idFuncion, String tipoEvento, String mensaje) {
-        if (observadores.containsKey(idFuncion)) {
-            for (ObservadorFuncion observador : observadores.get(idFuncion)) {
-                observador.actualizar(idFuncion, tipoEvento, mensaje);
-            }
-        }
-    }
-
-    @Override
     public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException {
-        return null;
+        MongoClient clienteMongo = null;
+        try {
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+
+            // Verificar si la sala esta ocupada
+            Bson filtro = Filters.and(
+                    Filters.eq("sala.numSala", funcion.getSala().getNumSala()),
+                    Filters.eq("fechaHora", funcion.getFechaHora())
+            );
+            Long contador = coleccionFunciones.countDocuments(filtro);
+            if (contador > 0) {
+                throw new FuncionSalaOcupadaException("La sala ya esta ocupada en la fecha.");
+            }
+
+            coleccionFunciones.insertOne(funcion);
+            return funcion;
+        } catch (FuncionSalaOcupadaException e) {
+            throw new FuncionSalaOcupadaException("Error al registrar la funcion: " + e.getMessage());
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
     }
 
     @Override
-    public Funcion eliminarFuncion(Funcion funcion) throws FuncionBoletosVendidosException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Funcion eliminarFuncion(Funcion funcion) throws FuncionNoEncontradaException {
+        MongoClient clienteMongo = null;
+        try {
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+
+            // Verificar si hay boletos vendidos (suponiendo que estado=true implica boletos vendidos)
+            if (funcion == null) {
+                throw new FuncionNoEncontradaException("No se puede eliminar la una funcion nula");
+            }
+
+            // Eliminar la función
+            Bson filtro = Filters.eq("_id", funcion.getIdFuncion());
+            coleccionFunciones.deleteOne(filtro);
+            return funcion;
+        } catch (FuncionNoEncontradaException e) {
+            throw new FuncionNoEncontradaException("Error al eliminar la funcion: " + e.getMessage());
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
     }
 
     @Override
     public Funcion buscarFuncionPorId(ObjectId idFuncion) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        MongoClient clienteMongo = conexion.crearConexion();
+        MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+        MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+        Bson filtro = Filters.eq("_id", idFuncion);
+        conexion.cerrarConexion(clienteMongo);
+        return coleccionFunciones.find(filtro).first();
+    }
+
+    @Override
+    public List<Funcion> buscarFuncionesPelicula(String nombrePelicula) {
+        MongoClient clienteMongo = conexion.crearConexion();
+        MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+        MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombrePelicula, Funcion.class);
+        Bson filtro = Filters.eq("pelicula.nombre", nombrePelicula);
+        List<Funcion> funciones = coleccionFunciones.find(filtro).into(new ArrayList<>());
+        conexion.cerrarConexion(clienteMongo);
+        return funciones;
+    }
+
+    @Override
+    public List<Funcion> buscarFuncionesActivas() {
+        MongoClient clienteMongo = conexion.crearConexion();
+        MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+        MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+        Bson filtro = Filters.eq("estado", true);
+        List<Funcion> funciones = coleccionFunciones.find(filtro).into(new ArrayList<>());
+        conexion.cerrarConexion(clienteMongo);
+        return funciones;
     }
 
 }
