@@ -36,7 +36,7 @@ public class PagoDAO implements IPagoDAO {
 
     private void inicializarObjetos() {
         //Objetos necesarios simulados
-        Funcion funcion = new Funcion(new Sala(), new Pelicula(), LocalDateTime.now(), true, 10.0);
+        Funcion funcion = new Funcion(new Sala(), new Pelicula(), LocalDateTime.now(), 10.0);
 
         // Calcular monto para 3 boletos
         Double montoTotal = calcularMontoTotal(3, funcion);
