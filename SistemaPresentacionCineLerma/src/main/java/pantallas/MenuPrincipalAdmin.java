@@ -84,7 +84,6 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         btnFuncion = new javax.swing.JButton();
         btnEmpleados = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
-        btnEditarUsuario = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -166,16 +165,6 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
             }
         });
 
-        btnEditarUsuario.setBackground(new java.awt.Color(162, 132, 94));
-        btnEditarUsuario.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnEditarUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditarUsuario.setText("Editar Usuario");
-        btnEditarUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarUsuarioActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -184,32 +173,27 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnCerrarSesion)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnEditarUsuario))
+                        .addComponent(btnCerrarSesion))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(230, 230, 230)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSalir)
+                            .addComponent(btnReporte))
+                        .addGap(26, 26, 26)
+                        .addComponent(btnEmpleados))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(191, 191, 191)
+                        .addComponent(labelTitulo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(250, 250, 250)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(230, 230, 230)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnSalir)
-                                    .addComponent(btnReporte))
-                                .addGap(26, 26, 26)
-                                .addComponent(btnEmpleados))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(191, 191, 191)
-                                .addComponent(labelTitulo))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(250, 250, 250)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnFuncion)
-                                    .addComponent(btnPelicula)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(259, 259, 259)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnSala)
-                                    .addComponent(btnUsuarios))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(btnFuncion)
+                            .addComponent(btnPelicula)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(259, 259, 259)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSala)
+                            .addComponent(btnUsuarios))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -232,9 +216,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
                     .addComponent(btnSalir)
                     .addComponent(btnEmpleados))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCerrarSesion)
-                    .addComponent(btnEditarUsuario))
+                .addComponent(btnCerrarSesion)
                 .addContainerGap())
         );
 
@@ -273,14 +255,9 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
-    private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarUsuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarUsuarioActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrarSesion;
-    private javax.swing.JButton btnEditarUsuario;
     private javax.swing.JButton btnEmpleados;
     private javax.swing.JButton btnFuncion;
     private javax.swing.JButton btnPelicula;
