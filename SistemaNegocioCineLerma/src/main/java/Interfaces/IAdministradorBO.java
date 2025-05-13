@@ -23,7 +23,7 @@ public interface IAdministradorBO {
     
     public Boolean eliminarAdministradorBO (AdministradorDTO administrador) throws EliminarUsuarioExceptionBO;
     
-    public Boolean validarAdministradorBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO;
+//    public Boolean validarAdministradorBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO;
     
-    public AdministradorDTO obtenerAdministradorBO(String nombreUsuario) throws EncontrarAdminExceptionBO;
+    public AdministradorDTO obtenerAdministradorBO(String nombreUsuario, String contrasena) throws EncontrarAdminExceptionBO;
 }

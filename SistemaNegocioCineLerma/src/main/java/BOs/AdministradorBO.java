@@ -41,6 +41,7 @@ public class AdministradorBO implements IAdministradorBO{
         }
         return instanceAdministradorBO;
     }
+    
 
     @Override
     public AdministradorDTO registrarAdministradorBO(AdministradorDTO administrador) throws RegistrarAdminExceptionBO {
@@ -83,23 +84,23 @@ public class AdministradorBO implements IAdministradorBO{
         }     
     }
 
-    @Override
-    public Boolean validarAdministradorBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO {
-        try {
-
-            return adminDAO.validarAdministrador(nombreUsuario, contrasena);
-
-        } catch (ValidarUsuarioException e) {
-            throw new ValidarUsuarioExceptionBO("Error al validar el cliente", e);
-        }
-    }
+//    @Override
+//    public Boolean validarAdministradorBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO {
+//        try {
+//
+//            return adminDAO.validarAdministrador(nombreUsuario, contrasena);
+//
+//        } catch (ValidarUsuarioException e) {
+//            throw new ValidarUsuarioExceptionBO("Error al validar el cliente", e);
+//        }
+//    }
         
 
     @Override
-    public AdministradorDTO obtenerAdministradorBO(String nombreUsuario) throws EncontrarAdminExceptionBO {
+    public AdministradorDTO obtenerAdministradorBO(String nombreUsuario, String contrasena) throws EncontrarAdminExceptionBO {
         try {
 
-            Administrador adminEncontrado = adminDAO.obtenerAdministrador(nombreUsuario);
+            Administrador adminEncontrado = adminDAO.obtenerAdministrador(nombreUsuario, contrasena);
 
             return mapper.toAdministradorDTO(adminEncontrado);
 

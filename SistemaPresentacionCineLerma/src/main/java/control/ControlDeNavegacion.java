@@ -116,7 +116,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarMenuCliente(JFrame frameAnterior, ClienteDTO cliente) {
         SwingUtilities.invokeLater(() -> {
-            MenuPrincipalCliente pantalla = new MenuPrincipalCliente();
+            MenuPrincipalCliente pantalla = new MenuPrincipalCliente(cliente);
             pantalla.setLocationRelativeTo(null);
             pantalla.setVisible(true);
         });
@@ -743,14 +743,19 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-    @Override
-    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException{
-            return gestionUsuarios.validarCliente(nombreUsuario, contrasena);
-    }
+//    @Override
+//    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException{
+//            return gestionUsuarios.validarCliente(nombreUsuario, contrasena);
+//    }
 
     @Override
-    public ClienteDTO obtenerCliente(String nombreUsuario) throws EncontrarUsuarioException {
-        return gestionUsuarios.obtenerCliente(nombreUsuario);
+    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarUsuarioException {
+        try {
+            return gestionUsuarios.obtenerCliente(nombreUsuario, contrasena);
+        } catch (EncontrarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     @Override
@@ -793,15 +798,15 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-    @Override
-    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException{
-            return gestionUsuarios.validarAdministrador(nombreUsuario, contrasena);
-    }
+//    @Override
+//    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException{
+//            return gestionUsuarios.validarAdministrador(nombreUsuario, contrasena);
+//    }
 
     @Override
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario) {
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) {
         try {
-            return gestionUsuarios.obtenerAdministrador(nombreUsuario);
+            return gestionUsuarios.obtenerAdministrador(nombreUsuario, contrasena);
         } catch (EncontrarUsuarioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return null;

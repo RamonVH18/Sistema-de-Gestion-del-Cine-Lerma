@@ -4,10 +4,16 @@
  */
 package enums;
 
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
+
 /**
  *
  * @author sonic
  */
 public enum Rol {
-    CLIENTE, ADMINISTRADOR;
+    @BsonRepresentation(BsonType.STRING)
+    CLIENTE, 
+    @BsonRepresentation(BsonType.STRING)
+    ADMINISTRADOR;
 }

@@ -61,9 +61,9 @@ public interface IManejoUsuarios {
     
     public Boolean eliminarCliente (ClienteDTO cliente) throws EliminarUsuarioException;
     
-    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
+//    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
     
-    public ClienteDTO obtenerCliente(String nombreUsuario) throws EncontrarUsuarioException;
+    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
     
     public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) throws CargarHistorialException;
     
@@ -75,9 +75,9 @@ public interface IManejoUsuarios {
     
     public Boolean eliminarAdministrador (AdministradorDTO administrador) throws EliminarUsuarioException;
     
-    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
+//    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
     
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario) throws EncontrarUsuarioException;
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
     
     
 }

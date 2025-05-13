@@ -4,6 +4,7 @@
  */
 package pantallas;
 
+import DTOs.ClienteDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
@@ -25,6 +26,8 @@ import javax.swing.SwingConstants;
  * @author Sebastian Borquez
  */
 public class MenuPrincipalCliente extends javax.swing.JFrame {
+    
+    private ClienteDTO cliente;
 
     //CHECAR EL TAMAÑO DEL MENU PRINCIPAL Y LOS LAYOUTS
     private final IControl control = ControlDeNavegacion.getInstancia();
@@ -40,11 +43,13 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
     private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
 
     private final JPanel panelCentral = new JPanel();
+    
+    
 
     /**
      * Creates new form MenuPrincipal
      */
-    public MenuPrincipalCliente() {
+    public MenuPrincipalCliente(ClienteDTO clienteActual) {
         initComponents();
         setTitle(nombrePestania);
         setSize(640, 830);
@@ -55,6 +60,8 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        
+        this.cliente = cliente;
 
         revalidate();
         repaint();
@@ -84,6 +91,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         btnAlimentosMenu = new javax.swing.JButton();
         btnOpcionesMenu1 = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
+        btnEditarUsuario = new javax.swing.JButton();
 
         btnRegresoMenu1.setBackground(new java.awt.Color(162, 132, 94));
         btnRegresoMenu1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
@@ -195,6 +203,22 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
             }
         });
 
+        btnEditarUsuario.setBackground(new java.awt.Color(162, 132, 94));
+        btnEditarUsuario.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        btnEditarUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        btnEditarUsuario.setText("Editar usuario");
+        btnEditarUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnEditarUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEditarUsuarioMouseClicked(evt);
+            }
+        });
+        btnEditarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarUsuarioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -209,21 +233,26 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(labelTitulo))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEditarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnOpcionesMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(147, 147, 147)
+                                .addComponent(labelTitulo))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btnOpcionesMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,7 +272,9 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(149, 149, 149)
-                .addComponent(btnCerrarSesion)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCerrarSesion)
+                    .addComponent(btnEditarUsuario))
                 .addContainerGap())
         );
 
@@ -301,6 +332,14 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    private void btnEditarUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarUsuarioMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarUsuarioMouseClicked
+
+    private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarUsuarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -310,6 +349,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnCarteleraMenu;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnCuentaMenu;
+    private javax.swing.JButton btnEditarUsuario;
     private javax.swing.JButton btnHistorialMenu;
     private javax.swing.JButton btnOpcionesMenu1;
     private javax.swing.JButton btnRegresoMenu1;

@@ -95,22 +95,22 @@ public class ClienteBO implements IClienteBO{
 
     }
 
+//    @Override
+//    public Boolean validarClienteBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO {
+//        try {
+//
+//            return clienteDAO.validarCliente(nombreUsuario, contrasena);
+//
+//        } catch (ValidarUsuarioException e) {
+//            throw new ValidarUsuarioExceptionBO("Error al validar el cliente", e);
+//        }
+//    }
+
     @Override
-    public Boolean validarClienteBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO {
+    public ClienteDTO obtenerClienteBO(String nombreUsuario, String contrasena) throws EncontrarClienteExceptionBO {
         try {
 
-            return clienteDAO.validarCliente(nombreUsuario, contrasena);
-
-        } catch (ValidarUsuarioException e) {
-            throw new ValidarUsuarioExceptionBO("Error al validar el cliente", e);
-        }
-    }
-
-    @Override
-    public ClienteDTO obtenerClienteBO(String nombreUsuario) throws EncontrarClienteExceptionBO {
-        try {
-
-            Cliente clienteEncontrado = clienteDAO.obtenerCliente(nombreUsuario);
+            Cliente clienteEncontrado = clienteDAO.obtenerCliente(nombreUsuario, contrasena);
 
             return mapper.toClienteDTO(clienteEncontrado);
 

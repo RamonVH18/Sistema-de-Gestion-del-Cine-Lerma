@@ -154,24 +154,26 @@ public class IniciarSesion extends javax.swing.JFrame {
         String contrasena = contrasenafield.getText();
 
         try {
-            Boolean esAdminValido = control.validarAdministrador(usuario, contrasena);
-            Boolean esClienteValido = control.validarCliente(usuario, contrasena);
+            AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuario, contrasena);
 
-            if (Boolean.TRUE.equals(esAdminValido)) {
-                AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuario);
+            if (adminEncontrado != null) {
                 control.mostrarMenuAdministrador(this, adminEncontrado);
                 dispose();
                 return;
             }
 
-            if (Boolean.TRUE.equals(esClienteValido)) {
-                ClienteDTO clienteEncontrado = control.obtenerCliente(usuario);
+            ClienteDTO clienteEncontrado = control.obtenerCliente(usuario, contrasena);
+
+            if (clienteEncontrado != null) {
                 control.mostrarMenuCliente(this, clienteEncontrado);
                 dispose();
                 return;
             }
 
-        } catch (ValidarUsuarioException | EncontrarUsuarioException e) {
+            // Si no se encontró ninguno:
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+
+        } catch (EncontrarUsuarioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 

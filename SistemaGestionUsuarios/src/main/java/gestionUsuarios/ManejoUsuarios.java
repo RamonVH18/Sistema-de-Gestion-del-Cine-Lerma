@@ -35,6 +35,8 @@ import Interfaces.IUsuarioBO;
 import enums.EstadoUsuario;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -193,7 +195,7 @@ public class ManejoUsuarios implements IManejoUsuarios {
 
     }
 
-    private void validarDatosCliente(ClienteDTO cliente) throws ValidarUsuarioException {
+    private void validarDatosCliente(ClienteDTO cliente) throws ValidarUsuarioException, EncontrarUsuarioException {
 
         if (cliente.getCP() == null || cliente.getCP().trim().isEmpty()) {
             throw new ValidarUsuarioException("El CP del cliente es obligatorio");
@@ -234,19 +236,18 @@ public class ManejoUsuarios implements IManejoUsuarios {
                 throw new RegistrarUsuarioException("El cliente no puede ser null");
             }
 
-            if (!validarCliente(cliente.getNombreUsuario(), cliente.getContraseña())) {
-                throw new RegistrarUsuarioException("Ya existe un usuario con ese username o esta bloqueado");
-            }
-
             validarDatosUsuario(cliente);
             validarDatosCliente(cliente);
+            
 
             return clienteBO.registrarClienteBO(cliente);
 
+        } catch (RegistrarClienteExceptionBO e) {
+            throw new RegistrarUsuarioException("No se pudo registrar el cliente: " + e.getMessage());
         } catch (ValidarUsuarioException e) {
             throw new RegistrarUsuarioException("Error al registrar el cliente: " + e.getMessage());
-        } catch (RegistrarClienteExceptionBO e) {
-            throw new RegistrarUsuarioException("No se pudo registrar el cliente (subsistema): " + e.getMessage(), e);
+        } catch (EncontrarUsuarioException e) {
+            throw new RegistrarUsuarioException("Error al registrar el cliente: " + e.getMessage());
         }
     }
 
@@ -254,14 +255,14 @@ public class ManejoUsuarios implements IManejoUsuarios {
     public ClienteDTO actualizarCliente(ClienteDTO cliente) throws ActualizarUsuarioException {
         try {
 
-            if (obtenerCliente(cliente.getNombreUsuario()) != null) {
-                throw new ActualizarUsuarioException("Ya existe un usuario con ese username");
+            if (obtenerAdministrador(cliente.getNombreUsuario(), cliente.getContraseña()) != null) {
+                throw new ActualizarUsuarioException("Ya existe un cliente con ese username");
             }
 
             validarDatosUsuario(cliente);
             validarDatosCliente(cliente);
-
-            if (!validarCliente(cliente.getNombreUsuario(), cliente.getContraseña())) {
+            
+            if (obtenerAdministrador(cliente.getNombreUsuario(), cliente.getContraseña()) == null) {
                 throw new ActualizarUsuarioException("El cliente no es valido");
             }
 
@@ -288,29 +289,33 @@ public class ManejoUsuarios implements IManejoUsuarios {
         }
     }
 
+//    @Override
+//    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
+//        if (nombreUsuario == null || nombreUsuario == "" || nombreUsuario.trim().isEmpty() || contrasena == null || contrasena == "" || contrasena.trim().isEmpty()) {
+//            throw new ValidarUsuarioException("Por favor ingrese los datos de inicio de sesion correctamente");
+//        }
+//        
+//        try {
+//
+//            return clienteBO.validarClienteBO(nombreUsuario, contrasena);
+//
+//        } catch (ValidarUsuarioExceptionBO e) {
+//            throw new ValidarUsuarioException("El cliente no es valido: " + e.getMessage());
+//        }
+//    }
+
     @Override
-    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
-        if (nombreUsuario == null || nombreUsuario == "" || nombreUsuario.trim().isEmpty() || contrasena == null || contrasena == "" || contrasena.trim().isEmpty()) {
-            throw new ValidarUsuarioException("Por favor ingrese los datos de inicio de sesion correctamente");
-        }
-        
-        try {
-
-            return clienteBO.validarClienteBO(nombreUsuario, contrasena);
-
-        } catch (ValidarUsuarioExceptionBO e) {
-            throw new ValidarUsuarioException("El cliente no es valido: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public ClienteDTO obtenerCliente(String nombreUsuario) throws EncontrarUsuarioException {
+    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarUsuarioException {
         if (nombreUsuario == null || nombreUsuario.trim().isEmpty()) {
-            throw new EncontrarUsuarioException("El nombre de usuario es obligatorio");
-        }
+                throw new EncontrarUsuarioException("El nombre de usuario es obligatorio");
+            }
+            
+            if (contrasena == null || contrasena.trim().isEmpty()) {
+                throw new EncontrarUsuarioException("La contrasena es obligatoria");
+            }
 
         try {
-            return clienteBO.obtenerClienteBO(nombreUsuario);
+            return clienteBO.obtenerClienteBO(nombreUsuario, contrasena);
 
         } catch (EncontrarClienteExceptionBO e) {
             throw new EncontrarUsuarioException("No se pudo obtener el cliente: " + e.getMessage(), e);
@@ -353,14 +358,16 @@ public class ManejoUsuarios implements IManejoUsuarios {
     public AdministradorDTO actualizarAdministrador(AdministradorDTO administrador) throws ActualizarUsuarioException {
         try {
 
-            if (obtenerAdministrador(administrador.getNombreUsuario()) != null) {
+            if (obtenerAdministrador(administrador.getNombreUsuario(), administrador.getContraseña()) != null) {
                 throw new ActualizarUsuarioException("Ya existe un usuario con ese username");
             }
+            
+            
 
             validarDatosUsuario(administrador);
             validarDatosAdministrador(administrador);
 
-            if (!validarAdministrador(administrador.getNombreUsuario(), administrador.getContraseña())) {
+            if (obtenerAdministrador(administrador.getNombreUsuario(), administrador.getContraseña()) == null) {
                 throw new ActualizarUsuarioException("El administrador no es valido");
             }
 
@@ -387,29 +394,33 @@ public class ManejoUsuarios implements IManejoUsuarios {
         }
     }
 
+//    @Override
+//    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
+//        try {
+//            if (nombreUsuario == null || nombreUsuario == "" || nombreUsuario.trim().isEmpty() || contrasena == null || contrasena == "" || contrasena.trim().isEmpty()) {
+//                throw new ValidarUsuarioException("Por favor ingrese los datos de inicio de sesion correctamente");
+//            }
+//
+//            return adminBO.validarAdministradorBO(nombreUsuario, contrasena);
+//
+//        } catch (ValidarUsuarioExceptionBO e) {
+//            throw new ValidarUsuarioException("El cliente no es valido: " + e.getMessage());
+//        }
+//    }
+
     @Override
-    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
-        try {
-            if (nombreUsuario == null || nombreUsuario == "" || nombreUsuario.trim().isEmpty() || contrasena == null || contrasena == "" || contrasena.trim().isEmpty()) {
-                throw new ValidarUsuarioException("Por favor ingrese los datos de inicio de sesion correctamente");
-            }
-
-            return adminBO.validarAdministradorBO(nombreUsuario, contrasena);
-
-        } catch (ValidarUsuarioExceptionBO e) {
-            throw new ValidarUsuarioException("El cliente no es valido: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario) throws EncontrarUsuarioException {
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) throws EncontrarUsuarioException {
 
         try {
             if (nombreUsuario == null || nombreUsuario.trim().isEmpty()) {
                 throw new EncontrarUsuarioException("El nombre de usuario es obligatorio");
             }
+            
+            if (contrasena == null || contrasena.trim().isEmpty()) {
+                throw new EncontrarUsuarioException("La contrasena es obligatoria");
+            }
 
-            AdministradorDTO adminEncontrado = adminBO.obtenerAdministradorBO(nombreUsuario);
+            AdministradorDTO adminEncontrado = adminBO.obtenerAdministradorBO(nombreUsuario, contrasena);
             if (adminEncontrado == null) {
                 throw new EncontrarUsuarioException("No se encontro el administrador");
             }

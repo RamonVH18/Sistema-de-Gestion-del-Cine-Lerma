@@ -9,9 +9,11 @@ import Excepciones.usuarios.ActualizarClienteException;
 import Excepciones.usuarios.CargarHistorialException;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarClienteException;
+import Excepciones.usuarios.ObtenerUsuariosException;
 import Excepciones.usuarios.RegistrarClienteException;
 import Excepciones.usuarios.ValidarUsuarioException;
 import Interfaces.IClienteDAO;
+import Interfaces.IUsuarioDAO;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -23,9 +25,12 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Cliente;
 import entidades.Compra;
+import entidades.Usuario;
 import enums.EstadoUsuario;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.conversions.Bson;
 
 /**
@@ -37,6 +42,7 @@ public class ClienteDAO implements IClienteDAO {
     private static ClienteDAO instance;
     private final MongoConexion conexion = new MongoConexion();
     private final String nombreColeccion = "Usuarios";
+    private final IUsuarioDAO usuarioDAO = UsuarioDAO.getInstance();
 
     //Quizas agregar una proyeccion
     private ClienteDAO() {
@@ -69,7 +75,7 @@ public class ClienteDAO implements IClienteDAO {
             return cliente;
 
         } catch (MongoException e) {
-            throw new RegistrarClienteException("Error al registrar el cliente: " + e.getMessage());
+            throw new RegistrarClienteException("El nombre de usuario ya esta en uso: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -151,62 +157,66 @@ public class ClienteDAO implements IClienteDAO {
         }
     }
 
+//    @Override
+//    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
+//        MongoClient clienteMongo = null;
+//        try {
+//            clienteMongo = conexion.crearConexion();
+//
+//            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+//
+//            MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
+//
+//            Bson filtro = Filters.and(
+//                    Filters.eq("nombreDeUsuario", nombreUsuario),
+//                    Filters.eq("contrasenia", contrasena),
+//                    Filters.eq("rol", "CLIENTE"));
+//
+//            Cliente usuarioEncontrado = coleccion.find(filtro).first();
+//
+//            if (usuarioEncontrado == null) {
+//                throw new ValidarUsuarioException("El usuario no se encontró o la contraseña es incorrecta");
+//            }
+//
+//            if (usuarioEncontrado.getEstado() == EstadoUsuario.BLOQUEADO) {
+//                throw new ValidarUsuarioException("El usuario esta bloqueado");
+//            }
+//
+//            return true;
+//
+//        } catch (MongoException e) {
+//            throw new ValidarUsuarioException("Error al desbloquear el usuario: " + e.getMessage());
+//        } finally {
+//            if (clienteMongo != null) {
+//                conexion.cerrarConexion(clienteMongo);
+//            }
+//        }
+//    }
+
     @Override
-    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
+    public Cliente obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarClienteException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
-
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-
-            MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
 
             Bson filtro = Filters.and(
                     Filters.eq("nombreDeUsuario", nombreUsuario),
                     Filters.eq("contrasenia", contrasena),
                     Filters.eq("rol", "CLIENTE"));
 
-            Cliente usuarioEncontrado = coleccion.find(filtro).first();
-
-            if (usuarioEncontrado == null) {
-                throw new ValidarUsuarioException("El usuario no se encontró o la contraseña es incorrecta");
-            }
-
-            if (usuarioEncontrado.getEstado() == EstadoUsuario.BLOQUEADO) {
-                throw new ValidarUsuarioException("El usuario esta bloqueado");
-            }
-
-            return true;
-
-        } catch (MongoException e) {
-            throw new ValidarUsuarioException("Error al desbloquear el usuario: " + e.getMessage());
-        } finally {
-            if (clienteMongo != null) {
-                conexion.cerrarConexion(clienteMongo);
-            }
-        }
-    }
-
-    @Override
-    public Cliente obtenerCliente(String nombreUsuario) throws EncontrarClienteException {
-        MongoClient clienteMongo = null;
-        try {
-            clienteMongo = conexion.crearConexion();
-            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-
-            Bson filtro = Filters.eq("nombreDeUsuario", nombreUsuario);
             MongoCollection<Cliente> coleccionUsuarios = base.getCollection("usuarios", Cliente.class);
 
-            Cliente cliente = coleccionUsuarios.find(filtro).first();
+            Cliente clienteEncontrado = coleccionUsuarios.find(filtro).first();
 
-            if (cliente == null) {
+            if (clienteEncontrado == null) {
                 throw new EncontrarClienteException("No se encontró el usuario");
             }
 
-            return cliente;
+            return clienteEncontrado;
 
         } catch (MongoException e) {
-            throw new EncontrarClienteException("Error al obtener el usuario: " + e.getMessage());
+            throw new EncontrarClienteException("Error al obtener el cliente: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);

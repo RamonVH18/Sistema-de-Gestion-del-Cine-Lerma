@@ -7,6 +7,7 @@ package entidades;
 import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.codecs.pojo.annotations.BsonProperty;
@@ -16,6 +17,7 @@ import org.bson.types.ObjectId;
  *
  * @author sonic
  */
+@BsonDiscriminator
 public class Usuario {
 
     @BsonId

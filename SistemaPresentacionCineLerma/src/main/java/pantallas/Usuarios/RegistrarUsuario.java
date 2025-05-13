@@ -6,12 +6,15 @@ package pantallas.Usuarios;
 
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
+import Excepciones.EncontrarUsuarioException;
 import control.ControlDeNavegacion;
 import control.IControl;
 import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -296,57 +299,30 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         }
 
         if (Rol.CLIENTE.equals(rolSeleccionado)) {
-            ClienteDTO clienteRegistrar = new ClienteDTO();
+            
+            ClienteDTO clienteRegistrar = construirClienteDTO(rolSeleccionado);
 
-            //setear nombres
-            clienteRegistrar.setNombre(nombreField.getText().trim());
-            clienteRegistrar.setApellidoPaterno(apellidoPaternoField.getText().trim());
-            clienteRegistrar.setApellidoMaterno(apellidoMaternoField.getText().trim());
+            ClienteDTO clienteRegistrado = control.registrarCliente(clienteRegistrar);
 
-            clienteRegistrar.setCorreoElectronico(correoField.getText().trim());
-            clienteRegistrar.setTelefono(telefonoField.getText().trim());
-            clienteRegistrar.setRol(rolSeleccionado);
-            clienteRegistrar.setContraseña(contrasenaField.getText().trim());
-            clienteRegistrar.setNombreUsuario(usuarioField.getText().trim());
-            clienteRegistrar.setEstado(EstadoUsuario.ACTIVO);
-
-            //convertir y setear fehca de nacimiento
-            LocalDateTime nacimiento = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            clienteRegistrar.setFechaNacimiento(nacimiento);
-
-            //setear direccion
-            clienteRegistrar.setCalle(CalleField.getText().trim());
-            clienteRegistrar.setCP(CPField.getText().trim());
-            clienteRegistrar.setNumero(NumDomicilioFIeld.getText().trim());
-
-            control.registrarCliente(clienteRegistrar);
+            if (clienteRegistrado != null) {
+                JOptionPane.showMessageDialog(this, "Cliente registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                control.mostrarIniciarSesion();
+            }
 
         }
 
         if (Rol.ADMINISTRADOR.equals(rolSeleccionado)) {
-            AdministradorDTO adminRegistrar = new AdministradorDTO();
+            
+            AdministradorDTO adminRegistrar = construirAdminDTO(rolSeleccionado);
 
-            //setear nombres
-            adminRegistrar.setNombre(nombreField.getText().trim());
-            adminRegistrar.setApellidoPaterno(apellidoPaternoField.getText().trim());
-            adminRegistrar.setApellidoMaterno(apellidoMaternoField.getText().trim());
+            AdministradorDTO administradorRegistrado = control.registrarAdministrador(adminRegistrar);
 
-            adminRegistrar.setCorreoElectronico(correoField.getText().trim());
-            adminRegistrar.setTelefono(telefonoField.getText().trim());
-            adminRegistrar.setRol(rolSeleccionado);
-            adminRegistrar.setContraseña(contrasenaField.getText().trim());
-            adminRegistrar.setNombreUsuario(usuarioField.getText().trim());
-            adminRegistrar.setEstado(EstadoUsuario.ACTIVO);
-
-            //convertir y setear fehca de nacimiento
-            LocalDateTime nacimiento = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            adminRegistrar.setFechaNacimiento(nacimiento);
-
-            //setear RFC
-            adminRegistrar.setRFC(RFCField.getText().trim());
-
-            control.registrarAdministrador(adminRegistrar);
-
+            if (administradorRegistrado != null) {
+                JOptionPane.showMessageDialog(this, "Administrador registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                control.mostrarIniciarSesion();
+            }
         }
 
     }//GEN-LAST:event_btnConfirmarActionPerformed
@@ -371,6 +347,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         if (comboRol.getItemCount() > 2) {
             comboRol.removeItemAt(2);
         }
+        limpiarCampos();
 
         // Mostrar campos comunes para ambos roles
         mostrarCamposComunes();
@@ -520,6 +497,59 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         CPField.setText("");
         RFCField.setText("");
         jDateChooser1.setDate(null);
+    }
+
+    private AdministradorDTO construirAdminDTO(Rol rolSeleccionado) {
+        AdministradorDTO adminRegistrar = new AdministradorDTO();
+
+            //setear nombres
+            adminRegistrar.setNombre(nombreField.getText().trim());
+            adminRegistrar.setApellidoPaterno(apellidoPaternoField.getText().trim());
+            adminRegistrar.setApellidoMaterno(apellidoMaternoField.getText().trim());
+
+            adminRegistrar.setCorreoElectronico(correoField.getText().trim());
+            adminRegistrar.setTelefono(telefonoField.getText().trim());
+            adminRegistrar.setRol(rolSeleccionado);
+            adminRegistrar.setContraseña(contrasenaField.getText().trim());
+            adminRegistrar.setNombreUsuario(usuarioField.getText().trim());
+            adminRegistrar.setEstado(EstadoUsuario.ACTIVO);
+
+            //convertir y setear fehca de nacimiento
+            LocalDateTime nacimiento = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            adminRegistrar.setFechaNacimiento(nacimiento);
+
+            //setear RFC
+            adminRegistrar.setRFC(RFCField.getText().trim());
+            
+            return adminRegistrar;
+    }
+    
+    private ClienteDTO construirClienteDTO(Rol rolSeleccionado) {
+        ClienteDTO clienteRegistrar = new ClienteDTO();
+
+            //setear nombres
+            clienteRegistrar.setNombre(nombreField.getText().trim());
+            clienteRegistrar.setApellidoPaterno(apellidoPaternoField.getText().trim());
+            clienteRegistrar.setApellidoMaterno(apellidoMaternoField.getText().trim());
+
+            clienteRegistrar.setCorreoElectronico(correoField.getText().trim());
+            clienteRegistrar.setTelefono(telefonoField.getText().trim());
+            clienteRegistrar.setRol(rolSeleccionado);
+            clienteRegistrar.setContraseña(contrasenaField.getText().trim());
+            clienteRegistrar.setNombreUsuario(usuarioField.getText().trim());
+            clienteRegistrar.setEstado(EstadoUsuario.ACTIVO);
+
+            //convertir y setear fehca de nacimiento
+            LocalDateTime nacimiento = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            clienteRegistrar.setFechaNacimiento(nacimiento);
+
+            //setear direccion
+            clienteRegistrar.setCalle(CalleField.getText().trim());
+            clienteRegistrar.setCP(CPField.getText().trim());
+            clienteRegistrar.setNumero(NumDomicilioFIeld.getText().trim());
+            
+            return clienteRegistrar;
+        
     }
 
 

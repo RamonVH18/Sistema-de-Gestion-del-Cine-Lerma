@@ -4,12 +4,22 @@
  */
 package Conexion;
 
-import Excepciones.PersistenciaException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import entidades.Administrador;
+import entidades.Asiento;
+import entidades.AsientoFuncion;
+import entidades.Cliente;
+import entidades.Compra;
+import entidades.Empleado;
+import entidades.Funcion;
+import entidades.Pago;
+import entidades.Pelicula;
+import entidades.Sala;
+import entidades.Usuario;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -26,16 +36,26 @@ public class MongoConexion {
     private final String nombreBase = "CineLerma";
     private final String connectionString = String.format("mongodb://%s:%d", servidor, puerto);
 
-    private final CodecRegistry codec = fromRegistries(
-            MongoClientSettings.getDefaultCodecRegistry(),
-            fromProviders(PojoCodecProvider.builder().automatic(true).build())
-    );
+    private final CodecRegistry codecRegistry;
+
+    public MongoConexion() {
+        PojoCodecProvider pojoCodecProvider = PojoCodecProvider.builder()
+                .register(Usuario.class, Cliente.class, Administrador.class, Sala.class, Pelicula.class, Pago.class, Funcion.class, Empleado.class, Compra.class,
+                         AsientoFuncion.class, Asiento.class)
+                .build();
+
+        this.codecRegistry = fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(pojoCodecProvider)
+        );
+    }
+
 
     public MongoClient crearConexion() throws MongoException {
         try {
-            MongoClientSettings settings = MongoClientSettings.builder()
+             MongoClientSettings settings = MongoClientSettings.builder()
                     .applyConnectionString(new com.mongodb.ConnectionString(connectionString))
-                    .codecRegistry(codec)
+                    .codecRegistry(codecRegistry)
                     .build();
 
             return MongoClients.create(settings);
@@ -46,7 +66,7 @@ public class MongoConexion {
     }
 
     public MongoDatabase obtenerBaseDatos(MongoClient conexion) throws MongoException {
-        return conexion.getDatabase(nombreBase).withCodecRegistry(codec);
+        return conexion.getDatabase(nombreBase).withCodecRegistry(codecRegistry);
 
     }
 
@@ -55,5 +75,4 @@ public class MongoConexion {
             conexion.close();
         }
     }
-
 }

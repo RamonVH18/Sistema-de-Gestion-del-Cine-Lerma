@@ -68,7 +68,7 @@ public class AdministradorDAO implements IAdministradorDAO {
             return administrador;
 
         } catch (MongoException e) {
-            throw new RegistrarAministradorException("Error al registrar el cliente: " + e.getMessage());
+            throw new RegistrarAministradorException("El nombre de usuario ya esta en uso: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -150,52 +150,56 @@ public class AdministradorDAO implements IAdministradorDAO {
         }
     }
 
+//    @Override
+//    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
+//        MongoClient clienteMongo = null;
+//        try {
+//            clienteMongo = conexion.crearConexion();
+//
+//            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+//
+//            MongoCollection<Administrador> coleccion = base.getCollection("usuarios", Administrador.class);
+//
+//            Bson filtro = Filters.and(
+//                    Filters.eq("nombreDeUsuario", nombreUsuario),
+//                    Filters.eq("contrasenia", contrasena),
+//                    Filters.eq("rol", "ADMINISTRADOR"));
+//
+//            Administrador adminEncontrado = coleccion.find(filtro).first();
+//            
+//            System.out.println(adminEncontrado);
+//
+//            if (adminEncontrado == null) {
+//                throw new ValidarUsuarioException("El usuario no se encontró");
+//            }
+//
+//            if (adminEncontrado.getEstado() == EstadoUsuario.BLOQUEADO) {
+//                throw new ValidarUsuarioException("El usuario esta bloqueado");
+//            }
+//
+//            return true;
+//
+//        } catch (MongoException e) {
+//            throw new ValidarUsuarioException("Error al validar y encontrar el usuario: " + e.getMessage());
+//        } finally {
+//            if (clienteMongo != null) {
+//                conexion.cerrarConexion(clienteMongo);
+//            }
+//        }
+//    }
+
     @Override
-    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
+    public Administrador obtenerAdministrador(String nombreUsuario, String contrasena) throws EncontrarAdministradorException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
-
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-
-            MongoCollection<Administrador> coleccion = base.getCollection("usuarios", Administrador.class);
 
             Bson filtro = Filters.and(
                     Filters.eq("nombreDeUsuario", nombreUsuario),
                     Filters.eq("contrasenia", contrasena),
                     Filters.eq("rol", "ADMINISTRADOR"));
-
-            Administrador adminEncontrado = coleccion.find(filtro).first();
             
-            System.out.println(adminEncontrado);
-
-            if (adminEncontrado == null) {
-                throw new ValidarUsuarioException("El usuario no se encontró");
-            }
-
-            if (adminEncontrado.getEstado() == EstadoUsuario.BLOQUEADO) {
-                throw new ValidarUsuarioException("El usuario esta bloqueado");
-            }
-
-            return true;
-
-        } catch (MongoException e) {
-            throw new ValidarUsuarioException("Error al validar y encontrar el usuario: " + e.getMessage());
-        } finally {
-            if (clienteMongo != null) {
-                conexion.cerrarConexion(clienteMongo);
-            }
-        }
-    }
-
-    @Override
-    public Administrador obtenerAdministrador(String nombreUsuario) throws EncontrarAdministradorException {
-        MongoClient clienteMongo = null;
-        try {
-            clienteMongo = conexion.crearConexion();
-            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-
-            Bson filtro = Filters.eq("nombreDeUsuario", nombreUsuario);
             MongoCollection<Administrador> coleccion = base.getCollection("usuarios", Administrador.class);
 
             Administrador adminEncontrado = coleccion.find(filtro).first();

@@ -246,11 +246,14 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
     
+    
+    
     private void filtroEstado(EstadoUsuario estado, List<Bson> filtros){
         //filtrar por estado
             if (estado != null) {
                 filtros.add(Filters.eq("estado", estado.toString()));
             }
     }
+
 
 }

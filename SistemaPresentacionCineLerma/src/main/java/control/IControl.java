@@ -135,9 +135,9 @@ public interface IControl {
     
     public Boolean eliminarCliente (ClienteDTO cliente);
     
-    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
+    //public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
     
-    public ClienteDTO obtenerCliente(String nombreUsuario) throws EncontrarUsuarioException;
+    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
     
     public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente);
     
@@ -149,8 +149,8 @@ public interface IControl {
     
     public Boolean eliminarAdministrador (AdministradorDTO administrador);
     
-    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
+    //public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
     
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario);
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena);
     
 }

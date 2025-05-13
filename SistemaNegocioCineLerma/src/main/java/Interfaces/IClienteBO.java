@@ -28,9 +28,9 @@ public interface IClienteBO {
     
     public Boolean eliminarClienteBO (ClienteDTO cliente) throws EliminarUsuarioExceptionBO;
     
-    public Boolean validarClienteBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO;
+//    public Boolean validarClienteBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO;
     
-    public ClienteDTO obtenerClienteBO(String nombreUsuario) throws EncontrarClienteExceptionBO;
+    public ClienteDTO obtenerClienteBO(String nombreUsuario, String contrasena) throws EncontrarClienteExceptionBO;
     
     public List<CompraDTO> cargarHistorialComprasBO(ClienteDTO cliente) throws CargarHistorialExceptionBO;
 }

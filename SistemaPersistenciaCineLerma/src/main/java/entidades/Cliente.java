@@ -7,20 +7,21 @@ package entidades;
 import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.types.ObjectId;
 
 /**
  *
  * @author Ramon Valencia
  */
-public class Cliente extends Usuario{
+@BsonDiscriminator(key = "tipo", value = "CLIENTE")
+public class Cliente extends Usuario {
 
     private String calle;
 
     private String CP;
 
     private String numero;
-    
 
     public Cliente() {
     }
@@ -38,6 +39,7 @@ public class Cliente extends Usuario{
         this.CP = CP;
         this.numero = numero;
     }
+    
 
     public String getCalle() {
         return calle;
@@ -62,22 +64,28 @@ public class Cliente extends Usuario{
     public void setNumero(String numero) {
         this.numero = numero;
     }
+    
+    
+    
 
     @Override
     public String toString() {
-        return "Cliente{" + "calle=" + calle + ", CP=" + CP + ", numero=" + numero + '}';
+        return "Cliente{"
+                + "idUsuario=" + getIdUsuario()
+                + ", nombreDeUsuario=" + getNombreDeUsuario()
+                + ", contrasenia=" + getContrasenia()
+                + ", nombre=" + getNombre()
+                + ", apellidoPaterno=" + getApellidoPaterno()
+                + ", apellidoMaterno=" + getApellidoMaterno()
+                + ", correoElectronico=" + getCorreoElectronico()
+                + ", fechaNacimiento=" + getFechaNacimiento()
+                + ", telefono=" + getTelefono()
+                + ", estado=" + getEstado()
+                + ", rol=" + getRol()
+                + ", calle=" + calle
+                + ", CP=" + CP
+                + ", numero=" + numero
+                + '}';
     }
-
-    
-
-    
-    
-    
-
-    
-    
-    
-
-    
 
 }

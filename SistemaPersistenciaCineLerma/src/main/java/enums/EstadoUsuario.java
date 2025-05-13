@@ -4,11 +4,17 @@
  */
 package enums;
 
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
+
 /**
  *
  * @author sonic
  */
 public enum EstadoUsuario {
-    ACTIVO, BLOQUEADO;
+    @BsonRepresentation(BsonType.STRING)
+    ACTIVO, 
+    @BsonRepresentation(BsonType.STRING)
+    BLOQUEADO;
     
 }

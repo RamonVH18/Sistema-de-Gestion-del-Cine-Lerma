@@ -26,9 +26,9 @@ public interface IClienteDAO {
     
     public Boolean eliminarCliente (Cliente cliente) throws EliminarUsuarioException;
     
-    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
+//    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
     
-    public Cliente obtenerCliente(String nombreUsuario) throws EncontrarClienteException;
+    public Cliente obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarClienteException;
     
     public List<Compra> cargarHistorialCompras(Cliente cliente) throws CargarHistorialException;
     
