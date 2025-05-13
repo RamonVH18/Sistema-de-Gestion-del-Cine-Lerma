@@ -22,8 +22,6 @@ public interface IFuncionDAO {
 
     public List<Funcion> buscarFuncionesPelicula(String nombrepelicula);
 
-    public List<Funcion> buscarFuncionesActivas();
-
     public Funcion buscarFuncionPorId(ObjectId idFuncion);
 
 }

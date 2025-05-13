@@ -112,18 +112,7 @@ public class FuncionDAO implements IFuncionDAO {
         MongoClient clienteMongo = conexion.crearConexion();
         MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
         MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombrePelicula, Funcion.class);
-        Bson filtro = Filters.eq("pelicula.nombre", nombrePelicula);
-        List<Funcion> funciones = coleccionFunciones.find(filtro).into(new ArrayList<>());
-        conexion.cerrarConexion(clienteMongo);
-        return funciones;
-    }
-
-    @Override
-    public List<Funcion> buscarFuncionesActivas() {
-        MongoClient clienteMongo = conexion.crearConexion();
-        MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
-        MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
-        Bson filtro = Filters.eq("estado", true);
+        Bson filtro = Filters.eq("pelicula.titulo", nombrePelicula);
         List<Funcion> funciones = coleccionFunciones.find(filtro).into(new ArrayList<>());
         conexion.cerrarConexion(clienteMongo);
         return funciones;

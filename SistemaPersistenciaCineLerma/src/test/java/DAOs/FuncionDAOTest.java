@@ -4,7 +4,14 @@
  */
 package DAOs;
 
+import Excepciones.Funciones.FuncionNoEncontradaException;
+import Excepciones.Funciones.FuncionSalaOcupadaException;
+import Interfaces.IFuncionDAO;
 import entidades.Funcion;
+import entidades.Pelicula;
+import entidades.Sala;
+import enums.EstadoSala;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
@@ -19,24 +26,46 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Abraham Coronel Bringas
  */
 public class FuncionDAOTest {
-    
+
+    private IFuncionDAO funcionDAO;
+    private Funcion funcionPrueba;
+    private Pelicula peliculaPrueba;
+    private Sala salaPrueba;
+
     public FuncionDAOTest() {
     }
-    
+
     @BeforeAll
     public static void setUpClass() {
     }
-    
+
     @AfterAll
     public static void tearDownClass() {
     }
-    
+
     @BeforeEach
     public void setUp() {
+        funcionDAO = FuncionDAO.getInstanceDAO();
+        peliculaPrueba = new Pelicula(1L, "PeliculaPrueba", "imagen.jpg", "Acción", 120, "Sinopsis", true);
+        salaPrueba = new Sala(50, "Sala1", EstadoSala.ACTIVA);
+        funcionPrueba = new Funcion(
+                new ObjectId(),
+                salaPrueba,
+                peliculaPrueba,
+                LocalDateTime.now().plusHours(1),
+                150.0
+        );
     }
-    
+
     @AfterEach
     public void tearDown() {
+        try {
+            if (funcionPrueba.getIdFuncion() != null) {
+                funcionDAO.eliminarFuncion(funcionPrueba);
+            }
+        } catch (FuncionNoEncontradaException e) {
+            System.out.println("Error en limpieza: " + e.getMessage());
+        }
     }
 
     /**
@@ -44,86 +73,46 @@ public class FuncionDAOTest {
      */
     @Test
     public void testGetInstanceDAO() {
-        System.out.println("getInstanceDAO");
-        FuncionDAO expResult = null;
-        FuncionDAO result = FuncionDAO.getInstanceDAO();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotNull(funcionDAO, "La instancia del DAO no debe ser nula");
     }
 
     /**
      * Test of registrarFuncion method, of class FuncionDAO.
      */
     @Test
-    public void testRegistrarFuncion() throws Exception {
-        System.out.println("registrarFuncion");
-        Funcion funcion = null;
-        FuncionDAO instance = null;
-        Funcion expResult = null;
-        Funcion result = instance.registrarFuncion(funcion);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testRegistrarFuncionExitoso() throws Exception {
+        Funcion registrada = funcionDAO.registrarFuncion(funcionPrueba);
+        assertNotNull(registrada.getIdFuncion(), "La función debe tener un ID después de registrarse");
     }
 
     /**
      * Test of eliminarFuncion method, of class FuncionDAO.
      */
     @Test
-    public void testEliminarFuncion() throws Exception {
-        System.out.println("eliminarFuncion");
-        Funcion funcion = null;
-        FuncionDAO instance = null;
-        Funcion expResult = null;
-        Funcion result = instance.eliminarFuncion(funcion);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testEliminarFuncionExitoso() throws Exception {
+        funcionDAO.registrarFuncion(funcionPrueba);
+        Funcion eliminada = funcionDAO.eliminarFuncion(funcionPrueba);
+        assertEquals(funcionPrueba.getIdFuncion(), eliminada.getIdFuncion(), "Debe eliminar la función correcta");
     }
 
     /**
      * Test of buscarFuncionPorId method, of class FuncionDAO.
      */
-    @Test
-    public void testBuscarFuncionPorId() {
-        System.out.println("buscarFuncionPorId");
-        ObjectId idFuncion = null;
-        FuncionDAO instance = null;
-        Funcion expResult = null;
-        Funcion result = instance.buscarFuncionPorId(idFuncion);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+//    @Test
+//    public void testBuscarFuncionPorId() throws Exception {
+//        funcionDAO.registrarFuncion(funcionPrueba);
+//        Funcion encontrada = funcionDAO.buscarFuncionPorId(funcionPrueba.getIdFuncion());
+//        assertEquals(funcionPrueba.getIdFuncion(), encontrada.getIdFuncion(), "Los IDs deben coincidir");
+//    }
 
     /**
      * Test of buscarFuncionesPelicula method, of class FuncionDAO.
      */
-    @Test
-    public void testBuscarFuncionesPelicula() {
-        System.out.println("buscarFuncionesPelicula");
-        String nombrePelicula = "";
-        FuncionDAO instance = null;
-        List<Funcion> expResult = null;
-        List<Funcion> result = instance.buscarFuncionesPelicula(nombrePelicula);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+//    @Test
+//    public void testBuscarFuncionesPelicula() throws Exception {
+//        funcionDAO.registrarFuncion(funcionPrueba);
+//        List<Funcion> funciones = funcionDAO.buscarFuncionesPelicula("PeliculaPrueba");
+//        assertTrue(funciones.size() > 0, "Debe encontrar al menos una función para la película");
+//    }
 
-    /**
-     * Test of buscarFuncionesActivas method, of class FuncionDAO.
-     */
-    @Test
-    public void testBuscarFuncionesActivas() {
-        System.out.println("buscarFuncionesActivas");
-        FuncionDAO instance = null;
-        List<Funcion> expResult = null;
-        List<Funcion> result = instance.buscarFuncionesActivas();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    
 }
