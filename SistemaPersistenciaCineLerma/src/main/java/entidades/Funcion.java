@@ -27,8 +27,6 @@ public class Funcion {
 
     private Double precio;
 
-    private List<AsientoFuncion> asientosFuncion;
-
     public Funcion() {
     }
 
@@ -39,7 +37,6 @@ public class Funcion {
         this.fechaHora = fechaHora;
         this.estado = estado;
         this.precio = precio;
-        this.asientosFuncion = new ArrayList<>();
     }
 
     public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Boolean estado, Double precio) {
@@ -48,7 +45,6 @@ public class Funcion {
         this.fechaHora = fechaHora;
         this.estado = estado;
         this.precio = precio;
-        this.asientosFuncion = new ArrayList<>();
     }
 
     public ObjectId getIdFuncion() {
@@ -83,11 +79,11 @@ public class Funcion {
         this.fechaHora = fechaHora;
     }
     
-    public String getIdExportable(){
+    public String getIdString(){
         return idFuncion.toString();
     }
     
-    public void setIdImportado(String idImportado) {
+    public void setIdString(String idImportado) {
         this.idFuncion = new ObjectId(idImportado);
     }
 
@@ -116,7 +112,6 @@ public class Funcion {
                 + ", fechaHora=" + fechaHora
                 + ", estado=" + estado
                 + ", precio=" + precio
-                + ", asientosFuncion=" + asientosFuncion
                 + '}';
     }
 }

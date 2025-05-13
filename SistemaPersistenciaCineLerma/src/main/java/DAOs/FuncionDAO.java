@@ -75,7 +75,7 @@ public class FuncionDAO implements IFuncionDAO {
             String mensaje = funcionActualizada.getEstado()
                     ? "La función ha sido activada"
                     : "La función ha sido cancelada";
-            notificarObservadores(funcionActualizada.getIdExportable(), "CAMBIO_ESTADO", mensaje);
+            notificarObservadores(funcionActualizada.getIdString(), "CAMBIO_ESTADO", mensaje);
         }
 
         // Verificar cambio de horario
@@ -83,7 +83,7 @@ public class FuncionDAO implements IFuncionDAO {
             String mensaje = "Cambio de horario: de "
                     + funcionOriginal.getFechaHora() + " a "
                     + funcionActualizada.getFechaHora();
-            notificarObservadores(funcionActualizada.getIdExportable(), "CAMBIO_HORARIO", mensaje);
+            notificarObservadores(funcionActualizada.getIdString(), "CAMBIO_HORARIO", mensaje);
         }
 
         // Verificar cambio de sala
@@ -91,7 +91,7 @@ public class FuncionDAO implements IFuncionDAO {
             String mensaje = "Cambio de sala: de sala #"
                     + funcionOriginal.getSala().getNumSala() + " a sala #"
                     + funcionActualizada.getSala().getNumSala();
-            notificarObservadores(funcionActualizada.getIdExportable(), "CAMBIO_SALA", mensaje);
+            notificarObservadores(funcionActualizada.getIdString(), "CAMBIO_SALA", mensaje);
         }
 
         // Verificar cambio de precio
@@ -99,7 +99,7 @@ public class FuncionDAO implements IFuncionDAO {
             String mensaje = "Cambio de precio: de $"
                     + funcionOriginal.getPrecio() + " a $"
                     + funcionActualizada.getPrecio();
-            notificarObservadores(funcionActualizada.getIdExportable(), "CAMBIO_PRECIO", mensaje);
+            notificarObservadores(funcionActualizada.getIdString(), "CAMBIO_PRECIO", mensaje);
         }
     }
 
