@@ -4,6 +4,7 @@
  */
 package Interfaces;
 
+import Excepciones.Funciones.FuncionDuracionIncorrectaException;
 import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
@@ -22,12 +23,12 @@ public interface IFuncionDAO {
 
     public Funcion eliminarFuncion(Funcion funcion) throws FuncionNoEncontradaException;
 
-    public List<Funcion> buscarFuncionesPelicula(String nombrepelicula);
+    public List<Funcion> buscarFuncionesPelicula(String nombrePelicula);
 
     public Funcion buscarFuncionId(ObjectId idFuncion);
     
-    public Funcion buscarFuncionFechaInicio(LocalDateTime fechaHora);
+    public List<Funcion> buscarFuncionFechaInicio(LocalDateTime fechaHora);
     
-    public LocalDateTime calcularHoraTerminoFuncion(LocalDateTime horaInicio);
+    public LocalDateTime calcularHoraTerminoFuncion(ObjectId IdFuncion) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException;
 
 }

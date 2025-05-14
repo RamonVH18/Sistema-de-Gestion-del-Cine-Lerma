@@ -5,23 +5,23 @@
 package DAOs;
 
 import Conexion.MongoConexion;
+import Excepciones.Funciones.FuncionDuracionIncorrectaException;
 import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Interfaces.IFuncionDAO;
-import Interfaces.IPeliculaDAO;
-import Interfaces.ObservadorFuncion;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import entidades.Funcion;
 import enums.EstadoSala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -32,14 +32,8 @@ import org.bson.types.ObjectId;
 public class FuncionDAO implements IFuncionDAO {
 
     private static FuncionDAO instance;
-    private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO();
     private final MongoConexion conexion = new MongoConexion();
     private final String nombreColeccion = "Funciones";
-    private Map<String, List<ObservadorFuncion>> observadores;
-
-    private FuncionDAO() {
-        this.observadores = new HashMap();
-    }
 
     public static FuncionDAO getInstanceDAO() {
         if (instance == null) {
@@ -127,22 +121,77 @@ public class FuncionDAO implements IFuncionDAO {
         try {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
-            Bson filtro = Filters.eq("pelicula.titulo", nombrePelicula);
-            return coleccionFunciones.find(filtro).into(new ArrayList<>());
+
+            // Cadena de agregación
+            List<Bson> cadena = new ArrayList<>();
+
+            // lookup para unir Funciones con Peliculas
+            cadena.add(Aggregates.lookup(
+                    "Peliculas",
+                    "pelicula.idPelicula",
+                    "_id",
+                    "peliculaInfo"
+            ));
+
+            // unwind para descomponer el arreglo
+            cadena.add(Aggregates.unwind("$peliculaInfo"));
+
+            // filtrar por titulo
+            Bson filtroTitulo = Aggregates.match(
+                    Filters.regex("peliculaInfo.titulo", Pattern.compile(nombrePelicula, Pattern.CASE_INSENSITIVE))
+            );
+            cadena.add(filtroTitulo);
+
+            // proyector para que se vea la funcion bien
+            cadena.add(Aggregates.project(Projections.fields(
+                    Projections.include("idFuncion", "sala", "fechaHora", "precio"),
+                    Projections.computed("pelicula", "$peliculaInfo")
+            )));
+
+            return coleccionFunciones.aggregate(cadena).into(new ArrayList<>());
+
         } finally {
             conexion.cerrarConexion(clienteMongo);
-
         }
     }
 
     @Override
-    public Funcion buscarFuncionFechaInicio(LocalDateTime fechaHora) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Funcion> buscarFuncionFechaInicio(LocalDateTime fechaHora) {
+        MongoClient clienteMongo = conexion.crearConexion();
+        try {
+            MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+            Bson filtro = Filters.eq("fechaHora", fechaHora);
+            return coleccionFunciones.find(filtro).into(new ArrayList<>());
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
     }
 
     @Override
-    public LocalDateTime calcularHoraTerminoFuncion(LocalDateTime horaInicio) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public LocalDateTime calcularHoraTerminoFuncion(ObjectId idFuncion) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException {
+        MongoClient clienteMongo = conexion.crearConexion();
+        try {
+            MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+
+            // Buscar la funcion por su Id
+            Bson filtro = Filters.eq("_id", idFuncion);
+            Funcion funcion = coleccionFunciones.find(filtro).first();
+
+            if (funcion == null) {
+                throw new FuncionNoEncontradaException("Error: Funcion no encontrada");
+            }
+
+            Integer duracion = funcion.getPelicula().getDuracion();
+            if (duracion == null) {
+                throw new FuncionDuracionIncorrectaException("La duracion de la pelicula no es correcta");
+            }
+
+            return funcion.getFechaHora().plusMinutes(duracion);
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
     }
 
 }

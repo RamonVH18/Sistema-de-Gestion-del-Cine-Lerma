@@ -75,6 +75,7 @@ public class Funcion {
         this.fechaHora = fechaHora;
     }
 
+    //Id en string
     public String getIdString() {
         return idFuncion.toString();
     }

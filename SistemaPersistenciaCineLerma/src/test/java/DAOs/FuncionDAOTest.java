@@ -50,13 +50,12 @@ public class FuncionDAOTest {
     public void setUp() {
         funcionDAO = FuncionDAO.getInstanceDAO();
         ObjectId id = new ObjectId();
-        peliculaPrueba = new Pelicula(id,"", "PeliculaPrueba", "Accion", 200, "B15", "Sinopsis", true);
+        peliculaPrueba = new Pelicula(id, "", "PeliculaPrueba", "Accion", 200, "B15", "Sinopsis", true);
 
-        // Inicializar Sala con asientos
         salaPrueba = new Sala(50, "Sala1", EstadoSala.ACTIVA);
         List<Asiento> asientos = new ArrayList<>();
         for (int i = 1; i <= 50; i++) {
-            asientos.add(new Asiento(String.valueOf(i))); // Números como String
+            asientos.add(new Asiento(String.valueOf(i)));
         }
         salaPrueba.setAsientos(asientos);
 
@@ -109,7 +108,7 @@ public class FuncionDAOTest {
                 150.0
         );
 
-        assertThrows(FuncionSalaVaciaException.class, () -> { // Crear esta excepción
+        assertThrows(FuncionSalaVaciaException.class, () -> { 
             funcionDAO.registrarFuncion(funcionInvalida);
         });
     }
@@ -137,7 +136,7 @@ public class FuncionDAOTest {
     public void testEliminarFuncionExitoso() throws Exception {
         funcionDAO.registrarFuncion(funcionPrueba);
         Funcion eliminada = funcionDAO.eliminarFuncion(funcionPrueba);
-        assertEquals(funcionPrueba.getIdFuncion(), eliminada.getIdFuncion(), "Debe eliminar la función correcta");
+        assertEquals(funcionPrueba.getIdFuncion(), eliminada.getIdFuncion(), "Debe eliminar la funcion correcta");
     }
 
     @Test
@@ -154,7 +153,7 @@ public class FuncionDAOTest {
         // Verificar que se lanza la excepción al intentar eliminar
         assertThrows(FuncionNoEncontradaException.class, () -> {
             funcionDAO.eliminarFuncion(funcionNoRegistrada);
-        }, "Debe fallar al eliminar una función no registrada");
+        }, "Debe fallar al eliminar una funcion no registrada");
     }
 
     /**
@@ -164,7 +163,7 @@ public class FuncionDAOTest {
     public void testBuscarFuncionPorId() throws Exception {
         funcionDAO.registrarFuncion(funcionPrueba);
         Funcion encontrada = funcionDAO.buscarFuncionId(funcionPrueba.getIdFuncion());
-        assertEquals(funcionPrueba.getIdFuncion(), encontrada.getIdFuncion(), "Los IDs deben coincidir");
+        assertEquals(funcionPrueba.getIdFuncion(), encontrada.getIdFuncion(), "Los Ids deben coincidir");
     }
 
     /**
@@ -174,7 +173,7 @@ public class FuncionDAOTest {
     public void testBuscarFuncionesPelicula() throws Exception {
         funcionDAO.registrarFuncion(funcionPrueba);
         List<Funcion> funciones = funcionDAO.buscarFuncionesPelicula("PeliculaPrueba");
-        assertTrue(funciones.size() > 0, "Debe encontrar al menos una función para la película");
+        assertTrue(funciones.size() > 0, "Debe encontrar al menos una funcion para la pelicula");
     }
 
 }
