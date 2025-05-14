@@ -96,4 +96,15 @@ public class Funcion {
         return "Funcion{" + "idFuncion=" + idFuncion + ", sala=" + sala + ", pelicula=" + pelicula + ", fechaHora=" + fechaHora + ", precio=" + precio + '}';
     }
 
+    private LocalDateTime calcularHoraTermino() {
+        if (this.pelicula == null || this.pelicula.getDuracion() == null) {
+            return this.fechaHora;
+        }
+        return this.fechaHora.plusMinutes(this.pelicula.getDuracion());
+    }
+
+    public LocalDateTime getHoraTermino() {
+        return calcularHoraTermino();
+    }
+
 }

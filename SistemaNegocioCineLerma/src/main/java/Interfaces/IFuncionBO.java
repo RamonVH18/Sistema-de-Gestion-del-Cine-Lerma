@@ -5,7 +5,6 @@
 package Interfaces;
 
 import DTOs.FuncionDTO;
-import DTOs.HistorialFuncionesDTO;
 import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionRegistrarException;
 import java.util.List;
@@ -20,8 +19,6 @@ public interface IFuncionBO {
 
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminarException;
 
-    public List<HistorialFuncionesDTO> buscarHistorialFunciones();
-
-    public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula);
+    public List<FuncionDTO> buscarFunciones(String nombrePelicula);
 
 }

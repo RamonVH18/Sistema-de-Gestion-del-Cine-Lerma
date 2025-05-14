@@ -6,9 +6,9 @@ package BOs;
 
 import DAOs.FuncionDAO;
 import DTOs.FuncionDTO;
-import DTOs.HistorialFuncionesDTO;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
+import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionRegistrarException;
 import Interfaces.IFuncionBO;
@@ -51,6 +51,8 @@ public class FuncionBO implements IFuncionBO {
             return funcionMapper.toFuncionDTO(funcionRegistrado);
         } catch (FuncionSalaOcupadaException e) {
             throw new FuncionRegistrarException("Error al registrar la funcion" + e.getMessage(), e);
+        } catch (FuncionSalaVaciaException e) {
+            throw new FuncionRegistrarException("Error la sala es nula o no existe" + e.getMessage(), e);
         }
 
     }
@@ -75,7 +77,7 @@ public class FuncionBO implements IFuncionBO {
     }
 
     @Override
-    public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula) {
+    public List<FuncionDTO> buscarFunciones(String nombrePelicula) {
         List<FuncionDTO> funcionesDTO = new ArrayList<>();
         try {
             List<Funcion> funcionesEntity = funcionDAO.buscarFuncionesPelicula(nombrePelicula);
@@ -86,11 +88,6 @@ public class FuncionBO implements IFuncionBO {
             System.err.println("Error al buscar funciones: " + e.getMessage());
         }
         return funcionesDTO;
-    }
-
-    @Override
-    public List<HistorialFuncionesDTO> buscarHistorialFunciones() {
-        return null;
     }
 
 }

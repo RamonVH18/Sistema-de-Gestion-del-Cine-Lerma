@@ -9,6 +9,7 @@ import DTOs.ClienteDTO;
 import DTOs.FuncionDTO;
 import DTOs.HistorialFuncionesDTO;
 import DTOs.SalaDTO;
+import Excepciones.FuncionBoletosVendidosException;
 import Excepciones.FuncionSolapamientoSalaException;
 import Excepciones.FuncionCapacidadSalaException;
 import Excepciones.FuncionDatosIncorrectosException;
@@ -42,7 +43,7 @@ public class ManejoFunciones implements IManejoFunciones {
     private final IFuncionBO funcionBO = FuncionBO.getInstanceDAO();
 
     @Override
-    public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException {
+    public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionSolapamientoSalaException, FuncionCapacidadSalaException {
         // Validar que funcionDTO no sea nulo o vacio
         if (funcionDTO == null) {
             throw new FuncionDatosIncorrectosException("Error: Los datos de la funcion no pueden estar vacios.");
@@ -74,16 +75,18 @@ public class ManejoFunciones implements IManejoFunciones {
         try {
             return funcionBO.registraFuncion(funcionDTO);
 
-        } catch (FuncionRegistrarException ex) {
-            throw new FuncionDatosIncorrectosException("Error: No se puedo registrar la funcion", ex);
+        } catch (FuncionRegistrarException e) {
+            throw new FuncionDatosIncorrectosException("Error: No se puedo registrar la funcion", e);
         }
     }
 
     @Override
-    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException {
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionBoletosVendidosException {
         if (funcionDTO == null || funcionDTO.getId() == null) {
             throw new FuncionDatosIncorrectosException("La funcion no existe o los datos no son validos");
         }
+        
+        // Validar que no haya boletos vendidos
 
         try {
             return funcionBO.eliminarFuncion(funcionDTO);
@@ -93,64 +96,9 @@ public class ManejoFunciones implements IManejoFunciones {
     }
 
     @Override
-    public List<HistorialFuncionesDTO> buscarHistorialFunciones() {
-        return funcionBO.buscarHistorialFunciones();
-    }
+    public List<FuncionDTO> buscarFuncionesPelicula(String pelicula) {
 
-    @Override
-    public FuncionDTO validarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionSolapamientoSalaException, FuncionCapacidadSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        return null;
 
-    @Override
-    public List<FuncionDTO> buscarFuncionesPelicula(String pelicula) throws FuncionDatosIncorrectosException {
-        if (pelicula == null || pelicula.trim().isEmpty()) {
-            throw new FuncionDatosIncorrectosException("El nombre de la pelicula no puede estar vacio");
-        }
-        try {
-            return funcionBO.buscarFuncionesActivas();
-        } catch (FuncionFechaValidaException ex) {
-            throw new FuncionDatosIncorrectosException("No hay funciones para esta pelicula");
-        }
     }
-
-    @Override
-    public List<FuncionDTO> buscarFuncionesActivas() {
-        try {
-            return funcionBO.buscarFuncionesActivas();
-        } catch (FuncionFechaValidaException e) {
-            throw new RuntimeException("Error al buscar funciones activas");
-        }
-    }
-
-    @Override
-    public void suscribirClienteAFuncion(ClienteDTO cliente, String idFuncion) throws FuncionSolapamientoSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void desuscribirClienteDeFuncion(ClienteDTO cliente, String idFuncion) throws FuncionSolapamientoSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean cambiarEstadoFuncion(String idFuncion, Boolean nuevoEstado) throws FuncionSolapamientoSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean cambiarHorarioFuncion(String idFuncion, LocalDateTime nuevoHorario) throws FuncionSolapamientoSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean cambiarSalaFuncion(String idFuncion, SalaDTO nuevaSala) throws FuncionSolapamientoSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean cambiarPrecioFuncion(String idFuncion, Double nuevoPrecio) throws FuncionSolapamientoSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
 }

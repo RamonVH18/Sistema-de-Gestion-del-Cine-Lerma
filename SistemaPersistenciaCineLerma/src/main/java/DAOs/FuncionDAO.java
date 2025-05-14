@@ -17,6 +17,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import entidades.Funcion;
 import enums.EstadoSala;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,7 +126,7 @@ public class FuncionDAO implements IFuncionDAO {
         MongoClient clienteMongo = conexion.crearConexion();
         try {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombrePelicula, Funcion.class);
+            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
             Bson filtro = Filters.eq("pelicula.titulo", nombrePelicula);
             return coleccionFunciones.find(filtro).into(new ArrayList<>());
         } finally {
