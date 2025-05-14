@@ -6,22 +6,24 @@ package DAOs;
 
 import Conexion.MongoConexion;
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
+import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloObtencionColeccionException;
-import Excepciones.PersistenciaException;
+import Excepciones.AsientoFuncion.FalloOcuparAsientosFuncionException;
 import Interfaces.IAsientoFuncionDAO;
 import Interfaces.IFuncionDAO;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import entidades.Asiento;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
-import entidades.Sala;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.bson.conversions.Bson;
 
 /**
  * Clase AsientoFuncionDAO encargada de manipular los AsientoFuncion persistidos
@@ -48,74 +50,110 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
      *
      * @return
      */
-    public static AsientoFuncionDAO getInstance() {
+    public static AsientoFuncionDAO getInstanceDAO() {
         if (instance == null) {
             instance = new AsientoFuncionDAO();
         }
         return instance;
     }
+
     /**
      * Metodo para agregar nuevos Asientos de una funcion en la base de datos
+     *
      * @param asientosFuncion
      * @return
-     * @throws FalloCreacionAsientosFuncionException 
+     * @throws FalloCreacionAsientosFuncionException
      */
     @Override
     public List<AsientoFuncion> agregarAsientosFuncion(List<AsientoFuncion> asientosFuncion) throws FalloCreacionAsientosFuncionException {
         MongoClient clienteMongo = null;
         try {
-            MongoCollection colecionAF = obtenerColeccionAsientoFuncion(clienteMongo);
-            
-            colecionAF.insertMany(asientosFuncion);
-            
+            // Se llama al metodo para obtener la coleccion de asientos funcion de la base de datos
+            MongoCollection coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
+            // Se inserta toda la lista de asientosFuncion
+            coleccionAF.insertMany(asientosFuncion);
+
             return asientosFuncion;
         } catch (FalloObtencionColeccionException e) {
             throw new FalloCreacionAsientosFuncionException("Hubo un error al insertar los asientos en la base de datos: " + e.getMessage());
         }
     }
 
+    /**
+     * Metodo para mostrar los asientos que esten relacionados a una funcion
+     *
+     * @param funcion
+     * @param mostrarDisponibles
+     * @return
+     * @throws FalloMostrarAsientosFuncionException
+     */
     @Override
-    public List<AsientoFuncion> mostrarAsientosFunciones(Funcion funcion) throws PersistenciaException {
+    public List<AsientoFuncion> mostrarListaAsientosPorFuncion(Funcion funcion, Boolean mostrarDisponibles) throws FalloMostrarAsientosFuncionException {
+        MongoClient clienteMongo = null;
+        try {
+            MongoCollection<AsientoFuncion> coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
 
-//        List<AsientoFuncion> asientosFuncion = asientosHarcodeados();
-//        for (int i = 1; i < asientosFuncion.size(); i++) {
-//            AsientoFuncion asiento = asientosFuncion.get(i);
-//            if (asiento.getFuncion() == funcion) {
-//                asientosFuncion.add(asiento);
-//            }
-//        }
-//        return asientosFuncion;
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            Bson filtroFuncion = filtroFuncion(funcion.getIdString(), mostrarDisponibles);
+
+            List<AsientoFuncion> asientosFuncion = coleccionAF.find(filtroFuncion).into(new ArrayList<>());
+
+            return asientosFuncion;
+
+        } catch (FalloObtencionColeccionException e) {
+            throw new FalloMostrarAsientosFuncionException("Hubo un error al mostrar los asientos de la funcion: " + e.getMessage());
+        }
     }
 
     @Override
-    public Boolean ocuparAsiento(AsientoFuncion asiento) throws PersistenciaException {
-//        asientosHarcodeados();
-//        int indice = asientosFuncion.indexOf(asiento);
-//
-//        asiento.setDisponibilidad(Boolean.FALSE);
-//
-//        asientosFuncion.set(indice, asiento);
-//
-//        return true;
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean ocuparAsientos(List<AsientoFuncion> asientosReservados, String idFuncion) throws FalloOcuparAsientosFuncionException {
+        MongoClient clienteMongo = null;
+        try {
+            MongoCollection<AsientoFuncion> coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
+
+            Bson filtroFuncion = filtroFuncion(
+                    asientosReservados.get(0).getFuncion().getIdString(),
+                    Boolean.FALSE
+            );
+            
+            Bson filtroAsientosFuncion = filtroAsientoFuncion(filtroFuncion, asientosReservados, idFuncion);
+            
+            Bson ocuparAsiento = Updates.set("disponibilidad", false);
+            
+            UpdateResult actualizacion = coleccionAF.updateMany(filtroAsientosFuncion, ocuparAsiento);
+            
+            return actualizacion.wasAcknowledged();
+        } catch (FalloObtencionColeccionException e) {
+            throw new FalloOcuparAsientosFuncionException("Hubo un error al ocupar los asientos: " + e.getMessage());
+        }
     }
 
-    @Override
-    public List<AsientoFuncion> mostrarAsientosDisponibles(Funcion funcion) throws PersistenciaException {
-//        asientosHarcodeados();
-//        List<AsientoFuncion> asientosFuncion = asientosHarcodeados();
-//        List<AsientoFuncion> asientos = new ArrayList<>();
-//        for (int i = 1; i < asientosFuncion.size(); i++) {
-//            AsientoFuncion asiento = asientosFuncion.get(i);
-//            if (asiento.getFuncion().getIdFuncion() == funcion.getIdFuncion() && asiento.getDisponibilidad() == true) {
-//                asientos.add(asiento);
-//            }
-//        }
-//        return asientos;
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
+    private Bson filtroFuncion(String idFuncion, Boolean mostrarDisponibles) {
+        Bson filtro = Filters.eq("idFuncion", idFuncion);
+        if (mostrarDisponibles) {
+            List<Bson> filtradores = Arrays.asList(
+                    Filters.eq("disponibilidad", mostrarDisponibles),
+                    filtro
+            );
+            return Filters.and(filtradores);
+        }
+        return filtro;
+    }
+    
+    private Bson filtroAsientoFuncion(Bson filtroAF, List<AsientoFuncion> asientosFuncion, String idFuncion) {
+        List<Bson> filtradores = new ArrayList();
+        for (AsientoFuncion asiento : asientosFuncion) {
+                List<Bson> filtrador = Arrays.asList(
+                        filtroAF,
+                        Filters.eq("numAsiento", asiento.getNumAsiento())
+                );
+                Bson filtro = Filters.and(filtrador);
+                filtradores.add(filtro);
+            }
+        return Filters.or(filtradores);
+    }
+    
+    
     private MongoCollection<AsientoFuncion> obtenerColeccionAsientoFuncion(MongoClient clienteMongo) throws FalloObtencionColeccionException {
         try {
             clienteMongo = conexion.crearConexion(); // Se llama a un metodo de la clase conexion para que se cree la conexion
@@ -129,5 +167,4 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             throw new FalloObtencionColeccionException("Error al realizar la conexion: " + e.getMessage());
         }
     }
-
 }

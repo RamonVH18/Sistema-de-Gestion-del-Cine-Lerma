@@ -5,6 +5,8 @@
 package Interfaces;
 
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
+import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
+import Excepciones.AsientoFuncion.FalloOcuparAsientosFuncionException;
 import Excepciones.PersistenciaException;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
@@ -18,9 +20,7 @@ public interface IAsientoFuncionDAO {
     
     public List<AsientoFuncion> agregarAsientosFuncion(List<AsientoFuncion> asientosFuncion) throws FalloCreacionAsientosFuncionException;
     
-    public List<AsientoFuncion> mostrarAsientosFunciones(Funcion funcion) throws PersistenciaException;
+    public List<AsientoFuncion> mostrarListaAsientosPorFuncion(Funcion funcion, Boolean disponibilidad) throws FalloMostrarAsientosFuncionException;
     
-    public Boolean ocuparAsiento(AsientoFuncion asiento) throws PersistenciaException;
-    
-    public List<AsientoFuncion> mostrarAsientosDisponibles(Funcion funcion) throws PersistenciaException;
+    public Boolean ocuparAsientos(List<AsientoFuncion> asientosReservados, String idFuncion) throws FalloOcuparAsientosFuncionException;
 }

@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class pruebasSalaDAO {
 
-    private static ISalaDAO salaDAO = SalaDAO.getInstance();
+    private static ISalaDAO salaDAO = SalaDAO.getInstanceDAO();
 
     /**
      * @param args the command line arguments

@@ -4,19 +4,16 @@
  */
 package DTOs;
 
-import entidades.Cliente;
-import entidades.Funcion;
-
 /**
  *
  * @author Ramon Valencia
  */
 public class AsientoFuncionDTO {
 
-    private Funcion funcion;
+    private String idFuncion;
     private String asiento;
-    private boolean disponibilidad;
-    private Cliente cliente;
+    private Boolean disponibilidad;
+    private String nombreCliente;
 
     /**
      * Constructor vacio
@@ -27,31 +24,32 @@ public class AsientoFuncionDTO {
     /**
      * Constructor con todos los metodos
      *
-     * @param funcion
+     * @param idFuncion
      * @param asiento
      * @param disponibilidad
-     * @param cliente
+     * @param nombreCliente
      */
-    public AsientoFuncionDTO(Funcion funcion, String asiento, boolean disponibilidad, Cliente cliente) {
-        this.funcion = funcion;
+    public AsientoFuncionDTO(String idFuncion, String asiento, Boolean disponibilidad, String nombreCliente) {
+        this.idFuncion = idFuncion;
         this.asiento = asiento;
         this.disponibilidad = disponibilidad;
-        this.cliente = cliente;
+        this.nombreCliente = nombreCliente;
     }
 
     /**
-     * Getters y setters
+     * 
+     * @return 
      */
-    public Funcion getFuncion() {
-        return funcion;
+    public String getIdFuncion() {
+        return idFuncion;
     }
 
     /**
      *
-     * @param funcion
+     * @param idFuncion
      */
-    public void setFuncion(Funcion funcion) {
-        this.funcion = funcion;
+    public void setIdFuncion(String idFuncion) {
+        this.idFuncion = idFuncion;
     }
 
     /**
@@ -90,15 +88,16 @@ public class AsientoFuncionDTO {
      *
      * @return
      */
-    public Cliente getCliente() {
-        return cliente;
+    public String getNombreCliente() {
+        return nombreCliente;
     }
 
     /**
      *
-     * @param cliente
+     * @param nombreCliente
      */
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
     }
+    
 }

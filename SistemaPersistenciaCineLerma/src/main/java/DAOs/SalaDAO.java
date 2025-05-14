@@ -17,6 +17,7 @@ import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Asiento;
 import entidades.Sala;
@@ -51,7 +52,7 @@ public class SalaDAO implements ISalaDAO {
      * Metodo para regresar la instancia de esta clase y que de esa manera nomas se manipule una instancia
      * @return 
      */
-    public static SalaDAO getInstance() {
+    public static SalaDAO getInstanceDAO() {
         if (instance == null) {
             instance = new SalaDAO();
         }
@@ -162,38 +163,6 @@ public class SalaDAO implements ISalaDAO {
             conexion.cerrarConexion(clienteMongo);
         }
     }
-
-//    @Override
-//    public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException {
-//        MongoClient clienteMongo = null;
-//        try {
-//            MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo);
-//
-//            Iterable<Bson> filtradores = Arrays.asList(
-//                    Filters.regex("estado", Pattern.compile("^" + filtro, Pattern.CASE_INSENSITIVE)),
-//                    Filters.regex("estado", Pattern.compile(".*" + filtro + "$", Pattern.CASE_INSENSITIVE)),
-//                    Filters.regex("numeroSala", Pattern.compile("^" + filtro, Pattern.CASE_INSENSITIVE)),
-//                    Filters.regex("numeroSala", Pattern.compile(".*" + filtro + "$", Pattern.CASE_INSENSITIVE))
-//            );
-//            Bson filtrador = Filters.or(filtradores);
-//
-//            FindIterable<Sala> iterador = coleccionSalas.find(filtrador);
-//
-//            List<Sala> salas = new ArrayList<>();
-////            for (Sala salaDoc : iterador) {
-////                String numSala = salaDoc.get("numeroSala", String.class);
-////                Sala sala = obtenerSalaConAsientos(salaDoc, numSala);
-////                salas.add(sala);
-////            }
-//
-//            return salas;
-//
-//        } catch (BuscarSalaException e) {
-//            throw new BuscarSalaException("Hubo un error al buscar las salas: " + e.getMessage());
-//        } finally {
-//            conexion.cerrarConexion(clienteMongo);
-//        }
-//    }
     
     /**
      * Metodo para crear el filtro del nombre
