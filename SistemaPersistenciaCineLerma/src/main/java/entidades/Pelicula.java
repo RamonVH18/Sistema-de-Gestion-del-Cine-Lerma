@@ -4,56 +4,55 @@
  */
 package entidades;
 
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+
 /**
  *
- * @author Ramon Valencia
+ * @author Daniel M
  */
 public class Pelicula {
 
-    private Long id;
-    private String titulo;
+    @BsonId
+    private ObjectId idPelicula;
     private String imagen;
+    private String titulo;
     private String genero;
     private Integer duracion;
+    private String clasificacion;
     private String sinopsis;
-    private Boolean estado;
+    private Boolean activo;
 
     public Pelicula() {
     }
 
-    public Pelicula(Long id, String titulo, String imagen, String genero, Integer duracion, String sinopsis, Boolean estado) {
-        this.id = id;
-        this.titulo = titulo;
+    public Pelicula(ObjectId idPelicula, String imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean estado) {
+        this.idPelicula = idPelicula;
         this.imagen = imagen;
+        this.titulo = titulo;
         this.genero = genero;
         this.duracion = duracion;
+        this.clasificacion = clasificacion;
         this.sinopsis = sinopsis;
-        this.estado = estado;
+        this.activo = estado;
     }
 
-    public Pelicula(String titulo, String imagen, String genero, Integer duracion, String sinopsis, Boolean estado) {
-        this.titulo = titulo;
+    public Pelicula(String imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean estado) {
         this.imagen = imagen;
+        this.titulo = titulo;
         this.genero = genero;
         this.duracion = duracion;
+        this.clasificacion = clasificacion;
         this.sinopsis = sinopsis;
-        this.estado = estado;
+        this.activo = estado;
     }
 
-    public Long getId() {
-        return id;
+    public ObjectId getIdPelicula() {
+        return idPelicula;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setIdPelicula(ObjectId idPelicula) {
+        this.idPelicula = idPelicula;
     }
 
     public String getImagen() {
@@ -62,6 +61,14 @@ public class Pelicula {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public String getGenero() {
@@ -80,6 +87,14 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
+    public String getClasificacion() {
+        return clasificacion;
+    }
+
+    public void setClasificacion(String clasificacion) {
+        this.clasificacion = clasificacion;
+    }
+
     public String getSinopsis() {
         return sinopsis;
     }
@@ -88,24 +103,25 @@ public class Pelicula {
         this.sinopsis = sinopsis;
     }
 
-    public Boolean getEstado() {
-        return estado;
+    public Boolean getActivo() {
+        return activo;
     }
 
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     @Override
     public String toString() {
         return "Pelicula{"
-                + "id=" + id
-                + ", titulo=" + titulo
+                + "id=" + idPelicula
                 + ", imagen=" + imagen
+                + ", titulo=" + titulo
                 + ", genero=" + genero
                 + ", duracion=" + duracion
+                + ", clasificacion=" + clasificacion
                 + ", sinopsis=" + sinopsis
-                + ", estado=" + estado
+                + ", estado=" + activo
                 + '}';
     }
 }

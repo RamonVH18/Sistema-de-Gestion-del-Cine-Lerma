@@ -42,7 +42,7 @@ public class PeliculaMapper implements IPeliculaMapper {
         // establecemos valores por defecto para los campos que no estan en el DTO
         pelicula.setGenero(null);
         pelicula.setDuracion(null);
-        pelicula.setEstado(true); // asumimos que la pelicula esta activa
+        pelicula.setActivo(true); // asumimos que la pelicula esta activa
 
         return pelicula;
     }

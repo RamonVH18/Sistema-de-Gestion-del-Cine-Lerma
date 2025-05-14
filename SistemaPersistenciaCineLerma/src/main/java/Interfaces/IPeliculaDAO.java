@@ -5,25 +5,28 @@
 package Interfaces;
 
 import Excepciones.PersistenciaException;
+import Excepciones.peliculas.*;
 import entidades.Pelicula;
 import java.util.List;
 
 /**
  *
- * @author Abraham Coronel Bringas
+ * @author Daniel M
  */
 public interface IPeliculaDAO {
 
-    public Pelicula registrarPelicula(Pelicula pelicula) throws PersistenciaException;
+    public Pelicula registrarPelicula(Pelicula pelicula) throws RegistrarPeliculaException;
 
-    public Pelicula actualizarPelicula(Pelicula peliculaActualizar) throws PersistenciaException;
+    public Pelicula actualizarPelicula(Pelicula pelicula) throws ActualizarPeliculaException;
 
-    public Boolean eliminarPelicula(Long id) throws PersistenciaException;
+    public Boolean eliminarPelicula(Pelicula pelicula) throws EliminarPeliculaException;
+    
+    public Boolean darAltaPelicula(Pelicula pelicula) throws DarAltaPeliculaException;
+    
+    public Boolean darBajaPelicula(Pelicula pelicula) throws DarBajaPeliculaException;
 
-    public List<Pelicula> mostrarListaPelicula() throws PersistenciaException;
-
-    public Boolean actualizarEstado(Long id) throws PersistenciaException;
-
-    public Pelicula buscarPelicula(String titulo) throws PersistenciaException;
+    public Pelicula buscarPelicula(String titulo) throws BuscarPeliculaException;
+    
+    public List<Pelicula> mostrarPeliculasFiltro(boolean activo) throws MostrarPeliculasException;
 
 }

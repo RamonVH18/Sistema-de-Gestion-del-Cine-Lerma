@@ -4,126 +4,314 @@
  */
 package DAOs;
 
-import Excepciones.PersistenciaException;
+import Conexion.MongoConexion;
+import Excepciones.peliculas.*;
 import Interfaces.IPeliculaDAO;
+import com.mongodb.MongoException;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import entidades.Pelicula;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.conversions.Bson;
 
 /**
+ * Clase DAO para manejar operaciones relacionadas con la colección de películas
+ * en MongoDB. Implementa la interfaz IPeliculaDAO.
  *
- * @author Ramon Valencia
+ * Se utiliza el patrón Singleton para asegurar que solo exista una instancia de
+ * esta clase durante la ejecución.
+ *
+ * @author Daniel M
  */
 public class PeliculaDAO implements IPeliculaDAO {
 
     private static PeliculaDAO instance;
-    private List<Pelicula> peliculas;
+    private final MongoConexion conexion = new MongoConexion(); // Instancia de la clase para manejar conexión Mongo
+    private final String nombreColeccion = "Peliculas"; // Nombre de la colección en la base de datos
 
+    /**
+     * Constructor privado para aplicar el patrón Singleton.
+     */
     private PeliculaDAO() {
-        peliculas = new ArrayList<>();
-        peliculasHarcodeadas();
     }
 
+    /**
+     * Obtiene la única instancia de PeliculaDAO (patrón Singleton).
+     *
+     * @return instancia única de PeliculaDAO
+     */
     public static PeliculaDAO getInstanceDAO() {
         if (instance == null) {
             instance = new PeliculaDAO();
         }
-
         return instance;
     }
 
-    private List<Pelicula> peliculasHarcodeadas() {
-        if (peliculas.isEmpty()) {
-            Pelicula pelicula1 = new Pelicula(1L,
-                    "Batman El Caballero Loco",
-                    "img/batman.jpg",
-                    "Accion",
-                    152,
-                    "Pelicula de las God",
-                    true
-            );
-            Pelicula pelicula2 = new Pelicula(2L, "Interstellar", "img/interstellar.jpg", "Ciencia Funcion", 169, "Pelicula algo Bien", true);
-            Pelicula pelicula3 = new Pelicula(3L, "John Wick 3", "img/johnWick3.jpg", "Accion", 131, "Tercera Pelicula donde sale el John Wick", true);
-            Pelicula pelicula4 = new Pelicula(4L, "La vida es bella", "img/vidaBella.jpg", "Drama", 116, "La pelicula favorita del jaime", false);
-            Pelicula pelicula5 = new Pelicula(5L, "Wazaa la Pelicula", "img/wazaa.jpg", "Comedia", 88, "WAZAAAAAAAAAAAAAA", true);
-            Pelicula pelicula6 = new Pelicula(6L, "Thor: Ragnarok", "img/thor.jpg", "Accion", 130, "Thor, mas thor que nunca", false);
-            Pelicula pelicula7 = new Pelicula(7L, "Cholos Empericados 2", "img/CHOLOS_EMPERICADOS.jpg", "Romance", 134, "Mas empericados que nunca...", false);
-            Pelicula pelicula8 = new Pelicula(8L, "Pancho el perro millonario", "img/PANCHO.jpg", "Comedia", 125, "Pancho se mete en problemas", true);
-            Pelicula pelicula9 = new Pelicula(9L, "Juego de gemelas", "img/JUEGOGEM.jpg", "Comedia", 118, "juego de gemelas", true);
-            Pelicula pelicula10 = new Pelicula(10L, "Tacos al carbon", "img/tacosCarbon.jpg", "Comida", 54, "Dos amigos con una idea loca, haran las cosas un poco diferente y haran tacos al carbon", false);
-            Pelicula pelicula11 = new Pelicula(11L, "James mono: El detective", "img/jamesMono.jpg", "Drama", 123, "El mayor detective de la historia", false);
+    /**
+     * Registra una nueva película en la base de datos.
+     *
+     * @param pelicula Objeto Pelicula a registrar
+     * @return Pelicula registrada
+     * @throws RegistrarPeliculaException si ocurre un error durante la
+     * operación
+     */
+    @Override
+    public Pelicula registrarPelicula(Pelicula pelicula) throws RegistrarPeliculaException {
+        MongoClient clienteMongo = null;
+        try {
+            // Establecer conexión con MongoDB
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
 
-            peliculas.add(pelicula1);
-            peliculas.add(pelicula2);
-            peliculas.add(pelicula3);
-            peliculas.add(pelicula4);
-            peliculas.add(pelicula5);
-            peliculas.add(pelicula6);
-            peliculas.add(pelicula7);
-            peliculas.add(pelicula8);
-            peliculas.add(pelicula9);
-            peliculas.add(pelicula10);
-            peliculas.add(pelicula11);
+            // Insertar la nueva película
+            coleccionPeliculas.insertOne(pelicula);
+            return pelicula;
+
+        } catch (MongoException e) {
+            throw new RegistrarPeliculaException("Ocurrio un problema al registrar la pelicula.");
+        } finally {
+            // Cerrar la conexión
+            conexion.cerrarConexion(clienteMongo);
         }
-        return peliculas;
     }
 
+    /**
+     * Actualiza los datos de una película existente.
+     *
+     * @param pelicula Objeto Pelicula con los nuevos datos
+     * @return Pelicula actualizada
+     * @throws ActualizarPeliculaException si no se encuentra o no se puede
+     * actualizar la película
+     */
     @Override
-    public Pelicula registrarPelicula(Pelicula pelicula) throws PersistenciaException {
-        Long nuevoId = peliculas.get(peliculas.size() - 1).getId() + 1L;
-        pelicula.setId(nuevoId);
-        peliculas.add(pelicula);
-        return pelicula;
-    }
+    public Pelicula actualizarPelicula(Pelicula pelicula) throws ActualizarPeliculaException {
+        MongoClient clienteMongo = null;
+        try {
+            // Conexión a la base de datos
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
 
-    @Override
-    public Pelicula actualizarPelicula(Pelicula peliculaActualizar) throws PersistenciaException {
-        for (int i = 0; i < peliculas.size(); i++) {
-            if (peliculas.get(i).getId().equals(peliculaActualizar.getId())) {
-                peliculas.set(i, peliculaActualizar);
-                return peliculaActualizar;
+            // Buscar la película por título
+            Bson filtro = Filters.eq("titulo", pelicula.getTitulo());
+            Pelicula peliculaActualizar = coleccionPeliculas.find(filtro).first();
+
+            // Validar que existe
+            if (peliculaActualizar == null) {
+                throw new ActualizarPeliculaException("No se encontró la película para actualizar.");
             }
-        }
-        throw new PersistenciaException("Error: Pelicula no encontrada");
-    }
 
-    @Override
-    public Boolean eliminarPelicula(Long id) throws PersistenciaException {
-        for (Pelicula pelicula : peliculas) {
-            if (pelicula.getId().equals(id)) {
-                peliculas.remove(pelicula);
-                return true;
+            // Reemplazar el documento
+            UpdateResult resultado = coleccionPeliculas.replaceOne(filtro, pelicula);
+
+            // Validar que fue modificada
+            if (resultado.getModifiedCount() == 0) {
+                throw new ActualizarPeliculaException("No se actualizó la película.");
             }
+
+            return pelicula;
+
+        } catch (MongoException e) {
+            throw new ActualizarPeliculaException("Ocurrió un problema al actualizar la película.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
         }
-        return false;
     }
 
+    /**
+     * Elimina una película de la base de datos.
+     *
+     * @param pelicula Película a eliminar
+     * @return true si se eliminó correctamente, false en caso contrario
+     * @throws EliminarPeliculaException si ocurre un error o no se encuentra la
+     * película
+     */
     @Override
-    public List<Pelicula> mostrarListaPelicula() throws PersistenciaException {
-        List<Pelicula> copia = new ArrayList<>();
-        copia.addAll(peliculas);
-        return copia;
-    }
+    public Boolean eliminarPelicula(Pelicula pelicula) throws EliminarPeliculaException {
+        MongoClient clienteMongo = null;
+        try {
+            // Conexión y obtención de colección
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
 
-    @Override
-    public Boolean actualizarEstado(Long id) throws PersistenciaException {
-        for (Pelicula pelicula : peliculas) {
-            if (pelicula.getId().equals(id)) {
-                Boolean nuevoEstado = !pelicula.getEstado();
-                pelicula.setEstado(nuevoEstado);
-                return true;
+            // Buscar por título
+            Bson filtro = Filters.eq("titulo", pelicula.getTitulo());
+            Pelicula peliculaEliminar = coleccionPeliculas.find(filtro).first();
+
+            if (peliculaEliminar == null) {
+                throw new EliminarPeliculaException("No se encontró la película para eliminar.");
             }
+
+            // Eliminar el documento
+            DeleteResult eliminar = coleccionPeliculas.deleteOne(filtro);
+
+            if (eliminar.getDeletedCount() == 0) {
+                throw new EliminarPeliculaException("No se eliminó ninguna película.");
+            }
+
+            return eliminar.getDeletedCount() > 0;
+
+        } catch (MongoException e) {
+            throw new EliminarPeliculaException("Ocurrió un problema al eliminar la película.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
         }
-        return false;
     }
 
+    /**
+     * Activa una película desactivada (campo "activo" en true).
+     *
+     * @param pelicula Película a activar
+     * @return true si se activó correctamente, false si ya estaba activa
+     * @throws DarAltaPeliculaException si ocurre un error o no se encuentra la
+     * película
+     */
     @Override
-    public Pelicula buscarPelicula(String titulo) throws PersistenciaException {
-        for (Pelicula pelicula : peliculas) {
-            if (pelicula.getTitulo().equalsIgnoreCase(titulo)) {
-                return pelicula;
+    public Boolean darAltaPelicula(Pelicula pelicula) throws DarAltaPeliculaException {
+        MongoClient clienteMongo = null;
+        try {
+            // Conexión a MongoDB
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
+
+            // Buscar película por título
+            Bson filtro = Filters.eq("titulo", pelicula.getTitulo());
+            Pelicula peliculaActualizar = coleccionPeliculas.find(filtro).first();
+
+            if (peliculaActualizar != null) {
+                if (!peliculaActualizar.getActivo()) {
+                    // Si está desactivada, la activamos
+                    Bson update = Updates.set("activo", true);
+                    UpdateResult resultado = coleccionPeliculas.updateOne(filtro, update);
+                    return resultado.getModifiedCount() > 0;
+                } else {
+                    // Ya está activa
+                    return false;
+                }
+            } else {
+                throw new DarAltaPeliculaException("La película no fue encontrada.");
             }
+
+        } catch (MongoException e) {
+            throw new DarAltaPeliculaException("Error al dar de alta la película.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
         }
-        throw new PersistenciaException("Pelicula no encontrada" + titulo);
+    }
+
+    /**
+     * Desactiva una película (campo "activo" en false).
+     *
+     * @param pelicula Película a desactivar
+     * @return true si se desactivó correctamente, false si ya estaba inactiva
+     * @throws DarBajaPeliculaException si ocurre un error o no se encuentra la
+     * película
+     */
+    @Override
+    public Boolean darBajaPelicula(Pelicula pelicula) throws DarBajaPeliculaException {
+        MongoClient clienteMongo = null;
+        try {
+            // Conexión con la base de datos
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
+
+            // Buscar por título
+            Bson filtro = Filters.eq("titulo", pelicula.getTitulo());
+            Pelicula peliculaActualizar = coleccionPeliculas.find(filtro).first();
+
+            if (peliculaActualizar != null) {
+                if (peliculaActualizar.getActivo()) {
+                    // Si está activa, la desactivamos
+                    Bson update = Updates.set("activo", false);
+                    UpdateResult resultado = coleccionPeliculas.updateOne(filtro, update);
+                    return resultado.getModifiedCount() > 0;
+                } else {
+                    // Ya está desactivada
+                    return false;
+                }
+            } else {
+                throw new DarBajaPeliculaException("La película no fue encontrada.");
+            }
+
+        } catch (MongoException e) {
+            throw new DarBajaPeliculaException("Error al dar de baja la película.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
+    }
+
+    /**
+     * Busca una película por su título.
+     *
+     * @param titulo Título de la película a buscar
+     * @return Película encontrada
+     * @throws BuscarPeliculaException si no se encuentra la película o ocurre
+     * un error
+     */
+    @Override
+    public Pelicula buscarPelicula(String titulo) throws BuscarPeliculaException {
+        MongoClient clienteMongo = null;
+        try {
+            // Establecer conexión
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
+
+            // Buscar por título
+            Bson filtro = Filters.eq("titulo", titulo);
+            Pelicula peliculaEncontrada = coleccionPeliculas.find(filtro).first();
+
+            if (peliculaEncontrada == null) {
+                throw new BuscarPeliculaException("La película no existe.");
+            }
+
+            return peliculaEncontrada;
+
+        } catch (MongoException e) {
+            throw new BuscarPeliculaException("Error al buscar la película.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
+    }
+
+    /**
+     * Obtiene una lista de películas activas o inactivas dependiendo del
+     * parametro recibido
+     *
+     * @param activo true para filtrar por peliculas activas, false para filtrar
+     * por inactivas
+     * @return Lista de películas activas/inactivas.
+     * @throws MostrarPeliculasException si ocurre un error al obtener las
+     * películas.
+     */
+    @Override
+    public List<Pelicula> mostrarPeliculasFiltro(boolean activo) throws MostrarPeliculasException {
+        MongoClient clienteMongo = null;
+        try {
+            // Se establece la conexión con la base de datos y se accede a la colección
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
+
+            // Se filtran las películas dependiendo el filtro recibido
+            Bson filtro = Filters.eq("activo", activo);
+            List<Pelicula> peliculasFiltradas = coleccionPeliculas.find(filtro).into(new ArrayList<>());
+
+            return peliculasFiltradas;
+        } catch (MongoException e) {
+            throw new MostrarPeliculasException("Error al mostrar las películas.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
     }
 }

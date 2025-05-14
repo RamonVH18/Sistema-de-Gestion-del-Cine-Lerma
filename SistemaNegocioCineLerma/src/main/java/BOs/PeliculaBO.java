@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Ramon Valencia
+ * @author Daniel Miramontes Iribe
  */
 public class PeliculaBO implements IPeliculaBO{
     
