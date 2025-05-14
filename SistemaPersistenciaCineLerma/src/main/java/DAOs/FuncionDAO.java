@@ -5,6 +5,7 @@
 package DAOs;
 
 import Conexion.MongoConexion;
+import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Interfaces.IFuncionDAO;
@@ -15,6 +16,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import entidades.Funcion;
+import enums.EstadoSala;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +49,7 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException {
+    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException, FuncionSalaVaciaException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
@@ -62,6 +64,15 @@ public class FuncionDAO implements IFuncionDAO {
             Long contador = coleccionFunciones.countDocuments(filtro);
             if (contador > 0) {
                 throw new FuncionSalaOcupadaException("La sala ya esta ocupada en la fecha.");
+            }
+
+            //Verificar si la sala no esta vacia
+            if (funcion.getSala() == null) {
+                throw new FuncionSalaVaciaException("La sala no puede estar vacia cuando creas una funcion");
+            }
+
+            if (funcion.getSala().getEstado() == EstadoSala.INACTIVA) {
+                throw new FuncionSalaVaciaException("La sala no puede estar vacia o inactiva para registrar una funcion");
             }
 
             coleccionFunciones.insertOne(funcion);
@@ -81,9 +92,8 @@ public class FuncionDAO implements IFuncionDAO {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
-            // Verificar si hay boletos vendidos (suponiendo que estado=true implica boletos vendidos)
-            if (funcion == null) {
-                throw new FuncionNoEncontradaException("No se puede eliminar la una funcion nula");
+            if (buscarFuncionPorId(funcion.getIdFuncion()) == null) {
+                throw new FuncionNoEncontradaException("No se encontro la funcion a eliminar");
             }
 
             // Eliminar la función
@@ -100,22 +110,28 @@ public class FuncionDAO implements IFuncionDAO {
     @Override
     public Funcion buscarFuncionPorId(ObjectId idFuncion) {
         MongoClient clienteMongo = conexion.crearConexion();
-        MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
-        MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
-        Bson filtro = Filters.eq("_id", idFuncion);
-        conexion.cerrarConexion(clienteMongo);
-        return coleccionFunciones.find(filtro).first();
+        try {
+            MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+            Bson filtro = Filters.eq("_id", idFuncion);
+            return coleccionFunciones.find(filtro).first();
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
     }
 
     @Override
     public List<Funcion> buscarFuncionesPelicula(String nombrePelicula) {
         MongoClient clienteMongo = conexion.crearConexion();
-        MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
-        MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombrePelicula, Funcion.class);
-        Bson filtro = Filters.eq("pelicula.titulo", nombrePelicula);
-        List<Funcion> funciones = coleccionFunciones.find(filtro).into(new ArrayList<>());
-        conexion.cerrarConexion(clienteMongo);
-        return funciones;
+        try {
+            MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombrePelicula, Funcion.class);
+            Bson filtro = Filters.eq("pelicula.titulo", nombrePelicula);
+            return coleccionFunciones.find(filtro).into(new ArrayList<>());
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+
+        }
     }
 
 }

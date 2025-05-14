@@ -4,6 +4,7 @@
  */
 package Interfaces;
 
+import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import entidades.Funcion;
@@ -16,7 +17,7 @@ import org.bson.types.ObjectId;
  */
 public interface IFuncionDAO {
 
-    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException;
+    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException, FuncionSalaVaciaException;
 
     public Funcion eliminarFuncion(Funcion funcion) throws FuncionNoEncontradaException;
 

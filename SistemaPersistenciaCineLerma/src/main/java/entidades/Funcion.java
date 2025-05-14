@@ -5,6 +5,7 @@
 package entidades;
 
 import java.time.LocalDateTime;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 /**
@@ -13,6 +14,7 @@ import org.bson.types.ObjectId;
  */
 public class Funcion {
 
+    @BsonId
     private ObjectId idFuncion;
 
     private Sala sala;

@@ -9,19 +9,12 @@ import DTOs.FuncionDTO;
 import DTOs.HistorialFuncionesDTO;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
-import Excepciones.PersistenciaException;
 import Excepciones.funciones.FuncionEliminarException;
-import Excepciones.funciones.FuncionFechaValidaException;
 import Excepciones.funciones.FuncionRegistrarException;
-import Excepciones.funciones.FuncionValidadaException;
 import Interfaces.IFuncionBO;
 import Interfaces.IFuncionDAO;
 import Mappers.FuncionMapper;
-import ObservadorClienteFuncion.ObservadorClienteFuncion;
-import entidades.Cliente;
 import entidades.Funcion;
-import entidades.Sala;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,132 +89,8 @@ public class FuncionBO implements IFuncionBO {
     }
 
     @Override
-    public List<FuncionDTO> buscarFuncionesActivas() throws FuncionFechaValidaException {
-        List<FuncionDTO> funcionesActivasDTO = new ArrayList<>();
-
-        try {
-            List<Funcion> funcionesActivasEntity = funcionDAO.buscarFuncionesActivas();
-            for (Funcion funcionActivaEntity : funcionesActivasEntity) {
-                FuncionDTO funcionActivaDTO = funcionMapper.toFuncionDTO(funcionActivaEntity);
-
-                funcionesActivasDTO.add(funcionActivaDTO);
-            }
-
-            return funcionesActivasDTO;
-        } catch (Exception e) {
-            throw new FuncionFechaValidaException("Error al buscar las funciones activas.");
-        }
-    }
-
-    @Override
     public List<HistorialFuncionesDTO> buscarHistorialFunciones() {
         return null;
     }
 
-//
-//    @Override
-//    public void suscribirClienteAFuncion(Cliente cliente, Long idFuncion) throws FuncionFechaValidaException {
-//        try {
-//            // Verificar que la función existe
-//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-//            if (funcion == null) {
-//                throw new FuncionFechaValidaException("La función no existe");
-//            }
-//
-//            // Crear observador para el cliente
-//            ObservadorClienteFuncion observador = new ObservadorClienteFuncion(cliente);
-//
-//            // Registrar el observador
-//            funcionDAO.agregarObservador(idFuncion, observador);
-//
-//        } catch (PersistenciaException e) {
-//            throw new FuncionFechaValidaException("Error al suscribir cliente a la función: " + e.getMessage());
-//        }
-//    }
-//
-//    public void desuscribirClienteDeFuncion(Cliente cliente, Long idFuncion) throws FuncionFechaValidaException {
-//        try {
-//            // Verificar que la función existe
-//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-//            if (funcion == null) {
-//                throw new FuncionFechaValidaException("La función no existe");
-//            }
-//
-//            //final ObjectId clienteId = cliente.getIdUsuario();
-//            // Eliminar el observador del cliente para esta función
-//            funcionDAO.eliminarObservadorPorFiltro(idFuncion, observador -> {
-//                if (observador instanceof ObservadorClienteFuncion) {
-//                    return ((ObservadorClienteFuncion) observador).getCliente().getIdUsuario().equals(clienteId);
-//                }
-//                return false;
-//            });
-//
-//        } catch (PersistenciaException e) {
-//            throw new FuncionFechaValidaException("Error al desuscribir cliente de la función: " + e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public boolean cambiarEstadoFuncion(Long idFuncion, boolean nuevoEstado) throws FuncionFechaValidaException {
-//        try {
-//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-//            if (funcion == null) {
-//                throw new FuncionFechaValidaException("La función no existe");
-//            }
-//
-//            funcion.setEstado(nuevoEstado);
-//            return funcionDAO.actualizarFuncion(funcion);
-//
-//        } catch (PersistenciaException e) {
-//            throw new FuncionFechaValidaException("Error al cambiar estado de la función: " + e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public boolean cambiarHorarioFuncion(Long idFuncion, LocalDateTime nuevoHorario) throws FuncionFechaValidaException {
-//        try {
-//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-//            if (funcion == null) {
-//                throw new FuncionFechaValidaException("La función no existe");
-//            }
-//
-//            funcion.setFechaHora(nuevoHorario);
-//            return funcionDAO.actualizarFuncion(funcion);
-//
-//        } catch (PersistenciaException e) {
-//            throw new FuncionFechaValidaException("Error al cambiar horario de la función: " + e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public boolean cambiarSalaFuncion(Long idFuncion, Sala nuevaSala) throws FuncionFechaValidaException {
-//        try {
-//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-//            if (funcion == null) {
-//                throw new FuncionFechaValidaException("La función no existe");
-//            }
-//
-//            funcion.setSala(nuevaSala);
-//            return funcionDAO.actualizarFuncion(funcion);
-//
-//        } catch (PersistenciaException e) {
-//            throw new FuncionFechaValidaException("Error al cambiar sala de la función: " + e.getMessage());
-//        }
-//    }
-//
-//    @Override
-//    public boolean cambiarPrecioFuncion(Long idFuncion, Double nuevoPrecio) throws FuncionFechaValidaException {
-//        try {
-//            Funcion funcion = funcionDAO.buscarFuncionPorId(idFuncion);
-//            if (funcion == null) {
-//                throw new FuncionFechaValidaException("La función no existe");
-//            }
-//
-//            funcion.setPrecio(nuevoPrecio);
-//            return funcionDAO.actualizarFuncion(funcion);
-//
-//        } catch (PersistenciaException e) {
-//            throw new FuncionFechaValidaException("Error al cambiar precio de la función: " + e.getMessage());
-//        }
-//    }
 }
