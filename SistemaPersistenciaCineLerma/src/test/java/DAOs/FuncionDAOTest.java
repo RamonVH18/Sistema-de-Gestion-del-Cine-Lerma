@@ -72,7 +72,7 @@ public class FuncionDAOTest {
     @AfterEach
     public void tearDown() {
         try {
-            Funcion funcionEnBD = funcionDAO.buscarFuncionPorId(funcionPrueba.getIdFuncion());
+            Funcion funcionEnBD = funcionDAO.buscarFuncionId(funcionPrueba.getIdFuncion());
             if (funcionEnBD != null) {
                 funcionDAO.eliminarFuncion(funcionPrueba);
             }
@@ -163,7 +163,7 @@ public class FuncionDAOTest {
     @Test
     public void testBuscarFuncionPorId() throws Exception {
         funcionDAO.registrarFuncion(funcionPrueba);
-        Funcion encontrada = funcionDAO.buscarFuncionPorId(funcionPrueba.getIdFuncion());
+        Funcion encontrada = funcionDAO.buscarFuncionId(funcionPrueba.getIdFuncion());
         assertEquals(funcionPrueba.getIdFuncion(), encontrada.getIdFuncion(), "Los IDs deben coincidir");
     }
 

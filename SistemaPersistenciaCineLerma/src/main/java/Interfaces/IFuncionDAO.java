@@ -8,6 +8,7 @@ import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import entidades.Funcion;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.bson.types.ObjectId;
 
@@ -23,6 +24,10 @@ public interface IFuncionDAO {
 
     public List<Funcion> buscarFuncionesPelicula(String nombrepelicula);
 
-    public Funcion buscarFuncionPorId(ObjectId idFuncion);
+    public Funcion buscarFuncionId(ObjectId idFuncion);
+    
+    public Funcion buscarFuncionFechaInicio(LocalDateTime fechaHora);
+    
+    public LocalDateTime calcularHoraTerminoFuncion(LocalDateTime horaInicio);
 
 }

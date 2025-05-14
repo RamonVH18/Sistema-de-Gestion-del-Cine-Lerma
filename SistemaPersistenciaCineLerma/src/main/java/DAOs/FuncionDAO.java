@@ -93,7 +93,7 @@ public class FuncionDAO implements IFuncionDAO {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
-            if (buscarFuncionPorId(funcion.getIdFuncion()) == null) {
+            if (buscarFuncionId(funcion.getIdFuncion()) == null) {
                 throw new FuncionNoEncontradaException("No se encontro la funcion a eliminar");
             }
 
@@ -109,7 +109,7 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public Funcion buscarFuncionPorId(ObjectId idFuncion) {
+    public Funcion buscarFuncionId(ObjectId idFuncion) {
         MongoClient clienteMongo = conexion.crearConexion();
         try {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
@@ -133,6 +133,16 @@ public class FuncionDAO implements IFuncionDAO {
             conexion.cerrarConexion(clienteMongo);
 
         }
+    }
+
+    @Override
+    public Funcion buscarFuncionFechaInicio(LocalDateTime fechaHora) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public LocalDateTime calcularHoraTerminoFuncion(LocalDateTime horaInicio) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
