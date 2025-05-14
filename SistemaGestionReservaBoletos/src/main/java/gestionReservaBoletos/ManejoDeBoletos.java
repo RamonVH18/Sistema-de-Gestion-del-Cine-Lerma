@@ -106,7 +106,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                 throw new FuncionCargaException("El nombre de la pelicula esta vacio o es nulo");
             }
             // aqui se llamaria a un metodo que de una listaFunciones, sin embargo como aun no tenemos la BO, voy hardcodearlas
-            List<FuncionDTO> funciones = funcionBO.buscarFuncionesActivas();
+            List<FuncionDTO> funciones  = funcionBO.buscarFuncionesPelicula(nombrePelicula);
             if (funciones == null || funciones.isEmpty()) {
                 throw new FuncionCargaException("Hubo un error al cargar las funciones, favor de ingresar mas al rato.");
             }
@@ -130,8 +130,6 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             
             return funcionesPelicula;
         } catch (FuncionCargaException e) {
-            throw new FuncionCargaException("ERROR: " + e.getMessage());
-        } catch (FuncionFechaValidaException e) {
             throw new FuncionCargaException("ERROR: " + e.getMessage());
         }
     }

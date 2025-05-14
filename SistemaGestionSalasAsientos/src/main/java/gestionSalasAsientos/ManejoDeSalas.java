@@ -6,11 +6,13 @@ package gestionSalasAsientos;
 
 import BOs.SalaBO;
 import DTOs.GananciaSalaDTO;
-import DTOs.SalaDTO;
+import DTOs.SalaNuevaDTO;
+import DTOs.SalaViejaDTO;
 import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
 import Excepciones.EstadisticasSalaException;
 import Excepciones.ModificarSalaException;
+import Excepciones.Sala.SalaBusquedaException;
 import Excepciones.Sala.SalaRegistroException;
 import Excepciones.ValidacionSalaException;
 import Interfaces.ISalaBO;
@@ -24,75 +26,105 @@ import java.util.regex.Pattern;
  * @author Ramon Valencia
  */
 public class ManejoDeSalas implements IManejoDeSalas {
-    private ISalaBO salaBO = SalaBO.getInstanceBO();
+
+    private static ManejoDeSalas instanceSalas;
+    private final ISalaBO salaBO = SalaBO.getInstanceBO();
     private final Integer minAsientos = 10; // Numero minimo de asientos que puede tener una sala
-    
-    @Override
-    public SalaDTO agregarSala(SalaDTO sala) throws AgregarSalaException {
-        try {
-            validarSala(sala);
-            sala = salaBO.agregarSala(sala);
-            
-        } catch(ValidacionSalaException e) {
-            throw new AgregarSalaException("La sala ingresada no cumple con la siguiente validacion: " + e.getMessage());
-        } catch (SalaRegistroException e) {
-            throw new AgregarSalaException("La sala no se pudo registrar debido al siguiente problema: " + e.getMessage());
+    private final Integer maxAsientos = 150; // Numero maximo de asientos que puede tener una sala
+
+    private ManejoDeSalas() {
+
+    }
+
+    public static ManejoDeSalas getInstanceSalas() {
+        if (instanceSalas == null) {
+            instanceSalas = new ManejoDeSalas();
         }
-        return sala;
+        return instanceSalas;
     }
 
     @Override
-    public void validarSala(SalaDTO sala) throws ValidacionSalaException {
-        validarNumeroSala(sala.getNumSala());
-        
-        validarNumeroAsientos(sala.getNumAsientos());
-        
+    public SalaViejaDTO agregarSala(SalaNuevaDTO salaNueva) throws AgregarSalaException {
+        try {
+            
+            SalaViejaDTO salaVieja = salaBO.agregarSala(salaNueva);
+
+            return salaVieja;
+        } catch (SalaRegistroException e) {
+            throw new AgregarSalaException("La sala no se pudo registrar");
+        }
     }
     
+    @Override
+    public void validarSala( String numSala, String numAsientos) throws ValidacionSalaException {
+        validarExistenciaSala(numSala);
+        
+        validarNumeroSala(numSala);
+
+        validarNumeroAsientos(numAsientos);
+
+    }
+    
+    private void validarExistenciaSala(String numSala) throws ValidacionSalaException {
+        try {
+            List<SalaViejaDTO> salas = salaBO.buscarSalas("");
+            for (SalaViejaDTO sala : salas) {
+                if (sala.getNumSala().equalsIgnoreCase(numSala)) {
+                    throw new ValidacionSalaException("Ya existe una sala con ese numero de sala");
+                }
+            }
+        } catch (SalaBusquedaException e) {
+            throw new ValidacionSalaException("Hubo un error al consultar si ya existia una sala con ese numero de sala");
+        }
+    }
+
     private void validarNumeroSala(String numSala) throws ValidacionSalaException {
         if (numSala.length() > 3) {
             throw new ValidacionSalaException("El numero de la sala no puede superar los 4 caracteres");
         }
-        if (Pattern.matches("^[A-Za-z][0-9]$", numSala)){
-            throw new ValidacionSalaException("El numero de la sala");
-        } 
-    }
-    
-    private void validarNumeroAsientos(Integer numAsientos) throws ValidacionSalaException {
-        if (numAsientos > minAsientos) {
-            throw new ValidacionSalaException("El numero de asientos no puede ser menor a : " + minAsientos);
+        if (!Pattern.matches("^[A-Za-z][0-9]$", numSala)) {
+            throw new ValidacionSalaException("El numero de la sala tiene que contar con una letra y un numero");
         }
     }
-    
+
+    private void validarNumeroAsientos(String asientos) throws ValidacionSalaException {
+        if (!Pattern.matches("\\d+", asientos)) {
+            throw new ValidacionSalaException("Debe de ingresar unicamente numeros entero en el campo de numero de asientos");
+        }
+        
+        Integer numAsientos = Integer.valueOf(asientos);
+        
+        if (numAsientos < minAsientos) {
+            throw new ValidacionSalaException("El numero de asientos no puede ser menor a : " + minAsientos);
+        }
+        if (numAsientos > maxAsientos) {
+            throw new ValidacionSalaException("El numero de asientos no puede ser mayor a : " + maxAsientos);
+        }
+    }
+
     private void validarEstadoSala(EstadoSala estadoAnterior, EstadoSala estadoNuevo) throws ValidacionSalaException {
         if (estadoAnterior == estadoNuevo) {
             throw new ValidacionSalaException("El estado que se le quiere asignar a la sala es el mismo que tenia anteriormente.");
         }
     }
-            
 
     @Override
-    public List<SalaDTO> cargarSalas() throws BuscarSalaException {
+    public List<SalaViejaDTO> cargarSalas(String filtro) throws BuscarSalaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<SalaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException {
+    public List<SalaViejaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<SalaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException {
+    public List<SalaViejaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<SalaDTO> cargarSalasPorPeriodo(LocalDate periodoInicio, LocalDate periodoFinal) throws BuscarSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<GananciaSalaDTO> obtenerGananciaSala(List<SalaDTO> listaSalas) throws EstadisticasSalaException {
+    public List<GananciaSalaDTO> obtenerGananciaSala(List<SalaViejaDTO> listaSalas) throws EstadisticasSalaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

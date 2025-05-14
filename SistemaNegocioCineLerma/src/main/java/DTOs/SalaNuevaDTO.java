@@ -10,16 +10,16 @@ import enums.EstadoSala;
  * DTO que representa una sala existente
  * @author Ramon Valencia
  */
-public class SalaDTO {
+public class SalaNuevaDTO {
     
     private String numSala;
     private Integer numAsientos;
     private EstadoSala estado;
 
-    public SalaDTO() {
+    public SalaNuevaDTO() {
     }
 
-    public SalaDTO(String numSala, Integer numAsientos, EstadoSala estado) {
+    public SalaNuevaDTO(String numSala, Integer numAsientos, EstadoSala estado) {
         this.numSala = numSala;
         this.numAsientos = numAsientos;
         this.estado = estado;

@@ -7,7 +7,6 @@ package Interfaces;
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloOcuparAsientosFuncionException;
-import Excepciones.PersistenciaException;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
 import java.util.List;

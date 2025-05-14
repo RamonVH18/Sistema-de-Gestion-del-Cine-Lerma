@@ -17,8 +17,6 @@ import Mappers.PeliculaMapper;
 import entidades.Pelicula;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -62,18 +60,19 @@ public class PeliculaBO implements IPeliculaBO{
 
     @Override
     public List<PeliculaDTO> buscarTodasPeliculasActivas() throws PeliculaBusquedaException {
-        try {
-            List<Pelicula> peliculas = peliculaDAO.mostrarListaPelicula();
-            List<PeliculaDTO> peliculasMapeadas = new ArrayList<>();
-            
-            for (int i = 0; i < peliculas.size(); i++) {
-                PeliculaDTO peliculaMap = mapperPeli.toPeliculaDTO(peliculas.get(i));
-                peliculasMapeadas.add(peliculaMap);
-            }
-            return peliculasMapeadas;
-        } catch (PersistenciaException e) {
-            throw new PeliculaBusquedaException("Hubo un error al buscar las peliculas activas");
-        }
+//        try {
+//            List<Pelicula> peliculas = peliculaDAO.mostrarListaPelicula();
+//            List<PeliculaDTO> peliculasMapeadas = new ArrayList<>();
+//            
+//            for (int i = 0; i < peliculas.size(); i++) {
+//                PeliculaDTO peliculaMap = mapperPeli.toPeliculaDTO(peliculas.get(i));
+//                peliculasMapeadas.add(peliculaMap);
+//            }
+//            return peliculasMapeadas;
+//        } catch (PersistenciaException e) {
+//            throw new PeliculaBusquedaException("Hubo un error al buscar las peliculas activas");
+//        }
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         
     }
 

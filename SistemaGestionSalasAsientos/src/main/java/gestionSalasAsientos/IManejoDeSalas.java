@@ -5,15 +5,14 @@
 package gestionSalasAsientos;
 
 import DTOs.GananciaSalaDTO;
-import DTOs.SalaDTO;
+import DTOs.SalaNuevaDTO;
+import DTOs.SalaViejaDTO;
 import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
 import Excepciones.EstadisticasSalaException;
 import Excepciones.ModificarSalaException;
 import Excepciones.ValidacionSalaException;
 import enums.EstadoSala;
-
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -22,19 +21,17 @@ import java.util.List;
  */
 public interface IManejoDeSalas {
     
-    public SalaDTO agregarSala(SalaDTO sala) throws AgregarSalaException;
+    public SalaViejaDTO agregarSala(SalaNuevaDTO sala) throws AgregarSalaException;
     
-    public void validarSala(SalaDTO sala) throws ValidacionSalaException;
+    public void validarSala(String numSala, String numAsientos) throws ValidacionSalaException;
     
-    public List<SalaDTO> cargarSalas() throws BuscarSalaException;
+    public List<SalaViejaDTO> cargarSalas(String filtro) throws BuscarSalaException;
     
-    public List<SalaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException;
+    public List<SalaViejaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException;
     
-    public List<SalaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException;
+    public List<SalaViejaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException;
     
-    public List<SalaDTO> cargarSalasPorPeriodo(LocalDate periodoInicio, LocalDate periodoFinal) throws BuscarSalaException;
-    
-    public List<GananciaSalaDTO> obtenerGananciaSala(List<SalaDTO> listaSalas) throws EstadisticasSalaException;
+    public List<GananciaSalaDTO> obtenerGananciaSala(List<SalaViejaDTO> listaSalas) throws EstadisticasSalaException;
     
     public Boolean imprimirEstadisticasSala(GananciaSalaDTO gananciaSala) throws EstadisticasSalaException;
     

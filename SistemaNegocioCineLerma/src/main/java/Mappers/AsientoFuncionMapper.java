@@ -22,10 +22,10 @@ public class AsientoFuncionMapper implements IAsientoFuncionMapper {
         
         AsientoFuncionDTO asientoFuncionDTO = new AsientoFuncionDTO();
         
-        asientoFuncionDTO.setIdFuncion(asientoFuncion.getFuncion().getIdString());
+        asientoFuncionDTO.setIdFuncion(asientoFuncion.getIdFuncion());
         asientoFuncionDTO.setAsiento(asientoFuncion.getNumAsiento());
         asientoFuncionDTO.setDisponibilidad(asientoFuncion.getDisponibilidad());
-        asientoFuncionDTO.setNombreCliente(asientoFuncion.getCliente().getNombre());
+        asientoFuncionDTO.setNombreCliente(asientoFuncion.getIdCliente());
         
         return asientoFuncionDTO;
     }

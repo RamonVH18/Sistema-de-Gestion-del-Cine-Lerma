@@ -4,12 +4,24 @@
  */
 package BOs;
 
-import DTOs.SalaDTO;
+import DAOs.SalaDAO;
+import DTOs.AsientoDTO;
+import DTOs.SalaNuevaDTO;
+import DTOs.SalaViejaDTO;
 import Excepciones.Sala.SalaBusquedaException;
 import Excepciones.Sala.SalaModificacionException;
 import Excepciones.Sala.SalaRegistroException;
+import Excepciones.salas.BuscarSalaException;
+import Excepciones.salas.CreacionSalaException;
+import Excepciones.salas.ModificarSalaException;
 import Interfaces.ISalaBO;
-import java.time.LocalDate;
+import Interfaces.ISalaDAO;
+import Interfaces.mappers.IAsientoMapper;
+import Interfaces.mappers.ISalaMapper;
+import Mappers.AsientoMapper;
+import Mappers.SalaMapper;
+import entidades.Sala;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,12 +29,15 @@ import java.util.List;
  * @author Ramon Valencia
  */
 public class SalaBO implements ISalaBO {
-    
+
     private static SalaBO instanceBO;
-    
-    private SalaBO(){
+    private final ISalaMapper mapperSala = new SalaMapper();
+    private final IAsientoMapper mapperAsiento = new AsientoMapper();
+    private final ISalaDAO salaDAO = SalaDAO.getInstanceDAO();
+
+    private SalaBO() {
     }
-    
+
     public static SalaBO getInstanceBO() {
         if (instanceBO == null) {
             instanceBO = new SalaBO();
@@ -31,28 +46,68 @@ public class SalaBO implements ISalaBO {
     }
 
     @Override
-    public SalaDTO agregarSala(SalaDTO sala) throws SalaRegistroException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public SalaViejaDTO agregarSala(SalaNuevaDTO salaNueva) throws SalaRegistroException {
+        try {
+            Sala sala = mapperSala.toSalaNuevaEntidad(salaNueva);
+
+            sala = salaDAO.agregarSala(sala);
+
+            List<AsientoDTO> asientosDTO = mapperAsiento.toAsientoDTO(sala.getAsientos());
+            SalaViejaDTO salaVieja = mapperSala.toSalaViejaDTO(sala);
+            salaVieja.setAsientos(asientosDTO);
+
+            return salaVieja;
+        } catch (CreacionSalaException e) {
+            throw new SalaRegistroException("Hubo un error al agregar la sala en negocio: " + e.getMessage());
+        }
     }
 
     @Override
-    public SalaDTO buscarSala() throws SalaBusquedaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public SalaViejaDTO buscarSala(String numSala) throws SalaBusquedaException {
+        try {
+            Sala sala = salaDAO.buscarSala(numSala);
+
+            List<AsientoDTO> asientosDTO = mapperAsiento.toAsientoDTO(sala.getAsientos());
+            SalaViejaDTO salaVieja = mapperSala.toSalaViejaDTO(sala);
+            salaVieja.setAsientos(asientosDTO);
+
+            return salaVieja;
+        } catch (BuscarSalaException e) {
+            throw new SalaBusquedaException("Hubo un erro al buscar la sala: " + e.getMessage());
+        }
     }
 
     @Override
-    public List<SalaDTO> buscarTodasSalas() throws SalaBusquedaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<SalaViejaDTO> buscarSalas(String filtroSalas) throws SalaBusquedaException {
+        try {
+            List<Sala> salas = salaDAO.buscarSalas(filtroSalas);
+            Sala sala;
+            List<SalaViejaDTO> salasViejas = new ArrayList<>();
+            for (int i = 0; i < salas.size(); i++) {
+                sala = salas.get(i);
+                
+                List<AsientoDTO> asientosDTO = mapperAsiento.toAsientoDTO(sala.getAsientos());
+                SalaViejaDTO salaVieja = mapperSala.toSalaViejaDTO(sala);
+                salaVieja.setAsientos(asientosDTO);
+                salasViejas.add(salaVieja);
+            }
+            return salasViejas;
+        } catch (BuscarSalaException e) {
+            throw new SalaBusquedaException("Hubo un error al buscar las salas: " + e.getMessage());
+        }
     }
 
     @Override
-    public Boolean modificarSala() throws SalaModificacionException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean modificarSala(SalaViejaDTO salaVieja) throws SalaModificacionException {
+        try {
+            Sala sala = mapperSala.toSalaViejaEntidad(salaVieja);
+            
+            Boolean confirmacion = salaDAO.modificarEstadoSala(sala);
+            
+            return confirmacion;
+        } catch (ModificarSalaException e) {
+            throw new SalaModificacionException("Hubo un error al modificar el estado de la sala: " + e.getMessage());
+        }
     }
 
-    @Override
-    public List<SalaDTO> buscarSalasFiltro() throws SalaBusquedaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
 }

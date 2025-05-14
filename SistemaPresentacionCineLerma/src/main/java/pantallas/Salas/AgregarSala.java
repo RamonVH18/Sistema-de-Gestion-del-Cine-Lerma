@@ -4,6 +4,7 @@
  */
 package pantallas.Salas;
 
+import DTOs.SalaNuevaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import enums.EstadoSala;
@@ -45,6 +46,8 @@ public class AgregarSala extends javax.swing.JFrame {
     private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.PLAIN, 20);
     
     private final Color colorBotonFore = new Color(255, 255, 255);
+    
+    private JComboBox<EstadoSala> comboBoxEstado;
 
     /**
      * Constructor de la clase
@@ -90,6 +93,11 @@ public class AgregarSala extends javax.swing.JFrame {
         comboBoxEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnRegistro.setText("Registrar Sala");
+        btnRegistro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegistroMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,6 +138,27 @@ public class AgregarSala extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegistroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistroMouseClicked
+        // TODO add your handling code here:
+        SalaNuevaDTO salaNueva = new SalaNuevaDTO();
+        
+        String numSala = textFieldNombreSala.getText().toUpperCase();
+        String numAsientos = textFieldNumAsi.getText();
+        EstadoSala estado = (EstadoSala) comboBoxEstado.getSelectedItem();
+        
+            
+        if (control.validarCamposAgregarSala(numSala, numAsientos)) {
+            
+            Integer numeroAsientos = Integer.valueOf(numAsientos);
+
+            salaNueva.setNumSala(numSala);
+            salaNueva.setNumAsientos(numeroAsientos);
+            salaNueva.setEstado(estado);
+
+            control.agregarSala(salaNueva);
+        }
+    }//GEN-LAST:event_btnRegistroMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -174,7 +203,7 @@ public class AgregarSala extends javax.swing.JFrame {
         panelCampos.setLayout(new BoxLayout(panelCampos, BoxLayout.Y_AXIS)); //Layout para que los componentes aparezcan alineados en una columna
         
         // Configuracion del JTextField encargado de obtener el nombre de la sala
-        labelNombreSala = new JLabel("Nombre Sala:");
+        labelNombreSala = new JLabel("Numero de Sala:");
         textFieldNombreSala = new JTextField();
         textFieldNombreSala.setPreferredSize(tamTextField);
         panelCampos.add(configurarPanelTextField(labelNombreSala, textFieldNombreSala));
@@ -187,7 +216,7 @@ public class AgregarSala extends javax.swing.JFrame {
         
         // Configuracion del JComboBox para seleccionar el tipo de estado de una sala
         labelEstado = new JLabel("Estado:");
-        JComboBox<EstadoSala> comboBoxEstado = new JComboBox<>(EstadoSala.values());
+        comboBoxEstado = new JComboBox<>(EstadoSala.values());
         panelCampos.add(configurarPanelTextField(labelEstado, comboBoxEstado));
         
         //Se llama al metodo para configurar el boton encargado del registro de la sala
@@ -223,7 +252,11 @@ public class AgregarSala extends javax.swing.JFrame {
         btnRegistro.setFont(fuenteBoton); // Configuracion del boton
         btnRegistro.setBackground(Color.BLUE); // Configuracion del color del boton
         btnRegistro.setForeground(colorBotonFore); // Configuracion del color del contorno del boton
-        
+        btnRegistro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegistroMouseClicked(evt);
+            }
+        });
     }
     /**
      * Metodo para configurar los paneles donde iran los JTextField o el comboBox

@@ -15,9 +15,11 @@ import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
+import DTOs.SalaNuevaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.ActualizarUsuarioException;
+import Excepciones.AgregarSalaException;
 import Excepciones.CalcularCostoTotalException;
 import Excepciones.CargarHistorialException;
 import Excepciones.DisponibilidadAsientosException;
@@ -31,8 +33,8 @@ import Excepciones.GenerarBoletoException;
 import Excepciones.PresentacionException;
 import Excepciones.RegistrarUsuarioException;
 import Excepciones.ReservarAsientoFuncionException;
+import Excepciones.ValidacionSalaException;
 import Excepciones.ValidarCampoAsientoException;
-import Excepciones.ValidarUsuarioException;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import enums.EstadoUsuario;
@@ -41,6 +43,8 @@ import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
+import gestionSalasAsientos.IManejoDeSalas;
+import gestionSalasAsientos.ManejoDeSalas;
 import gestionUsuarios.IManejoUsuarios;
 import gestionUsuarios.ManejoUsuarios;
 import java.time.LocalDateTime;
@@ -59,7 +63,6 @@ import pantallas.Pagos.PantallaPagoRechazado;
 import pantallas.Salas.AgregarSala;
 import pantallas.Salas.EstadisticasSala;
 import pantallas.Salas.MenuSalas;
-import pantallas.Usuarios.AdministracionDeUsuario;
 import pantallas.Usuarios.ConsultarUsuarios;
 import pantallas.Usuarios.EditarUsuario;
 import pantallas.Usuarios.HistorialCliente;
@@ -75,6 +78,7 @@ public class ControlDeNavegacion implements IControl {
 
     //Instancias y clases para llamar metodos
     private final IManejoDeBoletos manejoDeBoletos = ManejoDeBoletos.getInstancia();
+    private final IManejoDeSalas manejoDeSalas = ManejoDeSalas.getInstanceSalas();
     private final IGestionPagos gestionDePagos = GestionPagos.getInstancia();
     private final IManejoUsuarios gestionUsuarios = ManejoUsuarios.getInstance();
 
@@ -121,6 +125,18 @@ public class ControlDeNavegacion implements IControl {
             MenuPrincipalCliente pantalla = new MenuPrincipalCliente(cliente);
             pantalla.setLocationRelativeTo(null);
             pantalla.setVisible(true);
+        });
+    }
+    
+    /**
+     * Metodo que se encarga de abrir la pantalla de pago rechazado
+     */
+    @Override
+    public void mostrarMenuAdministrador(JFrame frameAnterior, AdministradorDTO admin) {
+        SwingUtilities.invokeLater(() -> {
+            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin(admin);
+            pantallaMenuAdmin.setLocationRelativeTo(null);
+            pantallaMenuAdmin.setVisible(true);
         });
     }
 
@@ -209,66 +225,6 @@ public class ControlDeNavegacion implements IControl {
             PantallaPagoRechazado pantallaPagoRechazado = new PantallaPagoRechazado();
             pantallaPagoRechazado.setLocationRelativeTo(null);
             pantallaPagoRechazado.setVisible(true);
-        });
-    }
-
-    /**
-     * Metodo que se encarga de abrir la pantalla de pago rechazado
-     */
-    @Override
-    public void mostrarMenuAdministrador(JFrame frameAnterior, AdministradorDTO admin) {
-        SwingUtilities.invokeLater(() -> {
-            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin(admin);
-            pantallaMenuAdmin.setLocationRelativeTo(null);
-            pantallaMenuAdmin.setVisible(true);
-        });
-    }
-
-    /**
-     * Metodo para abrir el menu del caso de uso de gestion de salas
-     *
-     * @param tituloFrame
-     * @param frameAnterior
-     */
-    @Override
-    public void mostrarMenuSalas(JFrame frameAnterior) {
-        SwingUtilities.invokeLater(() -> {
-            MenuSalas pantallaMenuSalas = new MenuSalas();
-            pantallaMenuSalas.setLocationRelativeTo(null);
-            pantallaMenuSalas.setVisible(true);
-            frameAnterior.dispose();
-        });
-    }
-
-    /**
-     * Metodo para abrir la pantalla de agregar sala
-     *
-     * @param tituloFrame
-     * @param frameAnterior
-     */
-    @Override
-    public void mostrarAgregarSala(JFrame frameAnterior) {
-        SwingUtilities.invokeLater(() -> {
-            AgregarSala pantallaAgregarSala = new AgregarSala();
-            pantallaAgregarSala.setLocationRelativeTo(null);
-            pantallaAgregarSala.setVisible(true);
-            frameAnterior.dispose();
-        });
-    }
-
-    /**
-     * Metodo para abrir la pantalla de estadisticas de una las sala
-     *
-     * @param tituloFrame
-     * @param frameAnterior
-     */
-    @Override
-    public void mostrarEstadisticasSala(JFrame frameAnterior) {
-        SwingUtilities.invokeLater(() -> {
-            EstadisticasSala pantallaEstadisticasSala = new EstadisticasSala();
-            pantallaEstadisticasSala.setLocationRelativeTo(null);
-            pantallaEstadisticasSala.setVisible(true);
-            frameAnterior.dispose();
         });
     }
 
@@ -594,6 +550,81 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    /*
+    --------------INICIO DE LOS METODOS DEL CONTROL DE NAVEGACION DE SALAS--------------
+    */
+
+    /**
+     * Metodo para abrir el menu del caso de uso de gestion de salas
+     *
+     * @param frameAnterior
+     */
+    @Override
+    public void mostrarMenuSalas(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            MenuSalas pantallaMenuSalas = new MenuSalas();
+            pantallaMenuSalas.setLocationRelativeTo(null);
+            pantallaMenuSalas.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+
+    /**
+     * Metodo para abrir la pantalla de agregar sala
+     *
+     * @param frameAnterior
+     */
+    @Override
+    public void mostrarAgregarSala(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            AgregarSala pantallaAgregarSala = new AgregarSala();
+            pantallaAgregarSala.setLocationRelativeTo(null);
+            pantallaAgregarSala.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
+    @Override 
+    public void agregarSala(SalaNuevaDTO salaNueva) {
+        try {
+            manejoDeSalas.agregarSala(salaNueva);
+            JOptionPane.showMessageDialog(null, "Sala agregada exitosamente!!", "SALA", JOptionPane.INFORMATION_MESSAGE);
+        } catch (AgregarSalaException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
+    
+    @Override 
+    public Boolean validarCamposAgregarSala(String numSala, String numAsientos) {
+        try {
+            manejoDeSalas.validarSala(numSala, numAsientos);
+            return Boolean.TRUE;
+        } catch (ValidacionSalaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return Boolean.FALSE;
+        }
+    }
+
+    /**
+     * Metodo para abrir la pantalla de estadisticas de una las sala
+     *
+     * @param frameAnterior
+     */
+    @Override
+    public void mostrarEstadisticasSala(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            EstadisticasSala pantallaEstadisticasSala = new EstadisticasSala();
+            pantallaEstadisticasSala.setLocationRelativeTo(null);
+            pantallaEstadisticasSala.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
+    /*
+    --------------FIN DE LOS METODOS DEL CONTROL DE NAVEGACION DE SALAS--------------
+    */
 
     //METODOS DE NAVEGACION DE LA GESTION DE USUARIOS
     @Override

@@ -4,11 +4,11 @@
  */
 package Interfaces;
 
-import DTOs.SalaDTO;
+import DTOs.SalaNuevaDTO;
+import DTOs.SalaViejaDTO;
 import Excepciones.Sala.SalaBusquedaException;
 import Excepciones.Sala.SalaModificacionException;
 import Excepciones.Sala.SalaRegistroException;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -17,14 +17,12 @@ import java.util.List;
  */
 public interface ISalaBO {
     
-    public SalaDTO agregarSala(SalaDTO sala) throws SalaRegistroException;
+    public SalaViejaDTO agregarSala(SalaNuevaDTO sala) throws SalaRegistroException;
     
-    public SalaDTO buscarSala() throws SalaBusquedaException;
+    public SalaViejaDTO buscarSala(String numSala) throws SalaBusquedaException;
     
-    public List<SalaDTO> buscarTodasSalas() throws SalaBusquedaException;
+    public List<SalaViejaDTO> buscarSalas(String filtroSalas) throws SalaBusquedaException;
     
-    public Boolean modificarSala() throws SalaModificacionException;
-    
-    public List<SalaDTO> buscarSalasFiltro() throws SalaBusquedaException;
+    public Boolean modificarSala(SalaViejaDTO salaVieja) throws SalaModificacionException;
     
 }

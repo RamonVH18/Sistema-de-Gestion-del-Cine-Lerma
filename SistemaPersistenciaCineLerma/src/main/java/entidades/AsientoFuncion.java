@@ -15,13 +15,13 @@ public class AsientoFuncion {
 
     private ObjectId idAsientoFuncion; // Id del AsientoFuncion
     
-    private Funcion funcion; // Id de la funcion a la que pertenecen
+    private String idFuncion; // Id de la funcion a la que pertenecen
 
     private String numAsiento; // Asiento al que hace referencia el asientoFuncion
 
     private Boolean disponibilidad; // Disponibilidad del asiento durante la funcion
 
-    private Cliente cliente; // Id del cliente que tiene reservado el asiento, este puede ser nulo
+    private String idCliente; // Id del cliente que tiene reservado el asiento, este puede ser nulo
 
     /**
      * Constructor vacio
@@ -31,30 +31,30 @@ public class AsientoFuncion {
     /**
      * Constructor con todos los atributos
      * @param idAsientoFuncion
-     * @param funcion
+     * @param idFuncion
      * @param numAsiento
      * @param disponibilidad
-     * @param cliente
+     * @param idCliente
      */
-    public AsientoFuncion(ObjectId idAsientoFuncion, Funcion funcion, String numAsiento, Boolean disponibilidad, Cliente cliente) {
+    public AsientoFuncion(ObjectId idAsientoFuncion, String idFuncion, String numAsiento, Boolean disponibilidad, String idCliente) {
         this.idAsientoFuncion = idAsientoFuncion;
-        this.funcion = funcion;
+        this.idFuncion = idFuncion;
         this.numAsiento = numAsiento;
         this.disponibilidad = disponibilidad;
-        this.cliente = cliente;
+        this.idCliente = idCliente;
     }
     /**
      * Constructor con todos los atributos sin el id
-     * @param funcion
+     * @param idFuncion
      * @param numAsiento
      * @param disponibilidad
-     * @param cliente
+     * @param idCliente
      */
-    public AsientoFuncion(Funcion funcion, String numAsiento, Boolean disponibilidad, Cliente cliente) {    
-        this.funcion = funcion;
+    public AsientoFuncion(String idFuncion, String numAsiento, Boolean disponibilidad, String idCliente) {    
+        this.idFuncion = idFuncion;
         this.numAsiento = numAsiento;
         this.disponibilidad = disponibilidad;
-        this.cliente = cliente;
+        this.idCliente = idCliente;
     }
 
     /**
@@ -75,15 +75,15 @@ public class AsientoFuncion {
      * Metodo para obtener la Funcion a la que pertenece el AsientoFuncion
      * @return 
      */
-    public Funcion getFuncion() {
-        return funcion;
+    public String getIdFuncion() {
+        return idFuncion;
     }
     /**
      * Metodo para guardar la Funcion a la que pertenece el AsientoFuncion 
-     * @param funcion
+     * @param idFuncion
      */
-    public void setFuncion(Funcion funcion) {
-        this.funcion = funcion;
+    public void setIdFuncion(String idFuncion) {
+        this.idFuncion = idFuncion;
     }
     /**
      * Metodo para obtener el Asiento al que hace referencia el asientoFuncion
@@ -117,30 +117,30 @@ public class AsientoFuncion {
      * Metodo para obtener el Cliente al que esta reservado el asiento
      * @return 
      */
-    public Cliente getCliente() {
-        return cliente;
+    public String getIdCliente() {
+        return idCliente;
     }
     /** 
      * Metodo para guardar el Cliente al que esta reservado el asiento 
-     * @param cliente
+     * @param idCliente
      */
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setIdCliente(String idCliente) {
+        this.idCliente = idCliente;
     }
 
-    @Override
-    public String toString() {
-        return "AsientoFuncion{" + 
-                "idAsientoFuncion=" + idAsientoFuncion + 
-                ", funcion=" + funcion + 
-                ", numAsiento=" + numAsiento + 
-                ", disponibilidad=" + disponibilidad + 
-                ", cliente=" + cliente + 
-                '}';
-    }
+    
     /**
      * ToString de AsientoFuncion
      * @return 
      */
-
+    @Override
+    public String toString() {
+        return "AsientoFuncion{" + 
+                "idAsientoFuncion=" + idAsientoFuncion + 
+                ", idFuncion=" + idFuncion + 
+                ", numAsiento=" + numAsiento + 
+                ", disponibilidad=" + disponibilidad + 
+                ", idCliente=" + idCliente + 
+                '}';
+    }
 }

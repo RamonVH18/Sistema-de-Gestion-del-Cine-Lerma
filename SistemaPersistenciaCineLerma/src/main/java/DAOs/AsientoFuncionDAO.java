@@ -111,7 +111,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             MongoCollection<AsientoFuncion> coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
 
             Bson filtroFuncion = filtroFuncion(
-                    asientosReservados.get(0).getFuncion().getIdString(),
+                    asientosReservados.get(0).getIdFuncion(),
                     Boolean.FALSE
             );
             
