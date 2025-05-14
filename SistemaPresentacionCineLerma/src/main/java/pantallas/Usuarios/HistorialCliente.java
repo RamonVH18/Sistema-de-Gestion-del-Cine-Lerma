@@ -4,17 +4,35 @@
  */
 package pantallas.Usuarios;
 
+import DTOs.ClienteDTO;
+import DTOs.CompraDTO;
+import DTOs.UsuarioDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import entidades.Compra;
+import java.util.List;
+import javax.swing.JTable;
+import utilitades.ModeladoTablas;
+
 /**
  *
  * @author sonic
  */
 public class HistorialCliente extends javax.swing.JFrame {
+    private ClienteDTO clienteActual;
+    private final IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form HistorialCliente
      */
-    public HistorialCliente() {
+    public HistorialCliente(ClienteDTO clienteActual) {
         initComponents();
+        this.clienteActual = clienteActual;
+        
+        lblNombreCompleto.setText(clienteActual.getNombre() + " " + clienteActual.getApellidoPaterno() + " " + clienteActual.getApellidoMaterno());
+        
+        List<CompraDTO> listaCompras = control.cargarHistorialCompras(clienteActual);
+        cargarListaCompras(listaCompras);
     }
 
     /**
@@ -27,26 +45,24 @@ public class HistorialCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jButton1 = new javax.swing.JButton();
+        lblNombreCompleto = new javax.swing.JLabel();
+        panelTabla = new javax.swing.JScrollPane();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(680, 820));
         setMinimumSize(new java.awt.Dimension(680, 820));
-        setPreferredSize(new java.awt.Dimension(680, 820));
         setSize(new java.awt.Dimension(680, 820));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Historial de compras del cliente: ");
 
-        jLabel2.setText("jLabel2");
+        lblNombreCompleto.setText("jLabel2");
 
-        jButton1.setBackground(new java.awt.Color(162, 132, 94));
-        jButton1.setText("< Volver");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnVolver.setBackground(new java.awt.Color(162, 132, 94));
+        btnVolver.setText("< Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnVolverActionPerformed(evt);
             }
         });
 
@@ -57,12 +73,12 @@ public class HistorialCliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)))
+                        .addComponent(lblNombreCompleto)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -71,20 +87,23 @@ public class HistorialCliente extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(lblNombreCompleto))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 663, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 663, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        control.mostrarGestionDeUsuarios(this, null);
+        dispose();
+        
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -116,15 +135,44 @@ public class HistorialCliente extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HistorialCliente().setVisible(true);
+                ClienteDTO clienteTemp = new ClienteDTO();
+                clienteTemp.setNombre("Cliente Temporal");
+                new HistorialCliente(clienteTemp).setVisible(true);
+                
             }
         });
     }
+    
+    private void cargarListaCompras(List<CompraDTO> listaUsuarios) {
+        String[] columnas = {
+            "Usuario", "Monto", "FechaHoraPago", "EstadoPago", "MetodoPago", "FechaCompra"
+        };
+
+        Object[][] datosTabla = new Object[listaUsuarios.size()][columnas.length];
+
+        for (int i = 0; i < listaUsuarios.size(); i++) {
+            CompraDTO compra = listaUsuarios.get(i);
+            datosTabla[i] = new Object[]{
+                compra.getUsuarioCliente(),
+                compra.getPago().getMonto(),
+                compra.getPago().getFechaHora(),
+                compra.getPago().getEstado(),
+                compra.getMetodoPago(),
+                compra.getFecha()
+            };
+        }
+
+        JTable tablaUsuarios = ModeladoTablas.creacionTablaSencilla(columnas, datosTabla, 14, 28);
+
+
+        panelTabla.setViewportView(tablaUsuarios);
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblNombreCompleto;
+    private javax.swing.JScrollPane panelTabla;
     // End of variables declaration//GEN-END:variables
 }

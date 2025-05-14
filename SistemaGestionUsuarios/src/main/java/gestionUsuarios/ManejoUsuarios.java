@@ -33,6 +33,7 @@ import Interfaces.IAdministradorBO;
 import Interfaces.IClienteBO;
 import Interfaces.IUsuarioBO;
 import enums.EstadoUsuario;
+import enums.Rol;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
@@ -75,28 +76,53 @@ public class ManejoUsuarios implements IManejoUsuarios {
     @Override
     public Boolean bloquearUsuario(UsuarioDTO usuario) throws ActualizarUsuarioException {
         try {
+            
+            if (usuario == null){
+                throw new ActualizarUsuarioException("El usuario no se pudo encontrar");
+            }
+            
+            if (usuario.getRol() == Rol.ADMINISTRADOR) {
+                throw new ActualizarUsuarioException("No se pueden bloquear administradores");
+            }
+            
+            //AQUI FALTA VALIDAR QUE SI UN CLIENTE AU TIENE FUNCIONES O ALGO PENDIENTE NO SE PUEDE BLOQUEAR
+            
+            if (usuario.getEstado() != EstadoUsuario.ACTIVO) {
+                throw new ActualizarUsuarioException("El usuario ya esta bloqueado");
+            }
+            
+            
             return usuarioBO.bloquearUsuarioBO(usuario);
 
         } catch (ActualizarUsuarioExceptionBO e) {
-            throw new ActualizarUsuarioException("No se pudo bloquear el cliente: " + e.getMessage(), e);
+            throw new ActualizarUsuarioException("No se pudo bloquear el usuario: " + e.getMessage(), e);
         }
     }
 
     @Override
     public Boolean desbloquearUsuario(UsuarioDTO usuario) throws ActualizarUsuarioException {
         try {
+            
+            if (usuario == null){
+                throw new ActualizarUsuarioException("El usuario no se pudo encontrar");
+            }
+            
+            if (usuario.getEstado() == EstadoUsuario.ACTIVO) {
+                throw new ActualizarUsuarioException("El usuario no esta bloqueado");
+            }
+            
             return usuarioBO.desbloquearUsuarioBO(usuario);
 
         } catch (ActualizarUsuarioExceptionBO e) {
-            throw new ActualizarUsuarioException("No se pudo bloquear el cliente: " + e.getMessage(), e);
+            throw new ActualizarUsuarioException("No se pudo desbloquear el cliente: " + e.getMessage(), e);
         }
     }
 
     //METODOS QUE SIRVEN PARA FILTRAR LA LISTA DE USUARIOS
     @Override
-    public List<UsuarioDTO> mostrarListaUsuariosPorEstado(EstadoUsuario estado) throws ObtenerUsuariosException {
+    public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String usuario) throws ObtenerUsuariosException {
         try {
-            List<UsuarioDTO> listaFiltrada = usuarioBO.mostrarListaUsuariosFiltradaBO(estado, null, null, null, null);
+            List<UsuarioDTO> listaFiltrada = usuarioBO.mostrarListaUsuariosFiltradaBO(estado, rol, fechaInicio, fechaFin, usuario);
 
             return listaFiltrada;
 
@@ -105,41 +131,41 @@ public class ManejoUsuarios implements IManejoUsuarios {
         }
     }
 
-    @Override
-    public List<UsuarioDTO> mostrarListaUsuariosPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) throws ObtenerUsuariosException {
-        try {
-            List<UsuarioDTO> listaFiltrada = usuarioBO.mostrarListaUsuariosFiltradaBO(null, fechaInicio, fechaFin, null, null);
-
-            return listaFiltrada;
-
-        } catch (ObtenerUsuariosExceptionBO e) {
-            throw new ObtenerUsuariosException("La lista no se pudo filtrar: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public List<UsuarioDTO> mostrarListaUsuariosPorCorreo(String correo) throws ObtenerUsuariosException {
-        try {
-            List<UsuarioDTO> listaFiltrada = usuarioBO.mostrarListaUsuariosFiltradaBO(null, null, null, correo, null);
-
-            return listaFiltrada;
-
-        } catch (ObtenerUsuariosExceptionBO e) {
-            throw new ObtenerUsuariosException("La lista no se pudo filtrar: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public List<UsuarioDTO> mostrarListaUsuariosPorNombre(String nombre) throws ObtenerUsuariosException {
-        try {
-            List<UsuarioDTO> listaFiltrada = usuarioBO.mostrarListaUsuariosFiltradaBO(null, null, null, null, nombre);
-
-            return listaFiltrada;
-
-        } catch (ObtenerUsuariosExceptionBO e) {
-            throw new ObtenerUsuariosException("La lista no se pudo filtrar: " + e.getMessage());
-        }
-    }
+//    @Override
+//    public List<UsuarioDTO> mostrarListaUsuariosPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) throws ObtenerUsuariosException {
+//        try {
+//            List<UsuarioDTO> listaFiltrada = usuarioBO.mostrarListaUsuariosFiltradaBO(null, fechaInicio, fechaFin, null, null);
+//
+//            return listaFiltrada;
+//
+//        } catch (ObtenerUsuariosExceptionBO e) {
+//            throw new ObtenerUsuariosException("La lista no se pudo filtrar: " + e.getMessage());
+//        }
+//    }
+//
+//    @Override
+//    public List<UsuarioDTO> mostrarListaUsuariosPorCorreo(String correo) throws ObtenerUsuariosException {
+//        try {
+//            List<UsuarioDTO> listaFiltrada = usuarioBO.mostrarListaUsuariosFiltradaBO(null, null, null, correo, null);
+//
+//            return listaFiltrada;
+//
+//        } catch (ObtenerUsuariosExceptionBO e) {
+//            throw new ObtenerUsuariosException("La lista no se pudo filtrar: " + e.getMessage());
+//        }
+//    }
+//
+//    @Override
+//    public List<UsuarioDTO> mostrarListaUsuariosPorNombre(String nombre) throws ObtenerUsuariosException {
+//        try {
+//            List<UsuarioDTO> listaFiltrada = usuarioBO.mostrarListaUsuariosFiltradaBO(null, null, null, null, nombre);
+//
+//            return listaFiltrada;
+//
+//        } catch (ObtenerUsuariosExceptionBO e) {
+//            throw new ObtenerUsuariosException("La lista no se pudo filtrar: " + e.getMessage());
+//        }
+//    }
 
     ///////////////////////////////////////////
     //-------------------------------------------------METODOS DE CLIENTES ---------------------------------------------------------------------------------------
@@ -281,7 +307,10 @@ public class ManejoUsuarios implements IManejoUsuarios {
     public Boolean eliminarCliente(ClienteDTO cliente) throws EliminarUsuarioException {
         try {
 
-            //FALTAN MUCHAS VALIDACIONES AQUI EHHHH XDDDDDDDDDDDDDDDDDDD MUCHAS POR QUE NO SE PUEDE ELIMINAR ASI COMO ASI
+            if (cliente.getEstado() != EstadoUsuario.BLOQUEADO) {
+                throw new EliminarUsuarioException("El cliente no puede ser eliminado si esta activo");
+            }
+            
             return clienteBO.eliminarClienteBO(cliente);
 
         } catch (EliminarUsuarioExceptionBO e) {

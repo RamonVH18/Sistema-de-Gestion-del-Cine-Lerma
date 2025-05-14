@@ -35,22 +35,22 @@ public class pruebasAsientoFuncionDAO {
     
     public static void main(String[] args) throws BuscarSalaException, FuncionSalaOcupadaException, FalloCreacionAsientosFuncionException {
         
-            Sala sala = salaDAO.buscarSala("C1");
-            Pelicula pelicula = new Pelicula("Cholos Empotrados", "Jaime", "Trans", 120, "El Abraham es gay", Boolean.TRUE);
-            Funcion funcion = new Funcion(sala, pelicula, LocalDateTime.now(), 120.00);
-            
-            funcion = funcionDAO.registrarFuncion(funcion);
-            
-            List<AsientoFuncion> asientosFuncion = new ArrayList<>();
-            List<Asiento> asientosSala = sala.getAsientos();
-            Asiento asiento;
-            for (int i = 0; i < sala.getNumAsientos(); i++) {
-                asiento = asientosSala.get(i);
-                AsientoFuncion nuevoAsiento = new AsientoFuncion(funcion, asiento.getNumero(), Boolean.TRUE, null);
-                asientosFuncion.add(nuevoAsiento);
-            }
-            
-            asientoFuncionDAO.agregarAsientosFuncion(asientosFuncion);
+//            Sala sala = salaDAO.buscarSala("C1");
+//            Pelicula pelicula = new Pelicula("Cholos Empotrados", "Jaime", "Trans", 120, "El Abraham es gay", Boolean.TRUE);
+//            Funcion funcion = new Funcion(sala, pelicula, LocalDateTime.now(), 120.00);
+//            
+//            funcion = funcionDAO.registrarFuncion(funcion);
+//            
+//            List<AsientoFuncion> asientosFuncion = new ArrayList<>();
+//            List<Asiento> asientosSala = sala.getAsientos();
+//            Asiento asiento;
+//            for (int i = 0; i < sala.getNumAsientos(); i++) {
+//                asiento = asientosSala.get(i);
+//                AsientoFuncion nuevoAsiento = new AsientoFuncion(funcion, asiento.getNumero(), Boolean.TRUE, null);
+//                asientosFuncion.add(nuevoAsiento);
+//            }
+//            
+//            asientoFuncionDAO.agregarAsientosFuncion(asientosFuncion);
         
         
     }

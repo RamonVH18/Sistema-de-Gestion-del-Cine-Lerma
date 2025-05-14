@@ -96,13 +96,13 @@ public class ClienteDAO implements IClienteDAO {
                     new IndexOptions().unique(true)
             );
 
-            Bson filtro = Filters.eq("nombreUsuario", cliente.getNombreDeUsuario());
+            Bson filtro = Filters.eq("nombreDeUsuario", cliente.getNombreDeUsuario());
             //puede ser que al filtro se le pudiera agregar que el rol del usuario encontrado coincida con cliente
 
             Cliente clienteActualizar = coleccion.find(filtro).first();
 
             if (clienteActualizar == null) {
-                throw new ActualizarClienteException("No se encontro el usuario para eliminar");
+                throw new ActualizarClienteException("No se encontro el usuario para actualizar");
             }
 
             UpdateResult result = coleccion.replaceOne(filtro, cliente);

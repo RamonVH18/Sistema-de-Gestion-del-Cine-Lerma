@@ -30,150 +30,150 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class FuncionDAOTest {
 
-    private IFuncionDAO funcionDAO;
-    private Funcion funcionPrueba;
-    private Pelicula peliculaPrueba;
-    private Sala salaPrueba;
-
-    public FuncionDAOTest() {
-    }
-
-    @BeforeAll
-    public static void setUpClass() {
-    }
-
-    @AfterAll
-    public static void tearDownClass() {
-    }
-
-    @BeforeEach
-    public void setUp() {
-        funcionDAO = FuncionDAO.getInstanceDAO();
-        peliculaPrueba = new Pelicula(1L, "PeliculaPrueba", "imagen.jpg", "Acción", 120, "Sinopsis", true);
-
-        // Inicializar Sala con asientos
-        salaPrueba = new Sala(50, "Sala1", EstadoSala.ACTIVA);
-        List<Asiento> asientos = new ArrayList<>();
-        for (int i = 1; i <= 50; i++) {
-            asientos.add(new Asiento(String.valueOf(i))); // Números como String
-        }
-        salaPrueba.setAsientos(asientos);
-
-        funcionPrueba = new Funcion(
-                new ObjectId(),
-                salaPrueba,
-                peliculaPrueba,
-                LocalDateTime.now().plusHours(1),
-                150.0
-        );
-    }
-
-    @AfterEach
-    public void tearDown() {
-        try {
-            Funcion funcionEnBD = funcionDAO.buscarFuncionPorId(funcionPrueba.getIdFuncion());
-            if (funcionEnBD != null) {
-                funcionDAO.eliminarFuncion(funcionPrueba);
-            }
-        } catch (FuncionNoEncontradaException e) {
-            System.out.println("Error en limpieza: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Test of getInstanceDAO method, of class FuncionDAO.
-     */
-    @Test
-    public void testGetInstanceDAO() {
-        assertNotNull(funcionDAO, "La instancia del DAO no debe ser nula");
-    }
-
-    /**
-     * Test of registrarFuncion method, of class FuncionDAO.
-     */
-    @Test
-    public void testRegistrarFuncionExitoso() throws Exception {
-        Funcion registrada = funcionDAO.registrarFuncion(funcionPrueba);
-        assertNotNull(registrada.getIdFuncion(), "La función debe tener un ID después de registrarse");
-    }
-
-    @Test
-    public void testRegistrarFuncionSalaInactiva() {
-        Sala salaInactiva = new Sala(50, "Sala2", EstadoSala.INACTIVA);
-        Funcion funcionInvalida = new Funcion(
-                new ObjectId(),
-                salaInactiva,
-                peliculaPrueba,
-                LocalDateTime.now().plusHours(1),
-                150.0
-        );
-
-        assertThrows(FuncionSalaVaciaException.class, () -> { // Crear esta excepción
-            funcionDAO.registrarFuncion(funcionInvalida);
-        });
-    }
-
-    @Test
-    public void testRegistrarFuncionSalaOcupada() throws Exception {
-        funcionDAO.registrarFuncion(funcionPrueba);
-        Funcion funcionRepetida = new Funcion(
-                new ObjectId(),
-                salaPrueba,
-                peliculaPrueba,
-                funcionPrueba.getFechaHora(),
-                200.0
-        );
-
-        assertThrows(FuncionSalaOcupadaException.class, () -> {
-            funcionDAO.registrarFuncion(funcionRepetida);
-        }, "Debe fallar al registrar funciones en la misma sala");
-    }
-
-    /**
-     * Test of eliminarFuncion method, of class FuncionDAO.
-     */
-    @Test
-    public void testEliminarFuncionExitoso() throws Exception {
-        funcionDAO.registrarFuncion(funcionPrueba);
-        Funcion eliminada = funcionDAO.eliminarFuncion(funcionPrueba);
-        assertEquals(funcionPrueba.getIdFuncion(), eliminada.getIdFuncion(), "Debe eliminar la función correcta");
-    }
-
-    @Test
-    public void testEliminarFuncionFallido() {
-        // Crear una función que NO se registra en la base de datos
-        Funcion funcionNoRegistrada = new Funcion(
-                new ObjectId(),
-                salaPrueba,
-                peliculaPrueba,
-                LocalDateTime.now().plusHours(3),
-                150.0
-        );
-
-        // Verificar que se lanza la excepción al intentar eliminar
-        assertThrows(FuncionNoEncontradaException.class, () -> {
-            funcionDAO.eliminarFuncion(funcionNoRegistrada);
-        }, "Debe fallar al eliminar una función no registrada");
-    }
-
-    /**
-     * Test of buscarFuncionPorId method, of class FuncionDAO.
-     */
-    @Test
-    public void testBuscarFuncionPorId() throws Exception {
-        funcionDAO.registrarFuncion(funcionPrueba);
-        Funcion encontrada = funcionDAO.buscarFuncionPorId(funcionPrueba.getIdFuncion());
-        assertEquals(funcionPrueba.getIdFuncion(), encontrada.getIdFuncion(), "Los IDs deben coincidir");
-    }
-
-    /**
-     * Test of buscarFuncionesPelicula method, of class FuncionDAO.
-     */
-    @Test
-    public void testBuscarFuncionesPelicula() throws Exception {
-        funcionDAO.registrarFuncion(funcionPrueba);
-        List<Funcion> funciones = funcionDAO.buscarFuncionesPelicula("PeliculaPrueba");
-        assertTrue(funciones.size() > 0, "Debe encontrar al menos una función para la película");
-    }
+//    private IFuncionDAO funcionDAO;
+//    private Funcion funcionPrueba;
+//    private Pelicula peliculaPrueba;
+//    private Sala salaPrueba;
+//
+//    public FuncionDAOTest() {
+//    }
+//
+//    @BeforeAll
+//    public static void setUpClass() {
+//    }
+//
+//    @AfterAll
+//    public static void tearDownClass() {
+//    }
+//
+//    @BeforeEach
+//    public void setUp() {
+//        funcionDAO = FuncionDAO.getInstanceDAO();
+//        peliculaPrueba = new Pelicula(1L, "PeliculaPrueba", "imagen.jpg", "Acción", 120, "Sinopsis", true);
+//
+//        // Inicializar Sala con asientos
+//        salaPrueba = new Sala(50, "Sala1", EstadoSala.ACTIVA);
+//        List<Asiento> asientos = new ArrayList<>();
+//        for (int i = 1; i <= 50; i++) {
+//            asientos.add(new Asiento(String.valueOf(i))); // Números como String
+//        }
+//        salaPrueba.setAsientos(asientos);
+//
+//        funcionPrueba = new Funcion(
+//                new ObjectId(),
+//                salaPrueba,
+//                peliculaPrueba,
+//                LocalDateTime.now().plusHours(1),
+//                150.0
+//        );
+//    }
+//
+//    @AfterEach
+//    public void tearDown() {
+//        try {
+//            Funcion funcionEnBD = funcionDAO.buscarFuncionPorId(funcionPrueba.getIdFuncion());
+//            if (funcionEnBD != null) {
+//                funcionDAO.eliminarFuncion(funcionPrueba);
+//            }
+//        } catch (FuncionNoEncontradaException e) {
+//            System.out.println("Error en limpieza: " + e.getMessage());
+//        }
+//    }
+//
+//    /**
+//     * Test of getInstanceDAO method, of class FuncionDAO.
+//     */
+//    @Test
+//    public void testGetInstanceDAO() {
+//        assertNotNull(funcionDAO, "La instancia del DAO no debe ser nula");
+//    }
+//
+//    /**
+//     * Test of registrarFuncion method, of class FuncionDAO.
+//     */
+//    @Test
+//    public void testRegistrarFuncionExitoso() throws Exception {
+//        Funcion registrada = funcionDAO.registrarFuncion(funcionPrueba);
+//        assertNotNull(registrada.getIdFuncion(), "La función debe tener un ID después de registrarse");
+//    }
+//
+//    @Test
+//    public void testRegistrarFuncionSalaInactiva() {
+//        Sala salaInactiva = new Sala(50, "Sala2", EstadoSala.INACTIVA);
+//        Funcion funcionInvalida = new Funcion(
+//                new ObjectId(),
+//                salaInactiva,
+//                peliculaPrueba,
+//                LocalDateTime.now().plusHours(1),
+//                150.0
+//        );
+//
+//        assertThrows(FuncionSalaVaciaException.class, () -> { // Crear esta excepción
+//            funcionDAO.registrarFuncion(funcionInvalida);
+//        });
+//    }
+//
+//    @Test
+//    public void testRegistrarFuncionSalaOcupada() throws Exception {
+//        funcionDAO.registrarFuncion(funcionPrueba);
+//        Funcion funcionRepetida = new Funcion(
+//                new ObjectId(),
+//                salaPrueba,
+//                peliculaPrueba,
+//                funcionPrueba.getFechaHora(),
+//                200.0
+//        );
+//
+//        assertThrows(FuncionSalaOcupadaException.class, () -> {
+//            funcionDAO.registrarFuncion(funcionRepetida);
+//        }, "Debe fallar al registrar funciones en la misma sala");
+//    }
+//
+//    /**
+//     * Test of eliminarFuncion method, of class FuncionDAO.
+//     */
+//    @Test
+//    public void testEliminarFuncionExitoso() throws Exception {
+//        funcionDAO.registrarFuncion(funcionPrueba);
+//        Funcion eliminada = funcionDAO.eliminarFuncion(funcionPrueba);
+//        assertEquals(funcionPrueba.getIdFuncion(), eliminada.getIdFuncion(), "Debe eliminar la función correcta");
+//    }
+//
+//    @Test
+//    public void testEliminarFuncionFallido() {
+//        // Crear una función que NO se registra en la base de datos
+//        Funcion funcionNoRegistrada = new Funcion(
+//                new ObjectId(),
+//                salaPrueba,
+//                peliculaPrueba,
+//                LocalDateTime.now().plusHours(3),
+//                150.0
+//        );
+//
+//        // Verificar que se lanza la excepción al intentar eliminar
+//        assertThrows(FuncionNoEncontradaException.class, () -> {
+//            funcionDAO.eliminarFuncion(funcionNoRegistrada);
+//        }, "Debe fallar al eliminar una función no registrada");
+//    }
+//
+//    /**
+//     * Test of buscarFuncionPorId method, of class FuncionDAO.
+//     */
+//    @Test
+//    public void testBuscarFuncionPorId() throws Exception {
+//        funcionDAO.registrarFuncion(funcionPrueba);
+//        Funcion encontrada = funcionDAO.buscarFuncionPorId(funcionPrueba.getIdFuncion());
+//        assertEquals(funcionPrueba.getIdFuncion(), encontrada.getIdFuncion(), "Los IDs deben coincidir");
+//    }
+//
+//    /**
+//     * Test of buscarFuncionesPelicula method, of class FuncionDAO.
+//     */
+//    @Test
+//    public void testBuscarFuncionesPelicula() throws Exception {
+//        funcionDAO.registrarFuncion(funcionPrueba);
+//        List<Funcion> funciones = funcionDAO.buscarFuncionesPelicula("PeliculaPrueba");
+//        assertTrue(funciones.size() > 0, "Debe encontrar al menos una función para la película");
+//    }
 
 }

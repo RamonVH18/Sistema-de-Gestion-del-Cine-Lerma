@@ -25,6 +25,7 @@ import Excepciones.ValidarUsuarioException;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import enums.EstadoUsuario;
+import enums.Rol;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JFrame;
@@ -102,13 +103,13 @@ public interface IControl {
     //Metodos de navegacion de usuarios /////////////////////
     public void mostrarIniciarSesion();
     
-    public void mostrarAdministracionDeUsuario(JFrame frameAnterior);
+    public void mostrarGestionDeUsuarios(JFrame frameAnterior, AdministradorDTO admin);
     
-    public void mostrarEditarUsuario(JFrame frameAnterior);
+    public void mostrarEditarUsuario(JFrame frameAnterior, ClienteDTO cliente, AdministradorDTO admin);
     
     public void mostrarRegistrarUsuario(JFrame frameAnterior);
     
-    public void mostrarHistorialCliente(JFrame frameAnterior);
+    public void mostrarHistorialCliente(JFrame frameAnterior, ClienteDTO cliente);
     
     //Usuarios:
     
@@ -118,13 +119,13 @@ public interface IControl {
     
     public Boolean desbloquearUsuario(UsuarioDTO usuario);
     
-    public List<UsuarioDTO> mostrarListaUsuariosPorEstado(EstadoUsuario estado);
+    public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre);
     
-    public List<UsuarioDTO> mostrarListaUsuariosPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin);
-    
-    public List<UsuarioDTO> mostrarListaUsuariosPorCorreo(String correo);
-    
-    public List<UsuarioDTO> mostrarListaUsuariosPorNombre(String nombre);
+//    public List<UsuarioDTO> mostrarListaUsuariosPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin);
+//    
+//    public List<UsuarioDTO> mostrarListaUsuariosPorCorreo(String correo);
+//    
+//    public List<UsuarioDTO> mostrarListaUsuariosPorNombre(String nombre);
     
     
     //Cliente:
@@ -151,6 +152,6 @@ public interface IControl {
     
     //public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
     
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena);
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
     
 }

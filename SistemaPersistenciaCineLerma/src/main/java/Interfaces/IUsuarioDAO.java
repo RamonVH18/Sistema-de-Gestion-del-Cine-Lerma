@@ -9,6 +9,7 @@ import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import entidades.Usuario;
 import enums.EstadoUsuario;
+import enums.Rol;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface IUsuarioDAO {
     
     public Boolean desbloquearUsuario(Usuario usuario) throws ActualizarUsuarioException;
     
-    public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws ObtenerUsuariosException;
+    public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre) throws ObtenerUsuariosException;
     
     
 }

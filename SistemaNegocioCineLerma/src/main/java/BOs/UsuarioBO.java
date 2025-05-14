@@ -21,6 +21,7 @@ import Mappers.UsuarioMapper;
 import entidades.Compra;
 import entidades.Usuario;
 import enums.EstadoUsuario;
+import enums.Rol;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,7 +86,7 @@ public class UsuarioBO implements IUsuarioBO {
             return usuarioDAO.bloquearUsuario(usuarioBloquear);
 
         } catch (ActualizarUsuarioException e) {
-            throw new ActualizarUsuarioExceptionBO("Error al eliminar usuario", e);
+            throw new ActualizarUsuarioExceptionBO("Error al bloquear usuario", e);
         }
     }
 
@@ -98,15 +99,15 @@ public class UsuarioBO implements IUsuarioBO {
             return usuarioDAO.desbloquearUsuario(usuarioDesbloquear);
 
         } catch (ActualizarUsuarioException e) {
-            throw new ActualizarUsuarioExceptionBO("Error al eliminar usuario", e);
+            throw new ActualizarUsuarioExceptionBO("Error al desbloquear usuario", e);
         }
     }
 
     @Override
-    public List<UsuarioDTO> mostrarListaUsuariosFiltradaBO(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws ObtenerUsuariosExceptionBO {
+    public List<UsuarioDTO> mostrarListaUsuariosFiltradaBO(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre) throws ObtenerUsuariosExceptionBO {
         try {
 
-            List<Usuario> usuarios = usuarioDAO.mostrarListaUsuariosFiltrada(estado, fechaInicio, fechaFin, correo, nombre);
+            List<Usuario> usuarios = usuarioDAO.mostrarListaUsuariosFiltrada(estado, rol, fechaInicio, fechaFin, nombre);
 
             return usuarios.stream()
                     .map(mapper::toUsuarioDTO)

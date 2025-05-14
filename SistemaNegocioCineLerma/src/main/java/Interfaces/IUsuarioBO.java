@@ -10,6 +10,7 @@ import Excepciones.Usuarios.ObtenerUsuariosExceptionBO;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import enums.EstadoUsuario;
+import enums.Rol;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +26,6 @@ public interface IUsuarioBO {
     
     public Boolean desbloquearUsuarioBO(UsuarioDTO usuario) throws ActualizarUsuarioExceptionBO;
     
-    public List<UsuarioDTO> mostrarListaUsuariosFiltradaBO(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws ObtenerUsuariosExceptionBO;
+    public List<UsuarioDTO> mostrarListaUsuariosFiltradaBO(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre) throws ObtenerUsuariosExceptionBO;
     
 }

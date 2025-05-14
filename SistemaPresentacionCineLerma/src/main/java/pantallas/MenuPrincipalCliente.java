@@ -334,6 +334,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
 
     private void btnEditarUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarUsuarioMouseClicked
         // TODO add your handling code here:
+        //control.mostrarEditarUsuario(this, null, null, cliente, null);
     }//GEN-LAST:event_btnEditarUsuarioMouseClicked
 
     private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarUsuarioActionPerformed

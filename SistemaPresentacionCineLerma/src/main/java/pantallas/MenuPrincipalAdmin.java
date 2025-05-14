@@ -229,6 +229,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         // TODO add your handling code here:
+        control.mostrarGestionDeUsuarios(this, administrador);
     }//GEN-LAST:event_btnUsuariosActionPerformed
 
     private void btnSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalaActionPerformed

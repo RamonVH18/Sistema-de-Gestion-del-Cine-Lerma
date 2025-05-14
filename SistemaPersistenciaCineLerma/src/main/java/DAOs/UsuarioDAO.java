@@ -21,6 +21,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Usuario;
 import enums.EstadoUsuario;
+import enums.Rol;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -124,7 +125,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
             MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
 
-            Bson filtro = Filters.eq("nombreUsuario", usuario.getNombreDeUsuario());
+            Bson filtro = Filters.eq("nombreDeUsuario", usuario.getNombreDeUsuario());
 
             Usuario usuarioBloquear = coleccion.find(filtro).first();
 
@@ -161,26 +162,26 @@ public class UsuarioDAO implements IUsuarioDAO {
 
             MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
 
-            Bson filtro = Filters.eq("nombreUsuario", usuario.getNombreDeUsuario());
+            Bson filtro = Filters.eq("nombreDeUsuario", usuario.getNombreDeUsuario());
 
-            Usuario usuarioBloquear = coleccion.find(filtro).first();
+            Usuario usuarioDesbloquear = coleccion.find(filtro).first();
 
-            if (usuarioBloquear == null) {
-                throw new ActualizarUsuarioException("No se encontro el usuario para bloquearlo");
+            if (usuarioDesbloquear == null) {
+                throw new ActualizarUsuarioException("No se encontro el usuario para desbloquearlo");
             }
 
-            Bson bloqueo = Updates.set("estado", EstadoUsuario.ACTIVO.toString());
+            Bson desbloqueo = Updates.set("estado", EstadoUsuario.ACTIVO.toString());
 
-            UpdateResult resultado = coleccion.updateOne(filtro, bloqueo);
+            UpdateResult resultado = coleccion.updateOne(filtro, desbloqueo);
 
             if (resultado.getModifiedCount() == 0) {
-                throw new ActualizarUsuarioException("No se bloqueo al usuario");
+                throw new ActualizarUsuarioException("No se desbloqueo al usuario");
             }
 
             return true;
 
         } catch (MongoException e) {
-            throw new ActualizarUsuarioException("Error al bloquear el usuario: " + e.getMessage());
+            throw new ActualizarUsuarioException("Error al desbloquear el usuario: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
@@ -189,7 +190,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, LocalDateTime fechaInicio, LocalDateTime fechaFin, String correo, String nombre) throws ObtenerUsuariosException {
+    public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre) throws ObtenerUsuariosException {
         MongoClient clienteMongo = null;
         List<Usuario> usuarios = new ArrayList<>();
 
@@ -216,14 +217,18 @@ public class UsuarioDAO implements IUsuarioDAO {
                 ));
             }
 
-            // Filtro por correo
-            if (correo != null && !correo.isEmpty()) {
-                filtros.add(Filters.regex("correoElectronico", correo, "i"));
-            }
 
-            // Filtro por nombre 
+            // Filtro por nombre de usuario
             if (nombre != null && !nombre.isEmpty()) {
-                filtros.add(Filters.regex("nombres", nombre, "i"));
+                filtros.add(Filters.regex("nombreDeUsuario", nombre, "i"));
+            }
+            
+            if (estado != null) {
+                filtros.add(Filters.eq("estado", estado.toString()));
+            }
+            
+            if (rol != null) {
+                filtros.add(Filters.eq("rol", rol.toString()));
             }
 
             // Construir consulta final

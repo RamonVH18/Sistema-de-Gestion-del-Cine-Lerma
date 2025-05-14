@@ -4,17 +4,128 @@
  */
 package pantallas.Usuarios;
 
+import DTOs.AdministradorDTO;
+import DTOs.ClienteDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author sonic
  */
 public class EditarUsuario extends javax.swing.JFrame {
 
+//    private AdministradorDTO adminAlMando;
+//    private ClienteDTO clienteAlMando;
+    private javax.swing.JPanel panelCampos;
+
+    private ClienteDTO clienteEncontrado;
+    private AdministradorDTO adminEncontrado;
+    private final IControl control = ControlDeNavegacion.getInstancia();
+
     /**
      * Creates new form EditarUsuario
      */
-    public EditarUsuario() {
+    public EditarUsuario(ClienteDTO clienteEncontrado, AdministradorDTO adminEncontrado) {
         initComponents();
+
+//        this.clienteAlMando = clienteAlMando;
+//        this.adminAlMando = adminAlMando;
+        this.clienteEncontrado = clienteEncontrado;
+        this.adminEncontrado = adminEncontrado;
+
+        panelCampos = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 1.0;
+
+        //nombres y apellido paterno
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panelCampos.add(Nombrelbl, gbc);
+        gbc.gridx = 1;
+        panelCampos.add(ApellidoPaternolbl, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panelCampos.add(nombreField, gbc);
+        gbc.gridx = 1;
+        panelCampos.add(apellidoPaternoField, gbc);
+
+        //apellidomaterno y cp
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panelCampos.add(apellidoMaternolbl, gbc);
+        gbc.gridx = 1;
+        panelCampos.add(cplbl, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panelCampos.add(apellidoMaternoField, gbc);
+        gbc.gridx = 1;
+        panelCampos.add(CPField, gbc);
+
+        //calle y domicilio
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        panelCampos.add(callelbl, gbc);
+        gbc.gridx = 1;
+        panelCampos.add(domiciliolbl, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        panelCampos.add(CalleField, gbc);
+        gbc.gridx = 1;
+        panelCampos.add(domicilioField, gbc);
+
+//        // usuario y contraseña
+//        gbc.gridx = 0;
+//        gbc.gridy = 6;
+//        panelCampos.add(nombreUsuariolbl, gbc);
+//        gbc.gridx = 1;
+//        panelCampos.add(contrasenalbl, gbc);
+//        gbc.gridx = 0;
+//        gbc.gridy = 7;
+//        panelCampos.add(nombreUsuariofield, gbc);
+//        gbc.gridx = 1;
+//        panelCampos.add(jPasswordField1, gbc);
+//
+//        // correo y telefono
+//        gbc.gridx = 0;
+//        gbc.gridy = 8;
+//        panelCampos.add(correolbl, gbc);
+//        gbc.gridx = 1;
+//        panelCampos.add(telefonolbl, gbc);
+//        gbc.gridx = 0;
+//        gbc.gridy = 9;
+//        panelCampos.add(correofield, gbc);
+//        gbc.gridx = 1;
+//        panelCampos.add(telefonofield, gbc);
+        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+        titulolbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+        botonConfirmar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnVolver.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        add(Box.createVerticalStrut(20));
+        add(titulolbl);
+        add(Box.createVerticalStrut(20));
+        add(panelCampos);
+        add(Box.createVerticalStrut(20));
+        add(botonConfirmar);
+        add(Box.createVerticalStrut(10));
+        add(btnVolver);
+        add(Box.createVerticalStrut(20));
+
+        configurarVisibilidadCampos();
+
     }
 
     /**
@@ -26,242 +137,265 @@ public class EditarUsuario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        botonHistorial = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        titulolbl = new javax.swing.JLabel();
+        Nombrelbl = new javax.swing.JLabel();
+        ApellidoPaternolbl = new javax.swing.JLabel();
+        apellidoMaternolbl = new javax.swing.JLabel();
+        callelbl = new javax.swing.JLabel();
+        cplbl = new javax.swing.JLabel();
+        domiciliolbl = new javax.swing.JLabel();
+        botonConfirmar = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
+        domicilioField = new javax.swing.JTextField();
+        CalleField = new javax.swing.JTextField();
+        CPField = new javax.swing.JTextField();
+        apellidoMaternoField = new javax.swing.JTextField();
+        nombreField = new javax.swing.JTextField();
+        apellidoPaternoField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(680, 820));
         setSize(new java.awt.Dimension(680, 820));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setText("Editar Usuario");
+        titulolbl.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        titulolbl.setText("Editar Usuario");
 
-        jLabel2.setText("Nombres");
+        Nombrelbl.setText("Nombres");
 
-        jLabel3.setText("Apellido Paterno");
+        ApellidoPaternolbl.setText("Apellido Paterno");
 
-        jLabel4.setText("Correo Electronico");
+        apellidoMaternolbl.setText("Apellido Materno");
 
-        jLabel5.setText("Apellido Materno");
+        callelbl.setText("Calle");
 
-        jLabel6.setText("Telefono");
+        cplbl.setText("CP");
 
-        jLabel7.setText("Contraseña");
+        domiciliolbl.setText("Numero de Domicilio");
 
-        jLabel8.setText("Calle");
-
-        jLabel9.setText("CP");
-
-        jLabel10.setText("Numero de Domicilio");
-
-        botonHistorial.setBackground(new java.awt.Color(162, 132, 94));
-        botonHistorial.setText("Confirmar cambios");
-        botonHistorial.addActionListener(new java.awt.event.ActionListener() {
+        botonConfirmar.setBackground(new java.awt.Color(162, 132, 94));
+        botonConfirmar.setText("Confirmar cambios");
+        botonConfirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonHistorialActionPerformed(evt);
+                botonConfirmarActionPerformed(evt);
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(162, 132, 94));
-        jButton1.setText("< Volver");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnVolver.setBackground(new java.awt.Color(162, 132, 94));
+        btnVolver.setText("< Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnVolverActionPerformed(evt);
             }
         });
-
-        jLabel11.setText("Nombre de Usuario");
-
-        jTextField1.setText("jTextField1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(570, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(266, 266, 266))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(titulolbl)
+                        .addGap(266, 266, 266))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(240, 240, 240))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel10)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                    .addComponent(jTextField2)
-                    .addComponent(jTextField6)
-                    .addComponent(jTextField7)
-                    .addComponent(jTextField8))
+                    .addComponent(Nombrelbl)
+                    .addComponent(apellidoMaternolbl)
+                    .addComponent(callelbl)
+                    .addComponent(CalleField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                    .addComponent(apellidoMaternoField)
+                    .addComponent(nombreField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel11)
-                    .addComponent(jTextField3)
-                    .addComponent(jTextField4)
-                    .addComponent(jTextField5)
-                    .addComponent(jTextField9)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
-                .addGap(57, 57, 57))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(238, 238, 238)
-                        .addComponent(botonHistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(248, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(ApellidoPaternolbl)
+                        .addComponent(cplbl)
+                        .addComponent(CPField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                        .addComponent(apellidoPaternoField))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(domiciliolbl)
+                        .addComponent(domicilioField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)))
+                .addGap(57, 57, 57))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jLabel1)
+                .addComponent(titulolbl)
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                    .addComponent(Nombrelbl)
+                    .addComponent(ApellidoPaternolbl))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                    .addComponent(jTextField10))
+                    .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(apellidoPaternoField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jTextField6)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(apellidoMaternolbl, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cplbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(apellidoMaternoField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CPField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                    .addComponent(jTextField4))
-                .addGap(127, 127, 127)
-                .addComponent(botonHistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(127, 127, 127)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(callelbl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(CalleField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(domiciliolbl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(domicilioField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 387, Short.MAX_VALUE)
+                .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botonHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHistorialActionPerformed
+    private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_botonHistorialActionPerformed
+        if (clienteEncontrado != null) {
+            ClienteDTO clienteActualizar = new ClienteDTO();
+            clienteActualizar.setNombre(nombreField.getText().trim());
+            clienteActualizar.setApellidoPaterno(apellidoPaternoField.getText().trim());
+            clienteActualizar.setApellidoMaterno(apellidoMaternoField.getText().trim());
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+            clienteActualizar.setCP(CPField.getText().trim());
+            clienteActualizar.setCalle(CalleField.getText().trim());
+            clienteActualizar.setNumero(domicilioField.getText().trim());
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+            clienteActualizar.setContraseña(clienteEncontrado.getContraseña());
+            clienteActualizar.setNombreUsuario(clienteEncontrado.getNombreUsuario());
+            clienteActualizar.setCorreoElectronico(clienteEncontrado.getCorreoElectronico());
+            clienteActualizar.setRol(clienteEncontrado.getRol());
+            clienteActualizar.setEstado(clienteEncontrado.getEstado());
+            clienteActualizar.setTelefono(clienteEncontrado.getTelefono());
+            clienteActualizar.setFechaNacimiento(clienteEncontrado.getFechaNacimiento());
+
+            ClienteDTO clienteActualizado = control.actualizarCliente(clienteActualizar);
+
+            if (clienteActualizado != null) {
+                JOptionPane.showMessageDialog(null, "Se edito el cliente exitosamente.");
+                control.mostrarGestionDeUsuarios(this, null);
+                dispose();
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditarUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditarUsuario().setVisible(true);
+        if (adminEncontrado != null) {
+            AdministradorDTO adminActualizar = new AdministradorDTO();
+            adminActualizar.setNombre(nombreField.getText().trim());
+            adminActualizar.setApellidoPaterno(apellidoPaternoField.getText().trim());
+            adminActualizar.setApellidoMaterno(apellidoMaternoField.getText().trim());
+
+            adminActualizar.setContraseña(adminEncontrado.getContraseña());
+            adminActualizar.setNombreUsuario(adminEncontrado.getNombreUsuario());
+            adminActualizar.setCorreoElectronico(adminEncontrado.getCorreoElectronico());
+            adminActualizar.setRol(adminEncontrado.getRol());
+            adminActualizar.setEstado(adminEncontrado.getEstado());
+            adminActualizar.setTelefono(adminEncontrado.getTelefono());
+            adminActualizar.setFechaNacimiento(adminEncontrado.getFechaNacimiento());
+            adminActualizar.setRFC(adminEncontrado.getRFC());
+
+            AdministradorDTO adminActualizado = control.actualizarAdministrador(adminActualizar);
+
+            if (adminActualizado != null) {
+                JOptionPane.showMessageDialog(null, "Se edito el admin exitosamente.");
+                control.mostrarGestionDeUsuarios(this, null);
+                dispose();
             }
-        });
+        }
+
+
+    }//GEN-LAST:event_botonConfirmarActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+        control.mostrarGestionDeUsuarios(this, null);
+        dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void configurarVisibilidadCampos() {
+//        boolean esAdminMando = adminAlMando != null;
+//        boolean esClienteMando = clienteAlMando != null;
+        boolean esClienteEncontrado = clienteEncontrado != null;
+        boolean esAdminEncontrado = adminEncontrado != null;
+
+        if (esClienteEncontrado) {
+            mostrarCamposComunes();
+            mostrarCamposDeDireccion();
+
+            nombreField.setText(clienteEncontrado.getNombre());
+            apellidoPaternoField.setText(clienteEncontrado.getApellidoPaterno());
+            apellidoMaternoField.setText(clienteEncontrado.getApellidoMaterno());
+
+            CPField.setText(clienteEncontrado.getCP());
+            CalleField.setText(clienteEncontrado.getCalle());
+            domicilioField.setText(clienteEncontrado.getNumero());
+
+        }
+
+        if (esAdminEncontrado) {
+            mostrarCamposComunes();
+
+            nombreField.setText(adminEncontrado.getNombre());
+            apellidoPaternoField.setText(adminEncontrado.getApellidoPaterno());
+            apellidoMaternoField.setText(adminEncontrado.getApellidoMaterno());
+        }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonHistorial;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JLabel ApellidoPaternolbl;
+    private javax.swing.JTextField CPField;
+    private javax.swing.JTextField CalleField;
+    private javax.swing.JLabel Nombrelbl;
+    private javax.swing.JTextField apellidoMaternoField;
+    private javax.swing.JLabel apellidoMaternolbl;
+    private javax.swing.JTextField apellidoPaternoField;
+    private javax.swing.JButton botonConfirmar;
+    private javax.swing.JButton btnVolver;
+    private javax.swing.JLabel callelbl;
+    private javax.swing.JLabel cplbl;
+    private javax.swing.JTextField domicilioField;
+    private javax.swing.JLabel domiciliolbl;
+    private javax.swing.JTextField nombreField;
+    private javax.swing.JLabel titulolbl;
     // End of variables declaration//GEN-END:variables
+    public void mostrarCamposComunes() {
+        Nombrelbl.setVisible(true);
+        nombreField.setVisible(Nombrelbl.isVisible());
+
+        ApellidoPaternolbl.setVisible(Nombrelbl.isVisible());
+        apellidoPaternoField.setVisible(Nombrelbl.isVisible());
+
+        apellidoMaternolbl.setVisible(Nombrelbl.isVisible());
+        apellidoMaternoField.setVisible(Nombrelbl.isVisible());
+    }
+
+    public void mostrarCamposDeDireccion() {
+        callelbl.setVisible(Nombrelbl.isVisible());
+        CalleField.setVisible(Nombrelbl.isVisible());
+
+        domiciliolbl.setVisible(Nombrelbl.isVisible());
+        domicilioField.setVisible(Nombrelbl.isVisible());
+
+        cplbl.setVisible(Nombrelbl.isVisible());
+        CPField.setVisible(Nombrelbl.isVisible());
+    }
+
 }
