@@ -19,6 +19,6 @@ public interface IFuncionBO {
 
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminarException;
 
-    public List<FuncionDTO> buscarFunciones(String nombrePelicula);
+    public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula);
 
 }

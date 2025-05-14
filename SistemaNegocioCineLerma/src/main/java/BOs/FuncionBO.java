@@ -77,7 +77,7 @@ public class FuncionBO implements IFuncionBO {
     }
 
     @Override
-    public List<FuncionDTO> buscarFunciones(String nombrePelicula) {
+    public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula) {
         List<FuncionDTO> funcionesDTO = new ArrayList<>();
         try {
             List<Funcion> funcionesEntity = funcionDAO.buscarFuncionesPelicula(nombrePelicula);
