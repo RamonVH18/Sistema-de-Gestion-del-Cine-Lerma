@@ -8,13 +8,13 @@ package Excepciones.peliculas;
  *
  * @author Daniel M
  */
-public class PeliculaBusquedaException extends Exception {
+public class PeliculaDarAltaException extends Exception {
 
-    public PeliculaBusquedaException(String message) {
+    public PeliculaDarAltaException(String message) {
         super(message);
     }
 
-    public PeliculaBusquedaException(String message, Throwable cause) {
+    public PeliculaDarAltaException(String message, Throwable cause) {
         super(message, cause);
     }
 

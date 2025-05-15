@@ -6,83 +6,105 @@ package DTOs;
 
 /**
  *
- * @author Daniel Miribe
+ * @author Daniel M
  */
 public class PeliculaDTO {
 
-    private String nombrePelicula;
-    private String peliculaImagen; // ESTE DEBE SER DE TIPO IMAGEN
-    public String descripcionPelicula;
-    private Double duracion;
-    /**
-     * Cosntructor vacio
-     */
+    private String idPelicula;
+    private String imagen;
+    private String titulo;
+    private String genero;
+    private Integer duracion;
+    private String clasificacion;
+    private String sinopsis;
+    private Boolean activo;
+
     public PeliculaDTO() {
     }
-    /**
-     * Constructor con todos los metodos
-     * @param nombrePelicula
-     * @param peliculaImagen
-     * @param descripcionPelicula 
-     */
-    public PeliculaDTO(String nombrePelicula, String peliculaImagen, String descripcionPelicula, Double duracion) {    
-        this.nombrePelicula = nombrePelicula;
-        this.peliculaImagen = peliculaImagen;
-        this.descripcionPelicula = descripcionPelicula;
+
+    public PeliculaDTO(String idPelicula, String imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean activo) {
+        this.idPelicula = idPelicula;
+        this.imagen = imagen;
+        this.titulo = titulo;
+        this.genero = genero;
         this.duracion = duracion;
+        this.clasificacion = clasificacion;
+        this.sinopsis = sinopsis;
+        this.activo = activo;
     }
 
-    /**
-     *
-     * @return 
-     */
-    public String getNombrePelicula() {
-        return nombrePelicula;
-    }
-    /**
-     * 
-     * @param nombrePelicula 
-     */
-    public void setNombrePelicula(String nombrePelicula) {
-        this.nombrePelicula = nombrePelicula;
-    }
-    /**
-     * 
-     * @return 
-     */
-    public String getPeliculaImagen() {
-        return peliculaImagen;
-    }
-    /**
-     * 
-     * @param peliculaImagen 
-     */
-    public void setPeliculaImagen(String peliculaImagen) {
-        this.peliculaImagen = peliculaImagen;
-    }
-    /**
-     * 
-     * @return 
-     */
-    public String getDescripcionPelicula() {
-        return descripcionPelicula;
-    }
-    /**
-     * 
-     * @param descripcionPelicula 
-     */
-    public void setDescripcionPelicula(String descripcionPelicula) {
-        this.descripcionPelicula = descripcionPelicula;
+    public PeliculaDTO(String imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean activo) {
+        this.imagen = imagen;
+        this.titulo = titulo;
+        this.genero = genero;
+        this.duracion = duracion;
+        this.clasificacion = clasificacion;
+        this.sinopsis = sinopsis;
+        this.activo = activo;
     }
 
-    public Double getDuracion() {
+    public String getIdPelicula() {
+        return idPelicula;
+    }
+
+    public void setIdPelicula(String idPelicula) {
+        this.idPelicula = idPelicula;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public Integer getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(Double duracion) {
+    public void setDuracion(Integer duracion) {
         this.duracion = duracion;
     }
-    
-    
+
+    public String getClasificacion() {
+        return clasificacion;
+    }
+
+    public void setClasificacion(String clasificacion) {
+        this.clasificacion = clasificacion;
+    }
+
+    public String getSinopsis() {
+        return sinopsis;
+    }
+
+    public void setSinopsis(String sinopsis) {
+        this.sinopsis = sinopsis;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
 
 }

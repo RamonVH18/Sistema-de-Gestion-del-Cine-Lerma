@@ -10,7 +10,7 @@ import entidades.Pelicula;
 
 /**
  *
- * @author isaac
+ * @author Daniel M
  */
 public class PeliculaMapper implements IPeliculaMapper {
 
@@ -21,28 +21,33 @@ public class PeliculaMapper implements IPeliculaMapper {
         }
 
         PeliculaDTO dto = new PeliculaDTO();
-        dto.setNombrePelicula(pelicula.getTitulo());
-        dto.setPeliculaImagen(pelicula.getImagen());
-        dto.setDescripcionPelicula(pelicula.getSinopsis());
+
+        dto.setImagen(pelicula.getImagen());
+        dto.setTitulo(pelicula.getTitulo());
+        dto.setGenero(pelicula.getGenero());
+        dto.setDuracion(pelicula.getDuracion());
+        dto.setClasificacion(pelicula.getClasificacion());
+        dto.setSinopsis(pelicula.getSinopsis());
+        dto.setActivo(pelicula.getActivo());
 
         return dto;
     }
 
     @Override
     public Pelicula toPeliculaEntidad(PeliculaDTO dto) {
-
         if (dto == null) {
             return null;
         }
-        // creamos instancia de pelicula sin id
+
         Pelicula pelicula = new Pelicula();
-        pelicula.setTitulo(dto.getNombrePelicula());
-        pelicula.setImagen(dto.getPeliculaImagen());
-        pelicula.setSinopsis(dto.getDescripcionPelicula());
-        // establecemos valores por defecto para los campos que no estan en el DTO
-        pelicula.setGenero(null);
-        pelicula.setDuracion(null);
-        pelicula.setActivo(true); // asumimos que la pelicula esta activa
+
+        pelicula.setImagen(dto.getImagen());
+        pelicula.setTitulo(dto.getTitulo());
+        pelicula.setGenero(dto.getGenero());
+        pelicula.setDuracion(dto.getDuracion());
+        pelicula.setClasificacion(dto.getClasificacion());
+        pelicula.setSinopsis(dto.getSinopsis());
+        pelicula.setActivo(dto.getActivo());
 
         return pelicula;
     }

@@ -5,9 +5,7 @@
 package Interfaces;
 
 import DTOs.PeliculaDTO;
-import Excepciones.peliculas.PeliculaActualizacionException;
-import Excepciones.peliculas.PeliculaBusquedaException;
-import Excepciones.peliculas.PeliculaRegistroException;
+import Excepciones.peliculas.*;
 import java.util.List;
 
 /**
@@ -18,15 +16,17 @@ public interface IPeliculaBO {
     
     public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO) throws PeliculaRegistroException;
     
-    public Boolean actualizarPelicula(PeliculaDTO peliculaDTO) throws PeliculaActualizacionException;
+    public PeliculaDTO actualizarPelicula(PeliculaDTO peliculaDTO) throws PeliculaActualizacionException;
     
-    //Este metodo puede quedarse como DAO y no como BO
-    public PeliculaDTO buscarPelicula(String nombrePelicula) throws PeliculaBusquedaException;
+    public Boolean eliminarPelicula(PeliculaDTO peliculaDTO) throws PeliculaEliminarException;
     
-    public PeliculaDTO buscarTodasPeliculas() throws PeliculaBusquedaException;
+    public Boolean darAltaPelicula(PeliculaDTO peliculaDTO) throws PeliculaDarAltaException;
     
-    public List<PeliculaDTO> buscarTodasPeliculasActivas() throws PeliculaBusquedaException;
+    public Boolean darBajaPelicula(PeliculaDTO peliculaDTO) throws PeliculaDarBajaException;
     
-    public List<PeliculaDTO> buscarConFiltros(String filtro) throws PeliculaBusquedaException;
+    public PeliculaDTO buscarPelicula(String titulo) throws PeliculaBusquedaException;
     
+    public List<PeliculaDTO> mostrarPeliculasActivasOInactivas(boolean activo) throws PeliculasActivasInactivasException;
+    
+    public List<PeliculaDTO> mostrarTodasLasPeliculas() throws PeliculasMostrarTodasException;
 }

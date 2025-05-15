@@ -27,6 +27,7 @@ public interface IPeliculaDAO {
 
     public Pelicula buscarPelicula(String titulo) throws BuscarPeliculaException;
     
-    public List<Pelicula> mostrarPeliculasFiltro(boolean activo) throws MostrarPeliculasException;
+    public List<Pelicula> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException;
 
+    public List<Pelicula> mostrarTodasLasPeliculas() throws MostrarPeliculasException;
 }

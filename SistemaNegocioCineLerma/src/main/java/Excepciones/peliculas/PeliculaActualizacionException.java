@@ -6,9 +6,9 @@ package Excepciones.peliculas;
 
 /**
  *
- * @author Ramon Valencia
+ * @author Daniel M
  */
-public class PeliculaActualizacionException extends Exception{
+public class PeliculaActualizacionException extends Exception {
 
     public PeliculaActualizacionException(String message) {
         super(message);
@@ -17,5 +17,5 @@ public class PeliculaActualizacionException extends Exception{
     public PeliculaActualizacionException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

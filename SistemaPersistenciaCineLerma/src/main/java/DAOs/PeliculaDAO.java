@@ -295,7 +295,7 @@ public class PeliculaDAO implements IPeliculaDAO {
      * películas.
      */
     @Override
-    public List<Pelicula> mostrarPeliculasFiltro(boolean activo) throws MostrarPeliculasException {
+    public List<Pelicula> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException {
         MongoClient clienteMongo = null;
         try {
             // Se establece la conexión con la base de datos y se accede a la colección
@@ -314,4 +314,31 @@ public class PeliculaDAO implements IPeliculaDAO {
             conexion.cerrarConexion(clienteMongo);
         }
     }
+
+    /**
+     * Obtiene una lista con todas las películas en la base de datos, sin
+     * importar si están activas o inactivas.
+     *
+     * @return Lista de todas las películas.
+     * @throws MostrarPeliculasException si ocurre un error al obtener las
+     * películas.
+     */
+    @Override
+    public List<Pelicula> mostrarTodasLasPeliculas() throws MostrarPeliculasException {
+        MongoClient clienteMongo = null;
+        try {
+            // Se establece la conexión con la base de datos y se accede a la colección
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
+
+            // Se obtienen todas las películas sin aplicar ningún filtro
+            return coleccionPeliculas.find().into(new ArrayList<>());
+        } catch (MongoException e) {
+            throw new MostrarPeliculasException("Error al mostrar todas las películas.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
+    }
+
 }
