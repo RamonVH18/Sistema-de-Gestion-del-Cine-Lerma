@@ -63,21 +63,21 @@ public class pruebasFuncionDAO {
 //        funcionDAO.registrarFuncion(funcion5);
 //        
 //        
-        MongoClient clienteMongo = null;
-        clienteMongo = conexion.crearConexion();
-        MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
-        MongoCollection<Funcion> coleccionFunciones = database.getCollection("Funciones", Funcion.class);
-        
-        List<Bson> filtradores = Arrays.asList(
-                Filters.gte("fechaHora", LocalDateTime.now()),
-                Filters.lte("fechaHora", LocalDateTime.now().plusMinutes(duracionPelicula))
-        );
-        
-        Bson filtro = Filters.and(filtradores);
-        
-        List<Funcion> funciones = coleccionFunciones.find(filtro).into(new ArrayList<>());
-        
-        System.out.println("");
+//        MongoClient clienteMongo = null;
+//        clienteMongo = conexion.crearConexion();
+//        MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+//        MongoCollection<Funcion> coleccionFunciones = database.getCollection("Funciones", Funcion.class);
+//        
+//        List<Bson> filtradores = Arrays.asList(
+//                Filters.gte("fechaHora", LocalDateTime.now()),
+//                Filters.lte("fechaHora", LocalDateTime.now().plusMinutes(duracionPelicula))
+//        );
+//        
+//        Bson filtro = Filters.and(filtradores);
+//        
+//        List<Funcion> funciones = coleccionFunciones.find(filtro).into(new ArrayList<>());
+//        
+//        System.out.println("");
     }
 
 }

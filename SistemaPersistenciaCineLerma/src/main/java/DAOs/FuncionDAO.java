@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -45,12 +47,16 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException, FuncionSalaVaciaException {
+    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException, FuncionSalaVaciaException, FuncionDuracionIncorrectaException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+
+            if (funcion.getPelicula().getDuracion() == null || funcion.getPelicula().getDuracion() <= 0) {
+                throw new FuncionDuracionIncorrectaException("La duracion de la pelicula es invalida.");
+            }
 
             // Verificar si la sala esta ocupada
             List<Bson> filtradores = Arrays.asList(
@@ -78,6 +84,8 @@ public class FuncionDAO implements IFuncionDAO {
             return funcion;
         } catch (FuncionSalaOcupadaException e) {
             throw new FuncionSalaOcupadaException("Error al registrar la funcion: " + e.getMessage());
+        } catch (FuncionDuracionIncorrectaException ex) {
+            throw new FuncionDuracionIncorrectaException("Error al registrar funcion: " + ex.getMessage());
         } finally {
             conexion.cerrarConexion(clienteMongo);
         }
@@ -174,11 +182,15 @@ public class FuncionDAO implements IFuncionDAO {
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idString) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException {
         MongoClient clienteMongo = conexion.crearConexion();
+
+        if (idString == null || idString.isEmpty()) {
+            throw new FuncionNoEncontradaException("Rrror: el id es nulo o esta vacio");
+        }
         try {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
-            Bson filtro = Filters.eq("_id", idString);
+            Bson filtro = Filters.eq("_id", new ObjectId(idString));
             Funcion funcion = coleccionFunciones.find(filtro).first();
 
             if (funcion == null) {

@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface IFuncionDAO {
 
-    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException, FuncionSalaVaciaException;
+    public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException, FuncionSalaVaciaException, FuncionDuracionIncorrectaException;
 
     public Funcion eliminarFuncion(Funcion funcion) throws FuncionNoEncontradaException;
 

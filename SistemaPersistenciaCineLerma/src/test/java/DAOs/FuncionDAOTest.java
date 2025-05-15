@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Excepciones.Funciones.FuncionDuracionIncorrectaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.Funciones.FuncionSalaVaciaException;
@@ -129,7 +130,6 @@ public class FuncionDAOTest {
 //            funcionDAO.registrarFuncion(funcionRepetida);
 //        }, "Debe fallar al registrar funciones en la misma sala");
 //    }
-
     /**
      * Test of eliminarFuncion method, of class FuncionDAO.
      */
@@ -155,6 +155,54 @@ public class FuncionDAOTest {
         assertThrows(FuncionNoEncontradaException.class, () -> {
             funcionDAO.eliminarFuncion(funcionNoRegistrada);
         }, "Debe fallar al eliminar una funcion no registrada");
+    }
+
+    @Test
+    public void testCalcularHoraTerminoFuncionExitoso() throws Exception {
+        funcionDAO.registrarFuncion(funcionPrueba);
+        String idFuncion = funcionPrueba.getIdFuncion().toHexString();
+        LocalDateTime horaTermino = funcionDAO.calcularHoraTerminoFuncion(idFuncion);
+        LocalDateTime expected = funcionPrueba.getFechaHora().plusMinutes(peliculaPrueba.getDuracion()).truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
+        
+        LocalDateTime actualTruncado = horaTermino.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
+
+        assertEquals(expected, actualTruncado, "La hora de término debe coincidir con la duración de la película");
+    }
+
+    @Test
+    public void testCalcularHoraTerminoFuncionNoEncontrada() {
+        String idNoExistente = new ObjectId().toHexString();
+        assertThrows(FuncionNoEncontradaException.class, () -> {
+            funcionDAO.calcularHoraTerminoFuncion(idNoExistente);
+        }, "Debe lanzar excepción cuando la función no existe");
+    }
+
+    @Test
+    public void testCalcularHoraTerminoFuncionDuracionIncorrecta() throws Exception {
+        // Crear película con duración nula
+        Pelicula peliculaSinDuracion = new Pelicula(
+                new ObjectId(),
+                "",
+                "PeliculaSinDuracion",
+                "Género",
+                null, // Duración nula
+                "Clasificacion",
+                "Sinopsis",
+                true
+        );
+
+        Funcion funcionInvalida = new Funcion(
+                new ObjectId(),
+                salaPrueba,
+                peliculaSinDuracion,
+                LocalDateTime.now().plusHours(3),
+                150.0
+        );
+
+        assertThrows(FuncionDuracionIncorrectaException.class, () -> {
+            funcionDAO.registrarFuncion(funcionInvalida);
+        }, "Debe lanzar excepción si la duración es incorrecta");
+
     }
 
     /**
