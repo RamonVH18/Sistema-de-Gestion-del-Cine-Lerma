@@ -704,7 +704,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarHistorialCliente(JFrame frameAnterior, ClienteDTO cliente) {
         SwingUtilities.invokeLater(() -> {
-            HistorialCliente pantallaHistorialCliente = new HistorialCliente(cliente);
+            HistorialCliente pantallaHistorialCliente = new HistorialCliente(frameAnterior, cliente);
             pantallaHistorialCliente.setLocationRelativeTo(null);
             pantallaHistorialCliente.setVisible(true);
             frameAnterior.dispose();

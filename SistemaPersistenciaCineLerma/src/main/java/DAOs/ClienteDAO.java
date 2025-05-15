@@ -64,7 +64,7 @@ public class ClienteDAO implements IClienteDAO {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
+            MongoCollection<Cliente> coleccion = base.getCollection(nombreColeccion, Cliente.class);
 
             coleccion.insertOne(cliente);
 
@@ -90,7 +90,7 @@ public class ClienteDAO implements IClienteDAO {
         try {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
+            MongoCollection<Cliente> coleccion = base.getCollection(nombreColeccion, Cliente.class);
 
             Bson filtro = Filters.eq("nombreDeUsuario", clienteModificado.getNombreDeUsuario());
             Cliente original = coleccion.find(filtro).first();
@@ -130,7 +130,7 @@ public class ClienteDAO implements IClienteDAO {
                     Filters.eq("contrasenia", contrasena),
                     Filters.eq("rol", "CLIENTE"));
 
-            MongoCollection<Cliente> coleccionUsuarios = base.getCollection("usuarios", Cliente.class);
+            MongoCollection<Cliente> coleccionUsuarios = base.getCollection(nombreColeccion, Cliente.class);
 
             Cliente clienteEncontrado = coleccionUsuarios.find(filtro).first();
 
@@ -152,7 +152,7 @@ public class ClienteDAO implements IClienteDAO {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            MongoCollection<Compra> coleccion = base.getCollection("compras", Compra.class);
+            MongoCollection<Compra> coleccion = base.getCollection("Compras", Compra.class);
 
             Bson filtro = Filters.eq("nombreDeUsuario", cliente.getNombreDeUsuario());
 

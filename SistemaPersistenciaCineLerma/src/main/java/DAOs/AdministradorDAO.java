@@ -26,6 +26,7 @@ public class AdministradorDAO implements IAdministradorDAO {
 
     private static AdministradorDAO instance;
     private final MongoConexion conexion = new MongoConexion();
+    private final String nombreColeccion = "Usuarios";
 
     //Quizas agregar una proyeccion
     private AdministradorDAO() {
@@ -46,7 +47,7 @@ public class AdministradorDAO implements IAdministradorDAO {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            MongoCollection<Administrador> coleccion = base.getCollection("usuarios", Administrador.class);
+            MongoCollection<Administrador> coleccion = base.getCollection(nombreColeccion, Administrador.class);
 
             validarUnicidad(coleccion, administrador);
             
@@ -83,7 +84,7 @@ public class AdministradorDAO implements IAdministradorDAO {
                     Filters.eq("contrasenia", contrasena),
                     Filters.eq("rol", "ADMINISTRADOR"));
             
-            MongoCollection<Administrador> coleccion = base.getCollection("usuarios", Administrador.class);
+            MongoCollection<Administrador> coleccion = base.getCollection(nombreColeccion, Administrador.class);
 
             Administrador adminEncontrado = coleccion.find(filtro).first();
 

@@ -11,7 +11,9 @@ import control.ControlDeNavegacion;
 import control.IControl;
 import entidades.Compra;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JTable;
+import pantallas.MenuPrincipalCliente;
 import utilitades.ModeladoTablas;
 
 /**
@@ -19,15 +21,17 @@ import utilitades.ModeladoTablas;
  * @author sonic
  */
 public class HistorialCliente extends javax.swing.JFrame {
+    private JFrame frameAnterior;
     private ClienteDTO clienteActual;
     private final IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form HistorialCliente
      */
-    public HistorialCliente(ClienteDTO clienteActual) {
+    public HistorialCliente(JFrame frameAnterior, ClienteDTO clienteActual) {
         initComponents();
         this.clienteActual = clienteActual;
+        this.frameAnterior = frameAnterior;
         
         lblNombreCompleto.setText(clienteActual.getNombre() + " " + clienteActual.getApellidoPaterno() + " " + clienteActual.getApellidoMaterno());
         
@@ -100,6 +104,15 @@ public class HistorialCliente extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
+        if (frameAnterior instanceof MenuPrincipalCliente) {
+            control.mostrarMenuCliente(this, clienteActual);
+            dispose();
+        } else if (frameAnterior instanceof ConsultarUsuarios) {
+            control.mostrarGestionDeUsuarios(this, null);
+            dispose();
+        }
+        
+        
         control.mostrarGestionDeUsuarios(this, null);
         dispose();
         
@@ -108,40 +121,6 @@ public class HistorialCliente extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HistorialCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HistorialCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HistorialCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HistorialCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ClienteDTO clienteTemp = new ClienteDTO();
-                clienteTemp.setNombre("Cliente Temporal");
-                new HistorialCliente(clienteTemp).setVisible(true);
-                
-            }
-        });
-    }
     
     private void cargarListaCompras(List<CompraDTO> listaUsuarios) {
         String[] columnas = {

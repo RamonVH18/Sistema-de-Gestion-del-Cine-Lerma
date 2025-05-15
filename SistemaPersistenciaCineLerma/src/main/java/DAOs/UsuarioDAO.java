@@ -60,7 +60,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         try {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
+            MongoCollection<Usuario> coleccion = base.getCollection(nombreColeccion, Usuario.class);
 
             MongoCursor<Usuario> cursor = coleccion.find().iterator();
             while (cursor.hasNext()) {
@@ -88,7 +88,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
+            MongoCollection<Usuario> coleccion = base.getCollection(nombreColeccion, Usuario.class);
 
             Bson filtro = Filters.eq("nombreDeUsuario", usuario.getNombreDeUsuario());
 
@@ -125,7 +125,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
+            MongoCollection<Usuario> coleccion = base.getCollection(nombreColeccion, Usuario.class);
 
             Bson filtro = Filters.eq("nombreDeUsuario", usuario.getNombreDeUsuario());
 
@@ -164,7 +164,7 @@ public class UsuarioDAO implements IUsuarioDAO {
 
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
-            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
+            MongoCollection<Usuario> coleccion = base.getCollection(nombreColeccion, Usuario.class);
 
             List<Bson> filtros = new ArrayList<>();
 
@@ -228,7 +228,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                     Filters.eq("nombreDeUsuario", nombreUsuario),
                     Filters.eq("contrasenia", contrasena));
 
-            MongoCollection<Usuario> coleccionUsuarios = base.getCollection("usuarios", Usuario.class);
+            MongoCollection<Usuario> coleccionUsuarios = base.getCollection(nombreColeccion, Usuario.class);
 
             Usuario usuarioEncontrado = coleccionUsuarios.find(filtro).first();
 

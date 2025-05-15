@@ -290,6 +290,8 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
 
     private void btnHistorialMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialMenuActionPerformed
         // TODO add your handling code here:
+        control.mostrarHistorialCliente(this, cliente);
+        dispose();
     }//GEN-LAST:event_btnHistorialMenuActionPerformed
 
     private void btnSalirMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirMenuActionPerformed
