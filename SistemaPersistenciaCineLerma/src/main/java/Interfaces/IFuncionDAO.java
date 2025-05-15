@@ -11,7 +11,6 @@ import Excepciones.Funciones.FuncionSalaOcupadaException;
 import entidades.Funcion;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -27,6 +26,6 @@ public interface IFuncionDAO {
 
     public List<Funcion> buscarFuncionFechaInicio(LocalDateTime fechaHora);
     
-    public LocalDateTime calcularHoraTerminoFuncion(ObjectId idFuncion) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException;
+    public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException;
 
 }

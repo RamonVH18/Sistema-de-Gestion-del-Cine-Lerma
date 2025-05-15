@@ -21,7 +21,6 @@ import entidades.Funcion;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -117,8 +116,7 @@ public class FuncionBO implements IFuncionBO {
         }
 
         try {
-            ObjectId objectId = funcionMapper.toObjectId(idFuncion);
-            return funcionDAO.calcularHoraTerminoFuncion(objectId);
+            return funcionDAO.calcularHoraTerminoFuncion(idFuncion);
         } catch (FuncionNoEncontradaException | FuncionDuracionIncorrectaException e) {
             throw new FuncionValidadaException("Error al calcular la hora" + e.getMessage(), e);
         }

@@ -172,13 +172,13 @@ public class FuncionDAO implements IFuncionDAO {
     }
 
     @Override
-    public LocalDateTime calcularHoraTerminoFuncion(ObjectId idFuncion) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException {
+    public LocalDateTime calcularHoraTerminoFuncion(String idString) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException {
         MongoClient clienteMongo = conexion.crearConexion();
         try {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
-            Bson filtro = Filters.eq("_id", idFuncion);
+            Bson filtro = Filters.eq("_id", idString);
             Funcion funcion = coleccionFunciones.find(filtro).first();
 
             if (funcion == null) {
