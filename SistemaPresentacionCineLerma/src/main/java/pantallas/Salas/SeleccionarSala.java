@@ -8,8 +8,10 @@ import DTOs.SalaViejaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,7 @@ import utilitades.ModeladoTablas;
 import utilitades.Utilerias;
 
 /**
- * 
+ *
  * @author Ramon Valencia
  */
 public class SeleccionarSala extends javax.swing.JFrame {
@@ -40,8 +42,18 @@ public class SeleccionarSala extends javax.swing.JFrame {
     private final Integer anchoBuscador = 150;
     private final Integer alturaBuscador = 20;
     private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
-    
+
+    //A continuacion se encuentran las dimensiones para configurar el tamaño del boton para agregar, tambien se configura su fuente y su color
+    private final Integer anchoBoton = 200;
+    private final Integer alturaBoton = 40;
+    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+    private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.PLAIN, 20);
+    private final Color colorBoton = new Color(162, 132, 94); // Color general del boton
+
+    private final Color colorBotonFore = new Color(255, 255, 255);
+
     private JPanel panelTabla;
+    private JTable tablaSalas;
     private static Timer temporizador;
     /**
      * Mapa que contiene los valores del tamaño de cada columna de la tabla de
@@ -82,6 +94,11 @@ public class SeleccionarSala extends javax.swing.JFrame {
         textFieldBuscador.setText("jTextField1");
 
         btnModificar.setText("jButton1");
+        btnModificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnModificarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,6 +131,10 @@ public class SeleccionarSala extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModificarMouseClicked
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnModificar;
@@ -146,6 +167,10 @@ public class SeleccionarSala extends javax.swing.JFrame {
         panelCentral.add(Box.createVerticalGlue());
         panelCentral.add(panelTabla);
 
+        configurarBotonModificar();
+        panelCentral.add(Box.createVerticalStrut(20));
+        panelCentral.add(btnModificar);
+
         this.add(panelCentral, BorderLayout.CENTER);
     }
 
@@ -164,7 +189,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
         panelBuscador.add(labelBuscador);
         panelBuscador.add(textFieldBuscador);
         textFieldBuscador.getDocument().addDocumentListener(new DocumentListener() {
-            
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 efectoTemporizador();
@@ -181,7 +206,6 @@ public class SeleccionarSala extends javax.swing.JFrame {
             }
 
         });
-        
 
         // Se agregan ambos paneles
         panel.add(panelBuscador);
@@ -214,7 +238,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
          * crear una tablaSencilla en base a: El arreglo de columnas, el arreglo
          * de datos y finalmente el tamaño del encabezado
          */
-        JTable tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoFuente, tamañoEncabezado);
+        tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoFuente, tamañoEncabezado);
 
         /**
          * Se llama nuevamente a otro metodo de la clase ModeladoTablas esto
@@ -228,26 +252,26 @@ public class SeleccionarSala extends javax.swing.JFrame {
         // Se añade la tabla a un scrollpane
         JScrollPane scrollPane = new JScrollPane(tablaSalas);
         panelTabla.add(scrollPane);
-        
+
         revalidate();
         repaint();
 
     }
-    
+
     private Object[][] obtenerSalas() {
         List<SalaViejaDTO> salas = control.consultarSalas(textFieldBuscador.getText());
         Object[][] datos = new Object[salas.size()][3];
-        
+
         for (int i = 0; i < salas.size(); i++) {
             SalaViejaDTO salaVieja = salas.get(i);
             datos[i][0] = salaVieja.getNumSala();
             datos[i][1] = salaVieja.getNumAsientos();
             datos[i][2] = salaVieja.getEstado().name();
         }
-        
+
         return datos;
     }
-    
+
     private void efectoTemporizador() {
         if (temporizador != null) {
             temporizador.stop();
@@ -257,6 +281,19 @@ public class SeleccionarSala extends javax.swing.JFrame {
             temporizador.stop();
         });
         temporizador.start();
+    }
+
+    private void configurarBotonModificar() {
+        btnModificar.setPreferredSize(tamañoBoton);
+        btnModificar.setSize(tamañoBoton);
+        btnModificar.setFont(fuenteBoton);
+        btnModificar.setBackground(colorBoton);
+        btnModificar.setForeground(colorBotonFore);
+        btnModificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnModificarMouseClicked(evt);
+            }
+        });
     }
 
     /**

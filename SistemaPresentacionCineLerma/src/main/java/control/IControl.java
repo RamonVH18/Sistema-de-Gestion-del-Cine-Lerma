@@ -103,6 +103,8 @@ public interface IControl {
     
     public List<SalaViejaDTO> consultarSalas(String filtro);
     
+    public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala);
+    
     // -----------------------------FIN DE METODOS DE SALAS-----------------------------------------
     //Metodos de navegacion de usuarios /////////////////////
     public void mostrarIniciarSesion();

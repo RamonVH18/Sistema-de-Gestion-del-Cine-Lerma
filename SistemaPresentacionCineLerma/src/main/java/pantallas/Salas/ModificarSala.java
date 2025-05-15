@@ -4,17 +4,44 @@
  */
 package pantallas.Salas;
 
+import DTOs.SalaViejaDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import enums.EstadoSala;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import utilitades.Utilerias;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class ModificarSala extends javax.swing.JFrame {
-
+    
+    private final IControl control = ControlDeNavegacion.getInstancia();
+    private final Utilerias utilerias = new Utilerias();
+    private final Font fuente = new Font("Tw Cen MT Condensed", Font.BOLD, 36);
+    
+    private JComboBox<EstadoSala> comboBoxEstado;
+    
+    private final SalaViejaDTO salaSeleccionada;
     /**
      * Creates new form ModificarSala
+     * @param sala
      */
-    public ModificarSala() {
-        initComponents();
+    public ModificarSala(SalaViejaDTO sala) {
+        this.salaSeleccionada = sala;
+        utilerias.configurarFrameBase(this, "Modificar Sala");
+        configurarModificarSala();
     }
 
     /**
@@ -26,57 +53,128 @@ public class ModificarSala extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGuardarCambios = new javax.swing.JButton();
+        labelNumSala = new javax.swing.JLabel();
+        labelCambiarEstado = new javax.swing.JLabel();
+        labelEstado = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        btnGuardarCambios.setText("jButton1");
+
+        labelNumSala.setText("jLabel1");
+
+        labelCambiarEstado.setText("jLabel2");
+
+        labelEstado.setText("jLabel3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(81, 81, 81)
+                .addComponent(btnGuardarCambios)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelEstado))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(labelNumSala)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 257, Short.MAX_VALUE)
+                        .addComponent(labelCambiarEstado)))
+                .addGap(113, 113, 113))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(92, 92, 92)
+                .addComponent(labelEstado)
+                .addGap(54, 54, 54)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelNumSala)
+                    .addComponent(labelCambiarEstado))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 280, Short.MAX_VALUE)
+                .addComponent(btnGuardarCambios)
+                .addGap(150, 150, 150))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ModificarSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ModificarSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ModificarSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ModificarSala.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ModificarSala().setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardarCambios;
+    private javax.swing.JLabel labelCambiarEstado;
+    private javax.swing.JLabel labelEstado;
+    private javax.swing.JLabel labelNumSala;
     // End of variables declaration//GEN-END:variables
+    private void configurarModificarSala() {
+        configurarPanelCentral();
+        configurarBotonVolver();
+    }
+    
+    private void configurarPanelCentral() {
+        JPanel panelCentral = new JPanel();
+        JPanel panelCentralSuperior = new JPanel();
+        JPanel panelCentralInferior = new JPanel();
+        
+        configurarPanelSala(panelCentralSuperior);
+        
+        configurarPanelEstado(panelCentralSuperior);
+        
+        panelCentralSuperior.setLayout(new FlowLayout(FlowLayout.CENTER));
+                
+    }
+    
+    private void configurarPanelSala(JPanel panelCentralSuperior) {
+        JPanel panelNumSala = new JPanel();
+        
+        labelNumSala = new JLabel("<html>SALA<br>" 
+                + salaSeleccionada.getNumSala() 
+                + "</html>"
+        );
+        labelNumSala.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        labelNumSala.setFont(fuente);
+        panelNumSala.add(labelNumSala);
+        panelCentralSuperior.add(panelNumSala);
+    }
+    
+    private void configurarPanelEstado(JPanel panelCentralSuperior) {
+        JPanel panelCampos = new JPanel();
+        panelCampos.setLayout(new BoxLayout(panelCampos, BoxLayout.Y_AXIS));
+        
+        labelEstado = new JLabel("Estado: " + salaSeleccionada.getEstado());
+        panelCampos.add(Box.createVerticalStrut(10));
+        panelCampos.add(labelEstado);
+        panelCampos.add(Box.createVerticalStrut(10));
+        
+        labelCambiarEstado = new JLabel("Cambiar estado:");
+        comboBoxEstado = new JComboBox<>(EstadoSala.values());
+        panelCampos.add(comboBoxEstado);
+        panelCampos.add(Box.createVerticalGlue());
+        
+        panelCentralSuperior.add(panelCampos);
+    }
+    
+    
+    
+    /**
+     * Metodo para configurar el obtener el boton volver del frameBase y
+     * configurarlo para que nos regrese a la ventana anterior
+     */
+    private void configurarBotonVolver() {
+        Container frame = this.getContentPane();
+        JPanel panel = (JPanel) frame.getComponent(0);
+        JButton btnVolver = (JButton) panel.getComponent(0);
+        // Se le añade un action listener para que cierre esta pantalla y abra la anterior
+        btnVolver.addActionListener((ActionEvent e) -> {
+            control.mostrarMenuSalas(this);
+            dispose();
+        });
+
+    }
 }
