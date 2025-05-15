@@ -49,7 +49,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipal
      */
-    public MenuPrincipalCliente(ClienteDTO clienteActual) {
+    public MenuPrincipalCliente(ClienteDTO cliente) {
         initComponents();
         setTitle(nombrePestania);
         setSize(640, 830);
@@ -208,11 +208,6 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         btnEditarUsuario.setForeground(new java.awt.Color(255, 255, 255));
         btnEditarUsuario.setText("Editar usuario");
         btnEditarUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnEditarUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnEditarUsuarioMouseClicked(evt);
-            }
-        });
         btnEditarUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarUsuarioActionPerformed(evt);
@@ -332,13 +327,9 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
-    private void btnEditarUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarUsuarioMouseClicked
-        // TODO add your handling code here:
-        //control.mostrarEditarUsuario(this, null, null, cliente, null);
-    }//GEN-LAST:event_btnEditarUsuarioMouseClicked
-
     private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarUsuarioActionPerformed
         // TODO add your handling code here:
+        control.mostrarEditarUsuario(this, null, cliente);
     }//GEN-LAST:event_btnEditarUsuarioActionPerformed
 
     /**

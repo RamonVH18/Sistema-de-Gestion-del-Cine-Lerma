@@ -21,13 +21,12 @@ public interface IUsuarioDAO {
     
     public List<Usuario> mostrarListaUsuarios() throws ObtenerUsuariosException;
 
-//    public Boolean eliminarUsuario(Usuario usuario) throws EliminarUsuarioException;
-
     public Boolean bloquearUsuario(Usuario usuario) throws ActualizarUsuarioException;
     
     public Boolean desbloquearUsuario(Usuario usuario) throws ActualizarUsuarioException;
     
     public List<Usuario> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre) throws ObtenerUsuariosException;
     
+    public Usuario obtenerUsuario(String nombreUsuario, String contrasena) throws ObtenerUsuariosException;
     
 }

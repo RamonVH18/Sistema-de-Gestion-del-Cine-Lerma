@@ -4,18 +4,12 @@
  */
 package pantallas.Usuarios;
 
-import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import pantallas.MenuPrincipalCliente;
 
 /**
  *
@@ -23,108 +17,36 @@ import javax.swing.JPanel;
  */
 public class EditarUsuario extends javax.swing.JFrame {
 
-//    private AdministradorDTO adminAlMando;
-//    private ClienteDTO clienteAlMando;
-    private javax.swing.JPanel panelCampos;
+    private JFrame frameAnterior;
+    private ClienteDTO clienteAlMando;
 
     private ClienteDTO clienteEncontrado;
-    private AdministradorDTO adminEncontrado;
+
     private final IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form EditarUsuario
      */
-    public EditarUsuario(ClienteDTO clienteEncontrado, AdministradorDTO adminEncontrado) {
+    public EditarUsuario(JFrame frameAnterior, ClienteDTO clienteEncontrado, ClienteDTO clienteAlMando) {
         initComponents();
 
-//        this.clienteAlMando = clienteAlMando;
-//        this.adminAlMando = adminAlMando;
+        this.clienteAlMando = clienteAlMando;
         this.clienteEncontrado = clienteEncontrado;
-        this.adminEncontrado = adminEncontrado;
+        this.frameAnterior = frameAnterior;
 
-        panelCampos = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.weightx = 1.0;
+        contrasenaField.setVisible(false);
+        contrasenalbl.setVisible(false);
+        nombreUsuariolbl.setVisible(false);
+        nombreUsuarioField.setVisible(false);
 
-        //nombres y apellido paterno
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panelCampos.add(Nombrelbl, gbc);
-        gbc.gridx = 1;
-        panelCampos.add(ApellidoPaternolbl, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panelCampos.add(nombreField, gbc);
-        gbc.gridx = 1;
-        panelCampos.add(apellidoPaternoField, gbc);
+        if (clienteAlMando != null) {
+            contrasenaField.setVisible(true);
+            contrasenalbl.setVisible(true);
+            nombreUsuariolbl.setVisible(true);
+            nombreUsuarioField.setVisible(true);
+        }
 
-        //apellidomaterno y cp
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panelCampos.add(apellidoMaternolbl, gbc);
-        gbc.gridx = 1;
-        panelCampos.add(cplbl, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        panelCampos.add(apellidoMaternoField, gbc);
-        gbc.gridx = 1;
-        panelCampos.add(CPField, gbc);
-
-        //calle y domicilio
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        panelCampos.add(callelbl, gbc);
-        gbc.gridx = 1;
-        panelCampos.add(domiciliolbl, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        panelCampos.add(CalleField, gbc);
-        gbc.gridx = 1;
-        panelCampos.add(domicilioField, gbc);
-
-//        // usuario y contraseña
-//        gbc.gridx = 0;
-//        gbc.gridy = 6;
-//        panelCampos.add(nombreUsuariolbl, gbc);
-//        gbc.gridx = 1;
-//        panelCampos.add(contrasenalbl, gbc);
-//        gbc.gridx = 0;
-//        gbc.gridy = 7;
-//        panelCampos.add(nombreUsuariofield, gbc);
-//        gbc.gridx = 1;
-//        panelCampos.add(jPasswordField1, gbc);
-//
-//        // correo y telefono
-//        gbc.gridx = 0;
-//        gbc.gridy = 8;
-//        panelCampos.add(correolbl, gbc);
-//        gbc.gridx = 1;
-//        panelCampos.add(telefonolbl, gbc);
-//        gbc.gridx = 0;
-//        gbc.gridy = 9;
-//        panelCampos.add(correofield, gbc);
-//        gbc.gridx = 1;
-//        panelCampos.add(telefonofield, gbc);
-        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
-        titulolbl.setAlignmentX(Component.CENTER_ALIGNMENT);
-        botonConfirmar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnVolver.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        add(Box.createVerticalStrut(20));
-        add(titulolbl);
-        add(Box.createVerticalStrut(20));
-        add(panelCampos);
-        add(Box.createVerticalStrut(20));
-        add(botonConfirmar);
-        add(Box.createVerticalStrut(10));
-        add(btnVolver);
-        add(Box.createVerticalStrut(20));
-
-        configurarVisibilidadCampos();
+        inicializarCampos();
 
     }
 
@@ -152,13 +74,21 @@ public class EditarUsuario extends javax.swing.JFrame {
         apellidoMaternoField = new javax.swing.JTextField();
         nombreField = new javax.swing.JTextField();
         apellidoPaternoField = new javax.swing.JTextField();
+        correoField = new javax.swing.JTextField();
+        correolbl = new javax.swing.JLabel();
+        telefonoField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        nombreUsuarioField = new javax.swing.JTextField();
+        nombreUsuariolbl = new javax.swing.JLabel();
+        contrasenalbl = new javax.swing.JLabel();
+        contrasenaField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(680, 820));
         setSize(new java.awt.Dimension(680, 820));
 
         titulolbl.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        titulolbl.setText("Editar Usuario");
+        titulolbl.setText("Editar Cliente");
 
         Nombrelbl.setText("Nombres");
 
@@ -188,6 +118,14 @@ public class EditarUsuario extends javax.swing.JFrame {
             }
         });
 
+        correolbl.setText("CorreoElectronico");
+
+        jLabel1.setText("Telefono");
+
+        nombreUsuariolbl.setText("Nombre de usuario");
+
+        contrasenalbl.setText("Contraseña");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -207,24 +145,39 @@ public class EditarUsuario extends javax.swing.JFrame {
                         .addGap(240, 240, 240))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Nombrelbl)
-                    .addComponent(apellidoMaternolbl)
-                    .addComponent(callelbl)
-                    .addComponent(CalleField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                    .addComponent(apellidoMaternoField)
-                    .addComponent(nombreField))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(ApellidoPaternolbl)
-                        .addComponent(cplbl)
-                        .addComponent(CPField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                        .addComponent(apellidoPaternoField))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(domiciliolbl)
-                        .addComponent(domicilioField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)))
-                .addGap(57, 57, 57))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(nombreUsuariolbl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(contrasenalbl)
+                        .addGap(236, 236, 236))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(nombreUsuarioField)
+                                .addGap(88, 88, 88)
+                                .addComponent(contrasenaField, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(Nombrelbl)
+                                    .addComponent(apellidoMaternolbl)
+                                    .addComponent(callelbl)
+                                    .addComponent(CalleField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                    .addComponent(apellidoMaternoField)
+                                    .addComponent(nombreField)
+                                    .addComponent(correoField)
+                                    .addComponent(correolbl))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(ApellidoPaternolbl)
+                                    .addComponent(cplbl)
+                                    .addComponent(CPField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                    .addComponent(apellidoPaternoField)
+                                    .addComponent(domiciliolbl)
+                                    .addComponent(domicilioField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                    .addComponent(telefonoField)
+                                    .addComponent(jLabel1))))
+                        .addGap(57, 57, 57))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,11 +196,15 @@ public class EditarUsuario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(apellidoMaternolbl, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cplbl))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(apellidoMaternoField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CPField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addComponent(CPField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(apellidoMaternoField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(callelbl)
@@ -257,7 +214,23 @@ public class EditarUsuario extends javax.swing.JFrame {
                         .addComponent(domiciliolbl)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(domicilioField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 387, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(correolbl)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(telefonoField, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                    .addComponent(correoField))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nombreUsuariolbl)
+                    .addComponent(contrasenalbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nombreUsuarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(contrasenaField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
                 .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -269,95 +242,78 @@ public class EditarUsuario extends javax.swing.JFrame {
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
+        ClienteDTO clienteActualizado = new ClienteDTO();
+
         if (clienteEncontrado != null) {
-            ClienteDTO clienteActualizar = new ClienteDTO();
-            clienteActualizar.setNombre(nombreField.getText().trim());
-            clienteActualizar.setApellidoPaterno(apellidoPaternoField.getText().trim());
-            clienteActualizar.setApellidoMaterno(apellidoMaternoField.getText().trim());
+            clienteActualizado.setNombreUsuario(clienteEncontrado.getNombreUsuario());
+            clienteActualizado.setContraseña(clienteEncontrado.getContraseña());
 
-            clienteActualizar.setCP(CPField.getText().trim());
-            clienteActualizar.setCalle(CalleField.getText().trim());
-            clienteActualizar.setNumero(domicilioField.getText().trim());
+            clienteActualizado.setNombre(nombreField.getText().trim());
+            clienteActualizado.setApellidoPaterno(apellidoPaternoField.getText().trim());
+            clienteActualizado.setApellidoMaterno(apellidoMaternoField.getText().trim());
+            clienteActualizado.setTelefono(telefonoField.getText().trim());
+            clienteActualizado.setCorreoElectronico(correoField.getText().trim());
 
-            clienteActualizar.setContraseña(clienteEncontrado.getContraseña());
-            clienteActualizar.setNombreUsuario(clienteEncontrado.getNombreUsuario());
-            clienteActualizar.setCorreoElectronico(clienteEncontrado.getCorreoElectronico());
-            clienteActualizar.setRol(clienteEncontrado.getRol());
-            clienteActualizar.setEstado(clienteEncontrado.getEstado());
-            clienteActualizar.setTelefono(clienteEncontrado.getTelefono());
-            clienteActualizar.setFechaNacimiento(clienteEncontrado.getFechaNacimiento());
+            clienteActualizado.setCP(CPField.getText().trim());
+            clienteActualizado.setCalle(CalleField.getText().trim());
+            clienteActualizado.setNumero(domicilioField.getText().trim());
 
-            ClienteDTO clienteActualizado = control.actualizarCliente(clienteActualizar);
+            clienteActualizado.setRol(clienteEncontrado.getRol());
+            clienteActualizado.setEstado(clienteEncontrado.getEstado());
+            clienteActualizado.setFechaNacimiento(clienteEncontrado.getFechaNacimiento());
 
-            if (clienteActualizado != null) {
-                JOptionPane.showMessageDialog(null, "Se edito el cliente exitosamente.");
+        }
+
+        if (clienteAlMando != null) {
+            clienteActualizado.setNombreUsuario(nombreUsuarioField.getText().trim());
+            clienteActualizado.setContraseña(new String(contrasenaField.getPassword()));
+
+            clienteActualizado.setNombre(nombreField.getText().trim());
+            clienteActualizado.setApellidoPaterno(apellidoPaternoField.getText().trim());
+            clienteActualizado.setApellidoMaterno(apellidoMaternoField.getText().trim());
+            clienteActualizado.setTelefono(telefonoField.getText().trim());
+            clienteActualizado.setCorreoElectronico(correoField.getText().trim());
+
+            clienteActualizado.setCP(CPField.getText().trim());
+            clienteActualizado.setCalle(CalleField.getText().trim());
+            clienteActualizado.setNumero(domicilioField.getText().trim());
+
+            clienteActualizado.setRol(clienteAlMando.getRol());
+            clienteActualizado.setEstado(clienteAlMando.getEstado());
+            clienteActualizado.setFechaNacimiento(clienteAlMando.getFechaNacimiento());
+
+        }
+
+        if (control.actualizarCliente(clienteActualizado) != null) {
+            JOptionPane.showMessageDialog(this, "Cambios guardados correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            if (frameAnterior instanceof MenuPrincipalCliente) {
+                control.mostrarMenuCliente(this, clienteAlMando);
+                dispose();
+            } else if (frameAnterior instanceof ConsultarUsuarios) {
                 control.mostrarGestionDeUsuarios(this, null);
                 dispose();
             }
+            dispose();
+
         }
 
-        if (adminEncontrado != null) {
-            AdministradorDTO adminActualizar = new AdministradorDTO();
-            adminActualizar.setNombre(nombreField.getText().trim());
-            adminActualizar.setApellidoPaterno(apellidoPaternoField.getText().trim());
-            adminActualizar.setApellidoMaterno(apellidoMaternoField.getText().trim());
-
-            adminActualizar.setContraseña(adminEncontrado.getContraseña());
-            adminActualizar.setNombreUsuario(adminEncontrado.getNombreUsuario());
-            adminActualizar.setCorreoElectronico(adminEncontrado.getCorreoElectronico());
-            adminActualizar.setRol(adminEncontrado.getRol());
-            adminActualizar.setEstado(adminEncontrado.getEstado());
-            adminActualizar.setTelefono(adminEncontrado.getTelefono());
-            adminActualizar.setFechaNacimiento(adminEncontrado.getFechaNacimiento());
-            adminActualizar.setRFC(adminEncontrado.getRFC());
-
-            AdministradorDTO adminActualizado = control.actualizarAdministrador(adminActualizar);
-
-            if (adminActualizado != null) {
-                JOptionPane.showMessageDialog(null, "Se edito el admin exitosamente.");
-                control.mostrarGestionDeUsuarios(this, null);
-                dispose();
-            }
-        }
-
+        // **Importante** conservar el nombre de usuario original:
 
     }//GEN-LAST:event_botonConfirmarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
-        control.mostrarGestionDeUsuarios(this, null);
-        dispose();
+        if (frameAnterior instanceof MenuPrincipalCliente) {
+            control.mostrarMenuCliente(this, clienteAlMando);
+            dispose();
+        } else if (frameAnterior instanceof ConsultarUsuarios) {
+            control.mostrarGestionDeUsuarios(this, null);
+            dispose();
+        }
+
+
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void configurarVisibilidadCampos() {
-//        boolean esAdminMando = adminAlMando != null;
-//        boolean esClienteMando = clienteAlMando != null;
-        boolean esClienteEncontrado = clienteEncontrado != null;
-        boolean esAdminEncontrado = adminEncontrado != null;
-
-        if (esClienteEncontrado) {
-            mostrarCamposComunes();
-            mostrarCamposDeDireccion();
-
-            nombreField.setText(clienteEncontrado.getNombre());
-            apellidoPaternoField.setText(clienteEncontrado.getApellidoPaterno());
-            apellidoMaternoField.setText(clienteEncontrado.getApellidoMaterno());
-
-            CPField.setText(clienteEncontrado.getCP());
-            CalleField.setText(clienteEncontrado.getCalle());
-            domicilioField.setText(clienteEncontrado.getNumero());
-
-        }
-
-        if (esAdminEncontrado) {
-            mostrarCamposComunes();
-
-            nombreField.setText(adminEncontrado.getNombre());
-            apellidoPaternoField.setText(adminEncontrado.getApellidoPaterno());
-            apellidoMaternoField.setText(adminEncontrado.getApellidoMaterno());
-        }
-
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ApellidoPaternolbl;
@@ -370,32 +326,47 @@ public class EditarUsuario extends javax.swing.JFrame {
     private javax.swing.JButton botonConfirmar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel callelbl;
+    private javax.swing.JPasswordField contrasenaField;
+    private javax.swing.JLabel contrasenalbl;
+    private javax.swing.JTextField correoField;
+    private javax.swing.JLabel correolbl;
     private javax.swing.JLabel cplbl;
     private javax.swing.JTextField domicilioField;
     private javax.swing.JLabel domiciliolbl;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField nombreField;
+    private javax.swing.JTextField nombreUsuarioField;
+    private javax.swing.JLabel nombreUsuariolbl;
+    private javax.swing.JTextField telefonoField;
     private javax.swing.JLabel titulolbl;
     // End of variables declaration//GEN-END:variables
-    public void mostrarCamposComunes() {
-        Nombrelbl.setVisible(true);
-        nombreField.setVisible(Nombrelbl.isVisible());
+    private void inicializarCampos() {
 
-        ApellidoPaternolbl.setVisible(Nombrelbl.isVisible());
-        apellidoPaternoField.setVisible(Nombrelbl.isVisible());
+        if (clienteEncontrado != null) {
+            nombreField.setText(clienteEncontrado.getNombre());
+            apellidoPaternoField.setText(clienteEncontrado.getApellidoPaterno());
+            apellidoMaternoField.setText(clienteEncontrado.getApellidoMaterno());
+            correoField.setText(clienteEncontrado.getCorreoElectronico());
+            telefonoField.setText(clienteEncontrado.getTelefono());
 
-        apellidoMaternolbl.setVisible(Nombrelbl.isVisible());
-        apellidoMaternoField.setVisible(Nombrelbl.isVisible());
+            CalleField.setText(clienteEncontrado.getCalle());
+            CPField.setText(clienteEncontrado.getCP());
+            domicilioField.setText(clienteEncontrado.getNumero());
+        }
+
+        if (clienteAlMando != null) {
+            nombreField.setText(clienteAlMando.getNombre());
+            apellidoPaternoField.setText(clienteAlMando.getApellidoPaterno());
+            apellidoMaternoField.setText(clienteAlMando.getApellidoMaterno());
+            correoField.setText(clienteAlMando.getCorreoElectronico());
+            telefonoField.setText(clienteAlMando.getTelefono());
+
+            CalleField.setText(clienteAlMando.getCalle());
+            CPField.setText(clienteAlMando.getCP());
+            domicilioField.setText(clienteAlMando.getNumero());
+
+            nombreUsuarioField.setText(clienteAlMando.getNombreUsuario());
+            contrasenaField.setText(clienteAlMando.getContraseña());
+        }
     }
-
-    public void mostrarCamposDeDireccion() {
-        callelbl.setVisible(Nombrelbl.isVisible());
-        CalleField.setVisible(Nombrelbl.isVisible());
-
-        domiciliolbl.setVisible(Nombrelbl.isVisible());
-        domicilioField.setVisible(Nombrelbl.isVisible());
-
-        cplbl.setVisible(Nombrelbl.isVisible());
-        CPField.setVisible(Nombrelbl.isVisible());
-    }
-
 }

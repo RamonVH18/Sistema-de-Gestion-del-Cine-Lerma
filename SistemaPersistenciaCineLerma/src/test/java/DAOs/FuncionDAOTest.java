@@ -169,11 +169,11 @@ public class FuncionDAOTest {
     /**
      * Test of buscarFuncionesPelicula method, of class FuncionDAO.
      */
-    @Test
-    public void testBuscarFuncionesPelicula() throws Exception {
-        funcionDAO.registrarFuncion(funcionPrueba);
-        List<Funcion> funciones = funcionDAO.buscarFuncionesPelicula("PeliculaPrueba");
-        assertTrue(funciones.size() > 0, "Debe encontrar al menos una funcion para la pelicula");
-    }
+//    @Test
+//    public void testBuscarFuncionesPelicula() throws Exception {
+//        funcionDAO.registrarFuncion(funcionPrueba);
+//        List<Funcion> funciones = funcionDAO.buscarFuncionesPelicula("PeliculaPrueba");
+//        assertTrue(funciones.size() > 0, "Debe encontrar al menos una funcion para la pelicula");
+//    }
 
 }

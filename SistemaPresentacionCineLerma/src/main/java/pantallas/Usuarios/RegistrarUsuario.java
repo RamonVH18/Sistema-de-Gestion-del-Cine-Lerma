@@ -31,6 +31,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
     public RegistrarUsuario() {
         initComponents();
         ocultarTodosLosCampos();
+        contrasenaField.setText("");
 
     }
 
@@ -63,7 +64,6 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         CPField = new javax.swing.JTextField();
         CalleField = new javax.swing.JTextField();
         telefonoField = new javax.swing.JTextField();
-        contrasenaField = new javax.swing.JTextField();
         correoField = new javax.swing.JTextField();
         apellidoPaternoField = new javax.swing.JTextField();
         apellidoMaternoField = new javax.swing.JTextField();
@@ -74,6 +74,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         nacimientolbl = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         comboRol = new javax.swing.JComboBox<>();
+        contrasenaField = new javax.swing.JPasswordField();
 
         jPasswordField1.setText("jPasswordField1");
 
@@ -211,11 +212,11 @@ public class RegistrarUsuario extends javax.swing.JFrame {
                                     .addComponent(correolbl)
                                     .addComponent(paternolbl)
                                     .addComponent(usuarioField, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                                    .addComponent(contrasenaField)
                                     .addComponent(correoField)
                                     .addComponent(apellidoPaternoField)
                                     .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(nacimientolbl))))
+                                    .addComponent(nacimientolbl)
+                                    .addComponent(contrasenaField))))
                         .addGap(56, 56, 56))))
         );
         layout.setVerticalGroup(
@@ -297,7 +298,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "La fecha de nacimiento es obligatoria.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
         if (Rol.CLIENTE.equals(rolSeleccionado)) {
             
             ClienteDTO clienteRegistrar = construirClienteDTO(rolSeleccionado);
@@ -510,7 +511,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
             adminRegistrar.setCorreoElectronico(correoField.getText().trim());
             adminRegistrar.setTelefono(telefonoField.getText().trim());
             adminRegistrar.setRol(rolSeleccionado);
-            adminRegistrar.setContraseña(contrasenaField.getText().trim());
+            adminRegistrar.setContraseña(new String(contrasenaField.getPassword()));
             adminRegistrar.setNombreUsuario(usuarioField.getText().trim());
             adminRegistrar.setEstado(EstadoUsuario.ACTIVO);
 
@@ -535,7 +536,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
             clienteRegistrar.setCorreoElectronico(correoField.getText().trim());
             clienteRegistrar.setTelefono(telefonoField.getText().trim());
             clienteRegistrar.setRol(rolSeleccionado);
-            clienteRegistrar.setContraseña(contrasenaField.getText().trim());
+            clienteRegistrar.setContraseña(new String(contrasenaField.getPassword()));
             clienteRegistrar.setNombreUsuario(usuarioField.getText().trim());
             clienteRegistrar.setEstado(EstadoUsuario.ACTIVO);
 
@@ -566,7 +567,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel callelbl;
     private javax.swing.JComboBox<String> comboRol;
-    private javax.swing.JTextField contrasenaField;
+    private javax.swing.JPasswordField contrasenaField;
     private javax.swing.JLabel contrasenalbl;
     private javax.swing.JTextField correoField;
     private javax.swing.JLabel correolbl;

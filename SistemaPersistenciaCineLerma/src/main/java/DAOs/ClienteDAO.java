@@ -15,6 +15,7 @@ import Excepciones.usuarios.ValidarUsuarioException;
 import Interfaces.IClienteDAO;
 import Interfaces.IUsuarioDAO;
 import com.mongodb.MongoException;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -65,133 +66,57 @@ public class ClienteDAO implements IClienteDAO {
 
             MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
 
-            coleccion.createIndex(
-                    Indexes.ascending("nombreDeUsuario"),
-                    new IndexOptions().unique(true)
-            );
-
             coleccion.insertOne(cliente);
+
+            validarRegistro(coleccion, cliente);
 
             return cliente;
 
         } catch (MongoException e) {
-            throw new RegistrarClienteException("El nombre de usuario ya esta en uso: " + e.getMessage());
+            throw new RegistrarClienteException(e.getMessage());
+        } catch (ValidarUsuarioException e) {
+            throw new RegistrarClienteException(e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
             }
         }
+
     }
 
     @Override
-    public Cliente actualizarCliente(Cliente cliente) throws ActualizarClienteException {
+    public Cliente actualizarCliente(Cliente clienteModificado) throws ActualizarClienteException {
         MongoClient clienteMongo = null;
         try {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
 
-            coleccion.createIndex(
-                    Indexes.ascending("nombreDeUsuario"),
-                    new IndexOptions().unique(true)
-            );
-
-            Bson filtro = Filters.eq("nombreDeUsuario", cliente.getNombreDeUsuario());
-            //puede ser que al filtro se le pudiera agregar que el rol del usuario encontrado coincida con cliente
-
-            Cliente clienteActualizar = coleccion.find(filtro).first();
-
-            if (clienteActualizar == null) {
-                throw new ActualizarClienteException("No se encontro el usuario para actualizar");
+            Bson filtro = Filters.eq("nombreDeUsuario", clienteModificado.getNombreDeUsuario());
+            Cliente original = coleccion.find(filtro).first();
+            if (original == null) {
+                throw new ActualizarClienteException("No se encontró el cliente para actualizar");
             }
 
-            UpdateResult result = coleccion.replaceOne(filtro, cliente);
+            validarActualizacion(coleccion, original, clienteModificado);
 
+            // 3) Reemplazar todo el documento
+            UpdateResult result = coleccion.replaceOne(filtro, clienteModificado);
             if (result.getModifiedCount() == 0) {
                 throw new ActualizarClienteException("No se modificó ningún documento");
             }
 
-            return cliente;
-
+            return clienteModificado;
+        } catch (ValidarUsuarioException e) {
+            throw new ActualizarClienteException(e.getMessage(), e);
         } catch (MongoException e) {
-            throw new ActualizarClienteException("Error al actualizar el usuario: " + e.getMessage());
+            throw new ActualizarClienteException(e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
             }
         }
     }
-
-    @Override
-    public Boolean eliminarCliente(Cliente cliente) throws EliminarUsuarioException {
-        MongoClient clienteMongo = null;
-        try {
-            clienteMongo = conexion.crearConexion();
-
-            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-
-            MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
-
-            Bson filtro = Filters.eq("nombreUsuario", cliente.getNombreDeUsuario());
-
-            Cliente clienteEliminar = coleccion.find(filtro).first();
-
-            if (clienteEliminar == null) {
-                throw new EliminarUsuarioException("No se encontro el cliente para eliminar");
-            }
-
-            DeleteResult eliminar = coleccion.deleteOne(filtro);
-
-            if (eliminar.getDeletedCount() == 0) {
-                throw new EliminarUsuarioException("No se elimino el usuario");
-            }
-
-            return true;
-
-        } catch (MongoException e) {
-            throw new EliminarUsuarioException("Error al actualizar el usuario: " + e.getMessage());
-        } finally {
-            if (clienteMongo != null) {
-                conexion.cerrarConexion(clienteMongo);
-            }
-        }
-    }
-
-//    @Override
-//    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException {
-//        MongoClient clienteMongo = null;
-//        try {
-//            clienteMongo = conexion.crearConexion();
-//
-//            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-//
-//            MongoCollection<Cliente> coleccion = base.getCollection("usuarios", Cliente.class);
-//
-//            Bson filtro = Filters.and(
-//                    Filters.eq("nombreDeUsuario", nombreUsuario),
-//                    Filters.eq("contrasenia", contrasena),
-//                    Filters.eq("rol", "CLIENTE"));
-//
-//            Cliente usuarioEncontrado = coleccion.find(filtro).first();
-//
-//            if (usuarioEncontrado == null) {
-//                throw new ValidarUsuarioException("El usuario no se encontró o la contraseña es incorrecta");
-//            }
-//
-//            if (usuarioEncontrado.getEstado() == EstadoUsuario.BLOQUEADO) {
-//                throw new ValidarUsuarioException("El usuario esta bloqueado");
-//            }
-//
-//            return true;
-//
-//        } catch (MongoException e) {
-//            throw new ValidarUsuarioException("Error al desbloquear el usuario: " + e.getMessage());
-//        } finally {
-//            if (clienteMongo != null) {
-//                conexion.cerrarConexion(clienteMongo);
-//            }
-//        }
-//    }
 
     @Override
     public Cliente obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarClienteException {
@@ -208,10 +133,6 @@ public class ClienteDAO implements IClienteDAO {
             MongoCollection<Cliente> coleccionUsuarios = base.getCollection("usuarios", Cliente.class);
 
             Cliente clienteEncontrado = coleccionUsuarios.find(filtro).first();
-
-            if (clienteEncontrado == null) {
-                throw new EncontrarClienteException("No se encontró el usuario");
-            }
 
             return clienteEncontrado;
 
@@ -242,6 +163,39 @@ public class ClienteDAO implements IClienteDAO {
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);
+            }
+        }
+    }
+
+    public void validarRegistro(MongoCollection coleccion, Cliente cliente) throws ValidarUsuarioException {
+        if (coleccion.find(Filters.eq("nombreDeUsuario", cliente.getNombreDeUsuario())).first() != null) {
+            throw new ValidarUsuarioException("El nombre de usuario ya está en uso");
+        }
+        if (coleccion.find(Filters.eq("correoElectronico", cliente.getCorreoElectronico())).first() != null) {
+            throw new ValidarUsuarioException("El correo electrónico ya está en uso");
+        }
+        if (coleccion.find(Filters.eq("telefono", cliente.getTelefono())).first() != null) {
+            throw new ValidarUsuarioException("El número de teléfono ya está en uso");
+        }
+    }
+
+    private void validarActualizacion(MongoCollection<Cliente> coleccion, Cliente original, Cliente modificado) throws ValidarUsuarioException {
+
+        if (!modificado.getNombreDeUsuario().equals(original.getNombreDeUsuario())) {
+            if (coleccion.find(Filters.and(Filters.eq("nombreDeUsuario", modificado.getNombreDeUsuario()), Filters.ne("_id", original.getIdUsuario()))).first() != null) {
+                throw new ValidarUsuarioException("El nombre de usuario ya está en uso");
+            }
+        }
+
+        if (!modificado.getCorreoElectronico().equals(original.getCorreoElectronico())) {
+            if (coleccion.find(Filters.and(Filters.eq("correoElectronico", modificado.getCorreoElectronico()), Filters.ne("_id", original.getIdUsuario()))).first() != null) {
+                throw new ValidarUsuarioException("El correo electrónico ya está en uso");
+            }
+        }
+
+        if (!modificado.getTelefono().equals(original.getTelefono())) {
+            if (coleccion.find(Filters.and(Filters.eq("telefono", modificado.getTelefono()), Filters.ne("_id", original.getIdUsuario()))).first() != null) {
+                throw new ValidarUsuarioException("El número de teléfono ya está en uso");
             }
         }
     }

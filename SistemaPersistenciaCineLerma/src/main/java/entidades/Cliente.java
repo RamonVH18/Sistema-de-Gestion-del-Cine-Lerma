@@ -14,7 +14,7 @@ import org.bson.types.ObjectId;
  *
  * @author Ramon Valencia
  */
-@BsonDiscriminator(key = "tipo", value = "CLIENTE")
+@BsonDiscriminator(key = "rol", value = "CLIENTE")
 public class Cliente extends Usuario {
 
     private String calle;

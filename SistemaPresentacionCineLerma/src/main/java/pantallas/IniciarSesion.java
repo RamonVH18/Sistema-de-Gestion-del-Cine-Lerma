@@ -6,10 +6,12 @@ package pantallas;
 
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
+import DTOs.UsuarioDTO;
 import Excepciones.EncontrarUsuarioException;
 import Excepciones.ValidarUsuarioException;
 import control.ControlDeNavegacion;
 import control.IControl;
+import enums.Rol;
 import gestionUsuarios.IManejoUsuarios;
 import gestionUsuarios.ManejoUsuarios;
 import java.util.logging.Level;
@@ -152,29 +154,22 @@ public class IniciarSesion extends javax.swing.JFrame {
         String usuario = usuarioField.getText().trim();
         String contrasena = new String(contrasenaField.getPassword()).trim();
 
-        try {
-            AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuario, contrasena);
+        UsuarioDTO usuarioEncontrado = control.validarUsuario(usuario, contrasena);
 
-            if (adminEncontrado != null) {
+        if (usuarioEncontrado != null) {
+            if (usuarioEncontrado.getRol() == Rol.CLIENTE) {
+                ClienteDTO clienteEncontrado = control.obtenerCliente(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
+                control.mostrarMenuCliente(this, clienteEncontrado);
+                dispose();
+                return;
+            } else if (usuarioEncontrado.getRol() == Rol.ADMINISTRADOR) {
+                AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
                 control.mostrarMenuAdministrador(this, adminEncontrado);
                 dispose();
                 return;
             }
-
-            ClienteDTO clienteEncontrado = control.obtenerCliente(usuario, contrasena);
-
-            if (clienteEncontrado != null) {
-                control.mostrarMenuCliente(this, clienteEncontrado);
-                dispose();
-                return;
-            }
-
-            // Si no se encontró ninguno:
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
-
-        } catch (EncontrarUsuarioException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
 
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 

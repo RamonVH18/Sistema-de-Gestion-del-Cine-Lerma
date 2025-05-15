@@ -79,41 +79,6 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
 
-//    @Override
-//    public Boolean eliminarUsuario(Usuario usuario) throws EliminarUsuarioException {
-//        MongoClient clienteMongo = null;
-//        try {
-//            clienteMongo = conexion.crearConexion();
-//
-//            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-//
-//            MongoCollection<Usuario> coleccion = base.getCollection("usuarios", Usuario.class);
-//
-//            Bson filtro = Filters.eq("nombreUsuario", usuario.getNombreDeUsuario());
-//
-//            Usuario usuarioEliminar = coleccion.find(filtro).first();
-//
-//            if (usuarioEliminar == null) {
-//                throw new EliminarUsuarioException("No se encontro el usuario para eliminar");
-//            }
-//
-//            DeleteResult eliminar = coleccion.deleteOne(filtro);
-//
-//            if (eliminar.getDeletedCount() == 0) {
-//                throw new EliminarUsuarioException("No se elimino el usuario");
-//            }
-//
-//            return true;
-//
-//        } catch (MongoException e) {
-//            throw new EliminarUsuarioException("Error al actualizar el usuario: " + e.getMessage());
-//        } finally {
-//            if (clienteMongo != null) {
-//                conexion.cerrarConexion(clienteMongo);
-//            }
-//        }
-//
-//    }
 
     @Override
     public Boolean bloquearUsuario(Usuario usuario) throws ActualizarUsuarioException {
@@ -243,7 +208,34 @@ public class UsuarioDAO implements IUsuarioDAO {
             return usuarios;
 
         } catch (MongoException e) {
-            throw new ObtenerUsuariosException("Error al registrar el cliente: " + e.getMessage());
+            throw new ObtenerUsuariosException("Error al obtener usuarios: " + e.getMessage());
+        } finally {
+            if (clienteMongo != null) {
+                conexion.cerrarConexion(clienteMongo);
+            }
+        }
+    }
+    
+    
+    @Override
+    public Usuario obtenerUsuario(String nombreUsuario, String contrasena) throws ObtenerUsuariosException {
+        MongoClient clienteMongo = null;
+        try {
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+
+            Bson filtro = Filters.and(
+                    Filters.eq("nombreDeUsuario", nombreUsuario),
+                    Filters.eq("contrasenia", contrasena));
+
+            MongoCollection<Usuario> coleccionUsuarios = base.getCollection("usuarios", Usuario.class);
+
+            Usuario usuarioEncontrado = coleccionUsuarios.find(filtro).first();
+
+            return usuarioEncontrado;
+
+        } catch (MongoException e) {
+            throw new ObtenerUsuariosException("Error al obtener el cliente: " + e.getMessage());
         } finally {
             if (clienteMongo != null) {
                 conexion.cerrarConexion(clienteMongo);

@@ -5,12 +5,10 @@
 package BOs;
 
 import DAOs.UsuarioDAO;
-import DTOs.CompraDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.Usuarios.ActualizarUsuarioExceptionBO;
 import Excepciones.Usuarios.ObtenerUsuariosExceptionBO;
 import Excepciones.usuarios.ActualizarUsuarioException;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import Interfaces.IUsuarioBO;
 import Interfaces.IUsuarioDAO;
@@ -18,7 +16,6 @@ import Interfaces.mappers.ICompraMapper;
 import Interfaces.mappers.IUsuarioMapper;
 import Mappers.CompraMapper;
 import Mappers.UsuarioMapper;
-import entidades.Compra;
 import entidades.Usuario;
 import enums.EstadoUsuario;
 import enums.Rol;
@@ -63,20 +60,6 @@ public class UsuarioBO implements IUsuarioBO {
     }
 
 
-//    @Override
-//    public Boolean eliminarUsuarioBO(UsuarioDTO usuario) throws EliminarUsuarioException {
-//        try {
-//
-//            Usuario usuarioEliminar = mapper.toUsuarioEntidad(usuario);
-//
-//            return usuarioDAO.eliminarUsuario(usuarioEliminar);
-//
-//        } catch (EliminarUsuarioException e) {
-//            throw new EliminarUsuarioException("Error al eliminar usuario", e);
-//        }
-//
-//    }
-
     @Override
     public Boolean bloquearUsuarioBO(UsuarioDTO usuario) throws ActualizarUsuarioExceptionBO {
         try {
@@ -115,6 +98,19 @@ public class UsuarioBO implements IUsuarioBO {
 
         } catch (ObtenerUsuariosException e) {
             throw new ObtenerUsuariosExceptionBO("Error al obtener lista de usuarios CON FILTROS", e);
+        }
+    }
+    
+    @Override
+    public UsuarioDTO obtenerUsuarioBO(String nombreUsuario, String contrasena) throws ObtenerUsuariosExceptionBO {
+        try {
+
+            Usuario usuarioEncontrado = usuarioDAO.obtenerUsuario(nombreUsuario, contrasena);
+
+            return mapper.toUsuarioDTO(usuarioEncontrado);
+
+        } catch (ObtenerUsuariosException e) {
+            throw new ObtenerUsuariosExceptionBO("Error al encontrar un usuario", e);
         }
     }
 

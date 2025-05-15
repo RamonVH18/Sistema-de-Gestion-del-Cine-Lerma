@@ -6,16 +6,12 @@ package BOs;
 
 import DAOs.AdministradorDAO;
 import DTOs.AdministradorDTO;
-import Excepciones.Usuarios.ActualizarAdminExceptionBO;
 import Excepciones.Usuarios.EliminarUsuarioExceptionBO;
 import Excepciones.Usuarios.EncontrarAdminExceptionBO;
 import Excepciones.Usuarios.RegistrarAdminExceptionBO;
-import Excepciones.Usuarios.ValidarUsuarioExceptionBO;
-import Excepciones.usuarios.ActualizarAdministradorException;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarAdministradorException;
 import Excepciones.usuarios.RegistrarAministradorException;
-import Excepciones.usuarios.ValidarUsuarioException;
 import Interfaces.IAdministradorBO;
 import Interfaces.IAdministradorDAO;
 import Interfaces.mappers.IAdministradorMapper;
@@ -53,47 +49,10 @@ public class AdministradorBO implements IAdministradorBO{
             return mapper.toAdministradorDTO(adminRegistrado);
 
         } catch (RegistrarAministradorException e) {
-            throw new RegistrarAdminExceptionBO("Error al registrar un administrador", e);
+            throw new RegistrarAdminExceptionBO(e.getMessage(), e);
         }
     }
 
-    @Override
-    public AdministradorDTO actualizarAdministradorBO(AdministradorDTO administrador) throws ActualizarAdminExceptionBO {
-        try {
-
-            Administrador adminActualizar = mapper.toAdministradorEntidad(administrador);
-            Administrador adminActualizado = adminDAO.actualizarAdministrador(adminActualizar);
-
-            return mapper.toAdministradorDTO(adminActualizado);
-
-        } catch (ActualizarAdministradorException e) {
-            throw new ActualizarAdminExceptionBO("Error al actualizar el administrador", e);
-        }
-    }
-
-    @Override
-    public Boolean eliminarAdministradorBO(AdministradorDTO administrador) throws EliminarUsuarioExceptionBO {
-        try {
-
-            Administrador adminEliminar = mapper.toAdministradorEntidad(administrador);
-
-            return adminDAO.eliminarAdministrador(adminEliminar);
-
-        } catch (EliminarUsuarioException e) {
-            throw new EliminarUsuarioExceptionBO("Error al eliminar el cliente", e);
-        }     
-    }
-
-//    @Override
-//    public Boolean validarAdministradorBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO {
-//        try {
-//
-//            return adminDAO.validarAdministrador(nombreUsuario, contrasena);
-//
-//        } catch (ValidarUsuarioException e) {
-//            throw new ValidarUsuarioExceptionBO("Error al validar el cliente", e);
-//        }
-//    }
         
 
     @Override

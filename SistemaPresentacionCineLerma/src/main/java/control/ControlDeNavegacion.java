@@ -37,6 +37,7 @@ import Excepciones.RegistrarUsuarioException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidacionSalaException;
 import Excepciones.ValidarCampoAsientoException;
+import Excepciones.ValidarUsuarioException;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import enums.EstadoUsuario;
@@ -671,13 +672,23 @@ public class ControlDeNavegacion implements IControl {
     }
 
     @Override
-    public void mostrarEditarUsuario(JFrame frameAnterior, ClienteDTO cliente, AdministradorDTO admin) {
+    public void mostrarEditarUsuario(JFrame frameAnterior, ClienteDTO cliente, ClienteDTO clienteAlMando) {
         SwingUtilities.invokeLater(() -> {
-            EditarUsuario pantallaEditarUsuario = new EditarUsuario(cliente, admin);
+            EditarUsuario pantallaEditarUsuario = new EditarUsuario(frameAnterior, cliente, clienteAlMando);
             pantallaEditarUsuario.setLocationRelativeTo(null);
             pantallaEditarUsuario.setVisible(true);
             frameAnterior.dispose();
         });
+    }
+    
+    @Override
+    public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena) {
+        try {
+            return gestionUsuarios.validarUsuario(nombreUsuario, contrasena);
+        } catch (ValidarUsuarioException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     @Override
@@ -740,35 +751,6 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-//    @Override
-//    public List<UsuarioDTO> mostrarListaUsuariosPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
-//        try {
-//            return gestionUsuarios.mostrarListaUsuariosPorPeriodo(fechaInicio, fechaFin);
-//        } catch (ObtenerUsuariosException e) {
-//            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public List<UsuarioDTO> mostrarListaUsuariosPorCorreo(String correo) {
-//        try {
-//            return gestionUsuarios.mostrarListaUsuariosPorCorreo(correo);
-//        } catch (ObtenerUsuariosException e) {
-//            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public List<UsuarioDTO> mostrarListaUsuariosPorNombre(String nombre) {
-//        try {
-//            return gestionUsuarios.mostrarListaUsuariosPorNombre(nombre);
-//        } catch (ObtenerUsuariosException e) {
-//            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-//            return null;
-//        }
-//    }
 
     @Override
     public ClienteDTO registrarCliente(ClienteDTO cliente) {
@@ -790,23 +772,9 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-    @Override
-    public Boolean eliminarCliente(ClienteDTO cliente) {
-        try {
-            return gestionUsuarios.eliminarCliente(cliente);
-        } catch (EliminarUsuarioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
-
-//    @Override
-//    public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException{
-//            return gestionUsuarios.validarCliente(nombreUsuario, contrasena);
-//    }
 
     @Override
-    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarUsuarioException {
+    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena){
         try {
             return gestionUsuarios.obtenerCliente(nombreUsuario, contrasena);
         } catch (EncontrarUsuarioException e) {
@@ -835,33 +803,10 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-    @Override
-    public AdministradorDTO actualizarAdministrador(AdministradorDTO administrador) {
-        try {
-            return gestionUsuarios.actualizarAdministrador(administrador);
-        } catch (ActualizarUsuarioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
+   
 
     @Override
-    public Boolean eliminarAdministrador(AdministradorDTO administrador) {
-        try {
-            return gestionUsuarios.eliminarAdministrador(administrador);
-        } catch (EliminarUsuarioException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
-
-//    @Override
-//    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException{
-//            return gestionUsuarios.validarAdministrador(nombreUsuario, contrasena);
-//    }
-
-    @Override
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) throws EncontrarUsuarioException{
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena){
         try {
             return gestionUsuarios.obtenerAdministrador(nombreUsuario, contrasena);
         } catch (EncontrarUsuarioException e) {

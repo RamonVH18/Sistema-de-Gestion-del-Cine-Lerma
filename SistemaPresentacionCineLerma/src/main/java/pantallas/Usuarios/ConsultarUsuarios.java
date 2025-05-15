@@ -99,7 +99,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         botonEditar = new javax.swing.JButton();
         botonHistorial = new javax.swing.JButton();
         botonDesBloquear = new javax.swing.JButton();
-        botonEliminarUsuario = new javax.swing.JButton();
         panelSeleccionado = new javax.swing.JPanel();
         fieldNombre = new javax.swing.JTextField();
         fieldApellidoPaterno = new javax.swing.JTextField();
@@ -123,7 +122,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         botonBloquear = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1515, 820));
         setMinimumSize(new java.awt.Dimension(1515, 820));
         setSize(new java.awt.Dimension(1515, 820));
 
@@ -176,17 +174,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         botonDesBloquear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonDesBloquearActionPerformed(evt);
-            }
-        });
-
-        botonEliminarUsuario.setBackground(new java.awt.Color(228, 82, 82));
-        botonEliminarUsuario.setText("Eliminar Usuario");
-        botonEliminarUsuario.setMaximumSize(new java.awt.Dimension(155, 41));
-        botonEliminarUsuario.setMinimumSize(new java.awt.Dimension(155, 41));
-        botonEliminarUsuario.setPreferredSize(new java.awt.Dimension(155, 41));
-        botonEliminarUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEliminarUsuarioActionPerformed(evt);
             }
         });
 
@@ -389,8 +376,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
                                         .addComponent(botonBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(botonHistorial, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                                        .addComponent(botonEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(botonEliminarUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(botonEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGap(58, 58, 58))))))
         );
         layout.setVerticalGroup(
@@ -427,7 +413,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
                                     .addComponent(usuarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(lblHasta)
                             .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                         .addComponent(panelTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
@@ -440,8 +426,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
                         .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(botonHistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                        .addComponent(botonEliminarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
@@ -517,11 +502,8 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
             control.mostrarEditarUsuario(this, clienteEncontrado, null);
             dispose();
             
-        }
-        
-        if (adminEncontrado != null) {
-            control.mostrarEditarUsuario(this, null, adminEncontrado);
-            dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "No se selecciono ningun cliente, solo los clientes se pueden editar");
         }
     }//GEN-LAST:event_botonEditarActionPerformed
 
@@ -532,47 +514,10 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         cargarListaUsuarios(listaUsuarios);
     }//GEN-LAST:event_botonBloquearActionPerformed
 
-    private void botonEliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarUsuarioActionPerformed
-        // TODO add your handling code here:
-        if (clienteEncontrado != null) {
-            int opcion = JOptionPane.showConfirmDialog(null,
-                "¿Estás seguro de que quieres eliminar?",
-                "Confirmar eliminacion",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-        
-        if (opcion == JOptionPane.YES_OPTION) {
-            Boolean SeElimino = control.eliminarCliente(clienteEncontrado);
-            List<UsuarioDTO> listaUsuarios = control.mostrarListaUsuarios();
-            cargarListaUsuarios(listaUsuarios);
-            if (SeElimino == true) {
-                JOptionPane.showMessageDialog(null, "Eliminación realizada con éxito.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Operación cancelada.");
-        }
-        }
-        
-//        if (adminEncontrado != null) {
-//        int opcion = JOptionPane.showConfirmDialog(null,
-//                "¿Estás seguro de que quieres eliminar?",
-//                "Confirmar eliminacion",
-//                JOptionPane.YES_NO_OPTION,
-//                JOptionPane.QUESTION_MESSAGE);
-//        
-//        if (opcion == JOptionPane.YES_OPTION) {
-//            control.eliminarAdministrador(adminEncontrado);
-//            JOptionPane.showMessageDialog(null, "Eliminación realizada con éxito.");
-//        } else {
-//            JOptionPane.showMessageDialog(null, "Operación cancelada.");
-//        }
-//        }
-    }//GEN-LAST:event_botonEliminarUsuarioActionPerformed
-
     private void botonHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHistorialActionPerformed
         // TODO add your handling code here:
         if (clienteEncontrado == null) {
-            JOptionPane.showMessageDialog(null, "No se selecciono ningun cliente");
+            JOptionPane.showMessageDialog(null, "No se selecciono ningun cliente, solo los clientes tienen historial");
             return;
         }
         
@@ -656,26 +601,15 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
 
                     //obtener cliente
                     if (usuarioEncontrado.getRol() == Rol.CLIENTE) {
-                        try {
                             clienteEncontrado = control.obtenerCliente(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
                             mostrarInfoCliente(clienteEncontrado);
-
-                        } catch (EncontrarUsuarioException ex) {
-                            Logger.getLogger(ConsultarUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-                        }
                     }
 
                     if (usuarioEncontrado.getRol() == Rol.ADMINISTRADOR) {
-                        try {
                             adminEncontrado = control.obtenerAdministrador(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
                             mostrarInfoAdmin(adminEncontrado);
-
-                        } catch (EncontrarUsuarioException ex) {
-                            Logger.getLogger(ConsultarUsuarios.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-
-                }
             }
         });
 
@@ -762,7 +696,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
     private javax.swing.JButton botonBloquear;
     private javax.swing.JButton botonDesBloquear;
     private javax.swing.JButton botonEditar;
-    private javax.swing.JButton botonEliminarUsuario;
     private javax.swing.JButton botonHistorial;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnVolver;

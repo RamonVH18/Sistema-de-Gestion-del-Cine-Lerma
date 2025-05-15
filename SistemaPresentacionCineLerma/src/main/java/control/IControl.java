@@ -109,7 +109,7 @@ public interface IControl {
 
     public void mostrarGestionDeUsuarios(JFrame frameAnterior, AdministradorDTO admin);
 
-    public void mostrarEditarUsuario(JFrame frameAnterior, ClienteDTO cliente, AdministradorDTO admin);
+    public void mostrarEditarUsuario(JFrame frameAnterior, ClienteDTO cliente, ClienteDTO clienteAlMando);
 
     public void mostrarRegistrarUsuario(JFrame frameAnterior);
 
@@ -124,31 +124,20 @@ public interface IControl {
 
     public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre);
 
-//    public List<UsuarioDTO> mostrarListaUsuariosPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin);
-//    
-//    public List<UsuarioDTO> mostrarListaUsuariosPorCorreo(String correo);
-//    
-//    public List<UsuarioDTO> mostrarListaUsuariosPorNombre(String nombre);
+    public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena);
+    
     //Cliente:
     public ClienteDTO registrarCliente(ClienteDTO cliente);
 
     public ClienteDTO actualizarCliente(ClienteDTO cliente);
 
-    public Boolean eliminarCliente(ClienteDTO cliente);
-
-    //public Boolean validarCliente(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
-    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
+    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena);
 
     public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente);
 
     //Administrador:
     public AdministradorDTO registrarAdministrador(AdministradorDTO administrador);
-
-    public AdministradorDTO actualizarAdministrador(AdministradorDTO administrador);
-
-    public Boolean eliminarAdministrador(AdministradorDTO administrador);
-
-    //public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
+    
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) ;
 
 }

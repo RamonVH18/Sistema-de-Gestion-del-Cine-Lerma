@@ -19,12 +19,6 @@ public interface IAdministradorDAO {
     
     public Administrador registrarAdministrador (Administrador administrador) throws RegistrarAministradorException;
     
-    public Administrador actualizarAdministrador (Administrador administrador) throws ActualizarAdministradorException;
-    
-    public Boolean eliminarAdministrador (Administrador administrador) throws EliminarUsuarioException;
-    
-//    public Boolean validarAdministrador(String nombreUsuario, String contrasena) throws ValidarUsuarioException;
-    
-     public Administrador obtenerAdministrador(String nombreUsuario, String contrasena) throws EncontrarAdministradorException;
+    public Administrador obtenerAdministrador(String nombreUsuario, String contrasena) throws EncontrarAdministradorException;
     
 }

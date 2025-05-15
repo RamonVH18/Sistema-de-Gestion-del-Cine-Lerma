@@ -9,16 +9,12 @@ import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
 import Excepciones.Usuarios.ActualizarClienteExceptionBO;
 import Excepciones.Usuarios.CargarHistorialExceptionBO;
-import Excepciones.Usuarios.EliminarUsuarioExceptionBO;
 import Excepciones.Usuarios.EncontrarClienteExceptionBO;
 import Excepciones.Usuarios.RegistrarClienteExceptionBO;
-import Excepciones.Usuarios.ValidarUsuarioExceptionBO;
 import Excepciones.usuarios.ActualizarClienteException;
 import Excepciones.usuarios.CargarHistorialException;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarClienteException;
 import Excepciones.usuarios.RegistrarClienteException;
-import Excepciones.usuarios.ValidarUsuarioException;
 import Interfaces.IClienteBO;
 import Interfaces.IClienteDAO;
 import Interfaces.mappers.IClienteMapper;
@@ -63,7 +59,7 @@ public class ClienteBO implements IClienteBO{
             return mapper.toClienteDTO(clienteRegistrado);
 
         } catch (RegistrarClienteException e) {
-            throw new RegistrarClienteExceptionBO("Error al registrar un cliente", e);
+            throw new RegistrarClienteExceptionBO(e.getMessage(), e);
         }
     }
 
@@ -77,34 +73,9 @@ public class ClienteBO implements IClienteBO{
             return mapper.toClienteDTO(clienteActualizado);
 
         } catch (ActualizarClienteException e) {
-            throw new ActualizarClienteExceptionBO("Error al registrar el cliente", e);
+            throw new ActualizarClienteExceptionBO(e.getMessage(), e);
         }
     }
-
-    @Override
-    public Boolean eliminarClienteBO(ClienteDTO cliente) throws EliminarUsuarioExceptionBO {
-        try {
-
-            Cliente clienteEliminar = mapper.toClienteEntidad(cliente);
-
-            return clienteDAO.eliminarCliente(clienteEliminar);
-
-        } catch (EliminarUsuarioException e) {
-            throw new EliminarUsuarioExceptionBO("Error al eliminar el cliente", e);
-        }
-
-    }
-
-//    @Override
-//    public Boolean validarClienteBO(String nombreUsuario, String contrasena) throws ValidarUsuarioExceptionBO {
-//        try {
-//
-//            return clienteDAO.validarCliente(nombreUsuario, contrasena);
-//
-//        } catch (ValidarUsuarioException e) {
-//            throw new ValidarUsuarioExceptionBO("Error al validar el cliente", e);
-//        }
-//    }
 
     @Override
     public ClienteDTO obtenerClienteBO(String nombreUsuario, String contrasena) throws EncontrarClienteExceptionBO {
