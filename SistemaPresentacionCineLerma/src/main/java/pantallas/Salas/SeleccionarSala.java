@@ -4,17 +4,62 @@
  */
 package pantallas.Salas;
 
+import DTOs.SalaViejaDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.Map;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import utilitades.ModeladoTablas;
+import utilitades.Utilerias;
+
 /**
- *
+ * 
  * @author Ramon Valencia
  */
 public class SeleccionarSala extends javax.swing.JFrame {
+
+    private final Utilerias utilerias = new Utilerias(); // Objeto Utilerias para poder utilizar los metodos de la clase
+    private final IControl control = ControlDeNavegacion.getInstancia(); // Instancia de la clase control de navegacion
+
+    // Valores del tamaño del buscador de salas
+    private final Integer anchoBuscador = 150;
+    private final Integer alturaBuscador = 20;
+    private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
+    
+    private JPanel panelTabla;
+    private static Timer temporizador;
+    /**
+     * Mapa que contiene los valores del tamaño de cada columna de la tabla de
+     * estadisticas El primer valor de cada line es la llave y el segundo valor
+     * es el tamaño del ancho del boton
+     */
+    private final Map<Integer, Number> tamañoColumnas = Map.of(
+            0, 50, // Tamaño de la columna del numero de la sala
+            1, 90, // Tamaño de la columna del numero de asientos de la sala
+            2, 75 // Tamaño de la columna del estado de la sala
+    );
 
     /**
      * Creates new form SeleccionarSala
      */
     public SeleccionarSala() {
-        initComponents();
+        utilerias.configurarFrameBase(this, "SELECCION SALA");
+        configurarSeleccionarSala();
     }
 
     /**
@@ -26,17 +71,44 @@ public class SeleccionarSala extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        labelBuscador = new javax.swing.JLabel();
+        textFieldBuscador = new javax.swing.JTextField();
+        btnModificar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        labelBuscador.setText("jLabel1");
+
+        textFieldBuscador.setText("jTextField1");
+
+        btnModificar.setText("jButton1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(textFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelBuscador)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(219, 219, 219)
+                        .addComponent(btnModificar)))
+                .addContainerGap(240, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(labelBuscador)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 413, Short.MAX_VALUE)
+                .addComponent(btnModificar)
+                .addGap(129, 129, 129))
         );
 
         pack();
@@ -44,5 +116,161 @@ public class SeleccionarSala extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnModificar;
+    private javax.swing.JLabel labelBuscador;
+    private javax.swing.JTextField textFieldBuscador;
     // End of variables declaration//GEN-END:variables
+
+    private void configurarSeleccionarSala() {
+        configurarBotonVolver();
+        configurarPanelCentral();
+    }
+
+    /**
+     * Metodo para configurar el panel central de esta pantalla
+     */
+    private void configurarPanelCentral() {
+        JPanel panelCentral = new JPanel();
+        // Se configura el buscador de la pantalla
+        JPanel panelBuscador = new JPanel();
+        configurarPanelBuscador(panelBuscador);
+        // Configuracion de la tabla
+        panelTabla = new JPanel();
+        configurarPanelTabla(panelTabla);
+
+        // Se agregan los componentes en cierto orden 
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+
+        panelCentral.add(Box.createVerticalStrut(75));
+        panelCentral.add(panelBuscador);
+        panelCentral.add(Box.createVerticalGlue());
+        panelCentral.add(panelTabla);
+
+        this.add(panelCentral, BorderLayout.CENTER);
+    }
+
+    /**
+     * Metodo para configurar el panel donde van el buscador y el comboBox
+     * encargado del ordenamiento de una sala
+     *
+     * @param panel
+     */
+    private void configurarPanelBuscador(JPanel panel) {
+        // Configuracion del buscador
+        JPanel panelBuscador = new JPanel();
+        labelBuscador = new JLabel("BUSCAR SALA: ");
+        textFieldBuscador = new JTextField();
+        textFieldBuscador.setPreferredSize(tamañoBuscador);
+        panelBuscador.add(labelBuscador);
+        panelBuscador.add(textFieldBuscador);
+        textFieldBuscador.getDocument().addDocumentListener(new DocumentListener() {
+            
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                efectoTemporizador();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                efectoTemporizador();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                efectoTemporizador();
+            }
+
+        });
+        
+
+        // Se agregan ambos paneles
+        panel.add(panelBuscador);
+
+    }
+
+    /**
+     * Metodo para configurar la tabla con los datos
+     *
+     * @param panelTabla
+     */
+    private void configurarPanelTabla(JPanel panelTabla) {
+        // Arreglo de Strings de una dimension para guardar todas las columnas de la tabla
+        String[] columnas = {
+            "SALA",
+            "<html>NUMERO DE<br>ASIENTOS</html>", // A esta opcione se le agrego esa escritura de html para poder hacer un salto de linea
+            "ESTADO"
+        };
+        // Arreglo de Objetos de dos dimensiones para guardar las estadisticas de cada sala
+        Object[][] datos = obtenerSalas();
+
+        // Valor del tamaño del encabezado
+        Integer tamañoEncabezado = 40;
+
+        //Valor del tamaño de la fuente del encabezado
+        Integer tamañoFuente = 14;
+
+        /**
+         * Se llama al metodo estatico de la clase de ModeladoTablas para poder
+         * crear una tablaSencilla en base a: El arreglo de columnas, el arreglo
+         * de datos y finalmente el tamaño del encabezado
+         */
+        JTable tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoFuente, tamañoEncabezado);
+
+        /**
+         * Se llama nuevamente a otro metodo de la clase ModeladoTablas esto
+         * para ajustar el tamaño de la columnas de la tablas Se necesito del
+         * mapa donde vienen el tamaño de las columnas
+         */
+        ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas);
+        if (panelTabla.getComponentCount() > 0) {
+            panelTabla.removeAll();
+        }
+        // Se añade la tabla a un scrollpane
+        JScrollPane scrollPane = new JScrollPane(tablaSalas);
+        panelTabla.add(scrollPane);
+        
+        revalidate();
+        repaint();
+
+    }
+    
+    private Object[][] obtenerSalas() {
+        List<SalaViejaDTO> salas = control.consultarSalas(textFieldBuscador.getText());
+        Object[][] datos = new Object[salas.size()][3];
+        
+        for (int i = 0; i < salas.size(); i++) {
+            SalaViejaDTO salaVieja = salas.get(i);
+            datos[i][0] = salaVieja.getNumSala();
+            datos[i][1] = salaVieja.getNumAsientos();
+            datos[i][2] = salaVieja.getEstado().name();
+        }
+        
+        return datos;
+    }
+    
+    private void efectoTemporizador() {
+        if (temporizador != null) {
+            temporizador.stop();
+        }
+        temporizador = new Timer(500, e -> {
+            configurarPanelTabla(panelTabla);
+            temporizador.stop();
+        });
+        temporizador.start();
+    }
+
+    /**
+     * Metodo para configurar el obtener el boton volver del frameBase y
+     * configurarlo para que nos regrese a la ventana anterior
+     */
+    private void configurarBotonVolver() {
+        Container frame = this.getContentPane();
+        JPanel panel = (JPanel) frame.getComponent(0);
+        JButton btnVolver = (JButton) panel.getComponent(0);
+
+        btnVolver.addActionListener((ActionEvent e) -> {
+            control.mostrarMenuSalas(this);
+        });
+
+    }
 }

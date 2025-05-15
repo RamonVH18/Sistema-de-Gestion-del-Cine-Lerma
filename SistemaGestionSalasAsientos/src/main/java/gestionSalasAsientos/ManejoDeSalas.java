@@ -19,6 +19,8 @@ import Interfaces.ISalaBO;
 import enums.EstadoSala;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -110,7 +112,12 @@ public class ManejoDeSalas implements IManejoDeSalas {
 
     @Override
     public List<SalaViejaDTO> cargarSalas(String filtro) throws BuscarSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            List<SalaViejaDTO> salas = salaBO.buscarSalas(filtro);
+            return salas;
+        } catch (SalaBusquedaException e) {
+            throw new BuscarSalaException("Hubo un problema al mostrar las salas. \n Intentelo de nuevo mas adelante");
+        }
     }
 
     @Override

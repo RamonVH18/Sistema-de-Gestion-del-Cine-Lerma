@@ -16,10 +16,12 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.SalaNuevaDTO;
+import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.ActualizarUsuarioException;
 import Excepciones.AgregarSalaException;
+import Excepciones.BuscarSalaException;
 import Excepciones.CalcularCostoTotalException;
 import Excepciones.CargarHistorialException;
 import Excepciones.DisponibilidadAsientosException;
@@ -63,6 +65,7 @@ import pantallas.Pagos.PantallaPagoRechazado;
 import pantallas.Salas.AgregarSala;
 import pantallas.Salas.EstadisticasSala;
 import pantallas.Salas.MenuSalas;
+import pantallas.Salas.SeleccionarSala;
 import pantallas.Usuarios.ConsultarUsuarios;
 import pantallas.Usuarios.EditarUsuario;
 import pantallas.Usuarios.HistorialCliente;
@@ -605,6 +608,27 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             return Boolean.FALSE;
         }
+    }
+    
+    @Override
+    public void mostrarSeleccionarSala(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            SeleccionarSala pantallaAgregarSala = new SeleccionarSala();
+            pantallaAgregarSala.setLocationRelativeTo(null);
+            pantallaAgregarSala.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
+    @Override 
+    public List<SalaViejaDTO> consultarSalas(String filtro) {
+        try {
+            List<SalaViejaDTO> salas = manejoDeSalas.cargarSalas(filtro);
+            return salas;
+        } catch (BuscarSalaException e) {
+            JOptionPane.showMessageDialog(null, "¡ERROR!", "ERROR: " + e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            return null;
+        } 
     }
 
     /**

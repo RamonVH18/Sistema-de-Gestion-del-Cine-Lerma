@@ -209,6 +209,10 @@ public final class MenuSalas extends javax.swing.JFrame {
                     control.mostrarEstadisticasSala(this); // Metodo para abrir la pantalla Estadisticas Sala
                     break;
                 }
+                case "Modificar Sala" -> {
+                    control.mostrarSeleccionarSala(this); // Metodo para abrir la pantalla Seleccionar Sala
+                    break;
+                }
                 default ->
                     JOptionPane.showMessageDialog(null, "Hubo un problema para cargar esa ventana intente luego", "INFO", JOptionPane.INFORMATION_MESSAGE);
 

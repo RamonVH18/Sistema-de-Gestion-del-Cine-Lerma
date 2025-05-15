@@ -15,6 +15,7 @@ import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
 import DTOs.SalaNuevaDTO;
+import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.EncontrarUsuarioException;
@@ -97,6 +98,10 @@ public interface IControl {
     public Boolean validarCamposAgregarSala(String numSala, String numAsientos);
 
     public void mostrarEstadisticasSala(JFrame frameAnterior);
+    
+    public void mostrarSeleccionarSala(JFrame frameAnterior);
+    
+    public List<SalaViejaDTO> consultarSalas(String filtro);
     
     // -----------------------------FIN DE METODOS DE SALAS-----------------------------------------
     //Metodos de navegacion de usuarios /////////////////////
