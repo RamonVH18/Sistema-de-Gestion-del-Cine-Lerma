@@ -66,6 +66,7 @@ import pantallas.Pagos.PantallaPagoRechazado;
 import pantallas.Salas.AgregarSala;
 import pantallas.Salas.EstadisticasSala;
 import pantallas.Salas.MenuSalas;
+import pantallas.Salas.ModificarSala;
 import pantallas.Salas.SeleccionarSala;
 import pantallas.Usuarios.ConsultarUsuarios;
 import pantallas.Usuarios.EditarUsuario;
@@ -630,6 +631,17 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, "¡ERROR!", "ERROR: " + e.getMessage(), JOptionPane.ERROR_MESSAGE);
             return null;
         } 
+    }
+    
+    
+    @Override 
+    public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala) {
+        SwingUtilities.invokeLater(() -> {
+            ModificarSala pantallaAgregarSala = new ModificarSala(sala);
+            pantallaAgregarSala.setLocationRelativeTo(null);
+            pantallaAgregarSala.setVisible(true);
+            frameAnterior.dispose();
+        });
     }
 
     /**
