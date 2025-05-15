@@ -7,6 +7,7 @@ package Mappers;
 import DTOs.FuncionDTO;
 import Interfaces.mappers.IFuncionMapper;
 import entidades.Funcion;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -53,6 +54,15 @@ public class FuncionMapper implements IFuncionMapper {
 
         return funcion;
 
+    }
+
+    @Override
+    public ObjectId toObjectId(String id) {
+        if (id == null || id.isEmpty()) {
+            return null;
+        }
+
+        return new ObjectId(id);
     }
 
 }

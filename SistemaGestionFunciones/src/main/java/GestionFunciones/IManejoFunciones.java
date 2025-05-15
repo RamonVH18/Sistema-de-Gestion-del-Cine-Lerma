@@ -9,6 +9,8 @@ import Excepciones.FuncionBoletosVendidosException;
 import Excepciones.FuncionSolapamientoSalaException;
 import Excepciones.FuncionCapacidadSalaException;
 import Excepciones.FuncionDatosIncorrectosException;
+import Excepciones.FuncionDuracionException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,6 +23,8 @@ public interface IManejoFunciones {
 
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionBoletosVendidosException;
 
-    public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula);
+    public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) throws FuncionDatosIncorrectosException;
+    
+    public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionDuracionException;
 
 }

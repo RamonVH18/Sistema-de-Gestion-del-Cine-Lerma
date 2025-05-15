@@ -6,17 +6,22 @@ package BOs;
 
 import DAOs.FuncionDAO;
 import DTOs.FuncionDTO;
+import Excepciones.Funciones.FuncionDuracionIncorrectaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.funciones.FuncionEliminarException;
+import Excepciones.funciones.FuncionFechaValidaException;
 import Excepciones.funciones.FuncionRegistrarException;
+import Excepciones.funciones.FuncionValidadaException;
 import Interfaces.IFuncionBO;
 import Interfaces.IFuncionDAO;
 import Mappers.FuncionMapper;
 import entidades.Funcion;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -32,7 +37,7 @@ public class FuncionBO implements IFuncionBO {
     }
 
     public static FuncionBO getInstanceDAO() {
-        if (instanceFuncionBO == null) { // para la primera vez que se llama
+        if (instanceFuncionBO == null) {
             instanceFuncionBO = new FuncionBO();
         }
         return instanceFuncionBO;
@@ -79,15 +84,44 @@ public class FuncionBO implements IFuncionBO {
     @Override
     public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula) {
         List<FuncionDTO> funcionesDTO = new ArrayList<>();
-        try {
-            List<Funcion> funcionesEntity = funcionDAO.buscarFuncionesPelicula(nombrePelicula);
-            for (Funcion funcion : funcionesEntity) {
-                funcionesDTO.add(funcionMapper.toFuncionDTO(funcion));
-            }
-        } catch (Exception e) {
-            System.err.println("Error al buscar funciones: " + e.getMessage());
+        List<Funcion> funcionesEntity = funcionDAO.buscarFuncionesPelicula(nombrePelicula);
+        for (Funcion funcion : funcionesEntity) {
+            funcionesDTO.add(funcionMapper.toFuncionDTO(funcion));
+        }
+
+        return funcionesDTO;
+    }
+
+    @Override
+    public List<FuncionDTO> buscarFuncionFechaInicio(LocalDateTime fechaHora) throws FuncionFechaValidaException {
+        if (fechaHora == null) {
+            throw new FuncionFechaValidaException("La fecha y la hora no pueden ser nulas");
+        }
+
+        if (fechaHora.isBefore(LocalDateTime.now())) {
+            throw new FuncionFechaValidaException("La fecha y hora deben ser futuras");
+        }
+
+        List<Funcion> funcionesEntity = funcionDAO.buscarFuncionFechaInicio(fechaHora);
+        List<FuncionDTO> funcionesDTO = new ArrayList<>();
+        for (Funcion funcion : funcionesEntity) {
+            funcionesDTO.add(funcionMapper.toFuncionDTO(funcion));
         }
         return funcionesDTO;
+    }
+
+    @Override
+    public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionValidadaException {
+        if (idFuncion == null || idFuncion.isEmpty()) {
+            throw new FuncionValidadaException("El id de la funcion no puede ser nulo");
+        }
+
+        try {
+            ObjectId objectId = funcionMapper.toObjectId(idFuncion);
+            return funcionDAO.calcularHoraTerminoFuncion(objectId);
+        } catch (FuncionNoEncontradaException | FuncionDuracionIncorrectaException e) {
+            throw new FuncionValidadaException("Error al calcular la hora" + e.getMessage(), e);
+        }
     }
 
 }

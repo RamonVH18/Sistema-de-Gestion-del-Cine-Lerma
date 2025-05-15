@@ -20,6 +20,7 @@ import entidades.Funcion;
 import enums.EstadoSala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
@@ -52,10 +53,13 @@ public class FuncionDAO implements IFuncionDAO {
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
             // Verificar si la sala esta ocupada
-            Bson filtro = Filters.and(
+            List<Bson> filtradores = Arrays.asList(
                     Filters.eq("sala.numSala", funcion.getSala().getNumSala()),
-                    Filters.eq("fechaHora", funcion.getFechaHora())
+                    Filters.gte("fechaHora", LocalDateTime.now()),
+                    Filters.gt("fechaHora", LocalDateTime.now().plusMinutes(funcion.getPelicula().getDuracion()))
             );
+            Bson filtro = Filters.and(filtradores);
+
             Long contador = coleccionFunciones.countDocuments(filtro);
             if (contador > 0) {
                 throw new FuncionSalaOcupadaException("La sala ya esta ocupada en la fecha.");
@@ -66,8 +70,8 @@ public class FuncionDAO implements IFuncionDAO {
                 throw new FuncionSalaVaciaException("La sala no puede estar vacia cuando creas una funcion");
             }
 
-            if (funcion.getSala().getEstado() == EstadoSala.INACTIVA) {
-                throw new FuncionSalaVaciaException("La sala no puede estar vacia o inactiva para registrar una funcion");
+            if (funcion.getSala().getEstado() != EstadoSala.ACTIVA) {
+                throw new FuncionSalaVaciaException("La sala no puede estar vacia, inactiva o mantenimiento para registrar una funcion");
             }
 
             coleccionFunciones.insertOne(funcion);
@@ -102,8 +106,7 @@ public class FuncionDAO implements IFuncionDAO {
         }
     }
 
-    @Override
-    public Funcion buscarFuncionId(ObjectId idFuncion) {
+    private Funcion buscarFuncionId(ObjectId idFuncion) {
         MongoClient clienteMongo = conexion.crearConexion();
         try {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
@@ -175,19 +178,17 @@ public class FuncionDAO implements IFuncionDAO {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
-            // Buscar la funcion por su Id
             Bson filtro = Filters.eq("_id", idFuncion);
             Funcion funcion = coleccionFunciones.find(filtro).first();
 
             if (funcion == null) {
-                throw new FuncionNoEncontradaException("Error: Funcion no encontrada");
+                throw new FuncionNoEncontradaException("Rrror: Funcion no encontrada");
             }
 
             Integer duracion = funcion.getPelicula().getDuracion();
             if (duracion == null) {
                 throw new FuncionDuracionIncorrectaException("La duracion de la pelicula no es correcta");
             }
-
             return funcion.getFechaHora().plusMinutes(duracion);
         } finally {
             conexion.cerrarConexion(clienteMongo);

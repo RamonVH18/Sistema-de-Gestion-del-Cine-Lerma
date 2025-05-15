@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 /**
  *
- * @author Ramon Valencia
+ * @author Abraham Coronel Bringas
  */
 public class FuncionDTO {
 

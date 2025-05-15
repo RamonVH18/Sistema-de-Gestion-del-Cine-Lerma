@@ -36,14 +36,18 @@ public class PagoDAO implements IPagoDAO {
 
     private void inicializarObjetos() {
         //Objetos necesarios simulados
-        Funcion funcion = new Funcion(new Sala(), new Pelicula(), LocalDateTime.now(), 10.0);
+        Pelicula pelicula = new Pelicula();
+        pelicula.setDuracion(120);
+
+        LocalDateTime fechaHoraInicio = LocalDateTime.now();
+        Funcion funcion = new Funcion(new Sala(), pelicula, fechaHoraInicio, 10.0);
 
         // Calcular monto para 3 boletos
         Double montoTotal = calcularMontoTotal(3, funcion);
 
         //Una vez que se calculo el monto podemos asignar un id, una fecha y un pago siempre que se registre su estado sera true
         Pago pago = new Pago(1L, montoTotal, LocalDateTime.now(), true);
-        
+
         pagos.add(pago);
 
     }
@@ -52,7 +56,7 @@ public class PagoDAO implements IPagoDAO {
     public Pago registrarPagoExitoso(Pago pago) {
         // Una vez que se registra el pago entonces se le asignara un id
         Long idPago = (long) (pagos.size() + 1); //Asignamos un id simulado segun los pagos registrados
-        
+
         Double monto = pago.getMonto();
 
         // Establecer fecha/hora actual y estado exitoso (true)

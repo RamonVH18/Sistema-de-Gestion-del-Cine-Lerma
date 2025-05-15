@@ -6,7 +6,10 @@ package Interfaces;
 
 import DTOs.FuncionDTO;
 import Excepciones.funciones.FuncionEliminarException;
+import Excepciones.funciones.FuncionFechaValidaException;
 import Excepciones.funciones.FuncionRegistrarException;
+import Excepciones.funciones.FuncionValidadaException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,4 +24,7 @@ public interface IFuncionBO {
 
     public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula);
 
+    public List<FuncionDTO> buscarFuncionFechaInicio(LocalDateTime fechaHora) throws FuncionFechaValidaException;
+
+    public LocalDateTime calcularHoraTerminoFuncion(String IdFuncion) throws FuncionValidadaException;
 }

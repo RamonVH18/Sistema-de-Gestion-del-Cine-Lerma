@@ -4,23 +4,25 @@
  */
 package GestionFunciones;
 
+import BOs.AsientoFuncionBO;
 import BOs.FuncionBO;
-import DTOs.ClienteDTO;
+import BOs.SalaBO;
+import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
-import DTOs.HistorialFuncionesDTO;
-import DTOs.SalaDTO;
 import Excepciones.FuncionBoletosVendidosException;
 import Excepciones.FuncionSolapamientoSalaException;
 import Excepciones.FuncionCapacidadSalaException;
 import Excepciones.FuncionDatosIncorrectosException;
+import Excepciones.FuncionDuracionException;
+import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionFechaValidaException;
 import Excepciones.funciones.FuncionRegistrarException;
+import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
+import Interfaces.ISalaBO;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -41,6 +43,8 @@ public class ManejoFunciones implements IManejoFunciones {
     }
 
     private final IFuncionBO funcionBO = FuncionBO.getInstanceDAO();
+    private final IAsientoFuncionBO asientoFuncionBO = AsientoFuncionBO.getInstance();
+    private final ISalaBO salaBO = SalaBO.getInstanceBO();
 
     @Override
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionSolapamientoSalaException, FuncionCapacidadSalaException {
@@ -70,8 +74,6 @@ public class ManejoFunciones implements IManejoFunciones {
             throw new FuncionDatosIncorrectosException("Error: El precio debe ser un valor positivo.");
         }
 
-        // Validar que no se intente solapar 2 salas
-        // Validar que la capacidad de la sala sea correcta
         try {
             return funcionBO.registraFuncion(funcionDTO);
 
@@ -85,20 +87,50 @@ public class ManejoFunciones implements IManejoFunciones {
         if (funcionDTO == null || funcionDTO.getId() == null) {
             throw new FuncionDatosIncorrectosException("La funcion no existe o los datos no son validos");
         }
-        
-        // Validar que no haya boletos vendidos
 
         try {
+            List<AsientoFuncionDTO> asientos = asientoFuncionBO.obtenerAsientosFuncion(funcionDTO);
+            Boolean hayBoletosVendidos = asientos.stream()
+                    .anyMatch(asiento -> !asiento.isDisponibilidad());
+
+            if (hayBoletosVendidos) {
+                throw new FuncionBoletosVendidosException("No se puede eliminar una funcion si tiene boletos vendidos");
+            }
             return funcionBO.eliminarFuncion(funcionDTO);
         } catch (FuncionEliminarException e) {
             throw new FuncionDatosIncorrectosException("Error al eliminar funcion" + e.getMessage());
+        } catch (AsientoFuncionBusquedaException e) {
+            throw new FuncionDatosIncorrectosException("Error al buscar asientos disponibles ");
         }
     }
 
     @Override
-    public List<FuncionDTO> buscarFuncionesPelicula(String pelicula) {
+    public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) throws FuncionDatosIncorrectosException {
+        try {
+            if (nombrePelicula != null && !nombrePelicula.isEmpty() && fechaHora != null) {
+                List<FuncionDTO> funcionesPorNombre = funcionBO.buscarFuncionesPelicula(nombrePelicula);
+                List<FuncionDTO> funcionesPorFecha = funcionBO.buscarFuncionFechaInicio(fechaHora);
 
-        return null;
+                funcionesPorNombre.retainAll(funcionesPorFecha);
+                return funcionesPorNombre;
+            }
 
+            if (nombrePelicula != null && !nombrePelicula.isEmpty()) {
+                return funcionBO.buscarFuncionesPelicula(nombrePelicula);
+            }
+
+            if (fechaHora != null) {
+                return funcionBO.buscarFuncionFechaInicio(fechaHora);
+            }
+
+            throw new FuncionDatosIncorrectosException("Seleccione por lo menos 1 filtro");
+        } catch (FuncionFechaValidaException e) {
+            throw new FuncionDatosIncorrectosException("Fecha invalida" + e.getMessage());
+        }
+    }
+
+    @Override
+    public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionDuracionException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
