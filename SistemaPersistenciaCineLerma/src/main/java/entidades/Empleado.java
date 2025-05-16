@@ -7,6 +7,7 @@ package entidades;
 import enums.Cargo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 /**
@@ -14,7 +15,8 @@ import org.bson.types.ObjectId;
  * @author isaac
  */
 public class Empleado {
-            
+    
+    @BsonId
     private ObjectId id;
 
     private String nombre;
@@ -204,6 +206,8 @@ public class Empleado {
     public String toString() {
         return "Empleado{" + "id=" + id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correoE=" + correoE + ", telefono=" + telefono + ", fechaNacimiento=" + fechaNacimiento + ", cargo=" + cargo + ", sueldo=" + sueldo + ", activo=" + activo + ", fechaRegistro=" + fechaRegistro + ", calle=" + calle + ", colonia=" + colonia + ", numExterior=" + numExterior + '}';
     }
+
+    
 
     
 

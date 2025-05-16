@@ -31,7 +31,6 @@ public class MenuEmpleados extends javax.swing.JFrame {
         btnDespedir = new javax.swing.JButton();
         btnGestionCargo = new javax.swing.JButton();
         btnGestionarSueldos = new javax.swing.JButton();
-        btnGestionarEmpleados = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -51,31 +50,40 @@ public class MenuEmpleados extends javax.swing.JFrame {
                 btnRegistrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, -1, -1));
+        getContentPane().add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, -1, -1));
 
         btnDespedir.setBackground(new java.awt.Color(162, 132, 94));
         btnDespedir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnDespedir.setForeground(new java.awt.Color(255, 255, 255));
         btnDespedir.setText("Despedir empleado");
-        getContentPane().add(btnDespedir, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 230, -1, -1));
+        btnDespedir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDespedirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDespedir, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, -1, -1));
 
         btnGestionCargo.setBackground(new java.awt.Color(162, 132, 94));
         btnGestionCargo.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnGestionCargo.setForeground(new java.awt.Color(255, 255, 255));
         btnGestionCargo.setText("Actualizar cargos");
-        getContentPane().add(btnGestionCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, -1, -1));
+        btnGestionCargo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGestionCargoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGestionCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 380, -1, -1));
 
         btnGestionarSueldos.setBackground(new java.awt.Color(162, 132, 94));
         btnGestionarSueldos.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnGestionarSueldos.setForeground(new java.awt.Color(255, 255, 255));
         btnGestionarSueldos.setText("Gestionar sueldos");
-        getContentPane().add(btnGestionarSueldos, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 420, -1, -1));
-
-        btnGestionarEmpleados.setBackground(new java.awt.Color(162, 132, 94));
-        btnGestionarEmpleados.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnGestionarEmpleados.setForeground(new java.awt.Color(255, 255, 255));
-        btnGestionarEmpleados.setText("Gestionar empleados");
-        getContentPane().add(btnGestionarEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 510, -1, -1));
+        btnGestionarSueldos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGestionarSueldosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGestionarSueldos, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 490, -1, -1));
 
         btnSalir.setBackground(new java.awt.Color(162, 132, 94));
         btnSalir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -86,18 +94,40 @@ public class MenuEmpleados extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 600, -1, -1));
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 610, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+        
+        RegistrarEmpleado frameEmpleado = new RegistrarEmpleado();
+        frameEmpleado.setVisible(true);
+        
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
+        
+        this.dispose(); // LUEGO le pogno ahi que 
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnDespedirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDespedirActionPerformed
+        
+        DespedirEmpleados frameDespedir = new DespedirEmpleados();
+        frameDespedir.setVisible(true);
+        
+    }//GEN-LAST:event_btnDespedirActionPerformed
+
+    private void btnGestionCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionCargoActionPerformed
+        
+        
+    }//GEN-LAST:event_btnGestionCargoActionPerformed
+
+    private void btnGestionarSueldosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarSueldosActionPerformed
+        
+        SueldoOpciones opcionesSueldo = new SueldoOpciones();
+        opcionesSueldo.setVisible(true);
+    }//GEN-LAST:event_btnGestionarSueldosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -137,7 +167,6 @@ public class MenuEmpleados extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDespedir;
     private javax.swing.JButton btnGestionCargo;
-    private javax.swing.JButton btnGestionarEmpleados;
     private javax.swing.JButton btnGestionarSueldos;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;

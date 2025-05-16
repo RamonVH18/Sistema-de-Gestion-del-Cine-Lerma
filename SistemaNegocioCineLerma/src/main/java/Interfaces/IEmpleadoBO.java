@@ -25,19 +25,19 @@ public interface IEmpleadoBO {
     
     public EmpleadoDTO registrarNuevoEmpleado(EmpleadoDTO empleadoDTO) throws ValidacionEmpleadoException, RegistrarEmpleadoException, PersistenciaException;
     
-    public EmpleadoDTO actualizarInformacionEmpleado(ObjectId empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException;
+    public EmpleadoDTO actualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException;
     
-    public boolean despedirEmpleado(ObjectId empleadoId) throws DespedirEmpleadoException, PersistenciaException;
+    public boolean despedirEmpleado(String empleadoId) throws DespedirEmpleadoException, PersistenciaException;
     
-    public EmpleadoDTO buscarEmpleadoActivoPorId(ObjectId empleadoId) throws BuscarEmpleadoException, PersistenciaException;
+    public EmpleadoDTO buscarEmpleadoActivoPorId(String empleadoId) throws BuscarEmpleadoException, PersistenciaException;
     
     public List<EmpleadoDTO> obtenerTodosLosEmpleadosActivos() throws PersistenciaException;
     
      public List<EmpleadoDTO> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws ValidacionEmpleadoException, PersistenciaException;
     
-    public boolean actualizarCargoEmpleado(ObjectId empleadoId, Cargo nuevoCargo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException;
+    public boolean actualizarCargoEmpleado(String empleadoId, Cargo nuevoCargo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException;
     
-    public boolean actualizarSueldoEmpleado(ObjectId empleadoId, double nuevoSueldo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException;
+    public boolean actualizarSueldoEmpleado(String empleadoId, double nuevoSueldo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException;
     
     public long actualizarSueldoGeneralPorCargo(Cargo cargo, double nuevoSueldo) throws ValidacionEmpleadoException, PersistenciaException;
     

@@ -56,8 +56,6 @@ public class EmpleadoBO implements IEmpleadoBO {
         this.empleadoMapper = new EmpleadoMapper();
     }
 
-    
-
     private void validarEmpleadoDTO(EmpleadoDTO dto, boolean esNuevo) throws ValidacionEmpleadoException {
         if (dto == null) {
             throw new ValidacionEmpleadoException("Los datos del empleado (DTO) no pueden ser nulos.");
@@ -68,7 +66,7 @@ public class EmpleadoBO implements IEmpleadoBO {
         if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
             throw new ValidacionEmpleadoException("El nombre del empleado no puede ser nulo o vacío.");
         }
-       
+
         if (dto.getNombre().length() < 3 || dto.getNombre().length() > 50) {
             throw new ValidacionEmpleadoException("El nombre del empleado debe tener entre 3 y 50 caracteres.");
         }
@@ -204,7 +202,7 @@ public class EmpleadoBO implements IEmpleadoBO {
         // 2. Validar el DTO completo (que ahora incluye el sueldo asignado)
         validarEmpleadoDTO(empleadoDTO, true);
 
-        // 3. Verificar unicidad de correo (como antes)
+        // 3. Verificar unicidad de correo 
         if (empleadoDAO.existeEmpleadoConEseCorreo(empleadoDTO.getCorreoE()) == true) {
             throw new RegistrarEmpleadoException("El correo electrónico '" + empleadoDTO.getCorreoE() + "' ya está registrado.");
         }
@@ -223,143 +221,180 @@ public class EmpleadoBO implements IEmpleadoBO {
 
     @Override
     // La firma para actualizar es mejor si pasas el ID y el DTO con los nuevos datos
-    public EmpleadoDTO actualizarInformacionEmpleado(ObjectId empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException {
-        if (empleadoId == null) {
+    public EmpleadoDTO actualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException {
+        if (empleadoId == null || empleadoId.trim().isEmpty()) {
             throw new ValidacionEmpleadoException("El ID del empleado es necesario para la actualización.");
         }
+        ObjectId empleadoIdObject = empleadoMapper.toObjectId(empleadoId);
+
+        if (empleadoIdObject == null) {
+            throw new ValidacionEmpleadoException("El formato del ID del empleado es invalido");
+        }
+
         validarEmpleadoDTO(datosNuevosDTO, false); // false porque es una actualización de datos existentes
 
-        Empleado entidadExistente = empleadoDAO.obtenerEmpleadoPorIdInterno(empleadoId);
+        Empleado entidadExistente = empleadoDAO.obtenerEmpleadoPorIdInterno(empleadoIdObject); // usar el metodo del dao para ver si existe
+
         if (entidadExistente == null) {
             throw new ActualizarEmpleadoException("No se encontró un empleado con el ID: " + empleadoId + ".");
         }
+
         if (!entidadExistente.isActivo()) {
             throw new ActualizarEmpleadoException("No se puede actualizar un empleado inactivo. ID: " + empleadoId);
         }
 
         // Verificar unicidad de correo si cambió
         if (!entidadExistente.getCorreoE().equalsIgnoreCase(datosNuevosDTO.getCorreoE().trim())) {
-            if (empleadoDAO.consultarPorCorreoActivoExcluyendoId(datosNuevosDTO.getCorreoE().trim(), empleadoId) != null) {
+            if (empleadoDAO.consultarPorCorreoActivoExcluyendoId(datosNuevosDTO.getCorreoE().trim(), empleadoIdObject) != null) {
                 throw new ActualizarEmpleadoException("El nuevo correo electrónico '" + datosNuevosDTO.getCorreoE().trim() + "' ya está en uso por otro empleado.");
             }
+
+            entidadExistente.setCorreoE(datosNuevosDTO.getCorreoE().trim()); // actualizar si es diferente y validado
         }
 
-        // Actualizar la entidad existente con los datos del DTO
-        empleadoMapper.actualizarEntidadConDTO(entidadExistente, datosNuevosDTO);
+        // aplicamos en estos pq los otros campos ( Cargo, Sueldo ) se actualizan con otros metodos
+        entidadExistente.setNombre(datosNuevosDTO.getNombre());
+        entidadExistente.setApellidoP(datosNuevosDTO.getApellidoP());
+        entidadExistente.setApellidoM(datosNuevosDTO.getApellidoM());
+        entidadExistente.setCalle(datosNuevosDTO.getCalle());
+        entidadExistente.setColonia(datosNuevosDTO.getColonia());
+        entidadExistente.setNumExterior(datosNuevosDTO.getNumExterior());
+        // Los demás campos (sueldo, cargo, activo, fechaRegistro) NO se tocan aquí.
 
-        boolean exito = empleadoDAO.actualizarEmpleado(entidadExistente);
+        boolean exito = empleadoDAO.actualizarEmpleado(entidadExistente); // DAO actualiza la entidad
         if (exito) {
-            return  empleadoMapper.convertirEntidadADTO(entidadExistente);
+            return empleadoMapper.convertirEntidadADTO(entidadExistente);
         } else {
-            throw new ActualizarEmpleadoException("El empleado con ID: " + empleadoId + " no pudo ser actualizado (DAO retornó false).");
+            throw new ActualizarEmpleadoException("El empleado con ID: " + empleadoId + " no pudo ser actualizado.");
         }
     }
 
-    
     @Override
-    public boolean despedirEmpleado(ObjectId empleadoId) throws DespedirEmpleadoException, PersistenciaException {
+    public boolean despedirEmpleado(String empleadoIdString) throws DespedirEmpleadoException, PersistenciaException {
 
-        if (empleadoId == null) {
-            throw new DespedirEmpleadoException("El ID del empleado no puede ser nulo para la baja.");
+        if (empleadoIdString == null || empleadoIdString.trim().isEmpty()) {
+            throw new DespedirEmpleadoException("El ID del empleado (String) no puede ser nulo para la baja.");
         }
-        Empleado existente = empleadoDAO.obtenerEmpleadoPorIdInterno(empleadoId);
+        ObjectId empleadoIdObject = empleadoMapper.toObjectId(empleadoIdString);
+        if (empleadoIdObject == null) {
+            throw new DespedirEmpleadoException("El formato del ID del empleado no es válido.");
+        }
+
+        Empleado existente = empleadoDAO.obtenerEmpleadoPorIdInterno(empleadoIdObject);
         if (existente == null) {
-            throw new DespedirEmpleadoException("No se encontró un empleado con el ID: " + empleadoId + ".");
+            throw new DespedirEmpleadoException("No se encontró un empleado con el ID: " + empleadoIdString + ".");
         }
         if (!existente.isActivo()) {
-            throw new DespedirEmpleadoException("El empleado con ID: " + empleadoId + " ya se encuentra inactivo.");
+            throw new DespedirEmpleadoException("El empleado con ID: " + empleadoIdString + " ya se encuentra inactivo.");
         }
-        boolean exito = empleadoDAO.despedirEmpleado(empleadoId);
+
+        boolean exito = empleadoDAO.despedirEmpleado(empleadoIdObject); // DAO usa ObjectId
         if (!exito) {
-            throw new DespedirEmpleadoException("No se pudo marcar como inactivo al empleado con ID: " + empleadoId + " (DAO retornó false).");
+            throw new DespedirEmpleadoException("No se pudo marcar como inactivo al empleado con ID: " + empleadoIdString);
         }
         return true;
     }
 
     @Override
-    public EmpleadoDTO buscarEmpleadoActivoPorId(ObjectId empleadoId) throws BuscarEmpleadoException, PersistenciaException {
-        if (empleadoId == null) {
-            throw new BuscarEmpleadoException("El ID del empleado para búsqueda no puede ser nulo.");
+    public EmpleadoDTO buscarEmpleadoActivoPorId(String empleadoIdString) throws BuscarEmpleadoException, PersistenciaException {
+        // validaciones
+        if (empleadoIdString == null || empleadoIdString.trim().isEmpty()) {
+            throw new BuscarEmpleadoException("El ID del empleado (String) para búsqueda no puede ser nulo.");
         }
-        Empleado entidad = empleadoDAO.obtenerEmpleadoActivoPorId(empleadoId);
-        return  empleadoMapper.convertirEntidadADTO(entidad); // Puede retornar null si la entidad es null
-    }
 
-    @Override
-    public List<EmpleadoDTO> obtenerTodosLosEmpleadosActivos() throws PersistenciaException {
-        List<Empleado> listaEntidades = empleadoDAO.obtenerTodosLosEmpleadosActivos();
-        List<EmpleadoDTO> listaDTOs = new ArrayList<>();
-        for (Empleado entidad : listaEntidades) {
-            listaDTOs.add( empleadoMapper.convertirEntidadADTO(entidad));
+        ObjectId empleadoIdObject = empleadoMapper.toObjectId(empleadoIdString); // convertimos a Object 
+
+        //validaciones    
+        if (empleadoIdObject == null) {
+            return null;
         }
-        return listaDTOs;
+
+        Empleado entidad = empleadoDAO.obtenerEmpleadoActivoPorId(empleadoIdObject);
+        return empleadoMapper.convertirEntidadADTO(entidad);
     }
 
     @Override
     public List<EmpleadoDTO> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws ValidacionEmpleadoException, PersistenciaException {
+
         if (cargo == null) {
             throw new ValidacionEmpleadoException("El cargo para la búsqueda no puede ser nulo.");
         }
         List<Empleado> listaEntidades = empleadoDAO.obtenerEmpleadosActivosPorCargo(cargo);
         List<EmpleadoDTO> listaDTOs = new ArrayList<>();
         for (Empleado entidad : listaEntidades) {
-            listaDTOs.add( empleadoMapper.convertirEntidadADTO(entidad));
+            listaDTOs.add(empleadoMapper.convertirEntidadADTO(entidad));
         }
         return listaDTOs;
     }
 
     @Override
-    public boolean actualizarCargoEmpleado(ObjectId empleadoId, Cargo nuevoCargo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException {
+    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException {
 
-        if (empleadoId == null) {
+        if (empleadoIdString == null || empleadoIdString.trim().isEmpty()) {
             throw new ValidacionEmpleadoException("El ID del empleado no puede ser nulo para actualizar cargo.");
         }
+
+        // conversion a objectId
+        ObjectId empleadoIdObject = empleadoMapper.toObjectId(empleadoIdString);
+
+        // validaciones 
+        if (empleadoIdObject == null) {
+            throw new ValidacionEmpleadoException("El formato del id del empleado es invalido");
+        }
+
         if (nuevoCargo == null) {
             throw new ValidacionEmpleadoException("El nuevo cargo no puede ser nulo.");
         }
-        Empleado existente = empleadoDAO.obtenerEmpleadoPorIdInterno(empleadoId);
+
+        Empleado existente = empleadoDAO.obtenerEmpleadoPorIdInterno(empleadoIdObject);
+
         if (existente == null) {
-            throw new ActualizarEmpleadoException("No se encontró un empleado con el ID: " + empleadoId + ".");
+            throw new ActualizarEmpleadoException("No se encontró un empleado con el ID: " + empleadoIdObject + ".");
         }
         if (!existente.isActivo()) {
-            throw new ActualizarEmpleadoException("No se puede actualizar el cargo de un empleado inactivo. ID: " + empleadoId);
+            throw new ActualizarEmpleadoException("No se puede actualizar el cargo de un empleado inactivo. ID: " + empleadoIdObject);
         }
-        boolean exito = empleadoDAO.actualizarCargoEmpleado(empleadoId, nuevoCargo);
+        boolean exito = empleadoDAO.actualizarCargoEmpleado(empleadoIdObject, nuevoCargo);
         if (!exito) {
-            throw new ActualizarEmpleadoException("No se pudo actualizar el cargo del empleado con ID: " + empleadoId + " (DAO retornó false).");
+            throw new ActualizarEmpleadoException("No se pudo actualizar el cargo del empleado con ID: " + empleadoIdObject + " (DAO retornó false).");
         }
         return true;
     }
 
     @Override
-    public boolean actualizarSueldoEmpleado(ObjectId empleadoId, double nuevoSueldo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException {
-     
-        if (empleadoId == null) {
+    public boolean actualizarSueldoEmpleado(String empleadoIdString, double nuevoSueldo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, PersistenciaException {
+
+        if (empleadoIdString == null || empleadoIdString.trim().isEmpty()) {
             throw new ValidacionEmpleadoException("El ID del empleado no puede ser nulo para actualizar sueldo.");
         }
+
+        ObjectId empleadoIdObject = empleadoMapper.toObjectId(empleadoIdString);// convertimos el id a ObjectId
+
         if (nuevoSueldo <= 0) {
             throw new ValidacionEmpleadoException("El nuevo sueldo debe ser un valor positivo.");
         }
+
         if (nuevoSueldo < 1000 || nuevoSueldo > 200000) {
             throw new ValidacionEmpleadoException("El sueldo está fuera de los rangos permitidos (1,000 - 200,000).");
         }
-        Empleado existente = empleadoDAO.obtenerEmpleadoPorIdInterno(empleadoId);
+
+        Empleado existente = empleadoDAO.obtenerEmpleadoPorIdInterno(empleadoIdObject);
         if (existente == null) {
-            throw new ActualizarEmpleadoException("No se encontró un empleado con el ID: " + empleadoId + ".");
+            throw new ActualizarEmpleadoException("No se encontró un empleado con el ID: " + empleadoIdObject + ".");
         }
         if (!existente.isActivo()) {
-            throw new ActualizarEmpleadoException("No se puede actualizar el sueldo de un empleado inactivo. ID: " + empleadoId);
+            throw new ActualizarEmpleadoException("No se puede actualizar el sueldo de un empleado inactivo. ID: " + empleadoIdObject);
         }
-        boolean exito = empleadoDAO.actualizarSueldoIndividual(empleadoId, nuevoSueldo);
+        boolean exito = empleadoDAO.actualizarSueldoIndividual(empleadoIdObject, nuevoSueldo);
         if (!exito) {
-            throw new ActualizarEmpleadoException("No se pudo actualizar el sueldo del empleado con ID: " + empleadoId + " (DAO retornó false).");
+            throw new ActualizarEmpleadoException("No se pudo actualizar el sueldo del empleado con ID: " + empleadoIdObject + " (DAO retornó false).");
         }
         return true;
     }
 
     @Override
     public long actualizarSueldoGeneralPorCargo(Cargo cargo, double nuevoSueldo) throws ValidacionEmpleadoException, PersistenciaException {
-        
+
         if (cargo == null) {
             throw new ValidacionEmpleadoException("El cargo no puede ser nulo para actualizar sueldos.");
         }
@@ -370,5 +405,19 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new ValidacionEmpleadoException("El sueldo general para el cargo está fuera de los rangos permitidos (1,000 - 200,000).");
         }
         return empleadoDAO.actualizarSueldoPorCargo(cargo, nuevoSueldo);
+    }
+
+    @Override
+    public List<EmpleadoDTO> obtenerTodosLosEmpleadosActivos() throws PersistenciaException {
+        
+        List<Empleado> listaEntidades = empleadoDAO.obtenerTodosLosEmpleadosActivos();
+        List<EmpleadoDTO> listaDTOs = new ArrayList<>();
+        
+        if (listaEntidades != null) {
+            for (Empleado entidad : listaEntidades) {
+                listaDTOs.add(empleadoMapper.convertirEntidadADTO(entidad));
+            }
+        }
+        return listaDTOs;
     }
 }

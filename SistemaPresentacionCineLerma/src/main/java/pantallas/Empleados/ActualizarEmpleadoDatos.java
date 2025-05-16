@@ -21,12 +21,12 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
     
     private EmpleadoBO empleadoBO; 
     private EmpleadoDTO empleadoActualDTO; // dto del empleado que se edita
-    private ObjectId empleadoId; // id del empleado que se edita
+    private String empleadoId; // id del empleado que se edita
 
     /**
      * Creates new form ActualizarEmpleadoDatos
      */
-    public ActualizarEmpleadoDatos(ObjectId empleadoIdParaEditar) {
+    public ActualizarEmpleadoDatos(String empleadoIdParaEditar) {
         this.empleadoBO = new EmpleadoBO();
         this.empleadoId = empleadoIdParaEditar;
         initComponents();
@@ -40,7 +40,7 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
     }
     
     private void cargarDatosEmpleado() {
-        if (this.empleadoId == null) {
+        if (this.empleadoId == null || empleadoId.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "No se especificó un empleado para editar.", "Error", JOptionPane.ERROR_MESSAGE);
             this.dispose();
             return;
@@ -390,7 +390,7 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
         dtoActualizado.setFechaRegistro(this.empleadoActualDTO.getFechaRegistro()); // Fecha de registro no cambia
 
         try {
-            // 3. Llamar al BO para actualizar. El BO usará el método que toma (ObjectId, EmpleadoDTO)
+            // 3. Llamar al BO para actualizar. El BO usará el método que toma (String, EmpleadoDTO)
             empleadoBO.actualizarInformacionEmpleado(this.empleadoId, dtoActualizado);
 
             JOptionPane.showMessageDialog(this, "Datos del empleado actualizados exitosamente.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);

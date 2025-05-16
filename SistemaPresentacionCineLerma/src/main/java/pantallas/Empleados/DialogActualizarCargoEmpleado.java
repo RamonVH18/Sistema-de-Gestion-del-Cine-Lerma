@@ -23,7 +23,7 @@ import org.bson.types.ObjectId;
 public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
 
     private EmpleadoBO empleadoBO;
-    private ObjectId empleadoIdActualizar;
+    private String empleadoIdActualizar;
     private EmpleadoDTO empleadoActualDTO;
     
 
@@ -173,7 +173,7 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         
-        if (empleadoIdActualizar == null) { // Doble verificación
+        if (empleadoIdActualizar == null || empleadoIdActualizar.trim().isEmpty()) { // Doble verificación
             JOptionPane.showMessageDialog(this, "Error: No hay un empleado seleccionado para actualizar.", "Error Interno", JOptionPane.ERROR_MESSAGE);
             return;
         }

@@ -21,7 +21,7 @@ public class FuncionMapper implements IFuncionMapper {
         if (funcion == null) {
             return null;
         }
-
+        
         //Se crea la instancia de funciondto
         FuncionDTO funcionDTO = new FuncionDTO();
 

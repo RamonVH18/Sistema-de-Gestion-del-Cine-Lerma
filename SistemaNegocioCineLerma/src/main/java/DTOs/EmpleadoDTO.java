@@ -15,7 +15,7 @@ import org.bson.types.ObjectId;
  */
 public class EmpleadoDTO {
     
-    private ObjectId id;
+    private String id;
     //nombre
     private String nombre;
     private String apellidoP;
@@ -43,7 +43,7 @@ public class EmpleadoDTO {
 
     }
 
-    public EmpleadoDTO(ObjectId id, String nombre, String apellidoP, String apellidoM, String correoE, String telefono, LocalDateTime fechaNacimiento, Cargo cargo, double sueldo, boolean activo, LocalDate fechaRegistro, String calle, String colonia, String numExterior) {
+    public EmpleadoDTO(String id, String nombre, String apellidoP, String apellidoM, String correoE, String telefono, LocalDateTime fechaNacimiento, Cargo cargo, double sueldo, boolean activo, LocalDate fechaRegistro, String calle, String colonia, String numExterior) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoP = apellidoP;
@@ -76,7 +76,7 @@ public class EmpleadoDTO {
         this.numExterior = numExterior;
     }
 
-    public EmpleadoDTO(ObjectId id, String nombre, String apellidoP, String apellidoM, String correoE, String telefono, LocalDateTime fechaNacimiento, Cargo cargo, boolean activo, LocalDate fechaRegistro, String calle, String colonia, String numExterior) {
+    public EmpleadoDTO(String id, String nombre, String apellidoP, String apellidoM, String correoE, String telefono, LocalDateTime fechaNacimiento, Cargo cargo, boolean activo, LocalDate fechaRegistro, String calle, String colonia, String numExterior) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoP = apellidoP;
@@ -215,11 +215,11 @@ public class EmpleadoDTO {
         this.numExterior = numExterior;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
     
