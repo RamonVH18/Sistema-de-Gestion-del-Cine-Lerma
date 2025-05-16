@@ -133,6 +133,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
 
     private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnModificarMouseClicked
     
 
@@ -168,7 +169,6 @@ public class SeleccionarSala extends javax.swing.JFrame {
         panelCentral.add(panelTabla);
 
         configurarBotonModificar();
-        panelCentral.add(Box.createVerticalStrut(20));
         panelCentral.add(btnModificar);
 
         this.add(panelCentral, BorderLayout.CENTER);
@@ -284,6 +284,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
     }
 
     private void configurarBotonModificar() {
+        btnModificar = new JButton("Seleccionar");
         btnModificar.setPreferredSize(tamañoBoton);
         btnModificar.setSize(tamañoBoton);
         btnModificar.setFont(fuenteBoton);

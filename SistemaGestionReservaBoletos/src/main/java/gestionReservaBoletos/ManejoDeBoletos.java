@@ -21,8 +21,6 @@ import Excepciones.GenerarBoletoException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
-import Excepciones.funciones.FuncionFechaValidaException;
-import Excepciones.peliculas.PeliculaBusquedaException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
@@ -31,8 +29,6 @@ import Mappers.ClienteMapper;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -86,17 +82,18 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
      */
     @Override
     public List<PeliculaDTO> cargarPeliculasActivas() throws PeliculasCargaException {
-        try {
-            // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
-            List<PeliculaDTO> peliculas = peliculaBO.buscarTodasPeliculasActivas();
-            if (peliculas == null || peliculas.isEmpty()) {
-                throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
-            }
-            return peliculas;
-
-        } catch (PeliculaBusquedaException e) {
-            throw new PeliculasCargaException("ERROR: " + e.getMessage());
-        }
+//        try {
+//            // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
+//            List<PeliculaDTO> peliculas = peliculaBO.buscarTodasPeliculasActivas();
+//            if (peliculas == null || peliculas.isEmpty()) {
+//                throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
+//            }
+//            return peliculas;
+//
+//        } catch (PeliculaBusquedaException e) {
+//            throw new PeliculasCargaException("ERROR: " + e.getMessage());
+//        }
+        throw new UnsupportedOperationException("");
     }
 
     @Override
@@ -235,22 +232,23 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     
     @Override
     public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException {
-        try {
-            if (pelicula == null) {
-                throw new GenerarBoletoException("Hubo un problema al guardar la pelicula en el boleto. Intente mas tarde.");
-            }
-            if (funcion == null) {
-                throw new GenerarBoletoException("Hubo un problema al guardar la funcion en el boleto. Intente mas tarde.");
-            }
-            if (asientos == null || asientos.isEmpty()) {
-                throw new GenerarBoletoException("Hubo un problema al guardar los asientos en el boleto. Intente mas tarde.");
-            }
-            //Aqui abajo se añadira un metodo que registre el Boleto 
-            return new BoletoDTO(pelicula.getNombrePelicula(), pelicula.getPeliculaImagen(), funcion.getFechaHora(), funcion.getSala(), asientos, cliente.getNombre());
-
-        } catch (GenerarBoletoException e) {
-            throw new GenerarBoletoException("ERROR: " + e.getMessage());
-        }
+//        try {
+//            if (pelicula == null) {
+//                throw new GenerarBoletoException("Hubo un problema al guardar la pelicula en el boleto. Intente mas tarde.");
+//            }
+//            if (funcion == null) {
+//                throw new GenerarBoletoException("Hubo un problema al guardar la funcion en el boleto. Intente mas tarde.");
+//            }
+//            if (asientos == null || asientos.isEmpty()) {
+//                throw new GenerarBoletoException("Hubo un problema al guardar los asientos en el boleto. Intente mas tarde.");
+//            }
+//            //Aqui abajo se añadira un metodo que registre el Boleto 
+//            return new BoletoDTO(pelicula.getNombrePelicula(), pelicula.getPeliculaImagen(), funcion.getFechaHora(), funcion.getSala(), asientos, cliente.getNombre());
+//
+//        } catch (GenerarBoletoException e) {
+//            throw new GenerarBoletoException("ERROR: " + e.getMessage());
+//        }
+        throw new UnsupportedOperationException();
     }
 
     //ESTE METODO CAMBIARA CASI POR COMPLETO

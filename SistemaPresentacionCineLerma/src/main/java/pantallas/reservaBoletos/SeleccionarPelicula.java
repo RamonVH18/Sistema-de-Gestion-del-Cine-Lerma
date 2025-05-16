@@ -259,13 +259,13 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
      */
     private JButton crearBotonPelicula(PeliculaDTO pelicula, int ancho) {
         ImageIcon imagen = utilidades.crearImagen(
-                pelicula.getPeliculaImagen(),
+                "pelicula.getPeliculaImagen()",
                 ancho - 20,
                 (int) ((ancho - 20) * 1.5) // 
         );
 
         // crear boton con diseño adaptable
-        JButton boton = new JButton(pelicula.getNombrePelicula(), imagen);
+        JButton boton = new JButton("pelicula.getNombrePelicula()", imagen);
         configurarBoton(boton, ancho);
 
         // 5. accion del boton
@@ -368,9 +368,9 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
      */
     private String obtenerUrlPelicula(String nombrePelicula) {
         for (PeliculaDTO pelicula : control.obtenerPeliculas()) {
-            if (pelicula.getNombrePelicula().equals(nombrePelicula)) {
-                return pelicula.getPeliculaImagen();
-            }
+            //if (pelicula.getNombrePelicula().equals("nombrePelicula)) {
+                return "pelicula.getPeliculaImagen()";
+            //}
         }
         return "default_poster.jpg";
     }

@@ -51,7 +51,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         initComponents();
         peliculaSeleccionada = pelicula;
         //Se obtiene las funciones de la pelicula que fue seleccionada en la pantalla anterior
-        listaFunciones = control.obtenerFunciones(pelicula.getNombrePelicula());
+        listaFunciones = control.obtenerFunciones("pelicula.getNombrePelicula()");
         
         // Se llama a la funcion que se encarga de darle un formato a la pagina
         generarFormatoPagina();
@@ -293,11 +293,11 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      */
     private void generarFormatoPagina() {
         panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
-        jTextAreaDescripcion.setText(peliculaSeleccionada.getDescripcionPelicula());
+        jTextAreaDescripcion.setText("peliculaSeleccionada.getDescripcionPelicula()");
         //Se llama al metodo de utileria encargado de crear la imagen
-        ImageIcon imagen = utilerias.crearImagen(peliculaSeleccionada.getPeliculaImagen(), 200, 300);
+        ImageIcon imagen = utilerias.crearImagen("peliculaSeleccionada.getPeliculaImagen()", 200, 300);
         jLabelImagenPelicula.setIcon(imagen);
-        jLabelNombrePelicula.setText(peliculaSeleccionada.getNombrePelicula());
+        jLabelNombrePelicula.setText("peliculaSeleccionada.getNombrePelicula()");
         jTextAreaDescripcion.setEnabled(false);
         jTextFieldNumAsientos.setText("");
     }

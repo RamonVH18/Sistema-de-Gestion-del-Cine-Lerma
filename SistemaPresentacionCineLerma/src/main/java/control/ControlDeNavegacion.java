@@ -622,6 +622,17 @@ public class ControlDeNavegacion implements IControl {
         });
     }
     
+    public SalaViejaDTO consultarSala(String numSala) {
+        
+        try {
+            SalaViejaDTO sala = manejoDeSalas.cargarSalaUnica(numSala);
+            return sala;
+        } catch (BuscarSalaException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+        }
+        return null;
+    }
+    
     @Override 
     public List<SalaViejaDTO> consultarSalas(String filtro) {
         try {

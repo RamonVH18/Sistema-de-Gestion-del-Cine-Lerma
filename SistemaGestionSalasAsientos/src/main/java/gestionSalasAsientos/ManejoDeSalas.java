@@ -119,6 +119,21 @@ public class ManejoDeSalas implements IManejoDeSalas {
             throw new BuscarSalaException("Hubo un problema al mostrar las salas. \n Intentelo de nuevo mas adelante");
         }
     }
+    
+    @Override
+    public SalaViejaDTO cargarSalaUnica(String numSala) throws BuscarSalaException {
+        
+        try {
+            if (numSala == null) {
+                throw new BuscarSalaException("Debe seleccionar una sala");
+            }
+            SalaViejaDTO sala = salaBO.buscarSala(numSala);
+            return sala;
+        } catch (SalaBusquedaException e) {
+            throw new BuscarSalaException("Hubo un error al obtener los datos de la sala");
+        }
+        
+    }
 
     @Override
     public List<SalaViejaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException {

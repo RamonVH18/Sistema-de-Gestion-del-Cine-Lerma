@@ -27,6 +27,8 @@ public interface IManejoDeSalas {
     
     public List<SalaViejaDTO> cargarSalas(String filtro) throws BuscarSalaException;
     
+    public SalaViejaDTO cargarSalaUnica(String numSala) throws BuscarSalaException;
+    
     public List<SalaViejaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException;
     
     public List<SalaViejaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException;
