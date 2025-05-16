@@ -9,7 +9,6 @@ import enums.Rol;
 import java.time.LocalDateTime;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
@@ -20,11 +19,11 @@ import org.bson.types.ObjectId;
 @BsonDiscriminator
 public class Usuario {
 
-    @BsonId
-    @BsonProperty("_id")
-    private ObjectId idUsuario;
+    @BsonId // Indica que este atributo sera el id
+    @BsonProperty("_id") //BsonProperty indica a mongo como debe guardar este atributo, mongo guarda los id por default como _id asi que lo indicaremos de esa forma
+    private ObjectId idUsuario; //Id del usuario, el cual tambien sera usado por clientes y administradores
     
-    private String nombreDeUsuario;
+    private String nombreDeUsuario; //Nombre de usuario, se utilizara como identificador unico
     
     private String contrasenia;
     
