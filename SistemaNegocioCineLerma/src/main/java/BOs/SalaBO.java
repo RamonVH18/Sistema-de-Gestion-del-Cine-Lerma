@@ -21,6 +21,7 @@ import Interfaces.mappers.ISalaMapper;
 import Mappers.AsientoMapper;
 import Mappers.SalaMapper;
 import entidades.Sala;
+import enums.EstadoSala;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,11 +99,10 @@ public class SalaBO implements ISalaBO {
     }
 
     @Override
-    public Boolean modificarSala(SalaViejaDTO salaVieja) throws SalaModificacionException {
+    public Boolean modificarSala(String numSala, EstadoSala estadoNuevo) throws SalaModificacionException {
         try {
-            Sala sala = mapperSala.toSalaViejaEntidad(salaVieja);
             
-            Boolean confirmacion = salaDAO.modificarEstadoSala(sala);
+            Boolean confirmacion = salaDAO.modificarEstadoSala(numSala, estadoNuevo);
             
             return confirmacion;
         } catch (ModificarSalaException e) {

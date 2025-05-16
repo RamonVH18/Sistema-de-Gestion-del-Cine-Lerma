@@ -9,6 +9,7 @@ import DTOs.SalaViejaDTO;
 import Excepciones.Sala.SalaBusquedaException;
 import Excepciones.Sala.SalaModificacionException;
 import Excepciones.Sala.SalaRegistroException;
+import enums.EstadoSala;
 import java.util.List;
 
 /**
@@ -23,6 +24,6 @@ public interface ISalaBO {
     
     public List<SalaViejaDTO> buscarSalas(String filtroSalas) throws SalaBusquedaException;
     
-    public Boolean modificarSala(SalaViejaDTO salaVieja) throws SalaModificacionException;
+    public Boolean modificarSala(String numSala, EstadoSala estadoNuevo) throws SalaModificacionException;
     
 }

@@ -133,9 +133,22 @@ public class SeleccionarSala extends javax.swing.JFrame {
 
     private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
         // TODO add your handling code here:
-        
+        Integer filaSeleccionada = tablaSalas.getSelectedRow();
+        String numSala = null;
+        if (filaSeleccionada > -1) {
+            numSala = (String) tablaSalas.getValueAt(filaSeleccionada, 0);
+
+        }
+        SalaViejaDTO sala = control.consultarSala(numSala);
+
+        if (sala == null) {
+            return;
+        }
+
+        control.mostrarModificarSala(this, sala);
+
     }//GEN-LAST:event_btnModificarMouseClicked
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnModificar;

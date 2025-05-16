@@ -8,7 +8,10 @@ import DTOs.SalaViejaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import enums.EstadoSala;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -18,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import utilitades.Utilerias;
 
 /**
@@ -29,9 +31,20 @@ public class ModificarSala extends javax.swing.JFrame {
     
     private final IControl control = ControlDeNavegacion.getInstancia();
     private final Utilerias utilerias = new Utilerias();
-    private final Font fuente = new Font("Tw Cen MT Condensed", Font.BOLD, 36);
+    private final Font fuente = new Font("Tw Cen MT Condensed", Font.BOLD, 100);
+    
+    //A continuacion se encuentran las dimensiones para configurar el tamaño del boton para agregar, tambien se configura su fuente y su color
+    private final Integer anchoBoton = 200;
+    private final Integer alturaBoton = 40;
+    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+    private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.PLAIN, 20);
+    private final Color colorBoton = new Color(162, 132, 94); // Color general del boton
+
+    private final Color colorBotonFore = new Color(255, 255, 255);
     
     private JComboBox<EstadoSala> comboBoxEstado;
+    
+    private JPanel panelCentral;
     
     private final SalaViejaDTO salaSeleccionada;
     /**
@@ -57,16 +70,24 @@ public class ModificarSala extends javax.swing.JFrame {
         labelNumSala = new javax.swing.JLabel();
         labelCambiarEstado = new javax.swing.JLabel();
         labelEstado = new javax.swing.JLabel();
+        labelNumAsientos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnGuardarCambios.setText("jButton1");
+        btnGuardarCambios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGuardarCambiosMouseClicked(evt);
+            }
+        });
 
         labelNumSala.setText("jLabel1");
 
         labelCambiarEstado.setText("jLabel2");
 
         labelEstado.setText("jLabel3");
+
+        labelNumAsientos.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,6 +99,9 @@ public class ModificarSala extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(labelNumAsientos))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(labelEstado))
@@ -97,7 +121,9 @@ public class ModificarSala extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelNumSala)
                     .addComponent(labelCambiarEstado))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 280, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(labelNumAsientos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
                 .addComponent(btnGuardarCambios)
                 .addGap(150, 150, 150))
         );
@@ -105,10 +131,24 @@ public class ModificarSala extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnGuardarCambiosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarCambiosMouseClicked
+        // TODO add your handling code here:
+        String numeroSala = salaSeleccionada.getNumSala();
+        EstadoSala estado = (EstadoSala) comboBoxEstado.getSelectedItem();
+        Boolean confirmacion = control.modificarSala(numeroSala, estado);
+        
+        if (confirmacion) {
+            panelCentral.removeAll();
+            configurarPanelCentral();
+        }
+        
+    }//GEN-LAST:event_btnGuardarCambiosMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JLabel labelCambiarEstado;
     private javax.swing.JLabel labelEstado;
+    private javax.swing.JLabel labelNumAsientos;
     private javax.swing.JLabel labelNumSala;
     // End of variables declaration//GEN-END:variables
     private void configurarModificarSala() {
@@ -117,26 +157,32 @@ public class ModificarSala extends javax.swing.JFrame {
     }
     
     private void configurarPanelCentral() {
-        JPanel panelCentral = new JPanel();
+        panelCentral = new JPanel();
         JPanel panelCentralSuperior = new JPanel();
         JPanel panelCentralInferior = new JPanel();
         
         configurarPanelSala(panelCentralSuperior);
-        
+        panelCentralSuperior.add(Box.createHorizontalStrut(30));
         configurarPanelEstado(panelCentralSuperior);
         
+        configurarPanelInferior(panelCentralInferior);
+        
         panelCentralSuperior.setLayout(new FlowLayout(FlowLayout.CENTER));
+        
+        panelCentral.add(panelCentralSuperior);
+        panelCentral.add(panelCentralInferior);
+        add(panelCentral, BorderLayout.CENTER);
                 
     }
     
     private void configurarPanelSala(JPanel panelCentralSuperior) {
         JPanel panelNumSala = new JPanel();
         
-        labelNumSala = new JLabel("<html>SALA<br>" 
+        labelNumSala = new JLabel(
+                "<html><div style='text-align:center;'>SALA<br>" 
                 + salaSeleccionada.getNumSala() 
-                + "</html>"
+                + "</div></html>"
         );
-        labelNumSala.setHorizontalAlignment(SwingConstants.CENTER);
         
         labelNumSala.setFont(fuente);
         panelNumSala.add(labelNumSala);
@@ -146,6 +192,7 @@ public class ModificarSala extends javax.swing.JFrame {
     private void configurarPanelEstado(JPanel panelCentralSuperior) {
         JPanel panelCampos = new JPanel();
         panelCampos.setLayout(new BoxLayout(panelCampos, BoxLayout.Y_AXIS));
+        panelCampos.setAlignmentY(Box.CENTER_ALIGNMENT);
         
         labelEstado = new JLabel("Estado: " + salaSeleccionada.getEstado());
         panelCampos.add(Box.createVerticalStrut(10));
@@ -155,11 +202,39 @@ public class ModificarSala extends javax.swing.JFrame {
         labelCambiarEstado = new JLabel("Cambiar estado:");
         comboBoxEstado = new JComboBox<>(EstadoSala.values());
         panelCampos.add(comboBoxEstado);
+        
+        labelNumAsientos = new JLabel("Numero de asientos: " + salaSeleccionada.getNumAsientos()
+        );
+        
+        panelCampos.add(Box.createVerticalStrut(10));
+        
+        panelCampos.add(labelNumAsientos);
+        
         panelCampos.add(Box.createVerticalGlue());
         
         panelCentralSuperior.add(panelCampos);
     }
     
+    private void configurarPanelInferior(JPanel panelCentralInferior) {
+        btnGuardarCambios = new JButton("Guardar Cambios");
+        btnGuardarCambios.setPreferredSize(tamañoBoton);
+        btnGuardarCambios.setSize(tamañoBoton);
+        btnGuardarCambios.setFont(fuenteBoton);
+        btnGuardarCambios.setBackground(colorBoton);
+        btnGuardarCambios.setForeground(colorBotonFore);
+        
+        panelCentralInferior.add(Box.createVerticalStrut(400));
+        panelCentralInferior.add(btnGuardarCambios);
+        panelCentralInferior.add(Box.createGlue());
+        
+        btnGuardarCambios.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGuardarCambiosMouseClicked(evt);
+            }
+        });
+        
+    }
     
     
     /**
@@ -172,9 +247,8 @@ public class ModificarSala extends javax.swing.JFrame {
         JButton btnVolver = (JButton) panel.getComponent(0);
         // Se le añade un action listener para que cierre esta pantalla y abra la anterior
         btnVolver.addActionListener((ActionEvent e) -> {
-            control.mostrarMenuSalas(this);
+            control.mostrarSeleccionarSala(this);
             dispose();
         });
-
     }
 }

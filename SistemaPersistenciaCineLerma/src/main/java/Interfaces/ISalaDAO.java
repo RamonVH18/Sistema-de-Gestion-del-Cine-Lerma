@@ -8,6 +8,7 @@ import Excepciones.salas.BuscarSalaException;
 import Excepciones.salas.CreacionSalaException;
 import Excepciones.salas.ModificarSalaException;
 import entidades.Sala;
+import enums.EstadoSala;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public interface ISalaDAO {
     
     public List<Sala> buscarSalas(String filtroNombre) throws BuscarSalaException;
     
-    public Boolean modificarEstadoSala(Sala sala) throws ModificarSalaException;
+    public Boolean modificarEstadoSala(String numSala, EstadoSala estadoNuevo) throws ModificarSalaException;
     
 //    public List<Sala> buscarSalasFiltradas(String filtro) throws BuscarSalaException;
     

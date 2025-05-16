@@ -670,7 +670,7 @@ public class ControlDeNavegacion implements IControl {
             Boolean confirmacion = manejoDeSalas.modificarEstadoSala(numSala, estadoSala);
             return confirmacion;
         } catch (ModificarSalaException e) {
-            JOptionPane.showConfirmDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }

@@ -21,6 +21,7 @@ import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Asiento;
 import entidades.Sala;
+import enums.EstadoSala;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -141,24 +142,25 @@ public class SalaDAO implements ISalaDAO {
     }
     /**
      * Metodo para modificar el estado ya existente en la base de datos
-     * @param sala
+     * @param numSala
+     * @param estadoNuevo
      * @return
      * @throws ModificarSalaException 
      */
     @Override
-    public Boolean modificarEstadoSala(Sala sala) throws ModificarSalaException {
+    public Boolean modificarEstadoSala(String numSala, EstadoSala estadoNuevo) throws ModificarSalaException {
         MongoClient clienteMongo = null; // Se crea el  como null para mas adelante poder usarlo
         try {
             MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo); // Se llama al metodo para obtener la coleccion de salas de la base de datos
 
-            Bson filtroNumSala = Filters.eq("numeroSala", sala.getNumSala()); // Filtro para obtener la sala que coincida con el numero de la sala
-            Bson update = Updates.set("estado", sala.getEstado().name()); // Se define que es lo que se le va actualizar a la base de datos
+            Bson filtroNumSala = Filters.eq("numeroSala", numSala); // Filtro para obtener la sala que coincida con el numero de la sala
+            Bson update = Updates.set("estado", estadoNuevo); // Se define que es lo que se le va actualizar a la base de datos
 
             UpdateResult resultado = coleccionSalas.updateOne(filtroNumSala, update); // Se realiza la actualizacion
 
             return resultado.wasAcknowledged();
         } catch (BuscarSalaException e) {
-            throw new ModificarSalaException("Hubo un error al modificar la sala " + sala.getNumSala() + ": " + e.getMessage());
+            throw new ModificarSalaException("Hubo un error al modificar la sala " + numSala + ": " + e.getMessage());
         } finally {
             conexion.cerrarConexion(clienteMongo);
         }

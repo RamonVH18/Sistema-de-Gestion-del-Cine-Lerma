@@ -13,14 +13,12 @@ import Excepciones.BuscarSalaException;
 import Excepciones.EstadisticasSalaException;
 import Excepciones.ModificarSalaException;
 import Excepciones.Sala.SalaBusquedaException;
+import Excepciones.Sala.SalaModificacionException;
 import Excepciones.Sala.SalaRegistroException;
 import Excepciones.ValidacionSalaException;
 import Interfaces.ISalaBO;
 import enums.EstadoSala;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -156,8 +154,23 @@ public class ManejoDeSalas implements IManejoDeSalas {
     }
 
     @Override
-    public Boolean modificarEstadoSala(String numeroSala, EstadoSala estado) throws ModificarSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean modificarEstadoSala(String numeroSala, EstadoSala estadoNuevo) throws ModificarSalaException {
+        try {
+            
+            SalaViejaDTO sala = cargarSalaUnica(numeroSala);
+            validarEstadoSala(sala.getEstado(), estadoNuevo);
+            if (sala == null) {
+                throw new ModificarSalaException("Hubo un problema al modificar el estado de la sala. Intente luego");
+            }
+            sala.setEstado(estadoNuevo);
+            Boolean confirmacion = salaBO.modificarSala(numeroSala, estadoNuevo);
+            
+            return confirmacion;
+        } catch (BuscarSalaException | SalaModificacionException e) {
+            throw new ModificarSalaException("Hubo un problema al modificar el estado de la sala. Intente luego");
+        } catch (ValidacionSalaException e) {
+            throw new ModificarSalaException(e.getMessage());
+        }
     }
 
 }
