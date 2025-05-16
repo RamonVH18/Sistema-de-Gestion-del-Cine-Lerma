@@ -8,13 +8,14 @@ package Excepciones;
  *
  * @author Daniel M
  */
-public class AltaPeliculaException extends Exception {
+public class VerificarCamposPeliculaException extends Exception {
 
-    public AltaPeliculaException(String message) {
+    public VerificarCamposPeliculaException(String message) {
         super(message);
     }
 
-    public AltaPeliculaException(String message, Throwable cause) {
+    public VerificarCamposPeliculaException(String message, Throwable cause) {
         super(message, cause);
     }
+    
 }

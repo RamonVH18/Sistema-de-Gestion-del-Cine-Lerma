@@ -8,13 +8,14 @@ package Excepciones;
  *
  * @author Daniel M
  */
-public class BajaPeliculaException extends Exception {
+public class VerificarTamanioImagenException extends Exception {
 
-    public BajaPeliculaException(String message) {
+    public VerificarTamanioImagenException(String message) {
         super(message);
     }
 
-    public BajaPeliculaException(String message, Throwable cause) {
+    public VerificarTamanioImagenException(String message, Throwable cause) {
         super(message, cause);
     }
+    
 }

@@ -18,6 +18,7 @@ import com.mongodb.client.result.UpdateResult;
 import entidades.Pelicula;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 
 /**
@@ -268,7 +269,7 @@ public class PeliculaDAO implements IPeliculaDAO {
             MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
 
             // Buscar por título
-            Bson filtro = Filters.eq("titulo", titulo);
+            Bson filtro = Filters.regex("titulo", Pattern.quote(titulo), "i");
             Pelicula peliculaEncontrada = coleccionPeliculas.find(filtro).first();
 
             if (peliculaEncontrada == null) {

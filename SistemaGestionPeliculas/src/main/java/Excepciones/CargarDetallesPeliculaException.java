@@ -8,13 +8,14 @@ package Excepciones;
  *
  * @author Daniel M
  */
-public class EditarPeliculaException extends Exception {
+public class CargarDetallesPeliculaException extends Exception {
 
-    public EditarPeliculaException(String message) {
+    public CargarDetallesPeliculaException(String message) {
         super(message);
     }
 
-    public EditarPeliculaException(String message, Throwable cause) {
+    public CargarDetallesPeliculaException(String message, Throwable cause) {
         super(message, cause);
     }
+    
 }

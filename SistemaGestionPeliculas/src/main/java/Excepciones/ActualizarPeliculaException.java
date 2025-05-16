@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author Daniel M
  */
-public class AgregarPeliculaException extends Exception {
+public class ActualizarPeliculaException extends Exception {
 
-    public AgregarPeliculaException(String message) {
+    public ActualizarPeliculaException(String message) {
         super(message);
     }
 
-    public AgregarPeliculaException(String message, Throwable cause) {
+    public ActualizarPeliculaException(String message, Throwable cause) {
         super(message, cause);
     }
 }
