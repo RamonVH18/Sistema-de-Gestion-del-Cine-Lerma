@@ -88,10 +88,6 @@ public class AdministradorDAO implements IAdministradorDAO {
 
             Administrador adminEncontrado = coleccion.find(filtro).first();
 
-            if (adminEncontrado == null) {
-                throw new EncontrarAdministradorException("No se encontró el admin");
-            }
-
             return adminEncontrado;
 
         } catch (MongoException e) {

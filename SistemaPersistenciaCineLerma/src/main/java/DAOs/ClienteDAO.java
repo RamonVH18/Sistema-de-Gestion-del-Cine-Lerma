@@ -46,7 +46,7 @@ public class ClienteDAO implements IClienteDAO {
     private final IUsuarioDAO usuarioDAO = UsuarioDAO.getInstance();
 
     //Quizas agregar una proyeccion
-    private ClienteDAO() {
+    ClienteDAO() {
 
     }
 
@@ -66,9 +66,10 @@ public class ClienteDAO implements IClienteDAO {
 
             MongoCollection<Cliente> coleccion = base.getCollection(nombreColeccion, Cliente.class);
 
+            validarRegistro(coleccion, cliente);
+            
             coleccion.insertOne(cliente);
 
-            validarRegistro(coleccion, cliente);
 
             return cliente;
 
@@ -179,7 +180,7 @@ public class ClienteDAO implements IClienteDAO {
         }
     }
 
-    private void validarActualizacion(MongoCollection<Cliente> coleccion, Cliente original, Cliente modificado) throws ValidarUsuarioException {
+    public void validarActualizacion(MongoCollection<Cliente> coleccion, Cliente original, Cliente modificado) throws ValidarUsuarioException {
 
         if (!modificado.getNombreDeUsuario().equals(original.getNombreDeUsuario())) {
             if (coleccion.find(Filters.and(Filters.eq("nombreDeUsuario", modificado.getNombreDeUsuario()), Filters.ne("_id", original.getIdUsuario()))).first() != null) {
