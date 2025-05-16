@@ -4,18 +4,70 @@
  */
 package pantallas.Funciones;
 
+import DTOs.FuncionDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Abraham Coronel Bringas
  */
 public class ProgramarFuncion extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ProgramarFuncion
-     */
+    IControl control;
+
     public ProgramarFuncion() {
         initComponents();
     }
+
+    private void confirmarFuncion() {
+        try {
+            // Validar campos vacíos
+            if (salaFuncion.getText().isEmpty()
+                    || fechaFuncion.getDate() == null
+                    || fechaInicio.getText().isEmpty()
+                    || precioBoleto.getText().isEmpty()) {
+
+                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Convertir fecha y hora
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String fechaStr = sdf.format(fechaFuncion.getDate());
+            LocalDate fecha = LocalDate.parse(fechaStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            LocalTime hora = LocalTime.parse(fechaInicio.getText(), DateTimeFormatter.ofPattern("HH:mm"));
+            LocalDateTime fechaHoraFuncion = LocalDateTime.of(fecha, hora);
+
+            // Crear DTO
+            FuncionDTO funcionDTO = new FuncionDTO();
+            funcionDTO.setSala(salaFuncion.getText());
+            funcionDTO.setFechaHora(fechaHoraFuncion);
+            funcionDTO.setPrecio(Double.parseDouble(precioBoleto.getText()));
+
+            // Registrar usando el control
+            ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
+            FuncionDTO funcionRegistrada = control.registrarFuncion(funcionDTO);
+
+            if (funcionRegistrada != null) {
+                JOptionPane.showMessageDialog(this, "¡Función programada!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose(); // Cierra la ventana actual
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Precio inválido", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,6 +124,11 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         btnBuscadorSala.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         btnBuscadorSala.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscadorSala.setText("Buscar de salas");
+        btnBuscadorSala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscadorSalaActionPerformed(evt);
+            }
+        });
 
         fechaFuncion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
 
@@ -181,7 +238,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        // TODO add your handling code here:
+        confirmarFuncion();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -199,6 +256,11 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     private void precioBoletoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_precioBoletoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_precioBoletoActionPerformed
+
+    private void btnBuscadorSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscadorSalaActionPerformed
+        control.consultarSalas(null);
+        
+    }//GEN-LAST:event_btnBuscadorSalaActionPerformed
 
     /**
      * @param args the command line arguments

@@ -6,6 +6,7 @@ package pantallas.Funciones;
 
 import DTOs.FuncionDTO;
 import GestionFunciones.IManejoFunciones;
+import control.IControl;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -20,9 +21,12 @@ import utilitades.ModeladoTablas;
  * @author Abraham Coronel Bringas
  */
 public class ConsultarFunciones extends javax.swing.JFrame {
+    
+    private javax.swing.JTable tabla;
 
     private IManejoFunciones manejoFunciones;
     private String nombrePelicula;
+    IControl control;
 
     public ConsultarFunciones(String nombrePelicula, IManejoFunciones manejoFunciones) {
         initComponents();
@@ -70,6 +74,49 @@ public class ConsultarFunciones extends javax.swing.JFrame {
             );
         }
     }
+    
+    private void eliminarFuncionSeleccionada() {
+    // Obtener la fila seleccionada en la tabla
+    int filaSeleccionada = tabla.getSelectedRow(); // Asegúrate de que el nombre de la tabla coincida
+    
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(
+            this, 
+            "Seleccione una función de la tabla", 
+            "Advertencia", 
+            JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
+    
+    try {
+        // Obtener el ID de la función seleccionada (asumiendo que la columna 0 es el ID)
+        String idFuncion = (String) tabla.getValueAt(filaSeleccionada, 0);
+        
+        // Crear DTO y eliminar
+        FuncionDTO funcionDTO = new FuncionDTO();
+        funcionDTO.setId(idFuncion);
+        
+        boolean eliminada = control.eliminarFuncion(funcionDTO);
+        
+        if (eliminada) {
+            JOptionPane.showMessageDialog(
+                this, 
+                "Función eliminada correctamente", 
+                "Éxito", 
+                JOptionPane.INFORMATION_MESSAGE
+            );
+            cargarTablaFunciones(); // Recargar la tabla
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(
+            this, 
+            "Error al eliminar: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -185,15 +232,16 @@ public class ConsultarFunciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProgramarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProgramarActionPerformed
-        // TODO add your handling code here:
+        control.mostrarProgramarFuncion();
+        this.dispose();
     }//GEN-LAST:event_btnProgramarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        eliminarFuncionSeleccionada();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
 

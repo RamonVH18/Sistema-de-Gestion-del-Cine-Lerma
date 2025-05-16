@@ -126,6 +126,7 @@ public interface IControl {
     public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula);
 
     public void mostrarProgramarFuncion();
+    
 
     //Usuarios:
     public List<UsuarioDTO> mostrarListaUsuarios();
@@ -157,7 +158,7 @@ public interface IControl {
     //Metodos Funciones
     public FuncionDTO registrarFuncion(FuncionDTO funcionDTO);
 
-    public FuncionDTO eliminarFuncion(FuncionDTO funcionDTO);
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO);
 
     public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora);
 

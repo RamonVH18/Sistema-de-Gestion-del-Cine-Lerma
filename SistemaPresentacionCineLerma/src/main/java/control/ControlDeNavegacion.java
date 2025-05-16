@@ -26,7 +26,12 @@ import Excepciones.CalcularCostoTotalException;
 import Excepciones.CargarHistorialException;
 import Excepciones.DisponibilidadAsientosException;
 import Excepciones.EncontrarUsuarioException;
+import Excepciones.FuncionBoletosVendidosException;
+import Excepciones.FuncionCapacidadSalaException;
 import Excepciones.FuncionCargaException;
+import Excepciones.FuncionDatosIncorrectosException;
+import Excepciones.FuncionDuracionException;
+import Excepciones.FuncionSolapamientoSalaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PagoException;
 import Excepciones.PeliculasCargaException;
@@ -61,6 +66,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import pantallas.Funciones.ConsultarFunciones;
+import pantallas.Funciones.ProgramarFuncion;
 import pantallas.IniciarSesion;
 import pantallas.MenuPrincipalAdmin;
 import pantallas.reservaBoletos.DetalleDelBoleto;
@@ -663,7 +669,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public Boolean modificarSala(String numSala, EstadoSala estadoSala) {
         try {
@@ -710,10 +716,13 @@ public class ControlDeNavegacion implements IControl {
 
     @Override
     public void mostrarProgramarFuncion() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SwingUtilities.invokeLater(() -> {
+            ProgramarFuncion pantalla = new ProgramarFuncion();
+            pantalla.setLocationRelativeTo(null);
+            pantalla.setVisible(true);
+
+        });
     }
-    
- 
 
     /*
     --------------Fin DE LOS METODOS DEL CONTROL DE NAVEGACION DE FUNCIONES--------------
@@ -884,22 +893,42 @@ public class ControlDeNavegacion implements IControl {
      */
     @Override
     public FuncionDTO registrarFuncion(FuncionDTO funcionDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return gestionFunciones.registraFuncion(funcionDTO);
+        } catch (FuncionDatosIncorrectosException | FuncionSolapamientoSalaException | FuncionCapacidadSalaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     @Override
-    public FuncionDTO eliminarFuncion(FuncionDTO funcionDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean eliminarFuncion(FuncionDTO funcionDTO) {
+        try {
+            return gestionFunciones.eliminarFuncion(funcionDTO);
+        } catch (FuncionDatosIncorrectosException | FuncionBoletosVendidosException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     @Override
     public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return gestionFunciones.buscarFunciones(nombrePelicula, null);
+        } catch (FuncionDatosIncorrectosException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return gestionFunciones.calcularHoraTerminoFuncion(idFuncion);
+        } catch (FuncionDuracionException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
 }
