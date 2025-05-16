@@ -487,8 +487,9 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-
-
+        
+        this.dispose();
+        
     }//GEN-LAST:event_btnVolverActionPerformed
 
     public static void main(String args[]) {

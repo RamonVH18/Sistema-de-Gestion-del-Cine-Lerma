@@ -207,7 +207,7 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
             try {
                 // Llamar al método del BO para actualizar el cargo
                 boolean exito = empleadoBO.actualizarCargoEmpleado(this.empleadoIdActualizar, nuevoCargoSeleccionado);
-
+                        
                 if (exito) {
                     JOptionPane.showMessageDialog(this, "El cargo del empleado ha sido actualizado exitosamente.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
                     this.dispose(); // Cierra este diálogo

@@ -149,10 +149,11 @@ public class ListaEmpleados extends JPanel {
             mostrarError("Error al filtrar empleados: " + ex.getMessage());
         }
     }
-
+    
+    
     private void mostrarEmpleadosEnTabla(List<EmpleadoDTO> empleados) {
-        empleadosActuales = empleados; // Guardar la lista completa actual de DTOs
-        tableModel.setRowCount(0); // Limpiar tabla antes de llenar
+        empleadosActuales = empleados; // guarda la lista completa actual de DTOs
+        tableModel.setRowCount(0); // limpiar tabla antes de llenar
 
         if (empleados == null) {
             return;
@@ -160,7 +161,7 @@ public class ListaEmpleados extends JPanel {
 
         for (EmpleadoDTO emp : empleados) {
             tableModel.addRow(new Object[]{
-                emp.getId(), // ID (String) en la columna 0 (oculta)
+                emp.getId(), //id string oculto pq es la columna 0 que ocultamos
                 emp.getNombre(),
                 emp.getApellidoP(),
                 emp.getApellidoM(),
@@ -172,21 +173,18 @@ public class ListaEmpleados extends JPanel {
         }
     }
 
-    /**
-     * Obtiene el EmpleadoDTO completo del empleado seleccionado en la tabla.
-     *
-     * @return El EmpleadoDTO seleccionado, o null si no hay selección.
-     */
+    
+    // obtiene el emplaedoDTO seleccionado
     public EmpleadoDTO getEmpleadoSeleccionado() {
         int filaVisualSeleccionada = tablaEmpleados.getSelectedRow();
         if (filaVisualSeleccionada != -1) {
-            // Convertir el índice de la fila visual al índice del modelo (importante si la tabla se ordena)
+            // convertir el indice de la fila visual al indice del modelo 
             int indiceModelo = tablaEmpleados.convertRowIndexToModel(filaVisualSeleccionada);
 
-            // Obtener el ID (String) de la columna 0 (oculta) del modelo
+            // Obtener el ID String de la columna 0 que esta oculta 
             String empleadoIdStr = (String) tableModel.getValueAt(indiceModelo, 0);
-
-            // Buscar el DTO completo en nuestra lista 'empleadosActuales' usando el ID (String)
+            
+            // buscar el dto completo en la lista de empleadosACtuales por medio del id
             if (empleadoIdStr != null && empleadosActuales != null) {
                 for (EmpleadoDTO empDTO : empleadosActuales) {
                     if (empDTO.getId() != null && empDTO.getId().equals(empleadoIdStr)) {
@@ -195,7 +193,7 @@ public class ListaEmpleados extends JPanel {
                 }
             }
         }
-        return null; // No se encontró o no hay selección
+        return null; // No se encontro o no hay seleccion
     }
 
     private void mostrarError(String mensaje) {

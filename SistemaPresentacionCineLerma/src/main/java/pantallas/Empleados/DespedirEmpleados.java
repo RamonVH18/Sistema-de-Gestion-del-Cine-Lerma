@@ -144,6 +144,7 @@ public class DespedirEmpleados extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
       
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
@@ -155,7 +156,6 @@ public class DespedirEmpleados extends javax.swing.JFrame {
         }
 
         StringBuilder detalles = new StringBuilder("<html><body><h2>Detalles del Empleado</h2>");
-        detalles.append("<b>ID:</b> ").append(seleccionado.getId()).append("<br>");
         detalles.append("<b>Nombre Completo:</b> ").append(seleccionado.getNombre()).append(" ").append(seleccionado.getApellidoP()).append(" ").append(seleccionado.getApellidoM()).append("<br>");
         detalles.append("<b>Correo Electrónico:</b> ").append(seleccionado.getCorreoE()).append("<br>");
         detalles.append("<b>Teléfono:</b> ").append(seleccionado.getTelefono()).append("<br>");

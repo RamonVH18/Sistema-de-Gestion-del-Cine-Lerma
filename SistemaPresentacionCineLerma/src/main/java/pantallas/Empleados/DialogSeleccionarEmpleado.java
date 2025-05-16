@@ -25,6 +25,8 @@ public class DialogSeleccionarEmpleado extends javax.swing.JDialog {
         super(parent, modal);
         this.empleadoBO = bo;
         initComponents();
+        this.listaEmpleados = new ListaEmpleados(this.empleadoBO);
+        scrollPanela.setViewportView(this.listaEmpleados);
         configurarDialog();
     }
     
@@ -43,7 +45,7 @@ public class DialogSeleccionarEmpleado extends javax.swing.JDialog {
     private void initComponents() {
 
         labelTitulo = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollPanela = new javax.swing.JScrollPane();
         btnVolver = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
 
@@ -84,7 +86,7 @@ public class DialogSeleccionarEmpleado extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scrollPanela, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnVolver)
                                 .addGap(377, 377, 377)
@@ -97,7 +99,7 @@ public class DialogSeleccionarEmpleado extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addComponent(labelTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                .addComponent(scrollPanela, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
@@ -139,7 +141,7 @@ public class DialogSeleccionarEmpleado extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelTitulo;
+    private javax.swing.JScrollPane scrollPanela;
     // End of variables declaration//GEN-END:variables
 }

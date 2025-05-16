@@ -37,6 +37,7 @@ public class SueldoOpciones extends javax.swing.JFrame {
         btnPorCargo = new javax.swing.JButton();
         btnPorEmpleado = new javax.swing.JButton();
         labelTitulo = new javax.swing.JLabel();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +64,16 @@ public class SueldoOpciones extends javax.swing.JFrame {
         labelTitulo.setFont(new java.awt.Font("Segoe UI Black", 0, 36)); // NOI18N
         labelTitulo.setText("Selecciona la forma de actualizacion sueldo");
 
+        btnVolver.setBackground(new java.awt.Color(162, 132, 94));
+        btnVolver.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -77,17 +88,23 @@ public class SueldoOpciones extends javax.swing.JFrame {
                 .addContainerGap(34, Short.MAX_VALUE)
                 .addComponent(labelTitulo)
                 .addGap(18, 18, 18))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(btnVolver)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(labelTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPorEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPorCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(188, 188, 188))
+                .addGap(149, 149, 149)
+                .addComponent(btnVolver)
+                .addGap(16, 16, 16))
         );
 
         pack();
@@ -155,6 +172,11 @@ public class SueldoOpciones extends javax.swing.JFrame {
     
     }//GEN-LAST:event_btnPorEmpleadoActionPerformed
 
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -193,6 +215,7 @@ public class SueldoOpciones extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPorCargo;
     private javax.swing.JButton btnPorEmpleado;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JLabel labelTitulo;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,9 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 /**
@@ -128,12 +131,39 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
         
+        EmpleadoDTO seleccionado = listaEmpleados.getEmpleadoSeleccionado();
+        if (seleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un empleado de la lista.", "Selección Requerida", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        StringBuilder detalles = new StringBuilder("<html><body><h2>Detalles del Empleado</h2>");
+        detalles.append("<b>Nombre Completo:</b> ").append(seleccionado.getNombre()).append(" ").append(seleccionado.getApellidoP()).append(" ").append(seleccionado.getApellidoM()).append("<br>");
+        detalles.append("<b>Correo Electrónico:</b> ").append(seleccionado.getCorreoE()).append("<br>");
+        detalles.append("<b>Teléfono:</b> ").append(seleccionado.getTelefono()).append("<br>");
         
+        int edad = 0;
+        if (seleccionado.getFechaNacimiento() != null) {
+            edad = Period.between(seleccionado.getFechaNacimiento().toLocalDate(), LocalDate.now()).getYears();
+        }
+        detalles.append("<b>Fecha de Nacimiento:</b> ").append(seleccionado.getFechaNacimiento() != null ? seleccionado.getFechaNacimiento().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A").append(" (Edad: ").append(edad).append(")<br>");
+        detalles.append("<b>Cargo:</b> ").append(seleccionado.getCargo() != null ? seleccionado.getCargo().getDescripcion() : "N/A").append("<br>");
+        detalles.append("<b>Sueldo:</b> $").append(String.format("%.2f", seleccionado.getSueldo())).append("<br>");
+        detalles.append("<b>Fecha de Registro:</b> ").append(seleccionado.getFechaRegistro() != null ? seleccionado.getFechaRegistro().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "N/A").append("<br>");
+        detalles.append("<h3>Dirección</h3>");
+        detalles.append("<b>Calle:</b> ").append(seleccionado.getCalle()).append("<br>");
+        detalles.append("<b>Colonia:</b> ").append(seleccionado.getColonia()).append("<br>");
+        detalles.append("<b>Número Exterior:</b> ").append(seleccionado.getNumExterior()).append("<br>");
+        detalles.append("<b>Estado:</b> ").append(seleccionado.isActivo() ? "Activo" : "Inactivo").append("<br>");
+        detalles.append("</body></html>");
+
+        JOptionPane.showMessageDialog(this, detalles.toString(), "Detalles de " + seleccionado.getNombre(), JOptionPane.INFORMATION_MESSAGE);
         
     }//GEN-LAST:event_btnDetallesActionPerformed
 

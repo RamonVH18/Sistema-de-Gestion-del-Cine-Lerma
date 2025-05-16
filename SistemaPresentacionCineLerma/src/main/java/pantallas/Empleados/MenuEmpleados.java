@@ -4,16 +4,22 @@
  */
 package pantallas.Empleados;
 
+import BOs.EmpleadoBO;
+import DTOs.EmpleadoDTO;
+
 /**
  *
  * @author isaac
  */
 public class MenuEmpleados extends javax.swing.JFrame {
+    
+    private EmpleadoBO empleadoBO;
 
     /**
      * Creates new form MenuEmpleados
      */
     public MenuEmpleados() {
+        this.empleadoBO = new EmpleadoBO();
         initComponents();
     }
 
@@ -32,6 +38,7 @@ public class MenuEmpleados extends javax.swing.JFrame {
         btnGestionCargo = new javax.swing.JButton();
         btnGestionarSueldos = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        btnActualizarEmpleado = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(519, 758));
@@ -50,7 +57,7 @@ public class MenuEmpleados extends javax.swing.JFrame {
                 btnRegistrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, -1, -1));
+        getContentPane().add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 120, -1, -1));
 
         btnDespedir.setBackground(new java.awt.Color(162, 132, 94));
         btnDespedir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -61,18 +68,18 @@ public class MenuEmpleados extends javax.swing.JFrame {
                 btnDespedirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnDespedir, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, -1, -1));
+        getContentPane().add(btnDespedir, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 350, -1, -1));
 
         btnGestionCargo.setBackground(new java.awt.Color(162, 132, 94));
         btnGestionCargo.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnGestionCargo.setForeground(new java.awt.Color(255, 255, 255));
-        btnGestionCargo.setText("Actualizar cargos");
+        btnGestionCargo.setText("Gestionar cargos");
         btnGestionCargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGestionCargoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGestionCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 380, -1, -1));
+        getContentPane().add(btnGestionCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 460, 220, -1));
 
         btnGestionarSueldos.setBackground(new java.awt.Color(162, 132, 94));
         btnGestionarSueldos.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -83,7 +90,7 @@ public class MenuEmpleados extends javax.swing.JFrame {
                 btnGestionarSueldosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGestionarSueldos, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 490, -1, -1));
+        getContentPane().add(btnGestionarSueldos, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 570, -1, -1));
 
         btnSalir.setBackground(new java.awt.Color(162, 132, 94));
         btnSalir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -94,7 +101,18 @@ public class MenuEmpleados extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 610, -1, -1));
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 670, -1, -1));
+
+        btnActualizarEmpleado.setBackground(new java.awt.Color(162, 132, 94));
+        btnActualizarEmpleado.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnActualizarEmpleado.setForeground(new java.awt.Color(255, 255, 255));
+        btnActualizarEmpleado.setText("Actualizar datos");
+        btnActualizarEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarEmpleadoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnActualizarEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 230, 230, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -120,6 +138,20 @@ public class MenuEmpleados extends javax.swing.JFrame {
 
     private void btnGestionCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionCargoActionPerformed
         
+        // primero vamos a abrir el Dialog DialogSeleccionarEmpleado para seleccionar el empleado a actualizar su cargo
+        DialogSeleccionarEmpleado dialogSeleccion = new DialogSeleccionarEmpleado(this, true, empleadoBO);
+        dialogSeleccion.setVisible(true);
+        
+        EmpleadoDTO empleadoActualizarCargo = dialogSeleccion.getEmpleadoSeleccionado();
+        
+        if ( empleadoActualizarCargo != null ) {
+            // si el empleado fue seleccionado a abrir el dialog para actualizarlo, 
+            DialogActualizarCargoEmpleado dialogActualizarCargoEmp = new DialogActualizarCargoEmpleado(this, true, empleadoBO, empleadoActualizarCargo);
+            dialogActualizarCargoEmp.setVisible(true);
+        } else {
+            System.out.println("La seleccion de empleado para actualizar ha sido cancelada");
+        }
+        
         
     }//GEN-LAST:event_btnGestionCargoActionPerformed
 
@@ -128,6 +160,12 @@ public class MenuEmpleados extends javax.swing.JFrame {
         SueldoOpciones opcionesSueldo = new SueldoOpciones();
         opcionesSueldo.setVisible(true);
     }//GEN-LAST:event_btnGestionarSueldosActionPerformed
+
+    private void btnActualizarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarEmpleadoActionPerformed
+            
+        ActualizarEmpleado frameActualizarDatos = new ActualizarEmpleado();
+        frameActualizarDatos.setVisible(true);
+    }//GEN-LAST:event_btnActualizarEmpleadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,6 +203,7 @@ public class MenuEmpleados extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarEmpleado;
     private javax.swing.JButton btnDespedir;
     private javax.swing.JButton btnGestionCargo;
     private javax.swing.JButton btnGestionarSueldos;
