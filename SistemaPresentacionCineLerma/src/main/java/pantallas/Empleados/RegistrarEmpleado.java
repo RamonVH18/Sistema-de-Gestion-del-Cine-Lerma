@@ -198,7 +198,6 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
             }
         });
 
-        comboboxCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboboxCargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboboxCargoActionPerformed(evt);
@@ -393,7 +392,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void comboboxCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxCargoActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_comboboxCargoActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
@@ -408,7 +407,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         String calle = txtCalle.getText().trim();
         String colonia = txtColonia.getText().trim();
         String numExt = txtNumExt.getText().trim();
-        Cargo cargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem(); // Esto ahora es correcto
+        Cargo cargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem(); // checart
         
 
         // validaciones para poder agregar
@@ -484,8 +483,8 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-
-                new RegistrarEmpleado().setVisible(true);
+ 
+               new RegistrarEmpleado().setVisible(true);
             }
         });
     }

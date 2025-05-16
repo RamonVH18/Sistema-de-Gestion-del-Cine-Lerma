@@ -301,8 +301,8 @@ public class EmpleadoDAO implements IEmpleadoDAO {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
             }
-        }
-    }
+        } 
+   }
 
     public boolean existeEmpleadoConEseCorreo(String correoE) throws PersistenciaException {
 

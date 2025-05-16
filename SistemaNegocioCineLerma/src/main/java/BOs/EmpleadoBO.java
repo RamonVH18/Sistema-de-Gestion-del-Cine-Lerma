@@ -68,7 +68,7 @@ public class EmpleadoBO implements IEmpleadoBO {
         if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
             throw new ValidacionEmpleadoException("El nombre del empleado no puede ser nulo o vacío.");
         }
-        // ... (resto de tus validaciones usando dto.get...()) ...
+       
         if (dto.getNombre().length() < 3 || dto.getNombre().length() > 50) {
             throw new ValidacionEmpleadoException("El nombre del empleado debe tener entre 3 y 50 caracteres.");
         }

@@ -35,7 +35,6 @@ public class MenuEmpleados extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(550, 778));
         setSize(new java.awt.Dimension(519, 758));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -63,7 +62,7 @@ public class MenuEmpleados extends javax.swing.JFrame {
         btnGestionCargo.setBackground(new java.awt.Color(162, 132, 94));
         btnGestionCargo.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnGestionCargo.setForeground(new java.awt.Color(255, 255, 255));
-        btnGestionCargo.setText("Gestionar cargos");
+        btnGestionCargo.setText("Actualizar cargos");
         getContentPane().add(btnGestionCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, -1, -1));
 
         btnGestionarSueldos.setBackground(new java.awt.Color(162, 132, 94));

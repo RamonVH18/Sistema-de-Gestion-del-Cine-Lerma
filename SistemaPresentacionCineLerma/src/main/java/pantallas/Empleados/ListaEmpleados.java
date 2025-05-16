@@ -84,7 +84,7 @@ public class ListaEmpleados extends JPanel {
 
         add(panelFiltros, BorderLayout.NORTH);
 
-        // --- Tabla de Empleados ---
+        // tabla de empleados
         tableModel = new DefaultTableModel(NOMBRES_COLUMNAS_PRINCIPALES, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -94,12 +94,6 @@ public class ListaEmpleados extends JPanel {
         tablaEmpleados = new JTable(tableModel);
         tablaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaEmpleados.setAutoCreateRowSorter(true);
-        
-        // Ocultar columna ID si no se quiere mostrar, pero es útil para obtener el ID
-        // tablaEmpleados.getColumnModel().getColumn(0).setMinWidth(0);
-        // tablaEmpleados.getColumnModel().getColumn(0).setMaxWidth(0);
-        // tablaEmpleados.getColumnModel().getColumn(0).setWidth(0);
-
 
         JScrollPane scrollPane = new JScrollPane(tablaEmpleados);
         add(scrollPane, BorderLayout.CENTER);
