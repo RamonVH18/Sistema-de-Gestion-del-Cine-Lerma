@@ -4,10 +4,18 @@
  */
 package enums;
 
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
+
 /**
  *
  * @author Ramon Valencia
  */
 public enum EstadoSala {
-    ACTIVA, INACTIVA, MANTENIMIENTO;
+    @BsonRepresentation(BsonType.STRING)
+    ACTIVA, 
+    @BsonRepresentation(BsonType.STRING)
+    INACTIVA, 
+    @BsonRepresentation(BsonType.STRING)
+    MANTENIMIENTO;
 }

@@ -17,7 +17,6 @@ import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Asiento;
 import entidades.Sala;
@@ -153,8 +152,8 @@ public class SalaDAO implements ISalaDAO {
         try {
             MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo); // Se llama al metodo para obtener la coleccion de salas de la base de datos
 
-            Bson filtroNumSala = Filters.eq("numeroSala", numSala); // Filtro para obtener la sala que coincida con el numero de la sala
-            Bson update = Updates.set("estado", estadoNuevo); // Se define que es lo que se le va actualizar a la base de datos
+            Bson filtroNumSala = Filters.eq("numSala", numSala); // Filtro para obtener la sala que coincida con el numero de la sala
+            Bson update = Updates.set("estado", estadoNuevo.name()); // Se define que es lo que se le va actualizar a la base de datos
 
             UpdateResult resultado = coleccionSalas.updateOne(filtroNumSala, update); // Se realiza la actualizacion
 

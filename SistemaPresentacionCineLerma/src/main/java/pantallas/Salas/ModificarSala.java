@@ -138,8 +138,8 @@ public class ModificarSala extends javax.swing.JFrame {
         Boolean confirmacion = control.modificarSala(numeroSala, estado);
         
         if (confirmacion) {
-            panelCentral.removeAll();
-            configurarPanelCentral();
+            SalaViejaDTO sala = control.consultarSala(numeroSala);
+            labelEstado.setText("Estado: " + sala.getEstado());
         }
         
     }//GEN-LAST:event_btnGuardarCambiosMouseClicked
