@@ -32,16 +32,17 @@ import Excepciones.PagoException;
 import Excepciones.PeliculasCargaException;
 import Excepciones.ValidarCuentaException;
 import Excepciones.GenerarBoletoException;
+import Excepciones.ModificarSalaException;
 import Excepciones.PresentacionException;
 import Excepciones.RegistrarUsuarioException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidacionSalaException;
 import Excepciones.ValidarCampoAsientoException;
 import Excepciones.ValidarUsuarioException;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import GestionFunciones.IManejoFunciones;
 import GestionFunciones.ManejoFunciones;
+import enums.EstadoSala;
 import enums.EstadoUsuario;
 import enums.Rol;
 import gestionPagos.GestionPagos;
@@ -648,7 +649,7 @@ public class ControlDeNavegacion implements IControl {
             List<SalaViejaDTO> salas = manejoDeSalas.cargarSalas(filtro);
             return salas;
         } catch (BuscarSalaException e) {
-            JOptionPane.showMessageDialog(null, "¡ERROR!", "ERROR: " + e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -661,6 +662,17 @@ public class ControlDeNavegacion implements IControl {
             pantallaAgregarSala.setVisible(true);
             frameAnterior.dispose();
         });
+    }
+    
+    @Override
+    public Boolean modificarSala(String numSala, EstadoSala estadoSala) {
+        try {
+            Boolean confirmacion = manejoDeSalas.modificarEstadoSala(numSala, estadoSala);
+            return confirmacion;
+        } catch (ModificarSalaException e) {
+            JOptionPane.showConfirmDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     /**

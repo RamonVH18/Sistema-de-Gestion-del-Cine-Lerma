@@ -20,6 +20,7 @@ import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.EncontrarUsuarioException;
 import Excepciones.PresentacionException;
+import enums.EstadoSala;
 import enums.EstadoUsuario;
 import enums.Rol;
 import java.time.LocalDateTime;
@@ -106,6 +107,8 @@ public interface IControl {
     public List<SalaViejaDTO> consultarSalas(String filtro);
 
     public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala);
+    
+    public Boolean modificarSala(String numSala, EstadoSala estadoSala);
 
     // -----------------------------FIN DE METODOS DE SALAS-----------------------------------------
     //Metodos de navegacion de usuarios /////////////////////
