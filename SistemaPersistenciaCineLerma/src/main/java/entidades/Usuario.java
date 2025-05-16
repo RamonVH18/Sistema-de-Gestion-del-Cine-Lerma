@@ -16,8 +16,11 @@ import org.bson.types.ObjectId;
  *
  * @author sonic
  */
+
+// La anotación @BsonDiscriminator sirve para indicar a MongoDB cómo distinguir esta subclase en la base de datos.
 @BsonDiscriminator
 public class Usuario {
+    //La entidad usuario funcionara como una clase padre, por lo tanto contiene como atributos los datos basicos de un usuario ya sea admin o cliente
 
     @BsonId // Indica que este atributo sera el id
     @BsonProperty("_id") //BsonProperty indica a mongo como debe guardar este atributo, mongo guarda los id por default como _id asi que lo indicaremos de esa forma
@@ -25,29 +28,30 @@ public class Usuario {
     
     private String nombreDeUsuario; //Nombre de usuario, se utilizara como identificador unico
     
-    private String contrasenia;
+    private String contrasenia; //Contraseña del usuario
     
-    private String nombre;
+    private String nombre; //Nombre del usuario
     
-    private String apellidoPaterno;
+    private String apellidoPaterno; //Apellidos del usuario
     
     private String apellidoMaterno;
     
     @BsonProperty
-    private String correoElectronico;
+    private String correoElectronico; //Correo electronico
     
     @BsonProperty
-    private LocalDateTime fechaNacimiento;
+    private LocalDateTime fechaNacimiento; //Fecha de nacimiento que se maneja con localDateTime
     
-    private String telefono;
+    private String telefono; //Numero de telefono string del cliente
     
-    private EstadoUsuario estado;
+    private EstadoUsuario estado; //Estado del usuario que puede ser ACTIVO O BLOQUEADO, utiliza un ENUM asi como Rol
     
-    private Rol rol;
+    private Rol rol; //Rol es un enum importante ya que funcionara como discriminador para que mongoDB pueda manejar la herencia
 
-    public Usuario() {
+    public Usuario() { //constructor vacio
     }
 
+    //constructor con todo y id
     public Usuario(ObjectId idUsuario, String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
         this.idUsuario = idUsuario;
         this.nombreDeUsuario = nombreDeUsuario;
@@ -63,7 +67,7 @@ public class Usuario {
     }
 
     
-
+    //contructor con todo sin id
     public Usuario(String nombreDeUsuario, String contrasenia, String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, LocalDateTime fechaNacimiento, String telefono, EstadoUsuario estado, Rol rol) {
         this.nombreDeUsuario = nombreDeUsuario;
         this.contrasenia = contrasenia;
