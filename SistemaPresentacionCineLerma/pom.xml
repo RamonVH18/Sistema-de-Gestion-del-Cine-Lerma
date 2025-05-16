@@ -65,11 +65,16 @@
             <artifactId>SistemaGestionSalasAsientos</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SistemaGestionFunciones</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
+        <maven.compiler.source>23</maven.compiler.source>
+        <maven.compiler.target>23</maven.compiler.target>
         <exec.mainClass>com.mycompany.sistemapresentacioncinelerma.SistemaPresentacionCineLerma</exec.mainClass>
     </properties>
 </project>

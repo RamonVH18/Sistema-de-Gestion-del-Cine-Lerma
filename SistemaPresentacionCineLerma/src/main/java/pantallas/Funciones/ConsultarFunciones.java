@@ -4,17 +4,71 @@
  */
 package pantallas.Funciones;
 
+import DTOs.FuncionDTO;
+import GestionFunciones.IManejoFunciones;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import utilitades.ModeladoTablas;
+
 /**
  *
  * @author Abraham Coronel Bringas
  */
 public class ConsultarFunciones extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ConsultarFunciones
-     */
-    public ConsultarFunciones() {
+    private IManejoFunciones manejoFunciones;
+    private String nombrePelicula;
+
+    public ConsultarFunciones(String nombrePelicula, IManejoFunciones manejoFunciones) {
         initComponents();
+        this.manejoFunciones = manejoFunciones;
+        this.nombrePelicula = nombrePelicula;
+        labelNombrePelicula.setText("Funciones de la pelicula: " + nombrePelicula);
+        cargarTablaFunciones();
+    }
+
+    private void cargarTablaFunciones() {
+        try {
+            List<FuncionDTO> funciones = manejoFunciones.buscarFunciones(nombrePelicula, null);
+
+            String[] columnas = {"Sala", "Fecha y Hora", "Hora Termino", "Precio"};
+            Object[][] datos = new Object[funciones.size()][4];
+
+            for (int i = 0; i < funciones.size(); i++) {
+                FuncionDTO funcion = funciones.get(i);
+                LocalDateTime horaTermino = manejoFunciones.calcularHoraTerminoFuncion(funcion.getId());
+
+                datos[i][0] = funcion.getSala();
+                datos[i][1] = funcion.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+                datos[i][2] = horaTermino.format(DateTimeFormatter.ofPattern("HH:mm"));
+                datos[i][3] = String.format("$%.2f", funcion.getPrecio());
+            }
+
+            panelTablaFunciones.removeAll();
+            panelTablaFunciones.setLayout(new java.awt.BorderLayout());
+
+            JTable tabla = ModeladoTablas.creacionTablaSencilla(columnas, datos, 14, 30);
+
+            // Ajustar anchos de columnas actualizado
+            Map<Integer, Integer> tamañoColumnas = new HashMap<>();
+            tamañoColumnas.put(0, 100);  // Sala
+            tamañoColumnas.put(1, 200);  // Fecha y Hora
+            tamañoColumnas.put(2, 100);  // Hora Término
+            tamañoColumnas.put(3, 100);  // Precio
+            ModeladoTablas.ajusteTamañoColumnas(tabla, tamañoColumnas);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar funciones: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 
     /**
@@ -142,40 +196,6 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultarFunciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultarFunciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultarFunciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultarFunciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ConsultarFunciones().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;

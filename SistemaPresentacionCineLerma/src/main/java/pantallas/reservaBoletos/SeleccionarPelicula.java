@@ -4,11 +4,11 @@ package pantallas.reservaBoletos;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
-
 import control.ControlDeNavegacion;
 import DTOs.PeliculaDTO;
+import DTOs.UsuarioDTO;
 import control.IControl;
+import enums.Rol;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -270,7 +270,12 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
 
         // 5. accion del boton
         boton.addActionListener(e -> {
-            control.mostrarSeleccionarAsientos(pelicula);
+            UsuarioDTO usuario = control.obtenerUsuarioActual();
+            if (usuario != null && usuario.getRol() == Rol.ADMINISTRADOR) {
+                control.mostrarConsultarFunciones(this, pelicula.getTitulo());
+            } else {
+                control.mostrarSeleccionarAsientos(pelicula);
+            }
             dispose();
         });
         return boton;
@@ -369,7 +374,7 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
     private String obtenerUrlPelicula(String nombrePelicula) {
         for (PeliculaDTO pelicula : control.obtenerPeliculas()) {
             //if (pelicula.getNombrePelicula().equals("nombrePelicula)) {
-                return "pelicula.getPeliculaImagen()";
+            return "pelicula.getPeliculaImagen()";
             //}
         }
         return "default_poster.jpg";

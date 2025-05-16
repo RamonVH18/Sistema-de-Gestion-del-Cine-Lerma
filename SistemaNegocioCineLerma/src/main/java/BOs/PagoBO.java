@@ -54,18 +54,13 @@ public class PagoBO {
             throw new PagoValidacionException("Precio de función invalido");
         }
 
-        // validar el estado de la funcion, si es false entonces lanzara excepcion
-        if (!funcion.getEstado()) {
-            throw new PagoValidacionException("La función no está disponible");
-        }
-
         // Validación 5: Fecha de función válida
         if (funcion.getFechaHora().isBefore(LocalDateTime.now())) {
             throw new PagoValidacionException("La funcion es pasada");
         }
-        
+
         Funcion funcionEntidad = funcionMapper.toFuncionEntidad(funcion);
-        
+
         Double montoTotal = pagoDAO.calcularMontoTotal(boletos, funcionEntidad);
 
         return montoTotal;
@@ -86,7 +81,7 @@ public class PagoBO {
         if (pago.getFechaHora() != null && pago.getFechaHora().isAfter(LocalDateTime.now())) {
             throw new PagoValidacionException("Fecha de pago inválida");
         }
-        
+
         Pago pagoRegistrar = PagoMapper.toPagoEntidad(pago);
         Pago pagoRegistrado = pagoDAO.registrarPagoExitoso(pagoRegistrar);
 

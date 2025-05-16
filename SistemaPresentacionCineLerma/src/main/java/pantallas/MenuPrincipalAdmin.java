@@ -28,7 +28,7 @@ import javax.swing.SwingConstants;
 public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
     private AdministradorDTO administrador;
-    
+
     private final IControl control = ControlDeNavegacion.getInstancia();
     private final int tamSeparacionbBtns = 15; // Variable que sirve para definir el tamaño de separacion entre los botones
     private final String nombrePestania = "MenuAdministrador"; // Variable para escribir el nombre de la pestaña
@@ -53,7 +53,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         crearEstructuraMenuPrincipal();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        
+
         this.administrador = administrador;
 
         revalidate();
@@ -229,7 +229,6 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         // TODO add your handling code here:
-        control.mostrarGestionDeUsuarios(this, administrador);
     }//GEN-LAST:event_btnUsuariosActionPerformed
 
     private void btnSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalaActionPerformed
@@ -242,7 +241,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalaMouseClicked
 
     private void btnFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncionActionPerformed
-        // TODO add your handling code here:
+        control.mostrarSeleccionarPelicula();
     }//GEN-LAST:event_btnFuncionActionPerformed
 
     private void btnEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadosActionPerformed
@@ -293,26 +292,26 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
     private void crearEstructuraPanelBotones(JPanel panelBotones) {
         panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
-        
+
         //Agregar cada boton al panel de botones utilizando boxLayout
         agregarBotonEnBox(btnPelicula, panelBotones);
         btnPelicula.setFont(fuenteBoton);
-        
+
         agregarBotonEnBox(btnFuncion, panelBotones);
         btnFuncion.setFont(fuenteBoton);
-        
-        agregarBotonEnBox(btnSala,  panelBotones);
+
+        agregarBotonEnBox(btnSala, panelBotones);
         btnSala.setFont(fuenteBoton);
-        
+
         agregarBotonEnBox(btnUsuarios, panelBotones);
         btnUsuarios.setFont(fuenteBoton);
-        
+
         agregarBotonEnBox(btnEmpleados, panelBotones);
         btnEmpleados.setFont(fuenteBoton);
-        
+
         agregarBotonEnBox(btnReporte, panelBotones);
         btnReporte.setFont(fuenteBoton);
-        
+
         agregarBotonEnBox(btnSalir, panelBotones);
         btnSalir.setFont(fuenteBoton);
 

@@ -19,25 +19,25 @@ public class FuncionDTO {
     private String nombre;
 
     private LocalDateTime fechaHora;
-    
+
     private double precio;
-    
-    private Boolean estado;
 
     /**
      * Constructor vacio
      */
     public FuncionDTO() {
     }
+
     /**
      * Constructor con todos los atributos y con id
-     * @param id
+     *
+     * @param idFuncion
      * @param sala
      * @param nombre
      * @param fechaHora
-     * @param precio 
+     * @param precio
      */
-    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio) {    
+    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio) {
         this.idFuncion = idFuncion;
         this.sala = sala;
         this.nombre = nombre;
@@ -47,111 +47,97 @@ public class FuncionDTO {
 
     /**
      * Constructor con todos los atributos sin el id
+     *
      * @param sala
      * @param nombre
      * @param fechaHora
-     * @param precio 
+     * @param precio
      */
-    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio) {    
+    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio) {
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
         this.precio = precio;
     }
-
-    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio, Boolean estado) {
-        this.sala = sala;
-        this.nombre = nombre;
-        this.fechaHora = fechaHora;
-        this.precio = precio;
-        this.estado = estado;
-    }
-    
-    
 
     /**
      *
-     * @return 
+     * @return
      */
     public String getId() {
         return idFuncion;
     }
+
     /**
-     * 
-     * @param id 
+     *
+     * @param id
      */
     public void setId(String idFuncion) {
         this.idFuncion = idFuncion;
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getSala() {
         return sala;
     }
+
     /**
-     * 
-     * @param sala 
+     *
+     * @param sala
      */
     public void setSala(String sala) {
         this.sala = sala;
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getNombre() {
         return nombre;
     }
+
     /**
-     * 
-     * @param nombre 
+     *
+     * @param nombre
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    public LocalDateTime getFechaHora() {    
+    public LocalDateTime getFechaHora() {
         return fechaHora;
     }
 
     /**
      *
-     * @param fechaHora 
+     * @param fechaHora
      */
-    public void setFechaHora(LocalDateTime fechaHora) {    
+    public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;
     }
 
     /**
      *
-     * @return 
+     * @return
      */
     public double getPrecio() {
         return precio;
     }
+
     /**
-     * 
-     * @param precio 
+     *
+     * @param precio
      */
     public void setPrecio(double precio) {
         this.precio = precio;
     }
-
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
-    }
-    
-    
-    
-    
 
 }

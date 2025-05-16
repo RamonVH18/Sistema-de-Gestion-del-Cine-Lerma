@@ -114,9 +114,9 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
-                if (funcion.getNombre().equals(nombrePelicula) && funcion.getEstado()) {
-                    funcionesPelicula.add(funcion);
-                }
+//                if (funcion.getNombre().equals(nombrePelicula) && funcion.getEstado()) {
+//                    funcionesPelicula.add(funcion);
+//                }
             }
             
             if (funcionesPelicula.isEmpty()) {

@@ -40,6 +40,8 @@ import Excepciones.ValidarCampoAsientoException;
 import Excepciones.ValidarUsuarioException;
 import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
+import GestionFunciones.IManejoFunciones;
+import GestionFunciones.ManejoFunciones;
 import enums.EstadoUsuario;
 import enums.Rol;
 import gestionPagos.GestionPagos;
@@ -57,6 +59,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import pantallas.Funciones.ConsultarFunciones;
 import pantallas.IniciarSesion;
 import pantallas.MenuPrincipalAdmin;
 import pantallas.reservaBoletos.DetalleDelBoleto;
@@ -86,10 +89,12 @@ public class ControlDeNavegacion implements IControl {
     private final IManejoDeSalas manejoDeSalas = ManejoDeSalas.getInstanceSalas();
     private final IGestionPagos gestionDePagos = GestionPagos.getInstancia();
     private final IManejoUsuarios gestionUsuarios = ManejoUsuarios.getInstance();
+    private final IManejoFunciones gestionFunciones = ManejoFunciones.getInstanceDAO();
 
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
     private PeliculaDTO peliculaSeleccionada;
     private FuncionDTO funcionSeleccionada;
+    private UsuarioDTO usuarioActual;
 
     private final String titulo = "¡ERROR!";
 
@@ -120,6 +125,11 @@ public class ControlDeNavegacion implements IControl {
         return instancia;
     }
 
+    @Override
+    public UsuarioDTO obtenerUsuarioActual() {
+        return usuarioActual;
+    }
+
     /**
      * Este metodo sirve para regresar al menu Principal, se encontrara la forma
      * de de fusionar
@@ -132,7 +142,7 @@ public class ControlDeNavegacion implements IControl {
             pantalla.setVisible(true);
         });
     }
-    
+
     /**
      * Metodo que se encarga de abrir la pantalla de pago rechazado
      */
@@ -555,11 +565,10 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     /*
     --------------INICIO DE LOS METODOS DEL CONTROL DE NAVEGACION DE SALAS--------------
-    */
-
+     */
     /**
      * Metodo para abrir el menu del caso de uso de gestion de salas
      *
@@ -589,8 +598,8 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
-    @Override 
+
+    @Override
     public void agregarSala(SalaNuevaDTO salaNueva) {
         try {
             manejoDeSalas.agregarSala(salaNueva);
@@ -598,10 +607,10 @@ public class ControlDeNavegacion implements IControl {
         } catch (AgregarSalaException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }
-    
-    @Override 
+
+    @Override
     public Boolean validarCamposAgregarSala(String numSala, String numAsientos) {
         try {
             manejoDeSalas.validarSala(numSala, numAsientos);
@@ -611,7 +620,7 @@ public class ControlDeNavegacion implements IControl {
             return Boolean.FALSE;
         }
     }
-    
+
     @Override
     public void mostrarSeleccionarSala(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -621,9 +630,9 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     public SalaViejaDTO consultarSala(String numSala) {
-        
+
         try {
             SalaViejaDTO sala = manejoDeSalas.cargarSalaUnica(numSala);
             return sala;
@@ -632,8 +641,8 @@ public class ControlDeNavegacion implements IControl {
         }
         return null;
     }
-    
-    @Override 
+
+    @Override
     public List<SalaViejaDTO> consultarSalas(String filtro) {
         try {
             List<SalaViejaDTO> salas = manejoDeSalas.cargarSalas(filtro);
@@ -641,11 +650,10 @@ public class ControlDeNavegacion implements IControl {
         } catch (BuscarSalaException e) {
             JOptionPane.showMessageDialog(null, "¡ERROR!", "ERROR: " + e.getMessage(), JOptionPane.ERROR_MESSAGE);
             return null;
-        } 
+        }
     }
-    
-    
-    @Override 
+
+    @Override
     public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala) {
         SwingUtilities.invokeLater(() -> {
             ModificarSala pantallaAgregarSala = new ModificarSala(sala);
@@ -669,11 +677,35 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     /*
     --------------FIN DE LOS METODOS DEL CONTROL DE NAVEGACION DE SALAS--------------
-    */
+     */
+ /*
+    --------------INICIO DE LOS METODOS DEL CONTROL DE NAVEGACION DE FUNCIONES--------------
+     */
+    @Override
+    public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula) {
+        SwingUtilities.invokeLater(() -> {
+            ConsultarFunciones pantalla = new ConsultarFunciones(nombrePelicula, gestionFunciones);
+            pantalla.setLocationRelativeTo(null);
+            pantalla.setVisible(true);
+            if (frameAnterior != null) {
+                frameAnterior.dispose();
+            }
+        });
+    }
 
+    @Override
+    public void mostrarProgramarFuncion() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+ 
+
+    /*
+    --------------Fin DE LOS METODOS DEL CONTROL DE NAVEGACION DE FUNCIONES--------------
+     */
     //METODOS DE NAVEGACION DE LA GESTION DE USUARIOS
     @Override
     public void mostrarIniciarSesion() {
@@ -703,11 +735,12 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena) {
         try {
-            return gestionUsuarios.validarUsuario(nombreUsuario, contrasena);
+            usuarioActual = gestionUsuarios.validarUsuario(nombreUsuario, contrasena);
+            return usuarioActual;
         } catch (ValidarUsuarioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return null;
@@ -774,7 +807,6 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-
     @Override
     public ClienteDTO registrarCliente(ClienteDTO cliente) {
         try {
@@ -795,9 +827,8 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-
     @Override
-    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena){
+    public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) {
         try {
             return gestionUsuarios.obtenerCliente(nombreUsuario, contrasena);
         } catch (EncontrarUsuarioException e) {
@@ -826,16 +857,37 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-   
-
     @Override
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena){
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) {
         try {
             return gestionUsuarios.obtenerAdministrador(nombreUsuario, contrasena);
         } catch (EncontrarUsuarioException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return null;
         }
+    }
+
+    /*
+    --------------METODOS DE FUNCION--------------
+     */
+    @Override
+    public FuncionDTO registrarFuncion(FuncionDTO funcionDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public FuncionDTO eliminarFuncion(FuncionDTO funcionDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

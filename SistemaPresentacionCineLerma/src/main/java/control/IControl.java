@@ -92,21 +92,21 @@ public interface IControl {
     public void mostrarMenuSalas(JFrame frameAnterior);
 
     public void mostrarAgregarSala(JFrame frameAnterior);
-    
+
     public void agregarSala(SalaNuevaDTO salaNueva);
-    
+
     public Boolean validarCamposAgregarSala(String numSala, String numAsientos);
 
     public void mostrarEstadisticasSala(JFrame frameAnterior);
-    
+
     public void mostrarSeleccionarSala(JFrame frameAnterior);
 
     public SalaViejaDTO consultarSala(String numSala);
-    
+
     public List<SalaViejaDTO> consultarSalas(String filtro);
-    
+
     public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala);
-    
+
     // -----------------------------FIN DE METODOS DE SALAS-----------------------------------------
     //Metodos de navegacion de usuarios /////////////////////
     public void mostrarIniciarSesion();
@@ -119,6 +119,11 @@ public interface IControl {
 
     public void mostrarHistorialCliente(JFrame frameAnterior, ClienteDTO cliente);
 
+    //Metodos de navegacion de Funciones
+    public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula);
+
+    public void mostrarProgramarFuncion();
+
     //Usuarios:
     public List<UsuarioDTO> mostrarListaUsuarios();
 
@@ -129,7 +134,9 @@ public interface IControl {
     public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre);
 
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena);
-    
+
+    public UsuarioDTO obtenerUsuarioActual();
+
     //Cliente:
     public ClienteDTO registrarCliente(ClienteDTO cliente);
 
@@ -141,7 +148,16 @@ public interface IControl {
 
     //Administrador:
     public AdministradorDTO registrarAdministrador(AdministradorDTO administrador);
-    
-    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) ;
+
+    public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena);
+
+    //Metodos Funciones
+    public FuncionDTO registrarFuncion(FuncionDTO funcionDTO);
+
+    public FuncionDTO eliminarFuncion(FuncionDTO funcionDTO);
+
+    public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora);
+
+    public LocalDateTime calcularHoraTerminoFuncion(String idFuncion);
 
 }
