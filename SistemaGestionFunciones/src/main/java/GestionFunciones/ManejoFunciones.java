@@ -18,6 +18,7 @@ import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionFechaValidaException;
 import Excepciones.funciones.FuncionRegistrarException;
+import Excepciones.funciones.FuncionValidadaException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
 import Interfaces.ISalaBO;
@@ -131,6 +132,19 @@ public class ManejoFunciones implements IManejoFunciones {
 
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionDuracionException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (idFuncion == null || idFuncion.isEmpty()) {
+            throw new FuncionDuracionException("El ID de la funcion es requerido.");
+        }
+
+        if (!org.bson.types.ObjectId.isValid(idFuncion)) {
+            throw new FuncionDuracionException("El ID de la funcion no tiene un formato valido.");
+        }
+
+        try {
+            return funcionBO.calcularHoraTerminoFuncion(idFuncion);
+
+        } catch (FuncionValidadaException e) {
+            throw new FuncionDuracionException("Error al calcular la hora de término: " + e.getMessage(), e);
+        }
     }
 }

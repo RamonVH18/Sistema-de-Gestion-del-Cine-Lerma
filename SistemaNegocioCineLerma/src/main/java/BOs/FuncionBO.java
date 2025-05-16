@@ -21,6 +21,8 @@ import entidades.Funcion;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -57,6 +59,8 @@ public class FuncionBO implements IFuncionBO {
             throw new FuncionRegistrarException("Error al registrar la funcion" + e.getMessage(), e);
         } catch (FuncionSalaVaciaException e) {
             throw new FuncionRegistrarException("Error la sala es nula o no existe" + e.getMessage(), e);
+        } catch (FuncionDuracionIncorrectaException ex) {
+            throw new FuncionRegistrarException("Error la duracion es de la pelicula es incorrecta" + ex.getMessage(), ex);
         }
 
     }
