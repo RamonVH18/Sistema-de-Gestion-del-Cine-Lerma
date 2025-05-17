@@ -6,6 +6,7 @@ package pantallas.Funciones;
 
 import DTOs.FuncionDTO;
 import GestionFunciones.IManejoFunciones;
+import control.ControlDeNavegacion;
 import control.IControl;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +27,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
 
     private IManejoFunciones manejoFunciones;
     private String nombrePelicula;
-    IControl control;
+    IControl control = ControlDeNavegacion.getInstancia();
 
     public ConsultarFunciones(String nombrePelicula, IManejoFunciones manejoFunciones) {
         initComponents();

@@ -20,15 +20,14 @@ import javax.swing.JOptionPane;
  */
 public class ProgramarFuncion extends javax.swing.JFrame {
 
-    IControl control;
-
+    IControl control = ControlDeNavegacion.getInstancia();
+    
     public ProgramarFuncion() {
         initComponents();
     }
 
     private void confirmarFuncion() {
         try {
-            // Validar campos vacíos
             if (salaFuncion.getText().isEmpty()
                     || fechaFuncion.getDate() == null
                     || fechaInicio.getText().isEmpty()
@@ -53,18 +52,16 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             FuncionDTO funcionRegistrada = control.registrarFuncion(funcionDTO);
 
             if (funcionRegistrada != null) {
-                JOptionPane.showMessageDialog(this, "¡Función programada!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose(); // Cierra la ventana actual
+                JOptionPane.showMessageDialog(this, "¡Funcion programada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose(); 
             }
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Precio inválido", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Precio invalido", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -209,7 +206,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(salaFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(salaFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(btnBuscadorSala)
                 .addGap(18, 18, 18)
@@ -239,7 +236,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void salaFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salaFuncionActionPerformed
@@ -255,8 +252,8 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     }//GEN-LAST:event_precioBoletoActionPerformed
 
     private void btnBuscadorSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscadorSalaActionPerformed
-        control.consultarSalas(null);
-        
+        control.consultarSalas("");
+
     }//GEN-LAST:event_btnBuscadorSalaActionPerformed
 
     /**

@@ -266,7 +266,7 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
         );
 
         // crear boton con diseño adaptable
-        JButton boton = new JButton("pelicula.getNombrePelicula()", imagen);
+        JButton boton = new JButton(pelicula.getTitulo(), imagen);
         configurarBoton(boton, ancho);
 
         // 5. accion del boton
