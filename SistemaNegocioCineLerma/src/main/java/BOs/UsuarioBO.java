@@ -5,6 +5,7 @@
 package BOs;
 
 import DAOs.UsuarioDAO;
+import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.Usuarios.ActualizarUsuarioExceptionBO;
 import Excepciones.Usuarios.ObtenerUsuariosExceptionBO;
@@ -111,6 +112,21 @@ public class UsuarioBO implements IUsuarioBO {
 
         } catch (ObtenerUsuariosException e) {
             throw new ObtenerUsuariosExceptionBO("Error al encontrar un usuario", e);
+        }
+    }
+    
+    @Override
+    public List<ReporteUsuarioDTO> obtenerReporteUsuarios() throws ObtenerUsuariosExceptionBO {
+        try {
+            
+            List<Usuario> usuarios = usuarioDAO.mostrarListaUsuarios();
+            
+            return usuarios.stream()
+                    .map(mapper::toReporteUsuarioDTO)
+                    .collect(Collectors.toList());
+            
+        } catch (ObtenerUsuariosException e) {
+            throw new ObtenerUsuariosExceptionBO("Error al obtener lista de usuarios para generar un reporte", e);
         }
     }
 

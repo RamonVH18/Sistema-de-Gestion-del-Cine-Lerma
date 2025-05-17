@@ -14,6 +14,7 @@ import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
+import DTOs.ReporteUsuarioDTO;
 import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
@@ -48,6 +49,8 @@ public interface IControl {
     public void mostrarPantallaPagoRechazado();
 
     public void mostrarMenuAdministrador(JFrame frameAnterior, AdministradorDTO admin);
+    
+    public void mostrarMenuReportes(JFrame frameAnterior);
 
     public List<PeliculaDTO> obtenerPeliculas();
 
@@ -145,6 +148,8 @@ public interface IControl {
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena);
 
     public UsuarioDTO obtenerUsuarioActual();
+    
+    public List<ReporteUsuarioDTO> obtenerReporteUsuarios();
 
     //Cliente:
     public ClienteDTO registrarCliente(ClienteDTO cliente);

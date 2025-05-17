@@ -10,6 +10,7 @@ import BOs.UsuarioBO;
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
+import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.ActualizarUsuarioException;
 import Excepciones.CargarHistorialException;
@@ -144,6 +145,18 @@ public class ManejoUsuarios implements IManejoUsuarios {
 
         } catch (ObtenerUsuariosExceptionBO e) {
             throw new ObtenerUsuariosException("La lista no se pudo filtrar: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<ReporteUsuarioDTO> mostrarUsuariosParaReporte() throws ObtenerUsuariosException {
+        try {
+            List<ReporteUsuarioDTO> reporteUsuarios = usuarioBO.obtenerReporteUsuarios();
+
+            return reporteUsuarios;
+
+        } catch (ObtenerUsuariosExceptionBO e) {
+            throw new ObtenerUsuariosException("No se pudieron obtener a los usuarios para el reporte: " + e.getMessage());
         }
     }
 

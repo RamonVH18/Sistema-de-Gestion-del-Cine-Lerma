@@ -4,6 +4,7 @@
  */
 package Interfaces;
 
+import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.Usuarios.ActualizarUsuarioExceptionBO;
 import Excepciones.Usuarios.ObtenerUsuariosExceptionBO;
@@ -29,4 +30,6 @@ public interface IUsuarioBO {
     public List<UsuarioDTO> mostrarListaUsuariosFiltradaBO(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre) throws ObtenerUsuariosExceptionBO;
     
     public UsuarioDTO obtenerUsuarioBO(String nombreUsuario, String contrasena) throws ObtenerUsuariosExceptionBO;
+    
+    public List<ReporteUsuarioDTO> obtenerReporteUsuarios() throws ObtenerUsuariosExceptionBO;
 }

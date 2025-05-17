@@ -4,6 +4,7 @@
  */
 package Interfaces.mappers;
 
+import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import entidades.Usuario;
 
@@ -15,5 +16,7 @@ public interface IUsuarioMapper {
     public UsuarioDTO toUsuarioDTO(Usuario usuario);
         
     public Usuario toUsuarioEntidad(UsuarioDTO usuariodto);
+    
+    public ReporteUsuarioDTO toReporteUsuarioDTO(Usuario usuario);
     
 }

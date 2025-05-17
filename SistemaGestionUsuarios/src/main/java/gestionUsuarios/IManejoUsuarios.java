@@ -7,6 +7,7 @@ package gestionUsuarios;
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
+import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.ActualizarUsuarioException;
 import Excepciones.CargarHistorialException;
@@ -49,6 +50,7 @@ public interface IManejoUsuarios {
     
     public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String usuario) throws ObtenerUsuariosException;
     
+    public List<ReporteUsuarioDTO> mostrarUsuariosParaReporte() throws ObtenerUsuariosException;
     
     
     //Cliente:

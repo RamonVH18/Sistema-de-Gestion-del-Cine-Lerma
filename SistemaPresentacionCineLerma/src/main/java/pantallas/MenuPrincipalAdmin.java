@@ -129,6 +129,11 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         btnReporte.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnReporte.setForeground(new java.awt.Color(255, 255, 255));
         btnReporte.setText("Reportes");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
 
         btnSalir.setBackground(new java.awt.Color(162, 132, 94));
         btnSalir.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -255,6 +260,12 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         administrador = null;
         dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        // TODO add your handling code here:
+        control.mostrarMenuReportes(this);
+        dispose();
+    }//GEN-LAST:event_btnReporteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

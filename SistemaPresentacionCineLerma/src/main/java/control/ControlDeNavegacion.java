@@ -15,6 +15,7 @@ import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
+import DTOs.ReporteUsuarioDTO;
 import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
@@ -77,6 +78,7 @@ import pantallas.reservaBoletos.DetalleDelBoleto;
 import pantallas.MenuPrincipalCliente;
 import pantallas.Pagos.PantallaPago;
 import pantallas.Pagos.PantallaPagoRechazado;
+import pantallas.Reportes.Reportes;
 import pantallas.Salas.AgregarSala;
 import pantallas.Salas.EstadisticasSala;
 import pantallas.Salas.MenuSalas;
@@ -792,6 +794,17 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
+    
+    @Override
+    public void mostrarMenuReportes(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            Reportes pantallaReportes = new Reportes();
+            pantallaReportes.setLocationRelativeTo(null);
+            pantallaReportes.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+
 
     @Override
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena) {
@@ -828,6 +841,17 @@ public class ControlDeNavegacion implements IControl {
     public List<UsuarioDTO> mostrarListaUsuarios() {
         try {
             return gestionUsuarios.mostrarListaUsuarios();
+        } catch (ObtenerUsuariosException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+    
+    
+    @Override
+    public List<ReporteUsuarioDTO> obtenerReporteUsuarios() {
+        try {
+            return gestionUsuarios.mostrarUsuariosParaReporte();
         } catch (ObtenerUsuariosException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return null;

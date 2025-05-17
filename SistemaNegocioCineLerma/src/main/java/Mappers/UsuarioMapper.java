@@ -4,6 +4,7 @@
  */
 package Mappers;
 
+import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import Interfaces.mappers.IUsuarioMapper;
 import entidades.Usuario;
@@ -12,7 +13,7 @@ import entidades.Usuario;
  *
  * @author sonic
  */
-public class UsuarioMapper implements IUsuarioMapper{
+public class UsuarioMapper implements IUsuarioMapper {
 
     @Override
     public UsuarioDTO toUsuarioDTO(Usuario usuario) {
@@ -55,5 +56,29 @@ public class UsuarioMapper implements IUsuarioMapper{
         usuario.setEstado(usuariodto.getEstado());
 
         return usuario;
+    }
+
+    @Override
+    public ReporteUsuarioDTO toReporteUsuarioDTO(Usuario usuario) {
+        if (usuario == null) {
+            return null;
+        }
+
+        ReporteUsuarioDTO dto = new ReporteUsuarioDTO();
+
+        String nombreCompleto = String.format("%s %s %s",
+                usuario.getNombre() != null ? usuario.getNombre() : "",
+                usuario.getApellidoPaterno() != null ? usuario.getApellidoPaterno() : "",
+                usuario.getApellidoMaterno() != null ? usuario.getApellidoMaterno() : "").trim();
+
+        dto.setNombreCompleto(nombreCompleto);
+        dto.setCorreo(usuario.getCorreoElectronico());
+        dto.setTelefono(usuario.getTelefono());
+        dto.setRol(usuario.getRol());
+        dto.setEstado(usuario.getEstado());
+        dto.setFechaNacimiento(usuario.getFechaNacimiento());
+        dto.setEdad(dto.getEdad());
+
+        return dto;
     }
 }
