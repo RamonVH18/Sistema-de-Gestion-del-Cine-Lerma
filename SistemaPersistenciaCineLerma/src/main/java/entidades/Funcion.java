@@ -25,7 +25,26 @@ public class Funcion {
 
     private Double precio;
 
+    private Empleado empleado;
+
     public Funcion() {
+    }
+
+    public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, Empleado empleado) {
+        this.idFuncion = idFuncion;
+        this.sala = sala;
+        this.pelicula = pelicula;
+        this.fechaHora = fechaHora;
+        this.precio = precio;
+        this.empleado = empleado;
+    }
+
+    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, Empleado empleado) {
+        this.sala = sala;
+        this.pelicula = pelicula;
+        this.fechaHora = fechaHora;
+        this.precio = precio;
+        this.empleado = empleado;
     }
 
     public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio) {
@@ -92,9 +111,17 @@ public class Funcion {
         this.precio = precio;
     }
 
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
     @Override
     public String toString() {
-        return "Funcion{" + "idFuncion=" + idFuncion + ", sala=" + sala + ", pelicula=" + pelicula + ", fechaHora=" + fechaHora + ", precio=" + precio + '}';
+        return "Funcion{" + "idFuncion=" + idFuncion + ", sala=" + sala + ", pelicula=" + pelicula + ", fechaHora=" + fechaHora + ", precio=" + precio + ", empleado=" + empleado + '}';
     }
 
 }

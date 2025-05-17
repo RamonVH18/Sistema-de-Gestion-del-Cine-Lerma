@@ -22,7 +22,7 @@ import utilitades.ModeladoTablas;
  * @author Abraham Coronel Bringas
  */
 public class ConsultarFunciones extends javax.swing.JFrame {
-    
+
     private javax.swing.JTable tabla;
 
     private IManejoFunciones manejoFunciones;
@@ -41,8 +41,8 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         try {
             List<FuncionDTO> funciones = manejoFunciones.buscarFunciones(nombrePelicula, null);
 
-            String[] columnas = {"Sala", "Fecha y Hora", "Hora Termino", "Precio"};
-            Object[][] datos = new Object[funciones.size()][4];
+            String[] columnas = {"Sala", "Fecha y Hora", "Hora Termino", "Precio", "Empleado"};
+            Object[][] datos = new Object[funciones.size()][5];
 
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
@@ -52,6 +52,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
                 datos[i][1] = funcion.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 datos[i][2] = horaTermino.format(DateTimeFormatter.ofPattern("HH:mm"));
                 datos[i][3] = String.format("$%.2f", funcion.getPrecio());
+                datos[i][4] = funcion.getEmpleado();
             }
 
             panelTablaFunciones.removeAll();
@@ -60,12 +61,13 @@ public class ConsultarFunciones extends javax.swing.JFrame {
             JTable tabla = ModeladoTablas.creacionTablaSencilla(columnas, datos, 14, 30);
 
             // Ajustar anchos de columnas actualizado
-            Map<Integer, Integer> tamañoColumnas = new HashMap<>();
-            tamañoColumnas.put(0, 100);  // Sala
-            tamañoColumnas.put(1, 200);  // Fecha y Hora
-            tamañoColumnas.put(2, 100);  // Hora Término
-            tamañoColumnas.put(3, 100);  // Precio
-            ModeladoTablas.ajusteTamañoColumnas(tabla, tamañoColumnas);
+            Map<Integer, Integer> tamanioColumnas = new HashMap<>();
+            tamanioColumnas.put(0, 100);  // Sala
+            tamanioColumnas.put(1, 200);  // Fecha y Hora
+            tamanioColumnas.put(2, 100);  // Hora Término
+            tamanioColumnas.put(3, 100);  // Precio
+            tamanioColumnas.put(4, 100); // Empleado
+            ModeladoTablas.ajusteTamañoColumnas(tabla, tamanioColumnas);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -75,49 +77,49 @@ public class ConsultarFunciones extends javax.swing.JFrame {
             );
         }
     }
-    
+
     private void eliminarFuncionSeleccionada() {
-    // Obtener la fila seleccionada en la tabla
-    int filaSeleccionada = tabla.getSelectedRow(); // Asegúrate de que el nombre de la tabla coincida
-    
-    if (filaSeleccionada == -1) {
-        JOptionPane.showMessageDialog(
-            this, 
-            "Seleccione una función de la tabla", 
-            "Advertencia", 
-            JOptionPane.WARNING_MESSAGE
-        );
-        return;
-    }
-    
-    try {
-        // Obtener el ID de la función seleccionada (asumiendo que la columna 0 es el ID)
-        String idFuncion = (String) tabla.getValueAt(filaSeleccionada, 0);
-        
-        // Crear DTO y eliminar
-        FuncionDTO funcionDTO = new FuncionDTO();
-        funcionDTO.setId(idFuncion);
-        
-        boolean eliminada = control.eliminarFuncion(funcionDTO);
-        
-        if (eliminada) {
+        // Obtener la fila seleccionada en la tabla
+        int filaSeleccionada = tabla.getSelectedRow(); // Asegúrate de que el nombre de la tabla coincida
+
+        if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(
-                this, 
-                "Función eliminada correctamente", 
-                "Éxito", 
-                JOptionPane.INFORMATION_MESSAGE
+                    this,
+                    "Seleccione una función de la tabla",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE
             );
-            cargarTablaFunciones(); // Recargar la tabla
+            return;
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(
-            this, 
-            "Error al eliminar: " + e.getMessage(), 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE
-        );
+
+        try {
+            // Obtener el ID de la función seleccionada (asumiendo que la columna 0 es el ID)
+            String idFuncion = (String) tabla.getValueAt(filaSeleccionada, 0);
+
+            // Crear DTO y eliminar
+            FuncionDTO funcionDTO = new FuncionDTO();
+            funcionDTO.setId(idFuncion);
+
+            boolean eliminada = control.eliminarFuncion(funcionDTO);
+
+            if (eliminada) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Función eliminada correctamente",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                cargarTablaFunciones(); // Recargar la tabla
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error al eliminar: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -233,8 +235,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProgramarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProgramarActionPerformed
-        control.mostrarProgramarFuncion();
-        this.dispose();
+        control.mostrarProgramarFuncion(this);
     }//GEN-LAST:event_btnProgramarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed

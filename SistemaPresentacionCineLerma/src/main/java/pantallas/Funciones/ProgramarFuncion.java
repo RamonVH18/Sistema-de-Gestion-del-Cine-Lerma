@@ -5,6 +5,7 @@
 package pantallas.Funciones;
 
 import DTOs.FuncionDTO;
+import DTOs.SalaViejaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,46 +25,11 @@ import javax.swing.JOptionPane;
 public class ProgramarFuncion extends javax.swing.JFrame {
 
     IControl control = ControlDeNavegacion.getInstancia();
-    
-    public ProgramarFuncion() {
+    private JFrame frameAnterior;
+
+    public ProgramarFuncion(JFrame Anterior) {
+        this.frameAnterior = frameAnterior;
         initComponents();
-    }
-
-    private void confirmarFuncion() {
-        try {
-            if (salaFuncion.getText().isEmpty()
-                    || fechaFuncion.getDate() == null
-                    || fechaInicio.getText().isEmpty()
-                    || precioBoleto.getText().isEmpty()) {
-
-                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Convertir fecha y hora
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            String fechaStr = sdf.format(fechaFuncion.getDate());
-            LocalDate fecha = LocalDate.parse(fechaStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            LocalTime hora = LocalTime.parse(fechaInicio.getText(), DateTimeFormatter.ofPattern("HH:mm"));
-            LocalDateTime fechaHoraFuncion = LocalDateTime.of(fecha, hora);
-
-            FuncionDTO funcionDTO = new FuncionDTO();
-            funcionDTO.setSala(salaFuncion.getText());
-            funcionDTO.setFechaHora(fechaHoraFuncion);
-            funcionDTO.setPrecio(Double.parseDouble(precioBoleto.getText()));
-
-            FuncionDTO funcionRegistrada = control.registrarFuncion(funcionDTO);
-
-            if (funcionRegistrada != null) {
-                JOptionPane.showMessageDialog(this, "¡Funcion programada", "Exito", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose(); 
-            }
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Precio invalido", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     /**
@@ -72,18 +41,20 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dateTimePicker1 = new com.github.lgooddatepicker.components.DateTimePicker();
         labelTitulo = new javax.swing.JLabel();
         btnConfirmar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        btnBuscadorSala = new javax.swing.JButton();
-        fechaFuncion = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        fechaInicio = new javax.swing.JTextField();
         precioBoleto = new javax.swing.JTextField();
-        salaFuncion = new javax.swing.JTextField();
+        salaSeleccionada = new javax.swing.JTextField();
+        btnBuscarSalas = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        FechaHoraFuncion = new com.github.lgooddatepicker.components.DateTimePicker();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        btnBuscarEmpleados = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(640, 830));
@@ -114,33 +85,8 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jLabel1.setText("Seleccione una sala disponible");
 
-        btnBuscadorSala.setBackground(new java.awt.Color(162, 132, 94));
-        btnBuscadorSala.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
-        btnBuscadorSala.setForeground(new java.awt.Color(255, 255, 255));
-        btnBuscadorSala.setText("Buscar de salas");
-        btnBuscadorSala.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscadorSalaActionPerformed(evt);
-            }
-        });
-
-        fechaFuncion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
-
         jLabel2.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
-        jLabel2.setText("Seleccione una fecha para la funcion");
-
-        jLabel3.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
-        jLabel3.setText("Seleccione una hora de inicio para la funcion");
-
-        jLabel4.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
-        jLabel4.setText("Seleccione precio del boleto");
-
-        fechaInicio.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
-        fechaInicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fechaInicioActionPerformed(evt);
-            }
-        });
+        jLabel2.setText("Seleccione una fecha y hora para la funcion");
 
         precioBoleto.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
         precioBoleto.addActionListener(new java.awt.event.ActionListener() {
@@ -149,12 +95,25 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             }
         });
 
-        salaFuncion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
-        salaFuncion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                salaFuncionActionPerformed(evt);
-            }
-        });
+        salaSeleccionada.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
+
+        btnBuscarSalas.setBackground(new java.awt.Color(162, 132, 94));
+        btnBuscarSalas.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
+        btnBuscarSalas.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscarSalas.setText("Buscar salas");
+
+        jLabel5.setText("Seleccione precio del boleto");
+        jLabel5.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
+        jLabel3.setText("Seleccione un empleado asignado a la funcion(Opcional)");
+
+        jTextField1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
+
+        btnBuscarEmpleados.setBackground(new java.awt.Color(162, 132, 94));
+        btnBuscarEmpleados.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
+        btnBuscarEmpleados.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscarEmpleados.setText("Buscar Empleados");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -169,33 +128,36 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(181, 181, 181)
-                        .addComponent(fechaFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(64, 64, 64)
+                        .addComponent(labelTitulo))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(190, 190, 190)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(salaFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscadorSala)))
+                        .addGap(160, 160, 160)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(salaSeleccionada)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(jLabel1))
+                        .addGap(198, 198, 198)
+                        .addComponent(btnBuscarSalas))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(143, 143, 143)
-                        .addComponent(jLabel2))
+                        .addGap(122, 122, 122)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(FechaHoraFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(177, 177, 177)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(precioBoleto, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(165, 165, 165)
+                        .addComponent(jLabel5))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
+                        .addGap(90, 90, 90)
                         .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(jLabel4))
+                        .addGap(174, 174, 174)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(labelTitulo)))
+                        .addGap(189, 189, 189)
+                        .addComponent(btnBuscarEmpleados))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(179, 179, 179)
+                        .addComponent(precioBoleto, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(92, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -203,25 +165,27 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(labelTitulo)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(salaSeleccionada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(salaFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(btnBuscadorSala)
+                .addComponent(btnBuscarSalas)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addGap(26, 26, 26)
-                .addComponent(fechaFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(FechaHoraFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addGap(27, 27, 27)
-                .addComponent(fechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addGap(24, 24, 24)
                 .addComponent(precioBoleto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnBuscarEmpleados)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
                     .addComponent(btnConfirmar))
@@ -232,77 +196,38 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        confirmarFuncion();
+
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        this.dispose();
+        if (frameAnterior != null) {
+            frameAnterior.setVisible(true); 
+        }
+        this.dispose(); 
     }//GEN-LAST:event_btnVolverActionPerformed
-
-    private void salaFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salaFuncionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_salaFuncionActionPerformed
-
-    private void fechaInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechaInicioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fechaInicioActionPerformed
 
     private void precioBoletoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_precioBoletoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_precioBoletoActionPerformed
 
-    private void btnBuscadorSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscadorSalaActionPerformed
-        control.consultarSalas("");
-
-    }//GEN-LAST:event_btnBuscadorSalaActionPerformed
-
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProgramarFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProgramarFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProgramarFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProgramarFuncion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ProgramarFuncion().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscadorSala;
+    private com.github.lgooddatepicker.components.DateTimePicker FechaHoraFuncion;
+    private javax.swing.JButton btnBuscarEmpleados;
+    private javax.swing.JButton btnBuscarSalas;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JButton btnVolver;
-    private com.toedter.calendar.JDateChooser fechaFuncion;
-    private javax.swing.JTextField fechaInicio;
+    private com.github.lgooddatepicker.components.DateTimePicker dateTimePicker1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelTitulo;
     private javax.swing.JTextField precioBoleto;
-    private javax.swing.JTextField salaFuncion;
+    private javax.swing.JTextField salaSeleccionada;
     // End of variables declaration//GEN-END:variables
 }

@@ -91,11 +91,16 @@
             <artifactId>Itext</artifactId>
             <version>1</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.LGoodDatePicker</groupId>
+            <artifactId>LGoodDatePicker</artifactId>
+            <version>11.2.1</version> 
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>23</maven.compiler.source>
+        <maven.compiler.target>23</maven.compiler.target>
         <exec.mainClass>com.mycompany.sistemapresentacioncinelerma.SistemaPresentacionCineLerma</exec.mainClass>
     </properties>
 </project>

@@ -22,6 +22,8 @@ public class FuncionDTO {
 
     private double precio;
 
+    private String empleado;
+
     /**
      * Constructor vacio
      */
@@ -36,13 +38,15 @@ public class FuncionDTO {
      * @param nombre
      * @param fechaHora
      * @param precio
+     * @param empleado
      */
-    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio) {
+    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio, String empleado) {
         this.idFuncion = idFuncion;
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
         this.precio = precio;
+        this.empleado = empleado;
     }
 
     /**
@@ -52,7 +56,24 @@ public class FuncionDTO {
      * @param nombre
      * @param fechaHora
      * @param precio
+     * @param empleado
      */
+    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio, String empleado) {
+        this.sala = sala;
+        this.nombre = nombre;
+        this.fechaHora = fechaHora;
+        this.precio = precio;
+        this.empleado = empleado;
+    }
+
+    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio) {
+        this.idFuncion = idFuncion;
+        this.sala = sala;
+        this.nombre = nombre;
+        this.fechaHora = fechaHora;
+        this.precio = precio;
+    }
+
     public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio) {
         this.sala = sala;
         this.nombre = nombre;
@@ -138,6 +159,22 @@ public class FuncionDTO {
      */
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+
+    public String getIdFuncion() {
+        return idFuncion;
+    }
+
+    public void setIdFuncion(String idFuncion) {
+        this.idFuncion = idFuncion;
+    }
+
+    public String getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(String empleado) {
+        this.empleado = empleado;
     }
 
 }

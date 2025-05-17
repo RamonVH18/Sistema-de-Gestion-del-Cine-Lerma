@@ -170,7 +170,7 @@ public class ControlDeNavegacion implements IControl {
             pantallaMenuAdmin.setVisible(true);
         });
     }
-    
+
     @Override
     public void mostrarAgregarPelicula(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -193,7 +193,6 @@ public class ControlDeNavegacion implements IControl {
             } catch (IOException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         });
     }
 
@@ -737,12 +736,11 @@ public class ControlDeNavegacion implements IControl {
     }
 
     @Override
-    public void mostrarProgramarFuncion() {
+    public void mostrarProgramarFuncion(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
-            ProgramarFuncion pantalla = new ProgramarFuncion();
+            ProgramarFuncion pantalla = new ProgramarFuncion(frameAnterior);
             pantalla.setLocationRelativeTo(null);
             pantalla.setVisible(true);
-
         });
     }
 
@@ -794,7 +792,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarMenuReportes(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -804,7 +802,6 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
 
     @Override
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena) {
@@ -846,8 +843,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
-    
+
     @Override
     public List<ReporteUsuarioDTO> obtenerReporteUsuarios() {
         try {
@@ -994,11 +990,12 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
+
     /*
     --------------FIN DE METODOS DE FUNCION--------------
      */
 
-    /*
+ /*
     --------------METODOS DE ADMINISTRAR PELICULAS--------------
      */
     @Override

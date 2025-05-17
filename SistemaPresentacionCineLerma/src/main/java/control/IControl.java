@@ -128,7 +128,7 @@ public interface IControl {
     //Metodos de navegacion de Funciones
     public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula);
 
-    public void mostrarProgramarFuncion();
+    public void mostrarProgramarFuncion(JFrame frameAnterior);
     
     // -------------------------------METODOS DE NAVEGACION DE PELICULAS--------------------------------
     public void mostrarMenuAdministrarPeliculas(JFrame frameAnterior);

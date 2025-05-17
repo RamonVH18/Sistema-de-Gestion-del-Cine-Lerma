@@ -5,6 +5,7 @@
 package DAOs;
 
 import Interfaces.IPagoDAO;
+import entidades.Empleado;
 import entidades.Funcion;
 import entidades.Pago;
 import entidades.Pelicula;
@@ -40,7 +41,7 @@ public class PagoDAO implements IPagoDAO {
         pelicula.setDuracion(120);
 
         LocalDateTime fechaHoraInicio = LocalDateTime.now();
-        Funcion funcion = new Funcion(new Sala(), pelicula, fechaHoraInicio, 10.0);
+        Funcion funcion = new Funcion(new Sala(), pelicula, fechaHoraInicio, 10.0, new Empleado());
 
         // Calcular monto para 3 boletos
         Double montoTotal = calcularMontoTotal(3, funcion);
