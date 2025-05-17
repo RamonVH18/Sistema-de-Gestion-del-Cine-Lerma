@@ -67,12 +67,12 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaGestionEmpleados</artifactId>
+            <artifactId>SistemaNegocioCineLerma</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaNegocioCineLerma</artifactId>
+            <artifactId>SistemaGestionEmpleados</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
