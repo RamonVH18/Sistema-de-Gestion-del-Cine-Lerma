@@ -41,7 +41,6 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dateTimePicker1 = new com.github.lgooddatepicker.components.DateTimePicker();
         labelTitulo = new javax.swing.JLabel();
         btnConfirmar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
@@ -51,7 +50,6 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         salaSeleccionada = new javax.swing.JTextField();
         btnBuscarSalas = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        FechaHoraFuncion = new com.github.lgooddatepicker.components.DateTimePicker();
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         btnBuscarEmpleados = new javax.swing.JButton();
@@ -140,9 +138,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                         .addComponent(btnBuscarSalas))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(122, 122, 122)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(FechaHoraFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)))
+                        .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(165, 165, 165)
                         .addComponent(jLabel5))
@@ -173,9 +169,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                 .addComponent(btnBuscarSalas)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addGap(28, 28, 28)
-                .addComponent(FechaHoraFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addGap(77, 77, 77)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(precioBoleto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -215,12 +209,10 @@ public class ProgramarFuncion extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.github.lgooddatepicker.components.DateTimePicker FechaHoraFuncion;
     private javax.swing.JButton btnBuscarEmpleados;
     private javax.swing.JButton btnBuscarSalas;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JButton btnVolver;
-    private com.github.lgooddatepicker.components.DateTimePicker dateTimePicker1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import utilitades.CreacionReportes;
+//import utilitades.CreacionReportes;
 
 /**
  *
@@ -185,7 +185,7 @@ public class Reportes extends javax.swing.JFrame {
                     filePath += ".pdf";
                 }
 
-                CreacionReportes.generarReporteUsuariosPDF(usuarios, filePath);
+//                CreacionReportes.generarReporteUsuariosPDF(usuarios, filePath);
                 JOptionPane.showMessageDialog(this, "Reporte generado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex) {
