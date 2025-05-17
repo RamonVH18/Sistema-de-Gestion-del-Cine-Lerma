@@ -8,13 +8,16 @@ import DTOs.FuncionDTO;
 import GestionFunciones.IManejoFunciones;
 import control.ControlDeNavegacion;
 import control.IControl;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import utilitades.ModeladoTablas;
 
 /**
@@ -41,33 +44,53 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         try {
             List<FuncionDTO> funciones = manejoFunciones.buscarFunciones(nombrePelicula, null);
 
-            String[] columnas = {"Sala", "Fecha y Hora", "Hora Termino", "Precio", "Empleado"};
-            Object[][] datos = new Object[funciones.size()][5];
+            String[] columnas = {"ID", "Sala", "Fecha y Hora", "Hora Termino", "Precio", "Empleado"};
+            Object[][] datos = new Object[funciones.size()][6];
 
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
-                LocalDateTime horaTermino = manejoFunciones.calcularHoraTerminoFuncion(funcion.getId());
+                LocalDateTime horaTermino = control.calcularHoraTerminoFuncion(funcion.getIdFuncion());
 
-                datos[i][0] = funcion.getSala();
-                datos[i][1] = funcion.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-                datos[i][2] = horaTermino.format(DateTimeFormatter.ofPattern("HH:mm"));
-                datos[i][3] = String.format("$%.2f", funcion.getPrecio());
-                datos[i][4] = funcion.getIdEmpleado();
+                datos[i][0] = funcion.getIdFuncion();
+                datos[i][1] = funcion.getNumSala();
+                datos[i][2] = funcion.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+                datos[i][3] = horaTermino.format(DateTimeFormatter.ofPattern("HH:mm"));
+                datos[i][4] = String.format("$%.2f", funcion.getPrecio());
+
+                String idEmpleado = funcion.getIdEmpleado();
+                datos[i][5] = (idEmpleado == null || idEmpleado.isEmpty()) ? "No asignado" : idEmpleado;
             }
 
+            tabla = ModeladoTablas.creacionTablaSencilla(columnas, datos, 14, 30);
+
+            tabla.setShowGrid(true);
+            tabla.setGridColor(new java.awt.Color(200, 200, 200)); 
+            tabla.setRowHeight(25); 
+
+            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+            centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+            for (int i = 0; i < tabla.getColumnCount(); i++) {
+                tabla.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
+
+            JTableHeader header = tabla.getTableHeader();
+            header.setDefaultRenderer(centerRenderer);
+            header.setBackground(new java.awt.Color(162, 132, 94)); // Color del encabezado
+            header.setForeground(Color.WHITE);
+            header.setFont(new java.awt.Font("Tw Cen MT", 1, 14)); // Fuente del encabezado
+
+            tabla.getColumnModel().getColumn(0).setMinWidth(0);
+            tabla.getColumnModel().getColumn(0).setMaxWidth(0);
+            tabla.getColumnModel().getColumn(1).setPreferredWidth(80);
+            tabla.getColumnModel().getColumn(2).setPreferredWidth(200);
+            tabla.getColumnModel().getColumn(3).setPreferredWidth(100);
+            tabla.getColumnModel().getColumn(4).setPreferredWidth(100);
+            tabla.getColumnModel().getColumn(5).setPreferredWidth(120);
+
             panelTablaFunciones.removeAll();
-            panelTablaFunciones.setLayout(new java.awt.BorderLayout());
-
-            JTable tabla = ModeladoTablas.creacionTablaSencilla(columnas, datos, 14, 30);
-
-            // Ajustar anchos de columnas actualizado
-            Map<Integer, Integer> tamanioColumnas = new HashMap<>();
-            tamanioColumnas.put(0, 100);  // Sala
-            tamanioColumnas.put(1, 200);  // Fecha y Hora
-            tamanioColumnas.put(2, 100);  // Hora Término
-            tamanioColumnas.put(3, 100);  // Precio
-            tamanioColumnas.put(4, 100); // Empleado
-            ModeladoTablas.ajusteTamañoColumnas(tabla, tamanioColumnas);
+            panelTablaFunciones.setLayout(new BorderLayout());
+            panelTablaFunciones.add(new JScrollPane(tabla), BorderLayout.CENTER);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -85,7 +108,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(
                     this,
-                    "Seleccione una función de la tabla",
+                    "Seleccione una funcion de la tabla",
                     "Advertencia",
                     JOptionPane.WARNING_MESSAGE
             );
@@ -93,19 +116,17 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         }
 
         try {
-            // Obtener el ID de la función seleccionada (asumiendo que la columna 0 es el ID)
             String idFuncion = (String) tabla.getValueAt(filaSeleccionada, 0);
 
-            // Crear DTO y eliminar
             FuncionDTO funcionDTO = new FuncionDTO();
-            funcionDTO.setId(idFuncion);
+            funcionDTO.setIdFuncion(idFuncion);
 
             boolean eliminada = control.eliminarFuncion(funcionDTO);
 
             if (eliminada) {
                 JOptionPane.showMessageDialog(
                         this,
-                        "Función eliminada correctamente",
+                        "Funcion eliminada correctamente",
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
                 );

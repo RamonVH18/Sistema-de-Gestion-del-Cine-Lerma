@@ -57,31 +57,28 @@ public class FuncionBO implements IFuncionBO {
 
     @Override
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistrarException {
-
         if (funcionDTO == null) {
-            throw new FuncionRegistrarException("La funcion no puede ser nulo");
+            throw new FuncionRegistrarException("La función no puede ser nula");
         }
 
         try {
             Funcion funcionRegistrar = funcionMapper.toFuncionEntidad(funcionDTO);
-            Pelicula pelicula = peliculaDAO.buscarPelicula(funcionDTO.getNombre());
-            funcionRegistrar.setPelicula(pelicula);
-            Sala sala = salaDAO.buscarSala(funcionDTO.getSala());
-            funcionRegistrar.setSala(sala);
-            Funcion funcionRegistrado = funcionDAO.registrarFuncion(funcionRegistrar);
-            return funcionMapper.toFuncionDTO(funcionRegistrado);
-        } catch (FuncionSalaOcupadaException e) {
-            throw new FuncionRegistrarException("Error al registrar la funcion" + e.getMessage(), e);
-        } catch (FuncionSalaVaciaException e) {
-            throw new FuncionRegistrarException("Error la sala es nula o no existe" + e.getMessage(), e);
-        } catch (FuncionDuracionIncorrectaException ex) {
-            throw new FuncionRegistrarException("Error la duracion es de la pelicula es incorrecta" + ex.getMessage(), ex);
-        } catch (BuscarPeliculaException e) {
-            throw new FuncionRegistrarException("");
-        } catch (BuscarSalaException e) {
-            throw new FuncionRegistrarException("Error al registrar funcion en la sala: " + e.getMessage());
-        }
 
+            Pelicula pelicula = peliculaDAO.buscarPelicula(funcionDTO.getNombrePelicula());
+            Sala sala = salaDAO.buscarSala(funcionDTO.getNumSala());
+
+            funcionRegistrar.setPelicula(pelicula);
+            funcionRegistrar.setSala(sala);
+
+            Funcion funcionRegistrada = funcionDAO.registrarFuncion(funcionRegistrar);
+
+            return funcionMapper.toFuncionDTO(funcionRegistrada);
+
+        } catch (FuncionSalaOcupadaException | FuncionSalaVaciaException | FuncionDuracionIncorrectaException e) {
+            throw new FuncionRegistrarException("Error al registrar: " + e.getMessage(), e);
+        } catch (BuscarPeliculaException | BuscarSalaException e) {
+            throw new FuncionRegistrarException("Error en datos: " + e.getMessage(), e);
+        }
     }
 
     @Override

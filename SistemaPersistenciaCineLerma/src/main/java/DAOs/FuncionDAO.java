@@ -131,34 +131,9 @@ public class FuncionDAO implements IFuncionDAO {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
-            // Cadena de agregación
-            List<Bson> cadena = new ArrayList<>();
+            Bson filtro = Filters.regex("pelicula.titulo", Pattern.compile(nombrePelicula, Pattern.CASE_INSENSITIVE));
 
-            // lookup para unir Funciones con Peliculas
-            cadena.add(Aggregates.lookup(
-                    "Peliculas",
-                    "pelicula.idPelicula",
-                    "_id",
-                    "peliculaInfo"
-            ));
-
-            // unwind para descomponer el arreglo
-            cadena.add(Aggregates.unwind("$peliculaInfo"));
-
-            // filtrar por titulo
-            Bson filtroTitulo = Aggregates.match(
-                    Filters.regex("peliculaInfo.titulo", Pattern.compile(nombrePelicula, Pattern.CASE_INSENSITIVE))
-            );
-            cadena.add(filtroTitulo);
-
-            // proyector para que se vea la funcion bien
-            cadena.add(Aggregates.project(Projections.fields(
-                    Projections.include("idFuncion", "sala", "fechaHora", "precio"),
-                    Projections.computed("pelicula", "$peliculaInfo")
-            )));
-
-            return coleccionFunciones.aggregate(cadena).into(new ArrayList<>());
-
+            return coleccionFunciones.find(filtro).into(new ArrayList<>());
         } finally {
             conexion.cerrarConexion(clienteMongo);
         }

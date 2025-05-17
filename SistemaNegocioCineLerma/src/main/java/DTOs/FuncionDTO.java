@@ -14,9 +14,9 @@ public class FuncionDTO {
 
     private String idFuncion;
 
-    private String sala;
+    private String numSala;
 
-    private String nombre;
+    private String nombrePelicula;
 
     private LocalDateTime fechaHora;
 
@@ -30,134 +30,35 @@ public class FuncionDTO {
     public FuncionDTO() {
     }
 
-    /**
-     * Constructor con todos los atributos y con id
-     *
-     * @param idFuncion
-     * @param sala
-     * @param nombre
-     * @param fechaHora
-     * @param precio
-     * @param empleado
-     */
-    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio, String idEmpleado) {
+    public FuncionDTO(String idFuncion, String numSala, String nombrePelicula, LocalDateTime fechaHora, double precio, String idEmpleado) {
         this.idFuncion = idFuncion;
-        this.sala = sala;
-        this.nombre = nombre;
+        this.numSala = numSala;
+        this.nombrePelicula = nombrePelicula;
         this.fechaHora = fechaHora;
         this.precio = precio;
         this.idEmpleado = idEmpleado;
     }
 
-    /**
-     * Constructor con todos los atributos sin el id
-     *
-     * @param sala
-     * @param nombre
-     * @param fechaHora
-     * @param precio
-     * @param idEmpleado
-     */
-    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio, String idEmpleado) {
-        this.sala = sala;
-        this.nombre = nombre;
+    public FuncionDTO(String numSala, String nombrePelicula, LocalDateTime fechaHora, double precio, String idEmpleado) {
+        this.numSala = numSala;
+        this.nombrePelicula = nombrePelicula;
         this.fechaHora = fechaHora;
         this.precio = precio;
         this.idEmpleado = idEmpleado;
     }
 
-    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio) {
+    public FuncionDTO(String idFuncion, String numSala, String nombrePelicula, LocalDateTime fechaHora, double precio) {
         this.idFuncion = idFuncion;
-        this.sala = sala;
-        this.nombre = nombre;
+        this.numSala = numSala;
+        this.nombrePelicula = nombrePelicula;
         this.fechaHora = fechaHora;
         this.precio = precio;
     }
 
-    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio) {
-        this.sala = sala;
-        this.nombre = nombre;
+    public FuncionDTO(String numSala, String nombrePelicula, LocalDateTime fechaHora, double precio) {
+        this.numSala = numSala;
+        this.nombrePelicula = nombrePelicula;
         this.fechaHora = fechaHora;
-        this.precio = precio;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getId() {
-        return idFuncion;
-    }
-
-    /**
-     *
-     * @param id
-     */
-    public void setId(String idFuncion) {
-        this.idFuncion = idFuncion;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getSala() {
-        return sala;
-    }
-
-    /**
-     *
-     * @param sala
-     */
-    public void setSala(String sala) {
-        this.sala = sala;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getNombre() {
-        return nombre;
-    }
-
-    /**
-     *
-     * @param nombre
-     */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public LocalDateTime getFechaHora() {
-        return fechaHora;
-    }
-
-    /**
-     *
-     * @param fechaHora
-     */
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public double getPrecio() {
-        return precio;
-    }
-
-    /**
-     *
-     * @param precio
-     */
-    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
@@ -167,6 +68,38 @@ public class FuncionDTO {
 
     public void setIdFuncion(String idFuncion) {
         this.idFuncion = idFuncion;
+    }
+
+    public String getNumSala() {
+        return numSala;
+    }
+
+    public void setNumSala(String numSala) {
+        this.numSala = numSala;
+    }
+
+    public String getNombrePelicula() {
+        return nombrePelicula;
+    }
+
+    public void setNombrePelicula(String nombrePelicula) {
+        this.nombrePelicula = nombrePelicula;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
     public String getIdEmpleado() {

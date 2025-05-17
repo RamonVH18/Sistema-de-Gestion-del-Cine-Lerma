@@ -16,33 +16,28 @@ public class FuncionMapper implements IFuncionMapper {
 
     @Override
     public FuncionDTO toFuncionDTO(Funcion funcion) {
-        //Primero se valida si la funcion recibida es null, entonces se retornara un null
-        if (funcion == null) {
-            return null;
+        if (funcion == null || funcion.getSala() == null || funcion.getPelicula() == null) {
+            return null; // o lanzar una excepción controlada
         }
 
-        FuncionDTO funcionDTO = new FuncionDTO();
-
-        funcionDTO.setId(funcion.getIdString());
-        funcionDTO.setFechaHora(funcion.getFechaHora());
-        funcionDTO.setNombre(funcion.getPelicula().getTitulo());
-        funcionDTO.setPrecio(funcion.getPrecio());
-        funcionDTO.setSala("SALA: " + funcion.getSala().getNumSala().toString());
-        funcionDTO.setIdEmpleado(funcion.getIdEmpleado());
-
-        return funcionDTO;
-
+        FuncionDTO dto = new FuncionDTO();
+        dto.setIdFuncion(funcion.getIdString());
+        dto.setFechaHora(funcion.getFechaHora());
+        dto.setNombrePelicula(funcion.getPelicula().getTitulo());
+        dto.setPrecio(funcion.getPrecio());
+        dto.setNumSala(funcion.getSala().getNumSala()); // Asignar solo el número
+        dto.setIdEmpleado(funcion.getIdEmpleado());
+        return dto;
     }
 
     @Override
-    public Funcion toFuncionEntidad(FuncionDTO funciondto) {
+    public Funcion toFuncionEntidad(FuncionDTO dto) {
         Funcion funcion = new Funcion();
-        
-        funcion.setIdString(funciondto.getId());
-        funcion.setFechaHora(funciondto.getFechaHora());
-        
-        funcion.setPrecio(funciondto.getPrecio());
-        funcion.setIdEmpleado(funciondto.getIdEmpleado());
+        funcion.setIdString(dto.getIdFuncion());
+        funcion.setFechaHora(dto.getFechaHora());
+        funcion.setPrecio(dto.getPrecio());
+        funcion.setIdEmpleado(dto.getIdEmpleado());
+
         return funcion;
     }
 

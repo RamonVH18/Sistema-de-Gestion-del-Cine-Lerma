@@ -66,7 +66,7 @@ public class ManejoFunciones implements IManejoFunciones {
         }
 
         // Validar que sala exista y no sea nula
-        if (funcionDTO.getSala() == null || funcionDTO.getSala().trim().isEmpty()) {
+        if (funcionDTO.getNumSala() == null || funcionDTO.getNumSala().trim().isEmpty()) {
             throw new FuncionDatosIncorrectosException("Error: La sala debe ser obligatoria, no puede haber una funcion sin sala asignada.");
         }
 
@@ -85,7 +85,7 @@ public class ManejoFunciones implements IManejoFunciones {
 
     @Override
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionBoletosVendidosException {
-        if (funcionDTO == null || funcionDTO.getId() == null) {
+        if (funcionDTO == null || funcionDTO.getIdFuncion() == null) {
             throw new FuncionDatosIncorrectosException("La funcion no existe o los datos no son validos");
         }
 
