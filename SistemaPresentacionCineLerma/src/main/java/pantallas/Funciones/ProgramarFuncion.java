@@ -45,14 +45,11 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             LocalTime hora = LocalTime.parse(fechaInicio.getText(), DateTimeFormatter.ofPattern("HH:mm"));
             LocalDateTime fechaHoraFuncion = LocalDateTime.of(fecha, hora);
 
-            // Crear DTO
             FuncionDTO funcionDTO = new FuncionDTO();
             funcionDTO.setSala(salaFuncion.getText());
             funcionDTO.setFechaHora(fechaHoraFuncion);
             funcionDTO.setPrecio(Double.parseDouble(precioBoleto.getText()));
 
-            // Registrar usando el control
-            ControlDeNavegacion control = ControlDeNavegacion.getInstancia();
             FuncionDTO funcionRegistrada = control.registrarFuncion(funcionDTO);
 
             if (funcionRegistrada != null) {

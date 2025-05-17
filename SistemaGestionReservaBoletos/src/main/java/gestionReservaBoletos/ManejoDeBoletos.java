@@ -21,6 +21,7 @@ import Excepciones.GenerarBoletoException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
+import Excepciones.peliculas.PeliculasActivasInactivasException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
@@ -29,6 +30,8 @@ import Mappers.ClienteMapper;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,39 +42,39 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     private final IFuncionBO funcionBO = FuncionBO.getInstanceDAO();
     private final IPeliculaBO peliculaBO = PeliculaBO.getInstanceBO();
     private final IAsientoFuncionBO asientoBO = AsientoFuncionBO.getInstance();
-    
+
     List<AsientoFuncionDTO> asientos = new ArrayList<>();
     List<MetodoPagoDTO> metodosPago = new ArrayList<>();
-    
+
     private final IClienteMapper mapeadorSupremo = new ClienteMapper();
-    
+
     private static ManejoDeBoletos instancia;
-    
+
     // Constructor privado para evitar múltiples instancias 
-    private ManejoDeBoletos() { 
-        
+    private ManejoDeBoletos() {
+
     }
-    
+
     public static ManejoDeBoletos getInstancia() {
         if (instancia == null) {
             instancia = new ManejoDeBoletos();
-        } 
+        }
         return instancia;
     }
+
     //METODOS DE PAGO HARDCODEADOS
     public List<MetodoPagoDTO> metodosPagoHarcodeados() {
         if (metodosPago.isEmpty()) {
             MetodoPagoDTO mercadoPago = new MetodoPagoDTO("Mercado Pago", "img/mercadoPago.jpg");
             MetodoPagoDTO paypal = new MetodoPagoDTO("Paypal", "img/paypal.png");
             MetodoPagoDTO tarjeta = new MetodoPagoDTO("Tarjeta", "img/visamaster.png");
-            
+
             metodosPago.add(tarjeta);
             metodosPago.add(mercadoPago);
             metodosPago.add(paypal);
         }
         return metodosPago;
     }
-    
 
     /**
      * Metodo que sirve para crear una lista de las peliculas que se van a
@@ -82,18 +85,17 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
      */
     @Override
     public List<PeliculaDTO> cargarPeliculasActivas() throws PeliculasCargaException {
-//        try {
-//            // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
-//            List<PeliculaDTO> peliculas = peliculaBO.buscarTodasPeliculasActivas();
-//            if (peliculas == null || peliculas.isEmpty()) {
-//                throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
-//            }
-//            return peliculas;
-//
-//        } catch (PeliculaBusquedaException e) {
-//            throw new PeliculasCargaException("ERROR: " + e.getMessage());
-//        }
-        throw new UnsupportedOperationException("");
+        try {
+            // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
+            List<PeliculaDTO> peliculas = peliculaBO.mostrarPeliculasActivasOInactivas(true);
+            if (peliculas == null || peliculas.isEmpty()) {
+                throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
+            }
+            return peliculas;
+
+        } catch (PeliculasActivasInactivasException e) {
+            throw new PeliculasCargaException("ERROR: " + e.getMessage());
+        }
     }
 
     @Override
@@ -103,28 +105,27 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                 throw new FuncionCargaException("El nombre de la pelicula esta vacio o es nulo");
             }
             // aqui se llamaria a un metodo que de una listaFunciones, sin embargo como aun no tenemos la BO, voy hardcodearlas
-            List<FuncionDTO> funciones  = funcionBO.buscarFuncionesPelicula(nombrePelicula);
+            List<FuncionDTO> funciones = funcionBO.buscarFuncionesPelicula(nombrePelicula);
             if (funciones == null || funciones.isEmpty()) {
                 throw new FuncionCargaException("Hubo un error al cargar las funciones, favor de ingresar mas al rato.");
             }
             //Lista donde se guardada las funciones del dia
             List<FuncionDTO> funcionesPelicula = new ArrayList<>();
-            
+
             //En este for se van a filtrar las funciones y se guardaran solo las funciones que sean del dia correspondiente
-            
             for (int i = 0; i < funciones.size(); i++) {
                 FuncionDTO funcion = funciones.get(i);
 //                if (funcion.getNombre().equals(nombrePelicula) && funcion.getEstado()) {
 //                    funcionesPelicula.add(funcion);
 //                }
             }
-            
+
             if (funcionesPelicula.isEmpty()) {
                 throw new FuncionCargaException("Hubo un error al cargar las funciones de esta pelicula, seleccione otra pelicula o ingrese mas al rato.");
             }
             //Funcion usada para poder ordernar la lista de funciones, para de esa manera mostrar las que van primero en fecha hora
             funcionesPelicula.sort(Comparator.comparing(e -> e.getFechaHora()));
-            
+
             return funcionesPelicula;
         } catch (FuncionCargaException e) {
             throw new FuncionCargaException("ERROR: " + e.getMessage());
@@ -155,7 +156,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public List<AsientoFuncionDTO> listaAsientosDisponibles(FuncionDTO funcion) throws DisponibilidadAsientosException {
         try {
             // Aqui se llamaria un metodo para consultar a los asientos de la respectiva funcion, pero eso sera hasta que agreguemos los BOs
-            
+
             //Lista que servira para guardar aquellos asientos vacios
             asientos = asientoBO.obtenerAsientosDisponibles(funcion);
             List<AsientoFuncionDTO> asientosDisponibles = new ArrayList<>();
@@ -193,7 +194,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     @Override //Metodo para validar que el numero de asientos selecionados este disponible
     public boolean validarDisponibilidaDeAsientos(int numAsientos, FuncionDTO funcion) throws DisponibilidadAsientosException {
         try {
-            
+
             if (numAsientos <= 0) {
                 throw new DisponibilidadAsientosException("Tiene que ingresar minimo 1 asiento.");
             }
@@ -224,12 +225,12 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
         }
     }
 
-    @Override 
+    @Override
     public List<MetodoPagoDTO> cargarMetodosPago() {
-            metodosPago = metodosPagoHarcodeados();
-            return metodosPago;
+        metodosPago = metodosPagoHarcodeados();
+        return metodosPago;
     }
-    
+
     @Override
     public BoletoDTO generarBoleto(PeliculaDTO pelicula, FuncionDTO funcion, List<String> asientos, ClienteDTO cliente) throws GenerarBoletoException {
 //        try {
@@ -254,7 +255,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     //ESTE METODO CAMBIARA CASI POR COMPLETO
     @Override
     public List<String> reservarAsientoFuncion(FuncionDTO funcion, int numAsiento, ClienteDTO cliente) throws ReservarAsientoFuncionException {
-        
+
         try {
             if (funcion == null) {
                 throw new ReservarAsientoFuncionException("La funcion no puede ser nula.");
@@ -267,7 +268,7 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
             }
 
             List<String> numAsientos = new ArrayList<>();
-            
+
             int conta = 0;
             asientos = asientoBO.obtenerAsientosFuncion(funcion);
 
@@ -276,15 +277,14 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
                     break;
                 }
                 AsientoFuncionDTO asiento = asientos.get(i);
-                
-                
-                
+
                 // Validar que la función y sala coincidan
 //                if (asiento.getFuncion().getSala().equals(funcion.getSala()) && asiento.isDisponibilidad()
 //                        && asiento.getFuncion().getFechaHora().equals(funcion.getFechaHora())) {
 //
 //                    // Reservar el asiento
-////                    ClienteDTO clienteNormal = mapeadorSupremo.toClienteEntidad(cliente);
+            
+            ////                    ClienteDTO clienteNormal = mapeadorSupremo.toClienteEntidad(cliente);
 ////                    asiento.setCliente(clienteNormal);
 ////                    asiento.setDisponibilidad(false);
 ////                    asientos.set(i, asiento);
