@@ -5,7 +5,7 @@
 package gestionSalasAsientos;
 
 import BOs.SalaBO;
-import DTOs.GananciaSalaDTO;
+import DTOs.EstadisticaSalaDTO;
 import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import Excepciones.AgregarSalaException;
@@ -152,12 +152,12 @@ public class ManejoDeSalas implements IManejoDeSalas {
     }
 
     @Override
-    public List<GananciaSalaDTO> obtenerGananciaSala(List<SalaViejaDTO> listaSalas) throws EstadisticasSalaException {
+    public List<EstadisticaSalaDTO> obtenerGananciaSala(List<SalaViejaDTO> listaSalas) throws EstadisticasSalaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Boolean imprimirEstadisticasSala(GananciaSalaDTO gananciaSala) throws EstadisticasSalaException {
+    public Boolean imprimirEstadisticasSala(EstadisticaSalaDTO gananciaSala) throws EstadisticasSalaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

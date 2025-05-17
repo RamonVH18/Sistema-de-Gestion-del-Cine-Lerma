@@ -28,7 +28,7 @@ public class FuncionMapper implements IFuncionMapper {
         funcionDTO.setNombre(funcion.getPelicula().getTitulo());
         funcionDTO.setPrecio(funcion.getPrecio());
         funcionDTO.setSala("SALA: " + funcion.getSala().getNumSala().toString());
-        funcionDTO.setIdEmpleado(funcion.getIdEmpleadoString());
+        funcionDTO.setIdEmpleado(funcion.getIdEmpleado());
 
         return funcionDTO;
 
@@ -36,22 +36,13 @@ public class FuncionMapper implements IFuncionMapper {
 
     @Override
     public Funcion toFuncionEntidad(FuncionDTO funciondto) {
-        if (funciondto == null) {
-            return null;
-        }
         Funcion funcion = new Funcion();
-        if (funciondto.getId() != null && !funciondto.getId().isEmpty()) {
-            funcion.setIdString(funciondto.getId());
-        } else {
-            funcion.setIdFuncion(null);
-        }
+        
+        funcion.setIdString(funciondto.getId());
         funcion.setFechaHora(funciondto.getFechaHora());
+        
         funcion.setPrecio(funciondto.getPrecio());
-        if (funciondto.getIdEmpleado() != null && !funciondto.getIdEmpleado().isEmpty()) {
-            funcion.setIdEmpleadoString(funciondto.getIdEmpleado());
-        } else {
-            funcion.setIdEmpleado(null);
-        }
+        funcion.setIdEmpleado(funciondto.getIdEmpleado());
         return funcion;
     }
 

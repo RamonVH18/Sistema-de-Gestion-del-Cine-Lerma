@@ -4,7 +4,7 @@
  */
 package gestionSalasAsientos;
 
-import DTOs.GananciaSalaDTO;
+import DTOs.EstadisticaSalaDTO;
 import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import Excepciones.AgregarSalaException;
@@ -33,9 +33,9 @@ public interface IManejoDeSalas {
     
     public List<SalaViejaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException;
     
-    public List<GananciaSalaDTO> obtenerGananciaSala(List<SalaViejaDTO> listaSalas) throws EstadisticasSalaException;
+    public List<EstadisticaSalaDTO> obtenerGananciaSala(List<SalaViejaDTO> listaSalas) throws EstadisticasSalaException;
     
-    public Boolean imprimirEstadisticasSala(GananciaSalaDTO gananciaSala) throws EstadisticasSalaException;
+    public Boolean imprimirEstadisticasSala(EstadisticaSalaDTO gananciaSala) throws EstadisticasSalaException;
     
     public Boolean modificarEstadoSala (String numeroSala, EstadoSala estado) throws ModificarSalaException;
 }

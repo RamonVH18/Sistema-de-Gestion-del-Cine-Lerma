@@ -42,7 +42,7 @@ public class PagoDAO implements IPagoDAO {
         pelicula.setDuracion(120);
 
         LocalDateTime fechaHoraInicio = LocalDateTime.now();
-        Funcion funcion = new Funcion(new Sala(), pelicula, fechaHoraInicio, 10.0, new ObjectId());
+        Funcion funcion = new Funcion(new Sala(), pelicula, fechaHoraInicio, 10.0, "");
 
         // Calcular monto para 3 boletos
         Double montoTotal = calcularMontoTotal(3, funcion);

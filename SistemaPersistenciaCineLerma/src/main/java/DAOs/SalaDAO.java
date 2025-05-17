@@ -5,8 +5,10 @@
 package DAOs;
 
 import Conexion.MongoConexion;
+import DTOs.GananciaSalaDTO;
 import Excepciones.salas.BuscarSalaException;
 import Excepciones.salas.CreacionSalaException;
+import Excepciones.salas.ErrorCalculoEstadisticasSalaException;
 import Excepciones.salas.ModificarSalaException;
 import Interfaces.ISalaDAO;
 import com.mongodb.client.MongoClient;
@@ -166,6 +168,17 @@ public class SalaDAO implements ISalaDAO {
         } finally {
             conexion.cerrarConexion(clienteMongo);
         }
+    }
+    
+    @Override
+     public List<GananciaSalaDTO> obtenerEstadisticasDeSalas() throws ErrorCalculoEstadisticasSalaException {
+        MongoClient clienteMongo = null;
+        try {
+            MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo);
+        } catch (BuscarSalaException ex) {
+            
+        }
+        throw new UnsupportedOperationException("jns");
     }
     
     /**

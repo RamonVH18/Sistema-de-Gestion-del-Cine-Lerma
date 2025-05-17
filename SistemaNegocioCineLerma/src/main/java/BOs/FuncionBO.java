@@ -5,6 +5,8 @@
 package BOs;
 
 import DAOs.FuncionDAO;
+import DAOs.PeliculaDAO;
+import DAOs.SalaDAO;
 import DTOs.FuncionDTO;
 import Excepciones.Funciones.FuncionDuracionIncorrectaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
@@ -14,10 +16,17 @@ import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionFechaValidaException;
 import Excepciones.funciones.FuncionRegistrarException;
 import Excepciones.funciones.FuncionValidadaException;
+import Excepciones.peliculas.BuscarPeliculaException;
+import Excepciones.salas.BuscarSalaException;
 import Interfaces.IFuncionBO;
 import Interfaces.IFuncionDAO;
+import Interfaces.IPeliculaBO;
+import Interfaces.IPeliculaDAO;
+import Interfaces.ISalaDAO;
 import Mappers.FuncionMapper;
 import entidades.Funcion;
+import entidades.Pelicula;
+import entidades.Sala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +41,8 @@ public class FuncionBO implements IFuncionBO {
 
     private static FuncionBO instanceFuncionBO;
     private final IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO();
+    private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO();
+    private final ISalaDAO salaDAO = SalaDAO.getInstanceDAO();
     private final FuncionMapper funcionMapper = new FuncionMapper();
 
     private FuncionBO() {
@@ -53,6 +64,10 @@ public class FuncionBO implements IFuncionBO {
 
         try {
             Funcion funcionRegistrar = funcionMapper.toFuncionEntidad(funcionDTO);
+            Pelicula pelicula = peliculaDAO.buscarPelicula(funcionDTO.getNombre());
+            funcionRegistrar.setPelicula(pelicula);
+            Sala sala = salaDAO.buscarSala(funcionDTO.getSala());
+            funcionRegistrar.setSala(sala);
             Funcion funcionRegistrado = funcionDAO.registrarFuncion(funcionRegistrar);
             return funcionMapper.toFuncionDTO(funcionRegistrado);
         } catch (FuncionSalaOcupadaException e) {
@@ -61,6 +76,10 @@ public class FuncionBO implements IFuncionBO {
             throw new FuncionRegistrarException("Error la sala es nula o no existe" + e.getMessage(), e);
         } catch (FuncionDuracionIncorrectaException ex) {
             throw new FuncionRegistrarException("Error la duracion es de la pelicula es incorrecta" + ex.getMessage(), ex);
+        } catch (BuscarPeliculaException e) {
+            throw new FuncionRegistrarException("");
+        } catch (BuscarSalaException e) {
+            throw new FuncionRegistrarException("Error al registrar funcion en la sala: " + e.getMessage());
         }
 
     }

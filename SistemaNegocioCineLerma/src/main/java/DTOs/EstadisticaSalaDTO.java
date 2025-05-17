@@ -8,7 +8,7 @@ package DTOs;
  *
  * @author Ramon Valencia
  */
-public class GananciaSalaDTO {
+public class EstadisticaSalaDTO {
     
     private String numSala;
     private Integer capacidad;
@@ -17,10 +17,10 @@ public class GananciaSalaDTO {
     private Integer funcionesRealizadas;
     private Integer funcionesCanceladas;
 
-    public GananciaSalaDTO() {
+    public EstadisticaSalaDTO() {
     }
 
-    public GananciaSalaDTO(String numSala, Integer capacidad, Double totalGanado, Integer asientosVendidos, Integer funcionesRealizadas, Integer funcionesCanceladas) {
+    public EstadisticaSalaDTO(String numSala, Integer capacidad, Double totalGanado, Integer asientosVendidos, Integer funcionesRealizadas, Integer funcionesCanceladas) {
         this.numSala = numSala;
         this.capacidad = capacidad;
         this.totalGanado = totalGanado;

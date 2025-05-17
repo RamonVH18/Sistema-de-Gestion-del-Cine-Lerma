@@ -25,12 +25,12 @@ public class Funcion {
 
     private Double precio;
 
-    private ObjectId idEmpleado;
+    private String idEmpleado;
 
     public Funcion() {
     }
 
-    public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, ObjectId idEmpleado) {
+    public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, String idEmpleado) {
         this.idFuncion = idFuncion;
         this.sala = sala;
         this.pelicula = pelicula;
@@ -39,7 +39,7 @@ public class Funcion {
         this.idEmpleado = idEmpleado;
     }
 
-    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, ObjectId idEmpleado) {
+    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, String idEmpleado) {
         this.sala = sala;
         this.pelicula = pelicula;
         this.fechaHora = fechaHora;
@@ -115,24 +115,12 @@ public class Funcion {
         this.precio = precio;
     }
 
-    public ObjectId getIdEmpleado() {
+    public String getIdEmpleado() {
         return idEmpleado;
     }
-
-    public String getIdEmpleadoString() {
-        return idEmpleado.toString();
-    }
-
-    public void setIdEmpleado(ObjectId idEmpleado) {
+    
+    public void setIdEmpleado(String idEmpleado) {
         this.idEmpleado = idEmpleado;
-    }
-
-    public void setIdEmpleadoString(String idImportado) {
-        if (idImportado != null && !idImportado.isEmpty()) {
-            this.idFuncion = new ObjectId(idImportado);
-        } else {
-            this.idFuncion = null;
-        }
     }
 
     @Override
