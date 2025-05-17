@@ -13,6 +13,7 @@ import entidades.Sala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -41,7 +42,7 @@ public class PagoDAO implements IPagoDAO {
         pelicula.setDuracion(120);
 
         LocalDateTime fechaHoraInicio = LocalDateTime.now();
-        Funcion funcion = new Funcion(new Sala(), pelicula, fechaHoraInicio, 10.0, new Empleado());
+        Funcion funcion = new Funcion(new Sala(), pelicula, fechaHoraInicio, 10.0, new ObjectId());
 
         // Calcular monto para 3 boletos
         Double montoTotal = calcularMontoTotal(3, funcion);

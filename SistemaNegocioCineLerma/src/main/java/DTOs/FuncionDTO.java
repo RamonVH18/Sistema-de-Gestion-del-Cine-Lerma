@@ -22,7 +22,7 @@ public class FuncionDTO {
 
     private double precio;
 
-    private String empleado;
+    private String idEmpleado;
 
     /**
      * Constructor vacio
@@ -40,13 +40,13 @@ public class FuncionDTO {
      * @param precio
      * @param empleado
      */
-    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio, String empleado) {
+    public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio, String idEmpleado) {
         this.idFuncion = idFuncion;
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
         this.precio = precio;
-        this.empleado = empleado;
+        this.idEmpleado = idEmpleado;
     }
 
     /**
@@ -56,14 +56,14 @@ public class FuncionDTO {
      * @param nombre
      * @param fechaHora
      * @param precio
-     * @param empleado
+     * @param idEmpleado
      */
-    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio, String empleado) {
+    public FuncionDTO(String sala, String nombre, LocalDateTime fechaHora, double precio, String idEmpleado) {
         this.sala = sala;
         this.nombre = nombre;
         this.fechaHora = fechaHora;
         this.precio = precio;
-        this.empleado = empleado;
+        this.idEmpleado = idEmpleado;
     }
 
     public FuncionDTO(String idFuncion, String sala, String nombre, LocalDateTime fechaHora, double precio) {
@@ -169,12 +169,12 @@ public class FuncionDTO {
         this.idFuncion = idFuncion;
     }
 
-    public String getEmpleado() {
-        return empleado;
+    public String getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setEmpleado(String empleado) {
-        this.empleado = empleado;
+    public void setIdEmpleado(String idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 
 }

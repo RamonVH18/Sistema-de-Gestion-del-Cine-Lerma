@@ -51,14 +51,6 @@
                       <Component id="btnBuscarSalas" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="165" max="-2" attributes="0"/>
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -73,6 +65,17 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="179" max="-2" attributes="0"/>
                       <Component id="precioBoleto" min="-2" pref="144" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="165" max="-2" attributes="0"/>
+                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="FechaHoraFuncion" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace pref="92" max="32767" attributes="0"/>
@@ -92,7 +95,9 @@
               <Component id="btnBuscarSalas" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+              <Component id="FechaHoraFuncion" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="precioBoleto" min="-2" max="-2" attributes="0"/>
@@ -115,14 +120,15 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="labelTitulo">
       <Properties>
+        <Property name="text" type="java.lang.String" value="PROGRAMAR FUNCION"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT Condensed" size="48" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="PROGRAMAR FUNCION"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnConfirmar">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Confirmar&gt;"/>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="5e" green="84" red="a2" type="rgb"/>
         </Property>
@@ -132,7 +138,6 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Confirmar&gt;"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConfirmarActionPerformed"/>
@@ -140,6 +145,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnVolver">
       <Properties>
+        <Property name="text" type="java.lang.String" value="&lt;Volver"/>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="5e" green="84" red="a2" type="rgb"/>
         </Property>
@@ -149,7 +155,6 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;Volver"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVolverActionPerformed"/>
@@ -157,18 +162,18 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Seleccione una sala disponible"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT Condensed" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Seleccione una sala disponible"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Seleccione una fecha y hora para la funcion"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT Condensed" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Seleccione una fecha y hora para la funcion"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="precioBoleto">
@@ -190,6 +195,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscarSalas">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Buscar salas"/>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="5e" green="84" red="a2" type="rgb"/>
         </Property>
@@ -199,23 +205,28 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Buscar salas"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarSalasActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="btnBuscarSalas.addActionListener(new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                btnBuscarSalasActionPerformed(evt);&#xa;            }&#xa;        });"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Seleccione precio del boleto"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT Condensed" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Seleccione precio del boleto"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Seleccione un empleado asignado a la funcion(Opcional)"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT Condensed" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Seleccione un empleado asignado a la funcion(Opcional)"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField1">
@@ -227,6 +238,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscarEmpleados">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Buscar Empleados"/>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="5e" green="84" red="a2" type="rgb"/>
         </Property>
@@ -236,8 +248,9 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Buscar Empleados"/>
       </Properties>
+    </Component>
+    <Component class="com.github.lgooddatepicker.components.DateTimePicker" name="FechaHoraFuncion">
     </Component>
   </SubComponents>
 </Form>

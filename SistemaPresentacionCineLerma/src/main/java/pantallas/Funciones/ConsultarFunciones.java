@@ -52,7 +52,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
                 datos[i][1] = funcion.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 datos[i][2] = horaTermino.format(DateTimeFormatter.ofPattern("HH:mm"));
                 datos[i][3] = String.format("$%.2f", funcion.getPrecio());
-                datos[i][4] = funcion.getEmpleado();
+                datos[i][4] = funcion.getIdEmpleado();
             }
 
             panelTablaFunciones.removeAll();
@@ -235,7 +235,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProgramarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProgramarActionPerformed
-        control.mostrarProgramarFuncion(this);
+        control.mostrarProgramarFuncion(this, nombrePelicula);
     }//GEN-LAST:event_btnProgramarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed

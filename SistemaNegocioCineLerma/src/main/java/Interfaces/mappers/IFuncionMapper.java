@@ -6,7 +6,6 @@ package Interfaces.mappers;
 
 import DTOs.FuncionDTO;
 import entidades.Funcion;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -17,6 +16,5 @@ public interface IFuncionMapper {
     public FuncionDTO toFuncionDTO(Funcion funcion);
 
     public Funcion toFuncionEntidad(FuncionDTO funciondto);
-    
-    public ObjectId toObjectId(String id);
+
 }

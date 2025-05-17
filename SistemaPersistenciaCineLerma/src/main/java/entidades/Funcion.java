@@ -25,26 +25,26 @@ public class Funcion {
 
     private Double precio;
 
-    private Empleado empleado;
+    private ObjectId idEmpleado;
 
     public Funcion() {
     }
 
-    public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, Empleado empleado) {
+    public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, ObjectId idEmpleado) {
         this.idFuncion = idFuncion;
         this.sala = sala;
         this.pelicula = pelicula;
         this.fechaHora = fechaHora;
         this.precio = precio;
-        this.empleado = empleado;
+        this.idEmpleado = idEmpleado;
     }
 
-    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, Empleado empleado) {
+    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio, ObjectId idEmpleado) {
         this.sala = sala;
         this.pelicula = pelicula;
         this.fechaHora = fechaHora;
         this.precio = precio;
-        this.empleado = empleado;
+        this.idEmpleado = idEmpleado;
     }
 
     public Funcion(ObjectId idFuncion, Sala sala, Pelicula pelicula, LocalDateTime fechaHora, Double precio) {
@@ -100,7 +100,11 @@ public class Funcion {
     }
 
     public void setIdString(String idImportado) {
-        this.idFuncion = new ObjectId(idImportado);
+        if (idImportado != null && !idImportado.isEmpty()) {
+            this.idFuncion = new ObjectId(idImportado);
+        } else {
+            this.idFuncion = null;
+        }
     }
 
     public Double getPrecio() {
@@ -111,17 +115,29 @@ public class Funcion {
         this.precio = precio;
     }
 
-    public Empleado getEmpleado() {
-        return empleado;
+    public ObjectId getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
+    public String getIdEmpleadoString() {
+        return idEmpleado.toString();
+    }
+
+    public void setIdEmpleado(ObjectId idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
+
+    public void setIdEmpleadoString(String idImportado) {
+        if (idImportado != null && !idImportado.isEmpty()) {
+            this.idFuncion = new ObjectId(idImportado);
+        } else {
+            this.idFuncion = null;
+        }
     }
 
     @Override
     public String toString() {
-        return "Funcion{" + "idFuncion=" + idFuncion + ", sala=" + sala + ", pelicula=" + pelicula + ", fechaHora=" + fechaHora + ", precio=" + precio + ", empleado=" + empleado + '}';
+        return "Funcion{" + "idFuncion=" + idFuncion + ", sala=" + sala + ", pelicula=" + pelicula + ", fechaHora=" + fechaHora + ", precio=" + precio + ", idEmpleado=" + idEmpleado + '}';
     }
 
 }
