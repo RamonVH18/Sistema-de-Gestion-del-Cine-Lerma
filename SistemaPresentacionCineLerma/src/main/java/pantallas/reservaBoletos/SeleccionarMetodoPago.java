@@ -166,8 +166,8 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
     }
 
     private JButton crearBotonMetodoPago(String url, Border border, String nombreMetodo) {
-        ImageIcon image = utilerias.crearImagen(url, 50, 50);
-        JButton boton = new JButton(image);
+//        ImageIcon image = utilerias.crearImagen(url, 50, 50);
+        JButton boton = new JButton(); //image
         boton.setPreferredSize(new Dimension(150, 50));
         boton.setBorder(border);
         boton.addActionListener(e -> {

@@ -61,6 +61,7 @@ import gestionSalasAsientos.IManejoDeSalas;
 import gestionSalasAsientos.ManejoDeSalas;
 import gestionUsuarios.IManejoUsuarios;
 import gestionUsuarios.ManejoUsuarios;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
@@ -183,9 +184,13 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarSeleccionarPelicula() {
         SwingUtilities.invokeLater(() -> {
-            SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
-            pantallaSeleccionarPelicula.setLocationRelativeTo(null);
-            pantallaSeleccionarPelicula.setVisible(true);
+            try {
+                SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
+                pantallaSeleccionarPelicula.setLocationRelativeTo(null);
+                pantallaSeleccionarPelicula.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         });
     }

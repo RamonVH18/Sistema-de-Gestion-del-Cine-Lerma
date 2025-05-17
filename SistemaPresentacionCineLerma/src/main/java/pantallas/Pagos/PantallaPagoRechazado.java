@@ -113,12 +113,12 @@ public class PantallaPagoRechazado extends javax.swing.JDialog {
 
     private void ponerImagen(JLabel label, String url, int ancho, int altura) {
 
-        ImageIcon imagen = utilerias.crearImagen(url, ancho, altura);
-        label.setIcon(imagen);
-        label.setText("");
-        label.revalidate();
-        label.repaint();
-        label.setVisible(true);
+//        ImageIcon imagen = utilerias.crearImagen(url, ancho, altura);
+//        label.setIcon(imagen);
+//        label.setText("");
+//        label.revalidate();
+//        label.repaint();
+//        label.setVisible(true);
 
     }
 

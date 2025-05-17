@@ -20,6 +20,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -54,84 +55,116 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 /**
- * Clase con diferentes metodos usados para la configuracion de diversas pantallas
+ * Clase con diferentes metodos usados para la configuracion de diversas
+ * pantallas
+ *
  * @author Ramon Valencia
  */
 public class Utilerias {
+
     /**
      * Constructor vacio
      */
     public Utilerias() {
     }
+
     /**
-     * Metodo para cargar una imagen que esta guardad en el sistema
-     * NOTA: Este metodo debe de diferenciarce del metodo para crear las peliculas, 
-     * ya que las imagenes que crea este metodo no estan guardadas en ninguna base de datos
-     * @param url
+     * Metodo para cargar una imagen que esta guardad en el sistema NOTA: Este
+     * metodo debe de diferenciarce del metodo para crear las peliculas, ya que
+     * las imagenes que crea este metodo no estan guardadas en ninguna base de
+     * datos
+     *
+     * @param bytesImagen
      * @param ancho
      * @param altura
-     * @return 
+     * @return
+     * @throws IOException
      */
-    public ImageIcon crearImagen(String url, int ancho, int altura) {
-        URL imageUrl = getClass().getClassLoader().getResource(url); // Se obtiene la url de la imagen
-        ImageIcon imagen = new ImageIcon(imageUrl);
+    public ImageIcon crearImagen(byte[] bytesImagen, int ancho, int altura) throws IOException {
+        ByteArrayInputStream bis = new ByteArrayInputStream(bytesImagen);
+        BufferedImage imagen = ImageIO.read(bis);
+        ImageIcon imagenIcono = new ImageIcon(imagen);
         // Se define la escala de la imagen
-        Image scaledImage = imagen.getImage().getScaledInstance(
+        Image scaledImage = imagenIcono.getImage().getScaledInstance(
                 ancho,
                 altura,
                 Image.SCALE_SMOOTH
         );
-        imagen = new ImageIcon(scaledImage);
-        
-        return imagen;
+        imagenIcono = new ImageIcon(scaledImage);
+
+        return imagenIcono;
     }
-    
+
     /**
-     * Metodo para traducir un los dias del objeto DayOfWeek 
+     * Metodo para traducir un los dias del objeto DayOfWeek
+     *
      * @param dia
-     * @return 
+     * @return
      */
     public String traducirDia(DayOfWeek dia) {
         String nuevoDia = new String();
         switch (dia) {
-            case MONDAY -> nuevoDia = "Lun";
-            case TUESDAY -> nuevoDia = "Mar";
-            case WEDNESDAY -> nuevoDia = "Mie";
-            case THURSDAY -> nuevoDia = "Jue";
-            case FRIDAY -> nuevoDia = "Vie";
-            case SATURDAY -> nuevoDia = "Sab";
-            case SUNDAY -> nuevoDia = "Dom";
+            case MONDAY ->
+                nuevoDia = "Lun";
+            case TUESDAY ->
+                nuevoDia = "Mar";
+            case WEDNESDAY ->
+                nuevoDia = "Mie";
+            case THURSDAY ->
+                nuevoDia = "Jue";
+            case FRIDAY ->
+                nuevoDia = "Vie";
+            case SATURDAY ->
+                nuevoDia = "Sab";
+            case SUNDAY ->
+                nuevoDia = "Dom";
         }
         return nuevoDia;
     }
 
     /**
      * Metodo para traducir el nombre de los mese del objeto Month
+     *
      * @param mes
-     * @return 
+     * @return
      */
     public String traducirMes(Month mes) {
         String nuevoMes = new String();
         switch (mes) {
-            case JANUARY -> nuevoMes = "Enero";
-            case FEBRUARY -> nuevoMes = "Febrero";
-            case MARCH -> nuevoMes = "Marzo";
-            case APRIL -> nuevoMes = "Abril";
-            case MAY -> nuevoMes = "Mayo";
-            case JUNE -> nuevoMes = "Junio";
-            case JULY -> nuevoMes = "Julio";
-            case AUGUST -> nuevoMes = "Agosto";
-            case SEPTEMBER -> nuevoMes = "Septiembre";
-            case OCTOBER -> nuevoMes = "Octobre";
-            case NOVEMBER -> nuevoMes = "Noviembre";
-            case DECEMBER -> nuevoMes = "Diciembre";
+            case JANUARY ->
+                nuevoMes = "Enero";
+            case FEBRUARY ->
+                nuevoMes = "Febrero";
+            case MARCH ->
+                nuevoMes = "Marzo";
+            case APRIL ->
+                nuevoMes = "Abril";
+            case MAY ->
+                nuevoMes = "Mayo";
+            case JUNE ->
+                nuevoMes = "Junio";
+            case JULY ->
+                nuevoMes = "Julio";
+            case AUGUST ->
+                nuevoMes = "Agosto";
+            case SEPTEMBER ->
+                nuevoMes = "Septiembre";
+            case OCTOBER ->
+                nuevoMes = "Octobre";
+            case NOVEMBER ->
+                nuevoMes = "Noviembre";
+            case DECEMBER ->
+                nuevoMes = "Diciembre";
         }
         return nuevoMes;
     }
+
     /**
-     * Metodo para convertir un objeto de tipo Date a un objeto de tipo LocalDate
+     * Metodo para convertir un objeto de tipo Date a un objeto de tipo
+     * LocalDate
+     *
      * @param fecha
-     * @return 
+     * @return
      */
     public LocalDate convertirDateALocalDate(Date fecha) {
         if (fecha == null) {
@@ -143,9 +176,11 @@ public class Utilerias {
     }
 
     /**
-     * Metodo para convertir un objeto de tipo LocalDate a un objeto de tipo Date
+     * Metodo para convertir un objeto de tipo LocalDate a un objeto de tipo
+     * Date
+     *
      * @param localDate
-     * @return 
+     * @return
      */
     public Date convertirLocalDateADate(LocalDate localDate) {
         if (localDate == null) {
@@ -156,12 +191,13 @@ public class Utilerias {
                         .toInstant()
         );
     }
-    
+
     /**
      * Metodo para sacarle captura de pantalla a un JFrame
+     *
      * @param frame
      * @param rutaArchivo
-     * @return 
+     * @return
      */
     public String sacarCapturaJFrame(JFrame frame, String rutaArchivo) {
         try {
@@ -184,10 +220,11 @@ public class Utilerias {
 
     /**
      * Metodo para convertir una imagen a base 64
+     *
      * @param rutaImagen
      * @param nuevoAncho
      * @param nuevoAlto
-     * @return 
+     * @return
      */
     public String convertirImagenABase64(String rutaImagen, int nuevoAncho, int nuevoAlto) {
         try {
@@ -208,9 +245,10 @@ public class Utilerias {
 
     /**
      * Generar un código QR desde el texto proporcionado
+     *
      * @param texto
      * @param tamaño
-     * @return 
+     * @return
      */
     public ImageIcon generarCodigoQR(String texto, int tamaño) {
         try {
@@ -234,10 +272,11 @@ public class Utilerias {
 
     /**
      * Generar un código QR desde una imagen en Base64
+     *
      * @param rutaImagen
      * @param tamañoQR
-     * @return 
-     */ 
+     * @return
+     */
     public ImageIcon obtenerQRDesdeImagen(String rutaImagen, int tamañoQR) {
         String base64Imagen = convertirImagenABase64(rutaImagen, 10, 10);
         if (base64Imagen == null) {
@@ -246,12 +285,14 @@ public class Utilerias {
         }
         return generarCodigoQR(base64Imagen, tamañoQR);
     }
+
     /**
      * Metodo para escalar una imagen
+     *
      * @param original
      * @param ancho
      * @param alto
-     * @return 
+     * @return
      */
     private BufferedImage escalarImagen(BufferedImage original, int ancho, int alto) {
         Image imagenEscalada = original.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
@@ -261,43 +302,46 @@ public class Utilerias {
         g2d.dispose();
         return bufferedEscalada;
     }
-    
+
     /**
      * Metodo para añadirle la configuracion basica de los frames a una pantalla
+     *
      * @param frame
-     * @param titulo 
+     * @param titulo
      */
     public void configurarFrameBase(JFrame frame, String titulo) {
         // Se ajusta el tamaño base del frame
         Dimension tamañoFrame = new Dimension(640, 830);
-        
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Configuracion de que cierre al salir
         frame.setLocationRelativeTo(null); // Se centra el frame en la pantalla
-        frame.setLayout(new BorderLayout()); 
+        frame.setLayout(new BorderLayout());
         frame.setPreferredSize(tamañoFrame); // Se le ajusta el tamaño deseado al frame
-        frame.setSize(tamañoFrame); 
+        frame.setSize(tamañoFrame);
         frame.setTitle(titulo); // Se añade el titulo que llevara en el borde de la pestaña
         JLabel labelTitulo = new JLabel();
-        
+
         JPanel panelNorte = new JPanel();
         JPanel panelSur = new JPanel();
         configuracionNorte(panelNorte); // Metodo para configurar el panel de arriba
         configuracionSur(panelSur); // Metodo para configurar panel de abajo
-        
+
         panelNorte.add(labelTitulo);
-        
+
         frame.add(panelSur, BorderLayout.SOUTH);
         frame.add(panelNorte, BorderLayout.NORTH);
         panelNorte.setOpaque(false);
-        
+
         configurarTitulo(labelTitulo, titulo);
-        
+
     }
+
     /**
-     * Metodo para configurar el titulo de la ventana
-     * Aqui tambien se configura el panel que ira en la parte superior del frame
+     * Metodo para configurar el titulo de la ventana Aqui tambien se configura
+     * el panel que ira en la parte superior del frame
+     *
      * @param tituloVentana
-     * @param titulo 
+     * @param titulo
      */
     private void configurarTitulo(JLabel tituloVentana, String titulo) {
         tituloVentana.setSize(new Dimension(125, 55));
@@ -305,34 +349,36 @@ public class Utilerias {
         tituloVentana.setHorizontalAlignment(SwingConstants.CENTER);
         tituloVentana.setVerticalAlignment(SwingConstants.CENTER);
         tituloVentana.setFont(new Font("Regular", Font.BOLD, 32));
-        
+
     }
+
     /**
      * Metodo que se encarga de configurar la parte superior de un JFrame
-     * @param panelNorte 
+     *
+     * @param panelNorte
      */
-    private void configuracionNorte(JPanel panelNorte){
+    private void configuracionNorte(JPanel panelNorte) {
         Border border = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.BLACK);
         panelNorte.setPreferredSize(new Dimension(650, 70));
         panelNorte.setBorder(border);
     }
+
     /**
-     * Metodo que se encarga de configurar la parte inferior de un JFrame 
-     * @param panelSur 
+     * Metodo que se encarga de configurar la parte inferior de un JFrame
+     *
+     * @param panelSur
      */
     private void configuracionSur(JPanel panelSur) {
         Border border = BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK);
         panelSur.setPreferredSize(new Dimension(650, 70));
         panelSur.setBorder(border);
-        
+
         JButton btnVolver = new JButton("<- Volver");
         btnVolver.setPreferredSize(new Dimension(100, 45));
-        btnVolver.setBackground(new Color(162,132,94));
-        
+        btnVolver.setBackground(new Color(162, 132, 94));
+
         panelSur.setLayout(new FlowLayout(FlowLayout.LEFT));
         panelSur.add(btnVolver);
     }
-    
-    
-    
+
 }

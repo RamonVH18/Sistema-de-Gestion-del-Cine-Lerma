@@ -295,8 +295,8 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
         jTextAreaDescripcion.setText("peliculaSeleccionada.getDescripcionPelicula()");
         //Se llama al metodo de utileria encargado de crear la imagen
-        ImageIcon imagen = utilerias.crearImagen("peliculaSeleccionada.getPeliculaImagen()", 200, 300);
-        jLabelImagenPelicula.setIcon(imagen);
+//        ImageIcon imagen = utilerias.crearImagen("peliculaSeleccionada.getPeliculaImagen()", 200, 300);
+//        jLabelImagenPelicula.setIcon(imagen);
         jLabelNombrePelicula.setText("peliculaSeleccionada.getNombrePelicula()");
         jTextAreaDescripcion.setEnabled(false);
         jTextFieldNumAsientos.setText("");

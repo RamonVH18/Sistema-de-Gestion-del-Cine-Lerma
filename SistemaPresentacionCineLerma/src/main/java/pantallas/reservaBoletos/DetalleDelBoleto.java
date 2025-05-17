@@ -206,8 +206,8 @@ public final class DetalleDelBoleto extends javax.swing.JFrame {
     /*Metodo que llena los campos que requiere el boleto seteando cada atributo en un label*/
     public void llenarCamposBoleto(BoletoDTO boleto) {
         
-        ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
-        etiquetaImagen.setIcon(imagen);
+//        ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
+//        etiquetaImagen.setIcon(imagen);
         
         labelPelicula.setText("Pelicula: " + boleto.getNombrePelicula());
         
