@@ -66,6 +66,7 @@ public class SalaBO implements ISalaBO {
     @Override
     public SalaViejaDTO buscarSala(String numSala) throws SalaBusquedaException {
         try {
+            
             Sala sala = salaDAO.buscarSala(numSala);
 
             List<AsientoDTO> asientosDTO = mapperAsiento.toAsientoDTO(sala.getAsientos());
@@ -81,6 +82,7 @@ public class SalaBO implements ISalaBO {
     @Override
     public List<SalaViejaDTO> buscarSalas(String filtroSalas) throws SalaBusquedaException {
         try {
+            
             List<Sala> salas = salaDAO.buscarSalas(filtroSalas);
             Sala sala;
             List<SalaViejaDTO> salasViejas = new ArrayList<>();

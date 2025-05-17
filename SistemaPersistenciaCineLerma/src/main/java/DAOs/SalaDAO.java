@@ -16,6 +16,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Asiento;
@@ -130,7 +131,9 @@ public class SalaDAO implements ISalaDAO {
             
             filtro = crearFiltroNombre(filtroNombre); // se llama al metodo filtroNombre para ver si se aplica un filtor
 
-            List<Sala> salas = coleccionSalas.find(filtro).into(new ArrayList<>()); // Se obtiene la coleccion de salas en base al filtro si es que hay o no
+            List<Sala> salas = coleccionSalas.find(filtro)
+                    .sort(Sorts.ascending("numSala"))
+                    .into(new ArrayList<>()); // Se obtiene la coleccion de salas en base al filtro si es que hay o no
 
             return salas;
         } catch (BuscarSalaException | MongoException e) {

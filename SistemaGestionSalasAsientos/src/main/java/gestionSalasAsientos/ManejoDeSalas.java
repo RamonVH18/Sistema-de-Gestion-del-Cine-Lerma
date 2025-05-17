@@ -107,10 +107,18 @@ public class ManejoDeSalas implements IManejoDeSalas {
             throw new ValidacionSalaException("El estado que se le quiere asignar a la sala es el mismo que tenia anteriormente.");
         }
     }
+    
+    private void validarSalaSinFuncionesActivas() throws ValidacionSalaException {
+        
+    }
 
     @Override
     public List<SalaViejaDTO> cargarSalas(String filtro) throws BuscarSalaException {
         try {
+            if (filtro == null) {
+                filtro = "";
+            }
+             filtro = filtro.replace(" ", "");
             List<SalaViejaDTO> salas = salaBO.buscarSalas(filtro);
             return salas;
         } catch (SalaBusquedaException e) {
