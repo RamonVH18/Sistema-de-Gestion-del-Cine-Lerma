@@ -6,6 +6,14 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import Excepciones.ActualizacionEmpleadoException;
+import Excepciones.ActualizacionSueldoException;
+import Excepciones.ValidacionEmpleadoIdException;
+import Excepciones.ValidarEmpleadoException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import pantallas.Empleados.DialogSeleccionarEmpleado;
 
@@ -15,13 +23,13 @@ import pantallas.Empleados.DialogSeleccionarEmpleado;
  */
 
 public class SueldoOpciones extends javax.swing.JFrame {
-    private EmpleadoBO empleadoBO;
+    private IManejoEmpleados manejoEmpleados;
 
     /**
      * Creates new form SueldoOpciones
      */
     public SueldoOpciones() {
-        this.empleadoBO = new EmpleadoBO();
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
     }
 
@@ -113,7 +121,7 @@ public class SueldoOpciones extends javax.swing.JFrame {
     private void btnPorCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorCargoActionPerformed
         
         // cargamos el dialog de ActualizarSueldoDeCargo 
-       DialogActualizarSueldoDeCargo dialog = new DialogActualizarSueldoDeCargo(this, true, empleadoBO);
+       DialogActualizarSueldoDeCargo dialog = new DialogActualizarSueldoDeCargo(this, true);
        dialog.setVisible(true);
         
     }//GEN-LAST:event_btnPorCargoActionPerformed
@@ -121,7 +129,7 @@ public class SueldoOpciones extends javax.swing.JFrame {
     private void btnPorEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorEmpleadoActionPerformed
 
         // vamos a cargar el dialog de seleccion de empleados para seleccionar el empleado a actualizar
-        DialogSeleccionarEmpleado dialogoSeleccion = new DialogSeleccionarEmpleado(this, true, empleadoBO);
+        DialogSeleccionarEmpleado dialogoSeleccion = new DialogSeleccionarEmpleado(this, true);
 
         dialogoSeleccion.setVisible(true); // Esto bloquea hasta que el diálogo se cierre
 
@@ -130,11 +138,13 @@ public class SueldoOpciones extends javax.swing.JFrame {
 
         if (empleadoElegido != null) { // si el empleado es nulo, fue porque ya hay un empleado seleccionado
             // ahora se llama al JOptionPane con showInputDialog y actualizamos el sueldo con el BO
-
+            
+            
             String mensajeDialogo = String.format("Empleado: %s %s\nSueldo Actual: $%.2f\n\nIngrese el nuevo sueldo:",
                     empleadoElegido.getNombre(), empleadoElegido.getApellidoP(), empleadoElegido.getSueldo());
             String nuevoSueldoStr = JOptionPane.showInputDialog(this, mensajeDialogo, "Actualizar Sueldo Individual", JOptionPane.PLAIN_MESSAGE);
-
+            
+            // validacion si es nulo o vacio
             if (nuevoSueldoStr != null && !nuevoSueldoStr.trim().isEmpty()) {
                 try {
                     double nuevoSueldo = Double.parseDouble(nuevoSueldoStr.trim());
@@ -143,14 +153,14 @@ public class SueldoOpciones extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Monto de sueldo inválido.", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    
+                    // sale la confirmacion en un JOPtionPane
                     int confirm = JOptionPane.showConfirmDialog(this,
                             String.format("¿Desea actualizar el sueldo de %s %s a $%.2f?",
                                     empleadoElegido.getNombre(), empleadoElegido.getApellidoP(), nuevoSueldo),
                             "Confirmar Nuevo Sueldo", JOptionPane.YES_NO_OPTION);
 
                     if (confirm == JOptionPane.YES_OPTION) {
-                        boolean exito = empleadoBO.actualizarSueldoEmpleado(empleadoElegido.getId(), nuevoSueldo);
+                        boolean exito = manejoEmpleados.actualizarSueldoEmpleadoIndividual(empleadoElegido.getId(), nuevoSueldo);
                         if (exito) {
                             JOptionPane.showMessageDialog(this, "Sueldo actualizado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                             // Aquí no necesitas actualizar la tabla del DialogSeleccionarEmpleado porque ya se cerró.
@@ -161,8 +171,12 @@ public class SueldoOpciones extends javax.swing.JFrame {
                     }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "Por favor, ingrese un valor numérico para el sueldo.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-                } catch (Excepciones.Empleados.ValidacionEmpleadoException | Excepciones.Empleados.ActualizarEmpleadoException | Excepciones.PersistenciaException ex) { // Ajusta tus excepciones
-                    JOptionPane.showMessageDialog(this, "Error al actualizar sueldo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (ValidarEmpleadoException ex) {
+                    Logger.getLogger(SueldoOpciones.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ActualizacionSueldoException ex) {
+                    Logger.getLogger(SueldoOpciones.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ValidacionEmpleadoIdException ex) {
+                    Logger.getLogger(SueldoOpciones.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         } else {
@@ -177,40 +191,6 @@ public class SueldoOpciones extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
-            }
-        }
-    } catch (ClassNotFoundException ex) {
-        java.util.logging.Logger.getLogger(SueldoOpciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        java.util.logging.Logger.getLogger(SueldoOpciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        java.util.logging.Logger.getLogger(SueldoOpciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        java.util.logging.Logger.getLogger(SueldoOpciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
-
-    /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            new SueldoOpciones().setVisible(true);
-        }
-    });
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPorCargo;

@@ -6,7 +6,14 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import Excepciones.FiltrarEmpleadosException;
+import Excepciones.ObtenerEmpleadoException;
+import Excepciones.ObtenerEmpleadoPorCargoException;
 import Excepciones.PersistenciaException;
+import Excepciones.ValidacionEmpleadoIdException;
+import Excepciones.ValidarEmpleadoException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import enums.Cargo;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -15,6 +22,9 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -33,39 +43,39 @@ import org.bson.types.ObjectId;
  *
  * @author isaac
  */
+
 public class ListaEmpleados extends JPanel {
 
-    private final EmpleadoBO empleadoBO;
+    // Cambiamos EmpleadoBO por IManejoEmpleados
+    private final IManejoEmpleados manejoEmpleados;
     private JComboBox<Cargo> comboFiltroCargo;
     private JTextField txtFiltroNombre;
     private JButton btnFiltrar;
     private JButton btnMostrarTodos;
     private JTable tablaEmpleados;
     private DefaultTableModel tableModel;
-    private List<EmpleadoDTO> empleadosActuales = new ArrayList<>();
+    private List<EmpleadoDTO> empleadosActualesEnTabla = new ArrayList<>(); // Para getEmpleadoSeleccionado
 
-    //columnas para los nombres de cada atributo
     private final String[] NOMBRES_COLUMNAS_VISIBLES = {
         "Nombre", "A. Paterno", "A. Materno", "Cargo", "Sueldo", "Correo E.", "Teléfono"
     };
-    
 
-    public ListaEmpleados(EmpleadoBO empleadoBO) {
-        this.empleadoBO = empleadoBO;
+    public ListaEmpleados() { // Constructor ya no recibe EmpleadoBO
+        // Obtenemos la instancia de ManejoEmpleados (Singleton)
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
-        cargarEmpleadosActivos();
+        cargarEmpleadosActivos(); // Carga inicial
     }
 
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
 
-        // --- Panel de Filtros ---
         JPanel panelFiltros = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         panelFiltros.add(new JLabel("Filtrar por Cargo:"));
-        comboFiltroCargo = new JComboBox<>(); // Será JComboBox<Cargo>
+        comboFiltroCargo = new JComboBox<>();
         DefaultComboBoxModel<Cargo> cargoModel = new DefaultComboBoxModel<>();
-        cargoModel.addElement(null); // Opción para "Todos"
-        for (Cargo cargo : Cargo.values()) {
+        cargoModel.addElement(null); // Opción para "Todos los Cargos"
+        for (Cargo cargo : Cargo.values()) { // Asumiendo que Cargo es un enum
             cargoModel.addElement(cargo);
         }
         comboFiltroCargo.setModel(cargoModel);
@@ -76,7 +86,15 @@ public class ListaEmpleados extends JPanel {
         panelFiltros.add(txtFiltroNombre);
 
         btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.addActionListener(e -> filtrarEmpleados());
+        btnFiltrar.addActionListener(e -> {
+            try {
+                filtrarEmpleados();
+            } catch (ValidacionEmpleadoIdException ex) {
+                Logger.getLogger(ListaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ObtenerEmpleadoPorCargoException ex) {
+                Logger.getLogger(ListaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         panelFiltros.add(btnFiltrar);
 
         btnMostrarTodos = new JButton("Mostrar Todos");
@@ -84,15 +102,13 @@ public class ListaEmpleados extends JPanel {
         panelFiltros.add(btnMostrarTodos);
         add(panelFiltros, BorderLayout.NORTH);
 
-        // --- Tabla de Empleados, ahora sin id ---
-        tableModel = new DefaultTableModel(new String[0], 0) { // Inicialmente sin columnas o filas
+        tableModel = new DefaultTableModel(new String[0], 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        // Añadir la columna ID al PRINCIPIO del modelo, pero no la mostraremos
-        tableModel.addColumn("ID_Interno"); // Columna para el ID (String)
+        tableModel.addColumn("ID_Interno"); // Columna 0 para el ID (oculta)
         for (String nombreColumna : NOMBRES_COLUMNAS_VISIBLES) {
             tableModel.addColumn(nombreColumna);
         }
@@ -101,14 +117,11 @@ public class ListaEmpleados extends JPanel {
         tablaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaEmpleados.setAutoCreateRowSorter(true);
 
-        // Aqui se oculta el id, para que no sea vea
-        // Columna 0 es "ID_Interno"
         TableColumn idColumna = tablaEmpleados.getColumnModel().getColumn(0);
         idColumna.setMinWidth(0);
         idColumna.setMaxWidth(0);
         idColumna.setWidth(0);
         idColumna.setPreferredWidth(0);
-       
 
         JScrollPane scrollPane = new JScrollPane(tablaEmpleados);
         add(scrollPane, BorderLayout.CENTER);
@@ -116,56 +129,75 @@ public class ListaEmpleados extends JPanel {
 
     public void cargarEmpleadosActivos() {
         try {
-            List<EmpleadoDTO> empleados = empleadoBO.obtenerTodosLosEmpleadosActivos();
+            // Llamamos al método de ManejoEmpleados
+            List<EmpleadoDTO> empleados = manejoEmpleados.obtenerTodosLosEmpleadosActivos();
             mostrarEmpleadosEnTabla(empleados);
             txtFiltroNombre.setText("");
-            comboFiltroCargo.setSelectedItem(null);
-        } catch (PersistenciaException ex) {
+            comboFiltroCargo.setSelectedItem(null); // Restablece el ComboBox
+        } catch (ObtenerEmpleadoException ex) { // Capturamos la excepción de la capa de Manejo
             mostrarError("Error al cargar empleados: " + ex.getMessage());
+            // Para depuración:
+            if (ex.getCause() != null) {
+                System.err.println("Causa original (cargarEmpleadosActivos): " + ex.getCause().getMessage());
+            }
         }
     }
 
-    private void filtrarEmpleados() {
+    private void filtrarEmpleados() throws ValidacionEmpleadoIdException, ObtenerEmpleadoPorCargoException {
         Cargo cargoSeleccionado = (Cargo) comboFiltroCargo.getSelectedItem();
         String nombreFiltro = txtFiltroNombre.getText().trim().toLowerCase();
+        List<EmpleadoDTO> resultadosFiltrados;
 
         try {
-            List<EmpleadoDTO> todosLosActivos = empleadoBO.obtenerTodosLosEmpleadosActivos(); // Podrías optimizar esto
-            List<EmpleadoDTO> resultadosFiltrados = new ArrayList<>();
+            if (cargoSeleccionado != null && nombreFiltro.isEmpty()) {
+                // Filtrar solo por cargo usando el método específico del BO (vía Manejo)
+                resultadosFiltrados = manejoEmpleados.obtenerEmpleadosActivosPorCargo(cargoSeleccionado);
+            } else {
+                // Obtener todos y filtrar en cliente si hay filtro de nombre o ambos filtros
+                List<EmpleadoDTO> baseParaFiltrar;
+                if (cargoSeleccionado != null) {
+                    baseParaFiltrar = manejoEmpleados.obtenerEmpleadosActivosPorCargo(cargoSeleccionado);
+                } else {
+                    baseParaFiltrar = manejoEmpleados.obtenerTodosLosEmpleadosActivos();
+                }
 
-            for (EmpleadoDTO emp : todosLosActivos) {
-                boolean pasaFiltroCargo = (cargoSeleccionado == null) || (emp.getCargo() == cargoSeleccionado);
-                boolean pasaFiltroNombre = nombreFiltro.isEmpty()
-                        || (emp.getNombre() != null && emp.getNombre().toLowerCase().contains(nombreFiltro))
-                        || (emp.getApellidoP() != null && emp.getApellidoP().toLowerCase().contains(nombreFiltro))
-                        || (emp.getApellidoM() != null && emp.getApellidoM().toLowerCase().contains(nombreFiltro));
-
-                if (pasaFiltroCargo && pasaFiltroNombre) {
-                    resultadosFiltrados.add(emp);
+                // Filtrado por nombre en el cliente (Java Stream API para eficiencia)
+                if (!nombreFiltro.isEmpty()) {
+                    final String filtroBusqueda = nombreFiltro; // Necesario para lambda
+                    resultadosFiltrados = baseParaFiltrar.stream()
+                        .filter(emp -> (emp.getNombre() != null && emp.getNombre().toLowerCase().contains(filtroBusqueda)) ||
+                                       (emp.getApellidoP() != null && emp.getApellidoP().toLowerCase().contains(filtroBusqueda)) ||
+                                       (emp.getApellidoM() != null && emp.getApellidoM().toLowerCase().contains(filtroBusqueda)))
+                        .collect(Collectors.toList());
+                } else {
+                    resultadosFiltrados = baseParaFiltrar; // No hay filtro de nombre, mostrar todos los del cargo (o todos)
                 }
             }
             mostrarEmpleadosEnTabla(resultadosFiltrados);
-        } catch (PersistenciaException ex) { // Ajustar si tu BO lanza ValidacionEmpleadoException también
+
+        } catch (ObtenerEmpleadoException vex) { // Por ej. si cargo es nulo y el método lo valida así
+             mostrarError("Error de validación al filtrar: " + vex.getMessage());
+        } catch (Exception ex) {
             mostrarError("Error al filtrar empleados: " + ex.getMessage());
+            if (ex.getCause() != null) {
+                System.err.println("Causa original (filtrarEmpleados): " + ex.getCause().getMessage());
+            }
         }
     }
-    
-    
-    private void mostrarEmpleadosEnTabla(List<EmpleadoDTO> empleados) {
-        empleadosActuales = empleados; // guarda la lista completa actual de DTOs
-        tableModel.setRowCount(0); // limpiar tabla antes de llenar
 
-        if (empleados == null) {
-            return;
-        }
+    private void mostrarEmpleadosEnTabla(List<EmpleadoDTO> empleados) {
+        empleadosActualesEnTabla = (empleados != null) ? empleados : new ArrayList<>();
+        tableModel.setRowCount(0); // Limpiar tabla
+
+        if (empleados == null) return;
 
         for (EmpleadoDTO emp : empleados) {
             tableModel.addRow(new Object[]{
-                emp.getId(), //id string oculto pq es la columna 0 que ocultamos
+                emp.getId(), // ID oculto
                 emp.getNombre(),
                 emp.getApellidoP(),
                 emp.getApellidoM(),
-                emp.getCargo() != null ? emp.getCargo().getDescripcion() : "N/A",
+                emp.getCargo() != null ? emp.getCargo().toString() : "N/A", // O getDescripcion() si lo tienes
                 String.format("$%.2f", emp.getSueldo()),
                 emp.getCorreoE(),
                 emp.getTelefono()
@@ -173,27 +205,20 @@ public class ListaEmpleados extends JPanel {
         }
     }
 
-    
-    // obtiene el emplaedoDTO seleccionado
     public EmpleadoDTO getEmpleadoSeleccionado() {
         int filaVisualSeleccionada = tablaEmpleados.getSelectedRow();
         if (filaVisualSeleccionada != -1) {
-            // convertir el indice de la fila visual al indice del modelo 
             int indiceModelo = tablaEmpleados.convertRowIndexToModel(filaVisualSeleccionada);
+            String empleadoIdStr = (String) tableModel.getValueAt(indiceModelo, 0); // Columna 0 es ID
 
-            // Obtener el ID String de la columna 0 que esta oculta 
-            String empleadoIdStr = (String) tableModel.getValueAt(indiceModelo, 0);
-            
-            // buscar el dto completo en la lista de empleadosACtuales por medio del id
-            if (empleadoIdStr != null && empleadosActuales != null) {
-                for (EmpleadoDTO empDTO : empleadosActuales) {
-                    if (empDTO.getId() != null && empDTO.getId().equals(empleadoIdStr)) {
-                        return empDTO; // Devuelve el DTO completo
-                    }
+            // Buscar en la lista que se usó para poblar la tabla
+            for (EmpleadoDTO empDTO : empleadosActualesEnTabla) {
+                if (empDTO.getId() != null && empDTO.getId().equals(empleadoIdStr)) {
+                    return empDTO;
                 }
             }
         }
-        return null; // No se encontro o no hay seleccion
+        return null;
     }
 
     private void mostrarError(String mensaje) {

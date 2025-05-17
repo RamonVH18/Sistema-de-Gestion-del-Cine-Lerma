@@ -6,9 +6,13 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import Excepciones.ActualizacionDeCargoException;
 import Excepciones.Empleados.ActualizarEmpleadoException;
 import Excepciones.Empleados.ValidacionEmpleadoException;
 import Excepciones.PersistenciaException;
+import Excepciones.ValidacionEmpleadoIdException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import enums.Cargo;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -22,19 +26,17 @@ import org.bson.types.ObjectId;
  */
 public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
 
-    private EmpleadoBO empleadoBO;
+    private IManejoEmpleados manejoEmpleados;
     private String empleadoIdActualizar;
     private EmpleadoDTO empleadoActualDTO;
-    
 
     /**
      * Creates new form DialogActualizarCargoEmpleado
      */
-    public DialogActualizarCargoEmpleado(java.awt.Frame parent, boolean modal, EmpleadoBO bo, EmpleadoDTO empleadoAActualizar) {
+    public DialogActualizarCargoEmpleado(java.awt.Frame parent, boolean modal, EmpleadoDTO empleadoAActualizar) {
         super(parent, modal);
-        this.empleadoBO = bo;
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         this.empleadoActualDTO = empleadoAActualizar;
-        
 
         if (empleadoAActualizar == null || empleadoAActualizar.getId() == null) {
             // Manejar error, no debería pasar si la selección fue correcta
@@ -71,7 +73,7 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
         for (Cargo cargoEnum : Cargo.values()) {
             cargoModel.addElement(cargoEnum);
         }
-        
+
         comboboxCargo.setModel(cargoModel);
 
         // Opcional: Preseleccionar el cargo actual del empleado
@@ -173,56 +175,68 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         
-        if (empleadoIdActualizar == null || empleadoIdActualizar.trim().isEmpty()) { // Doble verificación
+        // validacion simple que no este nulo o vacio
+        if (empleadoIdActualizar == null || empleadoIdActualizar.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Error: No hay un empleado seleccionado para actualizar.", "Error Interno", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Cargo nuevoCargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem();
-
+        Cargo nuevoCargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem(); // agararamos el cargo del comboBox
+        
+        // validacion simple que no este nulo el cargo
         if (nuevoCargoSeleccionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un nuevo cargo.", "Validación", JOptionPane.WARNING_MESSAGE);
             comboboxCargo.requestFocusInWindow();
             return;
         }
 
-        // Opcional: Verificar si el cargo seleccionado es el mismo que el actual
-        if (empleadoActualDTO.getCargo() == nuevoCargoSeleccionado) {
+        // verificar que no sea el mismo cargo, si es el mismo, va tirar un mensaje 
+        if (empleadoActualDTO != null && empleadoActualDTO.getCargo() == nuevoCargoSeleccionado) {
             JOptionPane.showMessageDialog(this, "El cargo seleccionado es el mismo que el actual. No se realizarán cambios.", "Información", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose(); // Cierra el diálogo
+            this.dispose(); // Cierra el dialogo
             return;
         }
 
         // Confirmación antes de actualizar
+        String nombreCompletoEmpleado = (empleadoActualDTO != null) ? (empleadoActualDTO.getNombre() + " " + empleadoActualDTO.getApellidoP()) : "ID " + empleadoIdActualizar;
+        String descripcionNuevoCargo = (nuevoCargoSeleccionado.getDescripcion() != null) ? nuevoCargoSeleccionado.getDescripcion() : nuevoCargoSeleccionado.toString(); // Asumiendo que Cargo tiene getDescripcion() o un buen toString()
+
         int confirmacion = JOptionPane.showConfirmDialog(
                 this,
-                "¿Está seguro de que desea cambiar el cargo del empleado " +
-                empleadoActualDTO.getNombre() + " " + empleadoActualDTO.getApellidoP() +
-                " a '" + nuevoCargoSeleccionado.getDescripcion() + "'?",
+                "¿Está seguro de que desea cambiar el cargo del empleado "
+                + nombreCompletoEmpleado + " a '" + descripcionNuevoCargo + "'?",
                 "Confirmar Actualización de Cargo",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
 
         if (confirmacion == JOptionPane.YES_OPTION) {
             try {
-                // Llamar al método del BO para actualizar el cargo
-                boolean exito = empleadoBO.actualizarCargoEmpleado(this.empleadoIdActualizar, nuevoCargoSeleccionado);
-                        
+                // Llamar al método de ManejoEmpleados
+                boolean exito = manejoEmpleados.actualizarCargoEmpleado(this.empleadoIdActualizar, nuevoCargoSeleccionado);
+
                 if (exito) {
                     JOptionPane.showMessageDialog(this, "El cargo del empleado ha sido actualizado exitosamente.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                    // Aquí podrías tener una forma de notificar a la ventana anterior que hubo un cambio
+                    // por ejemplo, si este diálogo tiene un método como `public boolean seActualizoConExito()`
+                    // this.actualizacionExitosa = true; // Variable de instancia del diálogo
                     this.dispose(); // Cierra este diálogo
                 } else {
-                    // El BO debería lanzar una excepción si algo falla y el DAO devuelve false
-                    JOptionPane.showMessageDialog(this, "No se pudo actualizar el cargo del empleado.", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
+                    // Si el método de ManejoEmpleados devuelve false sin lanzar excepción
+                    // (aunque usualmente es mejor lanzar excepción para fallos).
+                    JOptionPane.showMessageDialog(this, "No se pudo actualizar el cargo del empleado (la operación no indicó error pero no tuvo éxito).", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (ValidacionEmpleadoException | ActualizarEmpleadoException | PersistenciaException e) {
-                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error en Actualización", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception e) { // Captura genérica
+            } catch (ValidacionEmpleadoIdException vex) { // Excepción de la capa de Manejo
+                JOptionPane.showMessageDialog(this, "Error de validación: " + vex.getMessage(), "Error en Actualización", JOptionPane.ERROR_MESSAGE);
+            } catch (ActualizacionDeCargoException opex) { // Excepción de la capa de Manejo
+                JOptionPane.showMessageDialog(this, "Error en la operación: " + opex.getMessage(), "Error en Actualización", JOptionPane.ERROR_MESSAGE);
+                if (opex.getCause() != null) {
+                    System.err.println("Causa original (Actualizar Cargo): " + opex.getCause().getMessage());
+                }
+            } catch (Exception e) { // Captura genérica para cualquier otro imprevisto
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -232,7 +246,6 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

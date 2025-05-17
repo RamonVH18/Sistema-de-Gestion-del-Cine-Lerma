@@ -8,9 +8,15 @@ import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
 import Excepciones.Empleados.DespedirEmpleadoException;
 import Excepciones.PersistenciaException;
+import Excepciones.ValidacionEmpleadoIdException;
+import Excepciones.ValidarEmpleadoException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,17 +25,17 @@ import javax.swing.JOptionPane;
  */
 public class DespedirEmpleados extends javax.swing.JFrame {
     
-    private final EmpleadoBO empleadoBO;
+    private final IManejoEmpleados manejoEmpleados;
     private ListaEmpleados listaEmpleados;
 
     /**
      * Creates new form DespedirEmpleados
      */
     public DespedirEmpleados() {
-        this.empleadoBO = new EmpleadoBO();
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
         
-        this.listaEmpleados = new ListaEmpleados(this.empleadoBO);
+        this.listaEmpleados = new ListaEmpleados();
         scrollPanela.setViewportView(this.listaEmpleados); 
         
         //  configuracion adiciones del frame
@@ -193,54 +199,28 @@ public class DespedirEmpleados extends javax.swing.JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                boolean exito = empleadoBO.despedirEmpleado(seleccionado.getId());
+                boolean exito = false;
+                try {
+                    exito = manejoEmpleados.despedirEmpleado(seleccionado.getId());
+                } catch (ValidarEmpleadoException ex) {
+                    Logger.getLogger(DespedirEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ValidacionEmpleadoIdException ex) {
+                    Logger.getLogger(DespedirEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 if (exito) {
                     JOptionPane.showMessageDialog(this, "Empleado despedido (marcado como inactivo) exitosamente.", "Despido Exitoso", JOptionPane.INFORMATION_MESSAGE);
                     listaEmpleados.cargarEmpleadosActivos(); // Actualizar la lista
                 } else {
                      JOptionPane.showMessageDialog(this, "El empleado no pudo ser despedido (quizás ya estaba inactivo o no se encontró).", "Aviso", JOptionPane.WARNING_MESSAGE);
                 }
-            } catch (DespedirEmpleadoException | PersistenciaException ex) {
+            } catch (DespedirEmpleadoException  ex) {
                 JOptionPane.showMessageDialog(this, "Error al despedir empleado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         
     }//GEN-LAST:event_btnDespedirActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DespedirEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DespedirEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DespedirEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DespedirEmpleados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DespedirEmpleados().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDespedir;

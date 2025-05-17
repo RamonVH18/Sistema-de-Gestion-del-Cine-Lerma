@@ -6,9 +6,15 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import Excepciones.ActualizacionSueldoException;
 import Excepciones.Empleados.ValidacionEmpleadoException;
 import Excepciones.PersistenciaException;
+import Excepciones.validarActualizacionSueldoDeCargoException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import enums.Cargo;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import org.bson.types.ObjectId;
@@ -17,37 +23,35 @@ import org.bson.types.ObjectId;
  *
  * @author isaac
  */
-
 public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
-    
-    private EmpleadoBO empleadoBO;
-  
+
+    private IManejoEmpleados manejoEmpleados;
 
     /**
      * Creates new form DialogActualizarSueldoDeCargo
      */
-    public DialogActualizarSueldoDeCargo(java.awt.Frame parent, boolean modal, EmpleadoBO bo) {
+    public DialogActualizarSueldoDeCargo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.empleadoBO = bo;
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
         configurarDialog();
         poblarComboboxCargo();
     }
-    
+
     private void configurarDialog() {
         pack();
         this.setLocationRelativeTo(getParent());
     }
-    
+
     private void poblarComboboxCargo() {
         DefaultComboBoxModel<Cargo> cargoModel = new DefaultComboBoxModel<>();
-        
-        for (Cargo cargoEnum : Cargo.values() ) {
+
+        for (Cargo cargoEnum : Cargo.values()) {
             cargoModel.addElement(cargoEnum);
         }
         comboboxCargo.setModel(cargoModel);
-        
-        if ( cargoModel.getSize() > 0 ) {
+
+        if (cargoModel.getSize() > 0) {
             comboboxCargo.setSelectedIndex(0); // selecciona el primer cargo por defecto
         }
     }
@@ -176,22 +180,22 @@ public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
     }//GEN-LAST:event_comboboxCargoActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        
+
         Cargo cargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem(); // Asumiendo que tu JComboBox se llama así
         String nuevoSueldoStr = txtNuevoSueldo.getText().trim(); // Asumiendo que tu JTextField se llama así
 
         // validaciones, si cargo esta vacio
-        if (cargoSeleccionado == null ) {
+        if (cargoSeleccionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un cargo.", "Error de Selección", JOptionPane.ERROR_MESSAGE);
             return;
         }
-            // si sueldo esta vacio
+        // si sueldo esta vacio
         if (nuevoSueldoStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese el nuevo sueldo general.", "Entrada Requerida", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        double nuevoSueldo; 
+        double nuevoSueldo;
         try {
             nuevoSueldo = Double.parseDouble(nuevoSueldoStr); // convertimos a double nuestro string del nuevo sueldo
         } catch (NumberFormatException e) {
@@ -199,7 +203,7 @@ public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
             return;
         }
 
-        // 2. Confirmación (opcional pero recomendado)
+        //Confirmacion si quieres actualizar
         int confirmacion = JOptionPane.showConfirmDialog(this,
                 "¿Está seguro de que desea actualizar el sueldo a $" + String.format("%.2f", nuevoSueldo)
                 + " para todos los empleados activos con el cargo '" + cargoSeleccionado.toString() + "'?", // Usamos toString() del Cargo para mostrarlo
@@ -211,13 +215,12 @@ public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
             return; // El usuario canceló
         }
 
-        
         try {
-            
 
-            long empleadosActualizados = this.empleadoBO.actualizarSueldoGeneralPorCargo(cargoSeleccionado, nuevoSueldo);
+            long empleadosActualizados = this.manejoEmpleados.actualizarSueldoGeneralPorCargo(cargoSeleccionado, nuevoSueldo);
 
             // eeee
+            // notificamos los empleaods que fueron actualizados
             if (empleadosActualizados > 0) {
                 JOptionPane.showMessageDialog(this,
                         empleadosActualizados + " empleado(s) activo(s) con el cargo '" + cargoSeleccionado.toString()
@@ -229,25 +232,17 @@ public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
                         + cargoSeleccionado.toString() + "' o si el sueldo ya era el mismo.",
                         "Operación Completada", JOptionPane.INFORMATION_MESSAGE);
             }
+            
             this.dispose(); // Cerrar el diálogo
 
-        } catch (ValidacionEmpleadoException vex) {
+        // CAMIBAR LUEGO 
+        } catch (Exception e) { 
             JOptionPane.showMessageDialog(this,
-                    "Error de validación: " + vex.getMessage(),
-                    "Error de Datos", JOptionPane.ERROR_MESSAGE);
-        } catch (PersistenciaException pex) {
-            JOptionPane.showMessageDialog(this,
-                    "Error de persistencia: " + pex.getMessage()
-                    + "\nConsulte los registros del servidor para más detalles.",
-                    "Error en Base de Datos", JOptionPane.ERROR_MESSAGE);
-            // Podrías querer loggear pex.getCause() si existe
-        } catch (Exception e) { // Captura genérica para cualquier otro imprevisto
-            JOptionPane.showMessageDialog(this,
-                    "Ocurrió un error inesperado: " + e.getMessage(),
-                    "Error Desconocido", JOptionPane.ERROR_MESSAGE);
+                    "Ocurrió un error: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace(); // Es bueno loggear esto en la consola de desarrollo
         }
-    
+
 
     }//GEN-LAST:event_btnAceptarActionPerformed
 
@@ -256,7 +251,6 @@ public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

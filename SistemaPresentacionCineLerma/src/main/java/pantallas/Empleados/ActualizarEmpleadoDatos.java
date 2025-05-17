@@ -6,9 +6,15 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import Excepciones.ActualizacionEmpleadoException;
 import Excepciones.Empleados.ActualizarEmpleadoException;
 import Excepciones.Empleados.ValidacionEmpleadoException;
+import Excepciones.ObtenerEmpleadoException;
 import Excepciones.PersistenciaException;
+import Excepciones.ValidacionEmpleadoIdException;
+import Excepciones.ValidarEmpleadoException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.bson.types.ObjectId;
@@ -18,28 +24,28 @@ import org.bson.types.ObjectId;
  * @author isaac
  */
 public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
-    
-    private EmpleadoBO empleadoBO; 
+
+    private IManejoEmpleados manejoEmpleados;
     private EmpleadoDTO empleadoActualDTO; // dto del empleado que se edita
     private String empleadoId; // id del empleado que se edita
 
     /**
      * Creates new form ActualizarEmpleadoDatos
      */
-    public ActualizarEmpleadoDatos(String empleadoIdParaEditar) {
-        this.empleadoBO = new EmpleadoBO();
+    public ActualizarEmpleadoDatos(String empleadoIdParaEditar) throws ValidarEmpleadoException, ObtenerEmpleadoException, ValidacionEmpleadoIdException {
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         this.empleadoId = empleadoIdParaEditar;
         initComponents();
         configurarFrame();
         cargarDatosEmpleado();
     }
-    
+
     private void configurarFrame() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
     }
-    
-    private void cargarDatosEmpleado() {
+
+    private void cargarDatosEmpleado() throws ValidarEmpleadoException, ObtenerEmpleadoException, ValidacionEmpleadoIdException {
         if (this.empleadoId == null || empleadoId.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "No se especificó un empleado para editar.", "Error", JOptionPane.ERROR_MESSAGE);
             this.dispose();
@@ -47,7 +53,7 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
         }
         try {
             // Usamos el BO para buscar el empleado por ID (ya que el DTO completo podría no haber sido pasado)
-            this.empleadoActualDTO = empleadoBO.buscarEmpleadoActivoPorId(this.empleadoId); 
+            this.empleadoActualDTO = manejoEmpleados.buscarEmpleadoActivoPorId(this.empleadoId);
 
             if (this.empleadoActualDTO == null) {
                 JOptionPane.showMessageDialog(this, "Empleado no encontrado o inactivo.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -66,13 +72,22 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
             txtCorreoE.setText(empleadoActualDTO.getCorreoE());
             txtTelefono.setText(empleadoActualDTO.getTelefono());
 
-        } catch (PersistenciaException | Excepciones.Empleados.BuscarEmpleadoException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar datos del empleado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ValidacionEmpleadoIdException vex) { // Por ej. si el formato del ID fuera inválido (Manejo valida esto)
+            JOptionPane.showMessageDialog(this, "Error de validación al cargar datos: " + vex.getMessage(), "Error de Validación", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+        } catch (ObtenerEmpleadoException opex) { // Envuelve errores del BO (BuscarEmpleadoException, PersistenciaException)
+            JOptionPane.showMessageDialog(this, "Error al cargar datos del empleado: " + opex.getMessage(), "Error de Operación", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original (cargarDatosEmpleado): " + opex.getCause().getMessage());
+            }
+            this.dispose();
+        } catch (Exception e) { // Otros errores inesperados
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar los datos: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
             this.dispose();
         }
+
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -315,95 +330,98 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtColoniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtColoniaActionPerformed
-       
-        
-        
+
+
     }//GEN-LAST:event_txtColoniaActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        
-        
-        
+
+
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void txtApellidoPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidoPActionPerformed
-        
-        
-        
+
+
     }//GEN-LAST:event_txtApellidoPActionPerformed
 
     private void txtCalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCalleActionPerformed
-        
-        
-        
+
+
     }//GEN-LAST:event_txtCalleActionPerformed
 
     private void txtCorreoEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoEActionPerformed
-        
-        
-        
+
+
     }//GEN-LAST:event_txtCorreoEActionPerformed
 
     private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
-        
-        
-        
+
+
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void txtNumExtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumExtActionPerformed
-       
-        
+
+
     }//GEN-LAST:event_txtNumExtActionPerformed
 
     private void txtApellidoMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidoMActionPerformed
-        
-        
+
+
     }//GEN-LAST:event_txtApellidoMActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        
-        // 1. Recoger los datos actualizados de los campos editables
+
+        if (empleadoActualDTO == null) {
+            JOptionPane.showMessageDialog(this, "No hay datos de empleado cargados para actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 1. Recolectar datos de los campos (solo los que se pueden modificar)
         String nombre = txtNombre.getText().trim();
         String apellidoP = txtApellidoP.getText().trim();
         String apellidoM = txtApellidoM.getText().trim();
         String calle = txtCalle.getText().trim();
         String colonia = txtColonia.getText().trim();
         String numExt = txtNumExt.getText().trim();
+        String correoE = txtCorreoE.getText().trim();
+        String telefono = txtTelefono.getText().trim();
 
-        // 2. Crear un nuevo EmpleadoDTO con TODOS los datos para la actualización
-        EmpleadoDTO dtoActualizado = new EmpleadoDTO();
-        dtoActualizado.setId(this.empleadoActualDTO.getId()); // ID es el mismo
-        dtoActualizado.setNombre(nombre); // Dato nuevo
-        dtoActualizado.setApellidoP(apellidoP); // Dato nuevo
-        dtoActualizado.setApellidoM(apellidoM); // Dato nuevo
-        dtoActualizado.setCalle(calle); // Dato nuevo
-        dtoActualizado.setColonia(colonia); // Dato nuevo
-        dtoActualizado.setNumExterior(numExt); // Dato nuevo
+        // 2. Crear un DTO con los datos actualizados
+        //    Solo incluimos los campos que actualiza tu método actualizarInformacionEmpleado del BO.
+        EmpleadoDTO datosNuevosDTO = new EmpleadoDTO();
+        datosNuevosDTO.setNombre(nombre);
+        datosNuevosDTO.setApellidoP(apellidoP);
+        datosNuevosDTO.setApellidoM(apellidoM);
+        datosNuevosDTO.setCalle(calle);
+        datosNuevosDTO.setColonia(colonia);
+        datosNuevosDTO.setNumExterior(numExt);
+        datosNuevosDTO.setCorreoE(correoE);
+        datosNuevosDTO.setTelefono(telefono);
 
-        // Copiar los campos que NO se modifican desde el empleadoActualDTO original
-        dtoActualizado.setCorreoE(this.empleadoActualDTO.getCorreoE());
-        dtoActualizado.setTelefono(this.empleadoActualDTO.getTelefono());
-        dtoActualizado.setFechaNacimiento(this.empleadoActualDTO.getFechaNacimiento());
-        dtoActualizado.setCargo(this.empleadoActualDTO.getCargo());
-        dtoActualizado.setSueldo(this.empleadoActualDTO.getSueldo());
-        dtoActualizado.setActivo(this.empleadoActualDTO.isActivo()); // Debe seguir activo
-        dtoActualizado.setFechaRegistro(this.empleadoActualDTO.getFechaRegistro()); // Fecha de registro no cambia
+        // Campos que tu lógica de BO (actualizarInformacionEmpleado) NO actualiza directamente
+        // se mantienen del DTO original o se omiten si no son necesarios para esta operación específica.
+        datosNuevosDTO.setCargo(empleadoActualDTO.getCargo()); // Mantener cargo original
+        datosNuevosDTO.setSueldo(empleadoActualDTO.getSueldo()); // Mantener sueldo original
+        datosNuevosDTO.setFechaNacimiento(empleadoActualDTO.getFechaNacimiento()); // Mantener fecha nacimiento original
+        // El ID no se pone en el DTO de datosNuevos, se pasa como parámetro separado.
 
+        // 3. Llamar al método de ManejoEmpleados
         try {
-            // 3. Llamar al BO para actualizar. El BO usará el método que toma (String, EmpleadoDTO)
-            empleadoBO.actualizarInformacionEmpleado(this.empleadoId, dtoActualizado);
+            EmpleadoDTO empleadoActualizado = manejoEmpleados.actualizarInformacionEmpleado(this.empleadoId, datosNuevosDTO);
 
             JOptionPane.showMessageDialog(this, "Datos del empleado actualizados exitosamente.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose(); // Cerrar este frame
-            // Aquí podrías querer que el FrameSeleccionarEmpleado se actualice,
-            // lo cual es más complejo y podría requerir pasarle una referencia
-            // o usar un patrón observador. Por ahora, simplemente cerramos.
+            this.empleadoActualDTO = empleadoActualizado; // Actualizar el DTO local por si acaso
 
-        } catch (ValidacionEmpleadoException | ActualizarEmpleadoException | PersistenciaException e) {
-            JOptionPane.showMessageDialog(this, "Error al actualizar empleado: " + e.getMessage(), "Error de Actualización", JOptionPane.ERROR_MESSAGE);
+        } catch (ValidacionEmpleadoIdException vex) {
+            JOptionPane.showMessageDialog(this, "Error de validación al actualizar: " + vex.getMessage(), "Error de Validación", JOptionPane.ERROR_MESSAGE);
+        } catch (ActualizacionEmpleadoException opex) {
+            JOptionPane.showMessageDialog(this, "Error en la operación de actualización: " + opex.getMessage(), "Error de Operación", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original (guardarCambios): " + opex.getCause().getMessage());
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al actualizar: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -415,9 +433,6 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
- 
-    
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
@@ -441,4 +456,3 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }
-

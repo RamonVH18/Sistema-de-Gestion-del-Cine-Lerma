@@ -6,6 +6,8 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,18 +16,18 @@ import javax.swing.JOptionPane;
  */
 public class DialogSeleccionarEmpleado extends javax.swing.JDialog {
     
-    private EmpleadoBO empleadoBO;
+    private IManejoEmpleados manejoEmpleados;
     private ListaEmpleados listaEmpleados;
     private EmpleadoDTO empleadoSeleccionado = null;
 
     /**
      * Creates new form DialogSeleccionarEmpleado
      */
-    public DialogSeleccionarEmpleado(java.awt.Frame parent, boolean modal, EmpleadoBO bo) {
+    public DialogSeleccionarEmpleado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.empleadoBO = bo;
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
-        this.listaEmpleados = new ListaEmpleados(this.empleadoBO);
+        this.listaEmpleados = new ListaEmpleados();
         scrollPanela.setViewportView(this.listaEmpleados);
         configurarDialog();
     }

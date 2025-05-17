@@ -9,6 +9,10 @@ import DTOs.EmpleadoDTO;
 import Excepciones.Empleados.RegistrarEmpleadoException;
 import Excepciones.Empleados.ValidacionEmpleadoException;
 import Excepciones.PersistenciaException;
+import Excepciones.RegistrarNuevoEmpleadoException;
+import Excepciones.ValidarEmpleadoException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import entidades.Empleado;
 import enums.Cargo;
 import java.time.LocalDate;
@@ -23,13 +27,13 @@ import javax.swing.JOptionPane;
  */
 public class RegistrarEmpleado extends javax.swing.JFrame {
 
-    private EmpleadoBO empleadoBO;
+    private IManejoEmpleados manejoEmpleados;
 
     /**
      * Creates new form RegistrarEmpleado
      */
     public RegistrarEmpleado() {
-        empleadoBO = new EmpleadoBO();
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
         for (Cargo cargoEnum : Cargo.values()) {
             comboboxCargo.addItem(cargoEnum);
@@ -229,9 +233,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(labelNumExterior)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(labelNumExterior)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtNumExt, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -272,8 +274,8 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
                                         .addComponent(jLabel2)
                                         .addGap(90, 90, 90))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(33, 33, 33)
-                                        .addComponent(comboboxCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(16, 16, 16)
+                                        .addComponent(comboboxCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -342,9 +344,9 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
                     .addComponent(labelTelefono)
                     .addComponent(labelCorreoE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCorreoE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCorreoE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(46, 46, 46)
                 .addComponent(jLabel1)
                 .addGap(54, 54, 54)
@@ -404,12 +406,11 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void comboboxCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxCargoActionPerformed
-        
+
     }//GEN-LAST:event_comboboxCargoActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
 
-        // Obtener los datos de los textField y el comboBox de cargo
         String nombre = txtNombre.getText().trim();
         String apellidoP = txtApellidoP.getText().trim();
         String apellidoM = txtApellidoM.getText().trim();
@@ -419,85 +420,77 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         String calle = txtCalle.getText().trim();
         String colonia = txtColonia.getText().trim();
         String numExt = txtNumExt.getText().trim();
-        Cargo cargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem(); // checart
-        
+        Cargo cargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem();
 
-        // validaciones para poder agregar
+        // VALIDACION SUPER BASICA, nomas que no este vacio, es opcional pq el ManejoEmpleado valida todo eso pero por si las dudas
+        if (nombre.isEmpty() || apellidoP.isEmpty() || apellidoM.isEmpty()
+                || fechaNacimientoStr.isEmpty() || telefono.isEmpty() || correoE.isEmpty()
+                || calle.isEmpty() || colonia.isEmpty() || numExt.isEmpty() || cargoSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Campos Incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        LocalDateTime fechaNacimiento;
         try {
-            // validar los campos nombre, apellidos, fechaNacimiento, direccion  no esten vacio
-            if (nombre.isEmpty() || apellidoP.isEmpty() || apellidoM.isEmpty()
-                    || fechaNacimientoStr.isEmpty() || telefono.isEmpty() || correoE.isEmpty()
-                    || calle.isEmpty() || colonia.isEmpty() || numExt.isEmpty()) { // Quitado sueldoStr.isEmpty()
-                JOptionPane.showMessageDialog(this, "Todos los campos (excepto sueldo que es automático) son obligatorios.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+            LocalDate ld = LocalDate.parse(fechaNacimientoStr, formatter);
+            fechaNacimiento = ld.atStartOfDay();
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha de nacimiento inválido. Use dd/mm/yyyy.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            txtFechaNacimiento.requestFocusInWindow();
+            return;
+        }
 
-            
-            // validar que hayas seleccionado un cargo
-            if (cargoSeleccionado == null) {
-                JOptionPane.showMessageDialog(this, "Debe seleccionar un cargo.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
-                comboboxCargo.requestFocusInWindow();
-                return;
-            }
+        // 3. Crear el EmpleadoDTO
+        EmpleadoDTO nuevoEmpleadoDTO = new EmpleadoDTO(
+                nombre, apellidoP, apellidoM, correoE, telefono,
+                fechaNacimiento, cargoSeleccionado, calle, colonia, numExt
+        );
+        // El sueldo es asignado por el BO, no se pasa desde aquí.
 
-            // ponemos la fecha nacimiento como formato clasico yatusabe
-            LocalDateTime fechaNacimiento;
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
-                LocalDate ld = LocalDate.parse(fechaNacimientoStr, formatter);
-                fechaNacimiento = ld.atStartOfDay();
-            } catch (DateTimeParseException e) {
-                JOptionPane.showMessageDialog(this, "Formato de fecha de nacimiento inválido. Use dd/mm/yyyy.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-                txtFechaNacimiento.requestFocusInWindow();
-                return;
-            }
+        // 4. Llamar al método de la capa de Manejo
+        try {
+            // La instancia 'manejoEmpleados' debe estar inicializada en el constructor de tu JFrame
+            // por ejemplo: this.manejoEmpleados = ManejoEmpleados.getInstance();
+            EmpleadoDTO empleadoRegistradoDTO = manejoEmpleados.registrarNuevoEmpleado(nuevoEmpleadoDTO);
 
-            // Creamos el empleadoDTO sin sueldo
-            EmpleadoDTO nuevoEmpleadoDTO = new EmpleadoDTO(
-                    nombre,
-                    apellidoP,
-                    apellidoM,
-                    correoE,
-                    telefono,
-                    fechaNacimiento,
-                    cargoSeleccionado,
-                    calle,
-                    colonia,
-                    numExt);
-
-            // ahora usamos el BO para registrarlo llamando al metodo registrarNuevoEmpleado
-            EmpleadoDTO empleadoRegistradoDTO = empleadoBO.registrarNuevoEmpleado(nuevoEmpleadoDTO);
-
-            // mostramos mensaje de exito:
-            JOptionPane.showMessageDialog(this, "Empleado regitrado exitosamente con ID:" + empleadoRegistradoDTO.getId()
-                    + "\nSueldo Asignado: $" + empleadoRegistradoDTO.getSueldo(), "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+            // 5. Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(this,
+                    "Empleado registrado exitosamente con ID: " + empleadoRegistradoDTO.getId()
+                    + "\nSueldo Asignado: $" + String.format("%.2f", empleadoRegistradoDTO.getSueldo()),
+                    "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
 
             limpiarCampos();
 
-        } catch (ValidacionEmpleadoException | RegistrarEmpleadoException | PersistenciaException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
-        } catch (IllegalArgumentException e) { // Para el error de cargo nulo en obtenerSueldoParaCargo
-            JOptionPane.showMessageDialog(this, "Error con el cargo seleccionado: " + e.getMessage(), "Error de Configuración", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
+        } catch (ValidacionEmpleadoException vex) {
+            // Captura la ValidacionEmpleadoException lanzada por ManejoEmpleados.validarDatosEmpleadoDTO()
+            JOptionPane.showMessageDialog(this, "Error de validación: " + vex.getMessage(), "Datos Incorrectos", JOptionPane.ERROR_MESSAGE);
+        } catch (RegistrarNuevoEmpleadoException rnex) {
+            // Captura la RegistrarNuevoEmpleadoException lanzada por ManejoEmpleados
+            // Esta excepción envuelve errores del BO (validación, persistencia, etc.)
+            JOptionPane.showMessageDialog(this, "Error al registrar empleado: " + rnex.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
+            if (rnex.getCause() != null) {
+                System.err.println("Causa original del error de registro: " + rnex.getCause().getMessage());
+            }
+        } catch (Exception e) { // Captura genérica para cualquier otro imprevisto
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
         }
 
-
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        
+
         this.dispose();
-        
+
     }//GEN-LAST:event_btnVolverActionPerformed
 
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
- 
-               new RegistrarEmpleado().setVisible(true);
+
+                new RegistrarEmpleado().setVisible(true);
             }
         });
     }

@@ -6,6 +6,8 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 
 /**
  *
@@ -13,13 +15,13 @@ import DTOs.EmpleadoDTO;
  */
 public class MenuEmpleados extends javax.swing.JFrame {
     
-    private EmpleadoBO empleadoBO;
+    private IManejoEmpleados manejoEmpleados;
 
     /**
      * Creates new form MenuEmpleados
      */
     public MenuEmpleados() {
-        this.empleadoBO = new EmpleadoBO();
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
     }
 
@@ -139,14 +141,14 @@ public class MenuEmpleados extends javax.swing.JFrame {
     private void btnGestionCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionCargoActionPerformed
         
         // primero vamos a abrir el Dialog DialogSeleccionarEmpleado para seleccionar el empleado a actualizar su cargo
-        DialogSeleccionarEmpleado dialogSeleccion = new DialogSeleccionarEmpleado(this, true, empleadoBO);
+        DialogSeleccionarEmpleado dialogSeleccion = new DialogSeleccionarEmpleado(this, true);
         dialogSeleccion.setVisible(true);
         
         EmpleadoDTO empleadoActualizarCargo = dialogSeleccion.getEmpleadoSeleccionado();
         
         if ( empleadoActualizarCargo != null ) {
             // si el empleado fue seleccionado a abrir el dialog para actualizarlo, 
-            DialogActualizarCargoEmpleado dialogActualizarCargoEmp = new DialogActualizarCargoEmpleado(this, true, empleadoBO, empleadoActualizarCargo);
+            DialogActualizarCargoEmpleado dialogActualizarCargoEmp = new DialogActualizarCargoEmpleado(this, true, empleadoActualizarCargo);
             dialogActualizarCargoEmp.setVisible(true);
         } else {
             System.out.println("La seleccion de empleado para actualizar ha sido cancelada");

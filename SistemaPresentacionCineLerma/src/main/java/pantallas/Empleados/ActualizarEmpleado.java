@@ -6,9 +6,18 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
+import Excepciones.ActualizacionEmpleadoException;
+import Excepciones.Empleados.ActualizarEmpleadoException;
+import Excepciones.ObtenerEmpleadoException;
+import Excepciones.ValidacionEmpleadoIdException;
+import Excepciones.ValidarEmpleadoException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,23 +25,23 @@ import javax.swing.JOptionPane;
  * @author isaac
  */
 public class ActualizarEmpleado extends javax.swing.JFrame {
-    
-     private final EmpleadoBO empleadoBO;
+
+    private IManejoEmpleados manejoEmpleados;
     private ListaEmpleados listaEmpleados;
 
     /**
      * Creates new form ActualizarEmpleado
      */
     public ActualizarEmpleado() {
-        this.empleadoBO = new EmpleadoBO();
+        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
-        
-         this.listaEmpleados = new ListaEmpleados(this.empleadoBO);
-        scrollPanela.setViewportView(this.listaEmpleados); 
-        
+
+        this.listaEmpleados = new ListaEmpleados();
+        scrollPanela.setViewportView(this.listaEmpleados);
+
         //  configuracion adiciones del frame
         setLocationRelativeTo(null); // centrar la ventana
-        
+
         // cargar datos iniciales
         this.listaEmpleados.cargarEmpleadosActivos(); // el panel llama a esto en su constructor
     }
@@ -131,12 +140,12 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        
+
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
-        
+
         EmpleadoDTO seleccionado = listaEmpleados.getEmpleadoSeleccionado();
         if (seleccionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un empleado de la lista.", "Selección Requerida", JOptionPane.WARNING_MESSAGE);
@@ -147,7 +156,7 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
         detalles.append("<b>Nombre Completo:</b> ").append(seleccionado.getNombre()).append(" ").append(seleccionado.getApellidoP()).append(" ").append(seleccionado.getApellidoM()).append("<br>");
         detalles.append("<b>Correo Electrónico:</b> ").append(seleccionado.getCorreoE()).append("<br>");
         detalles.append("<b>Teléfono:</b> ").append(seleccionado.getTelefono()).append("<br>");
-        
+
         int edad = 0;
         if (seleccionado.getFechaNacimiento() != null) {
             edad = Period.between(seleccionado.getFechaNacimiento().toLocalDate(), LocalDate.now()).getYears();
@@ -164,7 +173,7 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
         detalles.append("</body></html>");
 
         JOptionPane.showMessageDialog(this, detalles.toString(), "Detalles de " + seleccionado.getNombre(), JOptionPane.INFORMATION_MESSAGE);
-        
+
     }//GEN-LAST:event_btnDetallesActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
@@ -172,10 +181,55 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
         EmpleadoDTO empleadoSeleccionado = listaEmpleados.getEmpleadoSeleccionado();
 
         if (empleadoSeleccionado != null) {
-            // Abrir el frame de actualización, pasando el ID del empleado
-            ActualizarEmpleadoDatos frameActualizar = new ActualizarEmpleadoDatos(empleadoSeleccionado.getId());
-            frameActualizar.setVisible(true);
-             this.dispose(); 
+            ActualizarEmpleadoDatos frameActualizar = null; // 1. Declara la variable fuera del try-catch
+
+            try {
+                // 2. La instanciación va dentro del try, ya que el constructor PUEDE lanzar excepciones
+                frameActualizar = new ActualizarEmpleadoDatos(empleadoSeleccionado.getId());
+
+                // 3. Si la instanciación fue exitosa (no hubo excepción), entonces frameActualizar SÍ está inicializado.
+                //    Por lo tanto, las siguientes líneas deben ir DENTRO del try o en un bloque 'finally'
+                //    con una comprobación de nulidad, o después del try-catch si la variable
+                //    se inicializa a null y se comprueba. Moverlas dentro del try es más limpio aquí.
+                frameActualizar.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        // Este evento se dispara después de que frameActualizar se cierra con dispose().
+                        System.out.println("Ventana ActualizarEmpleadoDatos cerrada, intentando refrescar lista...");
+                        // Sería ideal si 'frameActualizar' pudiera indicar si realmente se guardaron cambios.
+                        // ActualizarEmpleadoDatos necesitaría un método como: public boolean datosFueronGuardados()
+                        // if (frameActualizar.datosFueronGuardados()) {
+                        //    listaEmpleados.cargarEmpleadosActivos();
+                        // }
+                        // Por ahora, simplemente recargamos:
+                        listaEmpleados.cargarEmpleadosActivos();
+                    }
+                });
+
+                frameActualizar.setVisible(true);
+
+                // this.dispose(); // Decide si realmente quieres cerrar la ventana actual.
+                // Si lo haces, el WindowListener de arriba podría no ser la mejor
+                // forma de refrescar, ya que esta ventana ya no existiría.
+            } catch (ValidarEmpleadoException vex) { // Excepciones que PUEDE lanzar el constructor de ActualizarEmpleadoDatos
+                JOptionPane.showMessageDialog(this,
+                        "Error al preparar la ventana de actualización (validación): " + vex.getMessage(),
+                        "Error de Preparación", JOptionPane.ERROR_MESSAGE);
+                // frameActualizar podría ser null aquí si la excepción ocurrió muy temprano en el constructor.
+            } catch (ObtenerEmpleadoException opex) { // Excepciones que PUEDE lanzar el constructor de ActualizarEmpleadoDatos
+                JOptionPane.showMessageDialog(this,
+                        "Error al preparar la ventana de actualización (operación): " + opex.getMessage(),
+                        "Error de Preparación", JOptionPane.ERROR_MESSAGE);
+                if (opex.getCause() != null) {
+                    System.err.println("Causa original (constructor ActualizarEmpleadoDatos): " + opex.getCause().getMessage());
+                }
+            } catch (Exception e) { // Para cualquier otra excepción inesperada durante la creación
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "Ocurrió un error inesperado al abrir la ventana de actualización: " + e.getMessage(),
+                        "Error Crítico", JOptionPane.ERROR_MESSAGE);
+            }
+
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un empleado para editar.", "Selección Requerida", JOptionPane.WARNING_MESSAGE);
         }

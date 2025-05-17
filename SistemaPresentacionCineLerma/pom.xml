@@ -37,11 +37,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaNegocioCineLerma</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>SistemaGestionReservaBoletos</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -68,6 +63,16 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>SistemaGestionFunciones</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SistemaGestionEmpleados</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SistemaNegocioCineLerma</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

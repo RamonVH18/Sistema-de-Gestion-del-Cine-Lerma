@@ -8,12 +8,12 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaPersistenciaCineLerma</artifactId>
+            <artifactId>SistemaGestionUsuarios</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaGestionUsuarios</artifactId>
+            <artifactId>SistemaPersistenciaCineLerma</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
