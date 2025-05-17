@@ -84,15 +84,15 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>LGoodDatePicker-11.2.1.jar</groupId>
+            <artifactId>LGoodPicker</artifactId>
+            <version>1</version>
+        </dependency>
+        <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>2.1.7</version>
             <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>com.github.LGoodDatePicker</groupId>
-            <artifactId>LGoodDatePicker</artifactId>
-            <version>11.2.0</version>
         </dependency>
     </dependencies>
     <properties>

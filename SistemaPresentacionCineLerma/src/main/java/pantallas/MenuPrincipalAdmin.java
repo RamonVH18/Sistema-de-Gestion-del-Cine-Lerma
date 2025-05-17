@@ -18,6 +18,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -53,6 +54,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         crearEstructuraMenuPrincipal();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        
 
         this.administrador = administrador;
 

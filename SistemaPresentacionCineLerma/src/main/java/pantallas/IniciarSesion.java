@@ -159,11 +159,16 @@ public class IniciarSesion extends javax.swing.JFrame {
         if (usuarioEncontrado != null) {
             if (usuarioEncontrado.getRol() == Rol.CLIENTE) {
                 ClienteDTO clienteEncontrado = control.obtenerCliente(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
+                JOptionPane.showMessageDialog(this, "Bienvenido: " + clienteEncontrado.getNombre() + " " + clienteEncontrado.getApellidoPaterno() + " " + clienteEncontrado.getApellidoMaterno(), "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
+                
                 control.mostrarMenuCliente(this, clienteEncontrado);
                 dispose();
                 return;
             } else if (usuarioEncontrado.getRol() == Rol.ADMINISTRADOR) {
                 AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
+                JOptionPane.showMessageDialog(this, "Bienvenido: " + adminEncontrado.getNombre() + " " + adminEncontrado.getApellidoPaterno() + " " + adminEncontrado.getApellidoMaterno(), "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
+                
+                
                 control.mostrarMenuAdministrador(this, adminEncontrado);
                 dispose();
                 return;
