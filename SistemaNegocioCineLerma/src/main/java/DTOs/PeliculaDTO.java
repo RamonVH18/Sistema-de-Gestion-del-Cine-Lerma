@@ -11,7 +11,7 @@ package DTOs;
 public class PeliculaDTO {
 
     private String idPelicula;
-    private String imagen;
+    private byte[] imagen;
     private String titulo;
     private String genero;
     private Integer duracion;
@@ -22,7 +22,7 @@ public class PeliculaDTO {
     public PeliculaDTO() {
     }
 
-    public PeliculaDTO(String idPelicula, String imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean activo) {
+    public PeliculaDTO(String idPelicula, byte[] imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean activo) {
         this.idPelicula = idPelicula;
         this.imagen = imagen;
         this.titulo = titulo;
@@ -33,7 +33,7 @@ public class PeliculaDTO {
         this.activo = activo;
     }
 
-    public PeliculaDTO(String imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean activo) {
+    public PeliculaDTO(byte[] imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean activo) {
         this.imagen = imagen;
         this.titulo = titulo;
         this.genero = genero;
@@ -51,11 +51,11 @@ public class PeliculaDTO {
         this.idPelicula = idPelicula;
     }
 
-    public String getImagen() {
+    public byte[] getImagen() {
         return imagen;
     }
 
-    public void setImagen(String imagen) {
+    public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
 

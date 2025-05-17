@@ -127,6 +127,11 @@ public interface IControl {
 
     public void mostrarProgramarFuncion();
     
+    // -------------------------------METODOS DE NAVEGACION DE PELICULAS--------------------------------
+    public void mostrarMenuAdministrarPeliculas(JFrame frameAnterior);
+    
+    public void mostrarAgregarPelicula(JFrame frameAnterior);
+    // -------------------------------FIN DE METODOS DE NAVEGACION DE PELICULAS-------------------------
 
     //Usuarios:
     public List<UsuarioDTO> mostrarListaUsuarios();
@@ -163,5 +168,9 @@ public interface IControl {
     public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora);
 
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion);
+    
+    // -------------------------------METODOS DE PELICULAS--------------------------------
+    public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO);
+    // -------------------------------FIN DE METODOS DE PELICULAS-------------------------
 
 }

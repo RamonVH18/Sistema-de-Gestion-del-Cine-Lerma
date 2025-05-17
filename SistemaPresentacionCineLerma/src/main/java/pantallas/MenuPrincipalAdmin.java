@@ -224,7 +224,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPeliculaActionPerformed
-        // TODO add your handling code here:
+        control.mostrarMenuAdministrarPeliculas(this);
     }//GEN-LAST:event_btnPeliculaActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed

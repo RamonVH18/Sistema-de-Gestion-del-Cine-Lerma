@@ -6,7 +6,6 @@ package DAOs;
 
 import Excepciones.Funciones.FuncionDuracionIncorrectaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
-import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.Funciones.FuncionSalaVaciaException;
 import Interfaces.IFuncionDAO;
 import entidades.Asiento;
@@ -50,8 +49,9 @@ public class FuncionDAOTest {
     @BeforeEach
     public void setUp() {
         funcionDAO = FuncionDAO.getInstanceDAO();
-        ObjectId id = new ObjectId();
-        peliculaPrueba = new Pelicula(id, "", "PeliculaPrueba", "Accion", 200, "B15", "Sinopsis", true);
+        ObjectId idPelicula = new ObjectId();
+        byte[] imagen = null;
+        peliculaPrueba = new Pelicula(idPelicula, imagen, "PeliculaPrueba", "Accion", 200, "B15", "Sinopsis", true);
 
         salaPrueba = new Sala(50, "Sala1", EstadoSala.ACTIVA);
         List<Asiento> asientos = new ArrayList<>();
@@ -163,7 +163,7 @@ public class FuncionDAOTest {
         String idFuncion = funcionPrueba.getIdFuncion().toHexString();
         LocalDateTime horaTermino = funcionDAO.calcularHoraTerminoFuncion(idFuncion);
         LocalDateTime expected = funcionPrueba.getFechaHora().plusMinutes(peliculaPrueba.getDuracion()).truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
-        
+
         LocalDateTime actualTruncado = horaTermino.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
 
         assertEquals(expected, actualTruncado, "La hora de término debe coincidir con la duración de la película");
@@ -182,7 +182,7 @@ public class FuncionDAOTest {
         // Crear película con duración nula
         Pelicula peliculaSinDuracion = new Pelicula(
                 new ObjectId(),
-                "",
+                new byte[] {},
                 "PeliculaSinDuracion",
                 "Género",
                 null, // Duración nula

@@ -15,7 +15,7 @@ import Excepciones.EliminarPeliculaException;
 import Excepciones.MostrarPeliculasException;
 import Excepciones.RegistrarPeliculaException;
 import Excepciones.VerificarCamposPeliculaException;
-import Excepciones.VerificarTamanioImagenException;
+import Excepciones.VerificarImagenException;
 import Excepciones.peliculas.PeliculaActualizacionException;
 import Excepciones.peliculas.PeliculaBusquedaException;
 import Excepciones.peliculas.PeliculaDarAltaException;
@@ -25,7 +25,14 @@ import Excepciones.peliculas.PeliculaRegistroException;
 import Excepciones.peliculas.PeliculasActivasInactivasException;
 import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 /**
  *
@@ -40,7 +47,7 @@ public class ManejoPeliculas implements IManejoPeliculas {
     private ManejoPeliculas() {
     }
 
-    public static ManejoPeliculas getInstancePeliculas() {
+    public static ManejoPeliculas getInstanceDAO() {
         if (instancePeliculas == null) {
             instancePeliculas = new ManejoPeliculas();
         }
@@ -58,8 +65,12 @@ public class ManejoPeliculas implements IManejoPeliculas {
                 throw new RegistrarPeliculaException("No es posible registrar la pelicula ya que ya existe.");
             }
 
+            verificarImagenCompleta(peliculaDTO.getImagen());
+
             return peliculaBO.registrarPelicula(peliculaDTO);
         } catch (VerificarCamposPeliculaException e) {
+            throw new RegistrarPeliculaException("No se pudo registrar la pelicula: " + e.getMessage());
+        } catch (VerificarImagenException e) {
             throw new RegistrarPeliculaException("No se pudo registrar la pelicula: " + e.getMessage());
         } catch (PeliculaBusquedaException e) {
             throw new RegistrarPeliculaException("Ocurrio un error durante la verificacion de la pelicula: " + e.getMessage());
@@ -197,8 +208,65 @@ public class ManejoPeliculas implements IManejoPeliculas {
 
     }
 
-    private void verificarTamanioImagen() throws VerificarTamanioImagenException {
+    private void verificarImagenCompleta(byte[] imagen) throws VerificarImagenException {
+        verificarTamanioImagen(imagen);
+        verificarFormatoImagen(imagen);
+        verificarImagenValida(imagen);
+//        verificarDimensionesImagen(imagen);            
+    }
 
+    private void verificarTamanioImagen(byte[] imagen) throws VerificarImagenException {
+        if (imagen == null) {
+            throw new VerificarImagenException("La imagen no puede ser nula.");
+        }
+        final int MAX_SIZE = 5 * 1024 * 1024; // 5MB maximo
+        if (imagen.length > MAX_SIZE) {
+            throw new VerificarImagenException("El tamaño de la imagen no debe exceder 5MB.");
+        }
+    }
+
+    private void verificarImagenValida(byte[] imagen) throws VerificarImagenException {
+        try {
+            BufferedImage img = ImageIO.read(new ByteArrayInputStream(imagen));
+            if (img == null) {
+                throw new VerificarImagenException("La imagen proporcionada no es válida o está corrupta.");
+            }
+        } catch (IOException e) {
+            throw new VerificarImagenException("Error al leer la imagen.");
+        }
+    }
+
+//    private void verificarDimensionesImagen(byte[] imagen) throws VerificarImagenException {
+//        try {
+//            BufferedImage img = ImageIO.read(new ByteArrayInputStream(imagen));
+//            if (img == null) {
+//                throw new VerificarImagenException("La imagen proporcionada no es válida.");
+//            }
+//            int ancho = img.getWidth();
+//            int alto = img.getHeight();
+//            final int MAX_ANCHO = 1920;
+//            final int MAX_ALTO = 1080;
+//
+//            if (ancho > MAX_ANCHO || alto > MAX_ALTO) {
+//                throw new VerificarImagenException("Las dimensiones de la imagen no deben superar " + MAX_ANCHO + "x" + MAX_ALTO + " píxeles.");
+//            }
+//        } catch (Exception e) {
+//            throw new VerificarImagenException("Error al verificar dimensiones de la imagen: " + e.getMessage());
+//        }
+//    }
+    private void verificarFormatoImagen(byte[] imagen) throws VerificarImagenException {
+        try (ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(imagen))) {
+            Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
+            if (!readers.hasNext()) {
+                throw new VerificarImagenException("Formato de imagen no soportado.");
+            }
+            String formato = readers.next().getFormatName().toLowerCase();
+            if (!formato.equals("jpg") && !formato.equals("jpeg") && !formato.equals("png")) {
+                throw new VerificarImagenException("Solo se permiten imágenes en formato JPG, JPEG o PNG.");
+            }
+        } catch (Exception e) {
+            throw new VerificarImagenException("Error al verificar formato de la imagen.");
+        }
     }
 
 }

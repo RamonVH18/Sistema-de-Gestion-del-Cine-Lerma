@@ -39,6 +39,7 @@ import Excepciones.ValidarCuentaException;
 import Excepciones.GenerarBoletoException;
 import Excepciones.ModificarSalaException;
 import Excepciones.PresentacionException;
+import Excepciones.RegistrarPeliculaException;
 import Excepciones.RegistrarUsuarioException;
 import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidacionSalaException;
@@ -52,6 +53,8 @@ import enums.EstadoUsuario;
 import enums.Rol;
 import gestionPagos.GestionPagos;
 import gestionPagos.IGestionPagos;
+import gestionPeliculas.IManejoPeliculas;
+import gestionPeliculas.ManejoPeliculas;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
 import gestionSalasAsientos.IManejoDeSalas;
@@ -82,6 +85,8 @@ import pantallas.Usuarios.ConsultarUsuarios;
 import pantallas.Usuarios.EditarUsuario;
 import pantallas.Usuarios.HistorialCliente;
 import pantallas.Usuarios.RegistrarUsuario;
+import pantallas.administracionPeliculas.AgregarPelicula;
+import pantallas.administracionPeliculas.MenuAdministrarPeliculas;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
 
@@ -97,6 +102,7 @@ public class ControlDeNavegacion implements IControl {
     private final IGestionPagos gestionDePagos = GestionPagos.getInstancia();
     private final IManejoUsuarios gestionUsuarios = ManejoUsuarios.getInstance();
     private final IManejoFunciones gestionFunciones = ManejoFunciones.getInstanceDAO();
+    private final IManejoPeliculas gestionPeliculas = ManejoPeliculas.getInstanceDAO();
 
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
     private PeliculaDTO peliculaSeleccionada;
@@ -159,6 +165,15 @@ public class ControlDeNavegacion implements IControl {
             MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin(admin);
             pantallaMenuAdmin.setLocationRelativeTo(null);
             pantallaMenuAdmin.setVisible(true);
+        });
+    }
+    
+    @Override
+    public void mostrarAgregarPelicula(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            AgregarPelicula pantallaAgregarPelicula = new AgregarPelicula();
+            pantallaAgregarPelicula.setLocationRelativeTo(null);
+            pantallaAgregarPelicula.setVisible(true);
         });
     }
 
@@ -727,6 +742,22 @@ public class ControlDeNavegacion implements IControl {
     /*
     --------------Fin DE LOS METODOS DEL CONTROL DE NAVEGACION DE FUNCIONES--------------
      */
+ /*
+    --------------INICIO DE LOS METODOS DEL CONTROL DE NAVEGACION DE ADMINISTRACION DE PELICULAS--------------
+     */
+    @Override
+    public void mostrarMenuAdministrarPeliculas(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            MenuAdministrarPeliculas pantallaMenuAdministrarPeliculas = new MenuAdministrarPeliculas();
+            pantallaMenuAdministrarPeliculas.setLocationRelativeTo(null);
+            pantallaMenuAdministrarPeliculas.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+
+    /*
+    --------------FIN DE LOS METODOS DEL CONTROL DE NAVEGACION DE ADMINISTRACION DE PELICULAS--------------
+     */
     //METODOS DE NAVEGACION DE LA GESTION DE USUARIOS
     @Override
     public void mostrarIniciarSesion() {
@@ -889,6 +920,10 @@ public class ControlDeNavegacion implements IControl {
     }
 
     /*
+    --------------FIN DE LOS METODOS DEL CONTROL DE NAVEGACION DE GESTION DE USUARIOS--------------
+     */
+
+ /*
     --------------METODOS DE FUNCION--------------
      */
     @Override
@@ -930,5 +965,23 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
+    /*
+    --------------FIN DE METODOS DE FUNCION--------------
+     */
 
+    /*
+    --------------METODOS DE ADMINISTRAR PELICULAS--------------
+     */
+    @Override
+    public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO) {
+        try {
+            return gestionPeliculas.registrarPelicula(peliculaDTO);
+        } catch (RegistrarPeliculaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+    /*
+    --------------FIN DE METODOS DE ADMINISTRAR PELICULAS--------------
+     */
 }

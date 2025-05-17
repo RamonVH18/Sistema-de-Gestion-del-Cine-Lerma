@@ -15,7 +15,7 @@ public class Pelicula {
 
     @BsonId
     private ObjectId idPelicula;
-    private String imagen;
+    private byte[] imagen;
     private String titulo;
     private String genero;
     private Integer duracion;
@@ -26,7 +26,7 @@ public class Pelicula {
     public Pelicula() {
     }
 
-    public Pelicula(ObjectId idPelicula, String imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean estado) {
+    public Pelicula(ObjectId idPelicula, byte[] imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean estado) {
         this.idPelicula = idPelicula;
         this.imagen = imagen;
         this.titulo = titulo;
@@ -37,7 +37,7 @@ public class Pelicula {
         this.activo = estado;
     }
 
-    public Pelicula(String imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean estado) {
+    public Pelicula(byte[] imagen, String titulo, String genero, Integer duracion, String clasificacion, String sinopsis, Boolean estado) {
         this.imagen = imagen;
         this.titulo = titulo;
         this.genero = genero;
@@ -55,11 +55,11 @@ public class Pelicula {
         this.idPelicula = idPelicula;
     }
 
-    public String getImagen() {
+    public byte[] getImagen() {
         return imagen;
     }
 
-    public void setImagen(String imagen) {
+    public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
 

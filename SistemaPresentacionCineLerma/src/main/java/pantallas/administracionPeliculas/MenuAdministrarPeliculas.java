@@ -4,16 +4,23 @@
  */
 package pantallas.administracionPeliculas;
 
+import DTOs.AdministradorDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+
 /**
  *
  * @author Daniel M
  */
-public class CarteleraPeliculas extends javax.swing.JFrame {
+public class MenuAdministrarPeliculas extends javax.swing.JFrame {
 
+    private final IControl control = ControlDeNavegacion.getInstancia();
+    private AdministradorDTO administrador;
+    
     /**
      * Creates new form Cartelera
      */
-    public CarteleraPeliculas() {
+    public MenuAdministrarPeliculas() {
         initComponents();
     }
 
@@ -48,7 +55,7 @@ public class CarteleraPeliculas extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxFiltrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxFiltrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Peliculas Activas", "Peliculas Inactivas" }));
         jComboBoxFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxFiltrarActionPerformed(evt);
@@ -66,7 +73,7 @@ public class CarteleraPeliculas extends javax.swing.JFrame {
         );
         jPanelCarteleraFiltradaLayout.setVerticalGroup(
             jPanelCarteleraFiltradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 328, Short.MAX_VALUE)
+            .addGap(0, 385, Short.MAX_VALUE)
         );
 
         btnaVolver.setBackground(new java.awt.Color(162, 132, 94));
@@ -94,14 +101,15 @@ public class CarteleraPeliculas extends javax.swing.JFrame {
                             .addComponent(btnAgregarPelicula)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlabelFiltrar)
-                                    .addComponent(jComboBoxFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jComboBoxFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnaVolver)
-                            .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(276, 276, 276)
+                        .addComponent(jlabelFiltrar)))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -115,9 +123,9 @@ public class CarteleraPeliculas extends javax.swing.JFrame {
                 .addComponent(jlabelFiltrar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBoxFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(btnaVolver)
                 .addGap(16, 16, 16))
         );
@@ -126,7 +134,8 @@ public class CarteleraPeliculas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarPeliculaActionPerformed
-        // TODO add your handling code here:
+        control.mostrarAgregarPelicula(this);
+        dispose();
     }//GEN-LAST:event_btnAgregarPeliculaActionPerformed
 
     private void jComboBoxFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFiltrarActionPerformed
@@ -134,7 +143,8 @@ public class CarteleraPeliculas extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxFiltrarActionPerformed
 
     private void btnaVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaVolverActionPerformed
-        // TODO add your handling code here:
+        control.mostrarMenuAdministrador(this, administrador);
+        dispose();
     }//GEN-LAST:event_btnaVolverActionPerformed
 
     /**
@@ -154,21 +164,23 @@ public class CarteleraPeliculas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CarteleraPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuAdministrarPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CarteleraPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuAdministrarPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CarteleraPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuAdministrarPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CarteleraPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuAdministrarPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CarteleraPeliculas().setVisible(true);
+                new MenuAdministrarPeliculas().setVisible(true);
             }
         });
     }

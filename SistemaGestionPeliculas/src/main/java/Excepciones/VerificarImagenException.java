@@ -8,14 +8,14 @@ package Excepciones;
  *
  * @author Daniel M
  */
-public class VerificarTamanioImagenException extends Exception {
+public class VerificarImagenException extends Exception {
 
-    public VerificarTamanioImagenException(String message) {
+    public VerificarImagenException(String message) {
         super(message);
     }
 
-    public VerificarTamanioImagenException(String message, Throwable cause) {
+    public VerificarImagenException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
 }

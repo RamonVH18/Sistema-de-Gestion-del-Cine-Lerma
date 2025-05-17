@@ -270,14 +270,7 @@ public class PeliculaDAO implements IPeliculaDAO {
 
             // Buscar por título
             Bson filtro = Filters.regex("titulo", Pattern.quote(titulo), "i");
-            Pelicula peliculaEncontrada = coleccionPeliculas.find(filtro).first();
-
-            if (peliculaEncontrada == null) {
-                throw new BuscarPeliculaException("La película no existe.");
-            }
-
-            return peliculaEncontrada;
-
+            return coleccionPeliculas.find(filtro).first();
         } catch (MongoException e) {
             throw new BuscarPeliculaException("Error al buscar la película.");
         } finally {

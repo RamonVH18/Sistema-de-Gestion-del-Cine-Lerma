@@ -4,16 +4,41 @@
  */
 package pantallas.administracionPeliculas;
 
+import DTOs.PeliculaDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import entidades.Pelicula;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author Daniel M
  */
-public class AdministradorPeliculas extends javax.swing.JFrame {
+public class AgregarPelicula extends javax.swing.JFrame {
+
+    private final IControl control = ControlDeNavegacion.getInstancia();
+    private byte[] imagenSeleccionada;
 
     /**
      * Creates new form AdministradorPeliculas
      */
-    public AdministradorPeliculas() {
+    public AgregarPelicula() {
         initComponents();
     }
 
@@ -28,7 +53,7 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
 
         jlabelTituloAgregarEditar = new javax.swing.JLabel();
         jlabelImgPromocional = new javax.swing.JLabel();
-        jPanelCarteleraFiltrada = new javax.swing.JPanel();
+        jPanelImgPromocional = new javax.swing.JPanel();
         btnSubirImagen = new javax.swing.JButton();
         jlabelTituloPelicula = new javax.swing.JLabel();
         jTextFieldTitulo = new javax.swing.JTextField();
@@ -41,24 +66,28 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
         jTextFieldSinopsis = new javax.swing.JTextField();
         jlabelSinopsis = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
-        btnAgregarEditar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jlabelTituloAgregarEditar.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
-        jlabelTituloAgregarEditar.setText("Agregar/Editar película");
+        jlabelTituloAgregarEditar.setText("Agregar película");
 
         jlabelImgPromocional.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelImgPromocional.setText("Imágen promocional");
 
-        javax.swing.GroupLayout jPanelCarteleraFiltradaLayout = new javax.swing.GroupLayout(jPanelCarteleraFiltrada);
-        jPanelCarteleraFiltrada.setLayout(jPanelCarteleraFiltradaLayout);
-        jPanelCarteleraFiltradaLayout.setHorizontalGroup(
-            jPanelCarteleraFiltradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jPanelImgPromocional.setMaximumSize(new java.awt.Dimension(160, 160));
+        jPanelImgPromocional.setMinimumSize(new java.awt.Dimension(160, 160));
+        jPanelImgPromocional.setPreferredSize(new java.awt.Dimension(160, 160));
+
+        javax.swing.GroupLayout jPanelImgPromocionalLayout = new javax.swing.GroupLayout(jPanelImgPromocional);
+        jPanelImgPromocional.setLayout(jPanelImgPromocionalLayout);
+        jPanelImgPromocionalLayout.setHorizontalGroup(
+            jPanelImgPromocionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 160, Short.MAX_VALUE)
         );
-        jPanelCarteleraFiltradaLayout.setVerticalGroup(
-            jPanelCarteleraFiltradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelImgPromocionalLayout.setVerticalGroup(
+            jPanelImgPromocionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 160, Short.MAX_VALUE)
         );
 
@@ -75,24 +104,24 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
         jlabelTituloPelicula.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelTituloPelicula.setText("Título");
 
-        jTextFieldTitulo.setText("jTextField1");
-
         jlabelGenero.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelGenero.setText("Seleccionar género");
-
-        jTextFieldDuracion.setText("jTextField1");
 
         jlabelClasificacion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelClasificacion.setText("Seleccionar clasificación");
 
-        jComboBoxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Acción", "Aventura", "Ciencia ficción", "Fantasía", "Drama", "Comedia", "Terror", "Suspenso", "Romance", "Animación", "Musical", "Documental", "Crimen", "Histórico", "Biográfico" }));
+        jComboBoxGenero.setSelectedIndex(-1);
 
         jlabelDuracion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelDuracion.setText("Duración en minutos");
 
-        jComboBoxClasificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxClasificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AA", "A", "B", "B15", "C", "D" }));
+        jComboBoxClasificacion.setSelectedIndex(-1);
 
-        jTextFieldSinopsis.setText("jTextField1");
+        jTextFieldSinopsis.setMaximumSize(new java.awt.Dimension(350, 250));
+        jTextFieldSinopsis.setMinimumSize(new java.awt.Dimension(350, 250));
+        jTextFieldSinopsis.setPreferredSize(new java.awt.Dimension(350, 250));
 
         jlabelSinopsis.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelSinopsis.setText("Sinopsis");
@@ -107,13 +136,13 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
             }
         });
 
-        btnAgregarEditar.setBackground(new java.awt.Color(162, 132, 94));
-        btnAgregarEditar.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
-        btnAgregarEditar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregarEditar.setText("Agregar/Editar");
-        btnAgregarEditar.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setBackground(new java.awt.Color(162, 132, 94));
+        btnAgregar.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarEditarActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
             }
         });
 
@@ -121,9 +150,23 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(232, 232, 232)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnSubirImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanelImgPromocional, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(221, 221, 221)
+                        .addComponent(jlabelImgPromocional)))
+                .addContainerGap(240, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(236, 236, 236))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jlabelSinopsis)
@@ -135,27 +178,14 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
                             .addComponent(jTextFieldTitulo)
                             .addComponent(jComboBoxGenero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBoxClasificacion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldSinopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextFieldSinopsis, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(140, 140, 140))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAgregarEditar))
-                        .addGap(236, 236, 236))))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jlabelTituloAgregarEditar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(232, 232, 232)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSubirImagen, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(221, 221, 221)
-                        .addComponent(jlabelImgPromocional)))
-                .addContainerGap(60, Short.MAX_VALUE))
+                        .addComponent(btnAgregar)
+                        .addGap(262, 262, 262))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jlabelTituloAgregarEditar)
+                        .addGap(131, 131, 131))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,7 +195,7 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jlabelImgPromocional)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelImgPromocional, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnSubirImagen)
                 .addGap(28, 28, 28)
@@ -187,10 +217,10 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jlabelSinopsis)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldSinopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addComponent(btnAgregarEditar)
-                .addGap(27, 27, 27)
+                .addComponent(jTextFieldSinopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(btnAgregar)
+                .addGap(18, 18, 18)
                 .addComponent(btnCancelar)
                 .addGap(66, 66, 66))
         );
@@ -199,59 +229,40 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
-        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("jpg", "jpeg", "png"));
+
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
+            try {
+                imagenSeleccionada = Files.readAllBytes(archivo.toPath());
+                BufferedImage imagen = ImageIO.read(archivo);
+                mostrarImagenSeleccionada(imagen);
+
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al leer la imagen.");
+            }
+        }
     }//GEN-LAST:event_btnSubirImagenActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        control.mostrarMenuAdministrarPeliculas(this);
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnAgregarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEditarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgregarEditarActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdministradorPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdministradorPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdministradorPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdministradorPeliculas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AdministradorPeliculas().setVisible(true);
-            }
-        });
-    }
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        agregarPelicula();
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarEditar;
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSubirImagen;
     private javax.swing.JComboBox<String> jComboBoxClasificacion;
     private javax.swing.JComboBox<String> jComboBoxGenero;
-    private javax.swing.JPanel jPanelCarteleraFiltrada;
+    private javax.swing.JPanel jPanelImgPromocional;
     private javax.swing.JTextField jTextFieldDuracion;
     private javax.swing.JTextField jTextFieldSinopsis;
     private javax.swing.JTextField jTextFieldTitulo;
@@ -263,4 +274,69 @@ public class AdministradorPeliculas extends javax.swing.JFrame {
     private javax.swing.JLabel jlabelTituloAgregarEditar;
     private javax.swing.JLabel jlabelTituloPelicula;
     // End of variables declaration//GEN-END:variables
+
+    private void agregarPelicula() {
+        String titulo = jTextFieldTitulo.getText();
+        String sinopsis = jTextFieldSinopsis.getText();
+        String duracionStr = jTextFieldDuracion.getText();
+        String genero = (String) jComboBoxGenero.getSelectedItem();
+        String clasificacion = (String) jComboBoxClasificacion.getSelectedItem();
+
+        int duracion;
+        try {
+            duracion = Integer.parseInt(duracionStr);
+            if (duracion <= 0) {
+                throw new NumberFormatException("Duración inválida");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La duración debe ser un número entero válido mayor a 0.");
+            return;
+        }
+
+        PeliculaDTO nuevaPeliculaDTO = new PeliculaDTO(imagenSeleccionada, titulo, genero, duracion, clasificacion, sinopsis, true);
+        PeliculaDTO exito = control.registrarPelicula(nuevaPeliculaDTO);
+
+        if (exito != null) {
+            JOptionPane.showMessageDialog(this, "Película agregada correctamente.");
+            control.mostrarMenuAdministrarPeliculas(this);
+            dispose();
+        }
+
+    }
+
+    private void mostrarImagenSeleccionada(BufferedImage imagen) {
+
+        // Escalar la imagen con aspect ratio al tamaño del panel
+        int panelWidth = jPanelImgPromocional.getWidth();
+        int panelHeight = jPanelImgPromocional.getHeight();
+
+        int imgWidth = imagen.getWidth();
+        int imgHeight = imagen.getHeight();
+
+        // Cálculo del aspect ratio
+        double panelRatio = (double) panelWidth / panelHeight;
+        double imgRatio = (double) imgWidth / imgHeight;
+
+        int drawWidth, drawHeight;
+        if (imgRatio > panelRatio) {
+            drawWidth = panelWidth;
+            drawHeight = (int) (panelWidth / imgRatio);
+        } else {
+            drawHeight = panelHeight;
+            drawWidth = (int) (panelHeight * imgRatio);
+        }
+
+        // Escalar la imagen
+        Image imagenEscalada = imagen.getScaledInstance(drawWidth, drawHeight, Image.SCALE_SMOOTH);
+        ImageIcon icono = new ImageIcon(imagenEscalada);
+
+        // Limpiar el panel y dibujar la imagen centrada
+        jPanelImgPromocional.removeAll();
+        jPanelImgPromocional.setLayout(new GridBagLayout()); // Para centrar
+        jPanelImgPromocional.add(new JLabel(icono));
+        jPanelImgPromocional.revalidate();
+        jPanelImgPromocional.repaint();
+
+    }
+
 }

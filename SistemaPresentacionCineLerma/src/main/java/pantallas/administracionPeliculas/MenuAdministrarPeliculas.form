@@ -35,10 +35,7 @@
                           <Component id="btnAgregarPelicula" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jlabelFiltrar" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jComboBoxFiltrar" min="-2" pref="134" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jComboBoxFiltrar" min="-2" pref="134" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -48,6 +45,10 @@
                           <Component id="btnaVolver" min="-2" max="-2" attributes="0"/>
                           <Component id="jPanelCarteleraFiltrada" min="-2" max="-2" attributes="0"/>
                       </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="276" max="-2" attributes="0"/>
+                      <Component id="jlabelFiltrar" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="27" max="32767" attributes="0"/>
@@ -65,9 +66,9 @@
               <Component id="jlabelFiltrar" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jComboBoxFiltrar" min="-2" pref="53" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+              <EmptySpace pref="31" max="32767" attributes="0"/>
               <Component id="jPanelCarteleraFiltrada" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="36" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnaVolver" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
           </Group>
@@ -103,11 +104,9 @@
     <Component class="javax.swing.JComboBox" name="jComboBoxFiltrar">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
+          <StringArray count="2">
+            <StringItem index="0" value="Peliculas Activas"/>
+            <StringItem index="1" value="Peliculas Inactivas"/>
           </StringArray>
         </Property>
       </Properties>
@@ -136,7 +135,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="328" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="385" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>

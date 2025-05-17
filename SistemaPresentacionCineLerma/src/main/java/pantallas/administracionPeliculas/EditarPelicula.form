@@ -23,59 +23,61 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace pref="149" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jlabelSinopsis" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jlabelDuracion" min="-2" max="-2" attributes="0"/>
-                          <Component id="jlabelClasificacion" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldDuracion" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jlabelGenero" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jlabelTituloPelicula" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextFieldTitulo" max="32767" attributes="0"/>
-                          <Component id="jComboBoxGenero" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jComboBoxClasificacion" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jTextFieldSinopsis" alignment="0" min="-2" pref="350" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace pref="90" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jPanelCarteleraFiltrada" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="btnSubirImagen" alignment="0" min="-2" pref="160" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace pref="71" max="-2" attributes="0"/>
+                                      <Component id="jlabelImgPromocional" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jlabelSinopsis" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlabelDuracion" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlabelClasificacion" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldDuracion" alignment="1" max="32767" attributes="0"/>
+                              <Component id="jlabelGenero" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlabelTituloPelicula" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextFieldTitulo" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jComboBoxGenero" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jComboBoxClasificacion" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jTextFieldSinopsis" alignment="0" min="-2" pref="350" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jlabelTituloAgregarEditar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="141" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="btnEditar" min="-2" pref="156" max="-2" attributes="0"/>
                           <Component id="btnCancelar" min="-2" pref="156" max="-2" attributes="0"/>
-                          <Component id="btnAgregarEditar" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="236" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="241" max="-2" attributes="0"/>
                   </Group>
               </Group>
-          </Group>
-          <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                      <Component id="jlabelTituloAgregarEditar" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="232" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jPanelCarteleraFiltrada" max="32767" attributes="0"/>
-                          <Component id="btnSubirImagen" pref="160" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="221" max="-2" attributes="0"/>
-                      <Component id="jlabelImgPromocional" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace pref="60" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Component id="jlabelTituloAgregarEditar" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jlabelImgPromocional" min="-2" max="-2" attributes="0"/>
@@ -103,9 +105,9 @@
               <Component id="jlabelSinopsis" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jTextFieldSinopsis" min="-2" pref="239" max="-2" attributes="0"/>
-              <EmptySpace pref="52" max="32767" attributes="0"/>
-              <Component id="btnAgregarEditar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+              <EmptySpace pref="58" max="32767" attributes="0"/>
+              <Component id="btnEditar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
           </Group>
@@ -113,13 +115,69 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
+    <Component class="javax.swing.JComboBox" name="jComboBoxGenero">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="15">
+            <StringItem index="0" value="Acci&#xf3;n"/>
+            <StringItem index="1" value="Aventura"/>
+            <StringItem index="2" value="Ciencia ficci&#xf3;n"/>
+            <StringItem index="3" value="Fantas&#xed;a"/>
+            <StringItem index="4" value="Drama"/>
+            <StringItem index="5" value="Comedia"/>
+            <StringItem index="6" value="Terror"/>
+            <StringItem index="7" value="Suspenso"/>
+            <StringItem index="8" value="Romance"/>
+            <StringItem index="9" value="Animaci&#xf3;n"/>
+            <StringItem index="10" value="Musical"/>
+            <StringItem index="11" value="Documental"/>
+            <StringItem index="12" value="Crimen"/>
+            <StringItem index="13" value="Hist&#xf3;rico"/>
+            <StringItem index="14" value="Biogr&#xe1;fico"/>
+          </StringArray>
+        </Property>
+        <Property name="selectedIndex" type="int" value="-1"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxGeneroActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jlabelDuracion">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tw Cen MT Condensed" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Duraci&#xf3;n en minutos"/>
+      </Properties>
+    </Component>
     <Component class="javax.swing.JLabel" name="jlabelTituloAgregarEditar">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tw Cen MT Condensed" size="48" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Agregar/Editar pel&#xed;cula"/>
+        <Property name="text" type="java.lang.String" value="Editar pel&#xed;cula"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="jComboBoxClasificacion">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="6">
+            <StringItem index="0" value="AA"/>
+            <StringItem index="1" value="A"/>
+            <StringItem index="2" value="B"/>
+            <StringItem index="3" value="B15"/>
+            <StringItem index="4" value="C"/>
+            <StringItem index="5" value="D"/>
+          </StringArray>
+        </Property>
+        <Property name="selectedIndex" type="int" value="-1"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jlabelImgPromocional">
       <Properties>
@@ -128,6 +186,8 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Im&#xe1;gen promocional"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldSinopsis">
     </Component>
     <Container class="javax.swing.JPanel" name="jPanelCarteleraFiltrada">
 
@@ -144,6 +204,14 @@
         </DimensionLayout>
       </Layout>
     </Container>
+    <Component class="javax.swing.JLabel" name="jlabelSinopsis">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tw Cen MT Condensed" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Sinopsis"/>
+      </Properties>
+    </Component>
     <Component class="javax.swing.JButton" name="btnSubirImagen">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -170,9 +238,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldTitulo">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jlabelGenero">
       <Properties>
@@ -183,9 +248,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldDuracion">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jlabelClasificacion">
       <Properties>
@@ -193,57 +255,6 @@
           <Font name="Tw Cen MT Condensed" size="18" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Seleccionar clasificaci&#xf3;n"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="jComboBoxGenero">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jlabelDuracion">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tw Cen MT Condensed" size="18" style="1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Duraci&#xf3;n en minutos"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="jComboBoxClasificacion">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldSinopsis">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jlabelSinopsis">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tw Cen MT Condensed" size="18" style="1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Sinopsis"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnCancelar">
@@ -263,7 +274,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnAgregarEditar">
+    <Component class="javax.swing.JButton" name="btnEditar">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="5e" green="84" red="a2" type="rgb"/>
@@ -274,10 +285,10 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Agregar/Editar"/>
+        <Property name="text" type="java.lang.String" value="Guardar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarEditarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
