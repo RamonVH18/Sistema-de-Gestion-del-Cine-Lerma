@@ -13,9 +13,7 @@ import Interfaces.IFuncionDAO;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
 import entidades.Funcion;
 import enums.EstadoSala;
 import java.time.LocalDateTime;
@@ -52,38 +50,41 @@ public class FuncionDAO implements IFuncionDAO {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
+            // Validar duracion de la película
             if (funcion.getPelicula().getDuracion() == null || funcion.getPelicula().getDuracion() <= 0) {
                 throw new FuncionDuracionIncorrectaException("La duracion de la pelicula es invalida.");
             }
 
-            // Verificar si la sala esta ocupada
-            List<Bson> filtradores = Arrays.asList(
-                    Filters.eq("sala.numSala", funcion.getSala().getNumSala()),
-                    Filters.gte("fechaHora", LocalDateTime.now()),
-                    Filters.gt("fechaHora", LocalDateTime.now().plusMinutes(funcion.getPelicula().getDuracion()))
+            LocalDateTime nuevaFechaInicio = funcion.getFechaHora();
+            LocalDateTime nuevaFechaFin = nuevaFechaInicio.plusMinutes(funcion.getPelicula().getDuracion());
+
+            Bson filtroSala = Filters.eq("sala.numSala", funcion.getSala().getNumSala());
+            Bson filtroSolapamiento = Filters.or(
+                    Filters.and(
+                            Filters.lte("fechaHora", nuevaFechaInicio),
+                            Filters.gt("fechaHora", nuevaFechaInicio.minusMinutes(funcion.getPelicula().getDuracion()))
+                    ),
+                    Filters.and(
+                            Filters.gte("fechaHora", nuevaFechaInicio),
+                            Filters.lt("fechaHora", nuevaFechaFin)
+                    )
             );
-            Bson filtro = Filters.and(filtradores);
 
-            Long contador = coleccionFunciones.countDocuments(filtro);
-            if (contador > 0) {
-                throw new FuncionSalaOcupadaException("La sala ya esta ocupada en la fecha.");
+            Bson filtroCompleto = Filters.and(filtroSala, filtroSolapamiento);
+
+            // Verificar si hay funciones que solapen
+            long conteo = coleccionFunciones.countDocuments(filtroCompleto);
+            if (conteo > 0) {
+                throw new FuncionSalaOcupadaException("La sala esta ocupada en el horario seleccionado.");
             }
 
-            //Verificar si la sala no esta vacia
-            if (funcion.getSala() == null) {
-                throw new FuncionSalaVaciaException("La sala no puede estar vacia cuando creas una funcion");
-            }
-
-            if (funcion.getSala().getEstado() != EstadoSala.ACTIVA) {
-                throw new FuncionSalaVaciaException("La sala no puede estar vacia, inactiva o mantenimiento para registrar una funcion");
+            // Validar estado de la sala
+            if (funcion.getSala() == null || funcion.getSala().getEstado() != EstadoSala.ACTIVA) {
+                throw new FuncionSalaVaciaException("La sala no esta disponible para funciones.");
             }
 
             coleccionFunciones.insertOne(funcion);
             return funcion;
-        } catch (FuncionSalaOcupadaException e) {
-            throw new FuncionSalaOcupadaException("Error al registrar la funcion: " + e.getMessage());
-        } catch (FuncionDuracionIncorrectaException ex) {
-            throw new FuncionDuracionIncorrectaException("Error al registrar funcion: " + ex.getMessage());
         } finally {
             conexion.cerrarConexion(clienteMongo);
         }

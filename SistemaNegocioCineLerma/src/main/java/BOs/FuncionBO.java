@@ -58,7 +58,7 @@ public class FuncionBO implements IFuncionBO {
     @Override
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistrarException {
         if (funcionDTO == null) {
-            throw new FuncionRegistrarException("La función no puede ser nula");
+            throw new FuncionRegistrarException("La funcion no puede ser nula");
         }
 
         try {
