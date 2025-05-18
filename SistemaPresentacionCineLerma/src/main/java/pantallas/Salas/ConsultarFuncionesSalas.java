@@ -4,17 +4,63 @@
  */
 package pantallas.Salas;
 
+import DTOs.AsientoFuncionDTO;
+import DTOs.FuncionDTO;
+import DTOs.SalaViejaDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.Map;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import utilitades.ModeladoTablas;
+import utilitades.Utilerias;
+
 /**
  *
  * @author Ramon Valencia
  */
 public class ConsultarFuncionesSalas extends javax.swing.JFrame {
-
+    
+    private final Utilerias utilerias = new Utilerias(); //Objeto Utilerias para poder obtener sus metodos
+    private final IControl control = ControlDeNavegacion.getInstancia(); //Instancia del control de navegacion
+    
+    // Valores del tamaño de los buscadores
+    private final Integer anchoBuscador = 150;
+    private final Integer alturaBuscador = 20;
+    private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
+    
+    private JPanel panelTabla;
+    private JTable tablaFunciones;
+    private Timer temporizador;
+    
+    
+    private final Map<Integer, Number> tamañoColumnas = Map.of(
+            0, 50, // Tamaño de la columna del numero de la sala
+            1, 100, // Tamaño de la columna del numero de asientos de la sala
+            2, 75, // Tamaño de la columna del estado de la sala
+            3, 75,
+            4, 60
+    );
     /**
      * Creates new form ConsultarFuncionesSalas
      */
     public ConsultarFuncionesSalas() {
-        initComponents();
+        utilerias.configurarFrameBase(this, "FUNCIONES SALAS");
+        configurarConsultarFuncionesSalas();
     }
 
     /**
@@ -26,57 +72,205 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        labelBuscador = new javax.swing.JLabel();
+        textFieldBuscador = new javax.swing.JTextField();
+        btnInfo = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        labelBuscador.setText("jLabel1");
+
+        textFieldBuscador.setText("jTextField1");
+
+        btnInfo.setText("jButton1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelBuscador)
+                    .addComponent(textFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(55, 55, 55)
+                .addComponent(btnInfo)
+                .addContainerGap(182, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(labelBuscador)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                .addComponent(btnInfo)
+                .addGap(71, 71, 71))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultarFuncionesSalas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultarFuncionesSalas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultarFuncionesSalas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultarFuncionesSalas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ConsultarFuncionesSalas().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInfo;
+    private javax.swing.JLabel labelBuscador;
+    private javax.swing.JTextField textFieldBuscador;
     // End of variables declaration//GEN-END:variables
+    
+    
+    private void configurarConsultarFuncionesSalas() {
+        configurarBotonVolver();
+        configurarPanelCentral();
+    }
+    
+    private void configurarPanelCentral() {
+        JPanel panelCentral = new JPanel();
+        
+        JPanel panelBuscador = new JPanel();
+        configurarPanelBuscador(panelBuscador);
+        
+        panelTabla = new JPanel();
+        configurarPanelTabla();
+        
+        panelCentral.setLayout( new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+        
+        panelCentral.add(Box.createVerticalStrut(75));
+        panelCentral.add(panelBuscador);
+        panelCentral.add(Box.createVerticalGlue());
+        panelCentral.add(panelTabla);
+
+        configurarBotonInformacion();
+        panelCentral.add(btnInfo);
+
+        this.add(panelCentral, BorderLayout.CENTER);
+    }
+    
+    private void configurarPanelBuscador(JPanel panelBuscador) {
+        labelBuscador = new JLabel("BUSCAR: ");
+        textFieldBuscador = new JTextField();
+        configurarTextField(textFieldBuscador);
+        panelBuscador.add(labelBuscador);
+        panelBuscador.add(textFieldBuscador);
+        
+    }
+    
+    private void configurarTextField(JTextField textField) {
+        textField.setPreferredSize(tamañoBuscador);
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                efectoTemporizador();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                efectoTemporizador();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                efectoTemporizador();
+            }
+
+        });
+    }
+    
+    private void configurarPanelTabla() {
+        // Arreglo de Strings de una dimension para guardar todas las columnas de la tabla
+        String[] columnas = {
+            "SALA",
+            "PELICULA",
+            "HORARIO",
+            "<html>ASIENTOS<br>DISPONIBLES</html>", // A esta opcione se le agrego esa escritura de html para poder hacer un salto de linea
+            "<html>TOTAL<br>ASIENTOS</html>"
+        };
+        // Arreglo de Objetos de dos dimensiones para guardar las estadisticas de cada sala
+        Object[][] datos = obtenerSalas();
+
+        // Valor del tamaño del encabezado
+        Integer tamañoEncabezado = 40;
+
+        //Valor del tamaño de la fuente del encabezado
+        Integer tamañoFuente = 14;
+
+        /**
+         * Se llama al metodo estatico de la clase de ModeladoTablas para poder
+         * crear una tablaSencilla en base a: El arreglo de columnas, el arreglo
+         * de datos y finalmente el tamaño del encabezado
+         */
+        tablaFunciones = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoFuente, tamañoEncabezado);
+
+        /**
+         * Se llama nuevamente a otro metodo de la clase ModeladoTablas esto
+         * para ajustar el tamaño de la columnas de la tablas Se necesito del
+         * mapa donde vienen el tamaño de las columnas
+         */
+        ModeladoTablas.ajusteTamañoColumnas(tablaFunciones, tamañoColumnas);
+        if (panelTabla.getComponentCount() > 0) {
+            panelTabla.removeAll();
+        }
+        // Se añade la tabla a un scrollpane
+        JScrollPane scrollPane = new JScrollPane(tablaFunciones);
+        panelTabla.add(scrollPane);
+
+        revalidate();
+        repaint();
+    }
+    
+    private Object[][] obtenerSalas() {
+        String loco = textFieldBuscador.getText();
+        List<FuncionDTO> funciones = control.consultarFuncionesFiltradas(textFieldBuscador.getText());
+        
+        Object[][] datos = new Object[funciones.size()][5];
+        SalaViejaDTO sala;
+        FuncionDTO funcion;
+        for (int i = 0; i < funciones.size(); i++) {
+            funcion = funciones.get(i);
+            sala = control.consultarSala(funcion.getNumSala());
+            List<AsientoFuncionDTO> asientosDisponibles = control.cargarListaAsientos(funcion, true);
+            
+            
+            datos[i][0] = sala.getNumSala();
+            datos[i][1] = funcion.getNombrePelicula();
+            datos[i][2] = funcion.getFechaHora();
+            datos[i][3] = asientosDisponibles.size();
+            datos[i][4] = sala.getNumAsientos();
+        }
+
+        return datos;
+    }
+    
+    private void efectoTemporizador() {
+        if (temporizador != null) {
+            temporizador.stop();
+        }
+        temporizador = new Timer(500, e -> {
+            configurarPanelTabla();
+            temporizador.stop();
+        });
+        temporizador.start();
+    }
+    
+    private void configurarBotonInformacion() {
+        btnInfo = new JButton("MAS INFO...");
+    }
+    
+    /**
+     * Metodo para configurar el obtener el boton volver del frameBase y
+     * configurarlo para que nos regrese a la ventana anterior
+     */
+    private void configurarBotonVolver() {
+        Container frame = this.getContentPane();
+        JPanel panel = (JPanel) frame.getComponent(0);
+        JButton btnVolver = (JButton) panel.getComponent(0);
+
+        btnVolver.addActionListener((ActionEvent e) -> {
+            control.mostrarMenuSalas(this);
+        });
+
+    }
+
 }

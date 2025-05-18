@@ -213,6 +213,10 @@ public final class MenuSalas extends javax.swing.JFrame {
                     control.mostrarSeleccionarSala(this); // Metodo para abrir la pantalla Seleccionar Sala
                     break;
                 }
+                case "Consultar Reservas" -> {
+                    control.mostrarConsultarFuncionesSalas(this);
+                    break;
+                }
                 default ->
                     JOptionPane.showMessageDialog(null, "Hubo un problema para cargar esa ventana intente luego", "INFO", JOptionPane.INFORMATION_MESSAGE);
 
