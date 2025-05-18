@@ -26,15 +26,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * Pruebas unitarias para la clase FuncionDAO utilizando JUnit 5. Valida el
+ * funcionamiento de las operaciones CRUD, reglas de negocio y manejo de
+ * excepciones.
  *
  * @author Abraham Coronel Bringas
  */
 public class FuncionDAOTest {
 
-    private IFuncionDAO funcionDAO;
-    private Funcion funcionPrueba;
-    private Pelicula peliculaPrueba;
-    private Sala salaPrueba;
+    private IFuncionDAO funcionDAO; // Instancia del DAO a probar
+    private Funcion funcionPrueba; // Funcion base para pruebas
+    private Pelicula peliculaPrueba; // Película asociada a la funcion
+    private Sala salaPrueba; // Sala activa para pruebas
 
     public FuncionDAOTest() {
     }
@@ -47,6 +50,11 @@ public class FuncionDAOTest {
     public static void tearDownClass() {
     }
 
+    /**
+     * Configura el entorno antes de cada prueba: - Crea una sala activa con 50
+     * asientos. - Crea una película con duracion válida. - Crea una función de
+     * prueba con hora de inicio en el futuro.
+     */
     @BeforeEach
     public void setUp() {
         funcionDAO = FuncionDAO.getInstanceDAO();
@@ -72,6 +80,10 @@ public class FuncionDAOTest {
         );
     }
 
+    /**
+     * Elimina la funcion de prueba despues de cada test para evitar
+     * interferencias.
+     */
     @AfterEach
     public void tearDown() {
         try {
@@ -82,7 +94,7 @@ public class FuncionDAOTest {
     }
 
     /**
-     * Test of getInstanceDAO method, of class FuncionDAO.
+     * Verifica que la instancia del DAO se obtenga correctamente (Singleton).
      */
     @Test
     public void testGetInstanceDAO() {
@@ -90,7 +102,8 @@ public class FuncionDAOTest {
     }
 
     /**
-     * Test of registrarFuncion method, of class FuncionDAO.
+     * Prueba el registro exitoso de una función: - La función registrada debe
+     * tener un ID asignado por MongoDB.
      */
     @Test
     public void testRegistrarFuncionExitoso() throws Exception {
@@ -98,6 +111,10 @@ public class FuncionDAOTest {
         assertNotNull(registrada.getIdFuncion(), "La función debe tener un ID después de registrarse");
     }
 
+    /**
+     * Prueba el registro fallido cuando la sala está inactiva. Se espera una
+     * excepcion {FuncionSalaVaciaException}.
+     */
     @Test
     public void testRegistrarFuncionSalaInactiva() {
         Sala salaInactiva = new Sala(50, "Sala2", EstadoSala.INACTIVA);
@@ -115,6 +132,10 @@ public class FuncionDAOTest {
         });
     }
 
+    /**
+     * Prueba el registro fallido cuando la sala está ocupada en el mismo
+     * horario. Se espera una excepcion {FuncionSalaOcupadaException}.
+     */
     @Test
     public void testRegistrarFuncionSalaOcupada() throws Exception {
         funcionDAO.registrarFuncion(funcionPrueba);
@@ -133,7 +154,8 @@ public class FuncionDAOTest {
     }
 
     /**
-     * Test of eliminarFuncion method, of class FuncionDAO.
+     * Prueba la eliminación exitosa de una funcion. Verifica que la funcion
+     * eliminada coincida con la registrada.
      */
     @Test
     public void testEliminarFuncionExitoso() throws Exception {
@@ -142,6 +164,10 @@ public class FuncionDAOTest {
         assertEquals(funcionPrueba.getIdFuncion(), eliminada.getIdFuncion(), "Debe eliminar la funcion correcta");
     }
 
+    /**
+     * Prueba la eliminación fallida de una funcion no registrada. Se espera una
+     * excepcion {FuncionNoEncontradaException}.
+     */
     @Test
     public void testEliminarFuncionFallido() {
         LocalDateTime fechaHoraInicio = LocalDateTime.now().plusHours(1);
@@ -159,6 +185,10 @@ public class FuncionDAOTest {
         }, "Debe fallar al eliminar una funcion no registrada");
     }
 
+    /**
+     * Prueba el calculo correcto de la hora de termino de una funcion. Compara
+     * el resultado con la hora de inicio + duración de la pelicula.
+     */
     @Test
     public void testCalcularHoraTerminoFuncionExitoso() throws Exception {
         funcionDAO.registrarFuncion(funcionPrueba);
@@ -171,6 +201,10 @@ public class FuncionDAOTest {
         assertEquals(expected, actualTruncado, "La hora de término debe coincidir con la duración de la película");
     }
 
+    /**
+     * Prueba el cálculo fallido con un ID de funcion inexistente. Se espera una
+     * excepcion {@link FuncionNoEncontradaException}.
+     */
     @Test
     public void testCalcularHoraTerminoFuncionNoEncontrada() {
         String idNoExistente = new ObjectId().toHexString();
@@ -179,6 +213,10 @@ public class FuncionDAOTest {
         }, "Debe lanzar excepción cuando la función no existe");
     }
 
+    /**
+     * Prueba el registro fallido de una funcion con película de duracion nula.
+     * Se espera una excepcion {FuncionDuracionIncorrectaException}.
+     */
     @Test
     public void testCalcularHoraTerminoFuncionDuracionIncorrecta() throws Exception {
         // Crear película con duración nula
@@ -208,7 +246,8 @@ public class FuncionDAOTest {
     }
 
     /**
-     * Test of buscarFuncionesPelicula method, of class FuncionDAO.
+     * Prueba la busqueda de funciones por nombre de pelicula. Verifica que se
+     * encuentre al menos una coincidencia.
      */
     @Test
     public void testBuscarFuncionesPelicula() throws Exception {

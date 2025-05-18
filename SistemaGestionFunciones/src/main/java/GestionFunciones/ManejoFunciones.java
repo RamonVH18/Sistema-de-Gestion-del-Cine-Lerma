@@ -68,6 +68,12 @@ public class ManejoFunciones implements IManejoFunciones {
             throw new FuncionDatosIncorrectosException("Error: Los datos de la fecha ya pasaron y no son actuales");
         }
 
+        LocalDateTime fechaHora = funcionDTO.getFechaHora();
+        Integer hora = fechaHora.getHour();
+        if (hora < 8 || hora >= 22) {
+            throw new FuncionDatosIncorrectosException("Error: Las funciones solo pueden registrarse entre las 8:00 am y las 10:00 pm.");
+        }
+
         // Validar que sala exista y no sea nula
         if (funcionDTO.getNumSala() == null || funcionDTO.getNumSala().trim().isEmpty()) {
             throw new FuncionDatosIncorrectosException("Error: La sala debe ser obligatoria, no puede haber una funcion sin sala asignada.");
@@ -132,14 +138,14 @@ public class ManejoFunciones implements IManejoFunciones {
             throw new FuncionDatosIncorrectosException("Fecha invalida" + e.getMessage());
         }
     }
-    
+
     @Override
     public List<FuncionDTO> buscarFuncionesFiltradas(String textoFiltro) throws FuncionDatosIncorrectosException {
         try {
             if (textoFiltro == null) {
                 textoFiltro = "";
             }
-            
+
             return funcionBO.buscarFuncionesFiltradas(textoFiltro);
         } catch (FuncionPeliculaNoEncontradaException ex) {
             throw new FuncionDatosIncorrectosException("Hubo un problema al cargar las salas");

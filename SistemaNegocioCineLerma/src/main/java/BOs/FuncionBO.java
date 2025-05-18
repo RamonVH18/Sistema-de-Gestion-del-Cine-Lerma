@@ -21,7 +21,6 @@ import Excepciones.peliculas.BuscarPeliculaException;
 import Excepciones.salas.BuscarSalaException;
 import Interfaces.IFuncionBO;
 import Interfaces.IFuncionDAO;
-import Interfaces.IPeliculaBO;
 import Interfaces.IPeliculaDAO;
 import Interfaces.ISalaDAO;
 import Mappers.FuncionMapper;
@@ -31,24 +30,34 @@ import entidades.Sala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
+ * Clase que implementa la lógica de negocio para las operaciones relacionadas
+ * con Funciones. Actúa como intermediario entre la capa de presentacion y los
+ * DAOs, manejando validaciones, conversiones DTO/Entidad y excepciones
+ * específicas del dominio.
  *
  * @author Abraham Coronel Bringas
  */
 public class FuncionBO implements IFuncionBO {
 
-    private static FuncionBO instanceFuncionBO;
-    private final IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO();
-    private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO();
-    private final ISalaDAO salaDAO = SalaDAO.getInstanceDAO();
-    private final FuncionMapper funcionMapper = new FuncionMapper();
+    private static FuncionBO instanceFuncionBO;  // Instancia única (Singleton)
+    private final IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO(); // Acceso a operaciones de funciones
+    private final IPeliculaDAO peliculaDAO = PeliculaDAO.getInstanceDAO(); // Acceso a operaciones de películas
+    private final ISalaDAO salaDAO = SalaDAO.getInstanceDAO(); // Acceso a operaciones de salas
+    private final FuncionMapper funcionMapper = new FuncionMapper(); // Conversor DTO <-> Entidad
 
+    /**
+     * Constructor privado para Singleton.
+     */
     private FuncionBO() {
     }
 
+    /**
+     * Obtiene la instancia unica de FuncionBO (Singleton).
+     *
+     * @return Instancia unica de FuncionBO.
+     */
     public static FuncionBO getInstanceDAO() {
         if (instanceFuncionBO == null) {
             instanceFuncionBO = new FuncionBO();
@@ -56,6 +65,15 @@ public class FuncionBO implements IFuncionBO {
         return instanceFuncionBO;
     }
 
+    /**
+     * Registra una funcion validando y convirtiendo el DTO a entidad antes de
+     * persistir.
+     *
+     * @param funcionDTO Datos de la funcion en formato DTO.
+     * @return FuncionDTO registrada con ID generado.
+     * @throws FuncionRegistrarException Si hay errores de validacion, datos
+     * invalidos o conflictos de horario/sala.
+     */
     @Override
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionRegistrarException {
         if (funcionDTO == null) {
@@ -82,6 +100,14 @@ public class FuncionBO implements IFuncionBO {
         }
     }
 
+    /**
+     * Elimina una función existente a partir de su representacion DTO.
+     *
+     * @param funcionDTO Función a eliminar (debe contener ID valido).
+     * @return true si la eliminación fue exitosa, false en caso contrario.
+     * @throws FuncionEliminarException Si la funcion no existe o hay errores en
+     * los datos.
+     */
     @Override
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionEliminarException {
         if (funcionDTO == null) {
@@ -101,6 +127,14 @@ public class FuncionBO implements IFuncionBO {
 
     }
 
+    /**
+     * Busca funciones asociadas a una pelicula por nombre (coincidencia
+     * parcial).
+     *
+     * @param nombrePelicula Texto para filtrar (ej: "Aven" encontrará
+     * "Avengers").
+     * @return Lista de FuncionDTO que coinciden con el filtro.
+     */
     @Override
     public List<FuncionDTO> buscarFuncionesPelicula(String nombrePelicula) {
         List<FuncionDTO> funcionesDTO = new ArrayList<>();
@@ -112,6 +146,15 @@ public class FuncionBO implements IFuncionBO {
         return funcionesDTO;
     }
 
+    /**
+     * Busca funciones que coinciden con un texto en sala o pelicula (busqueda
+     * combinada).
+     *
+     * @param textoFiltro Texto para filtrar.
+     * @return Lista de FuncionDTO que coinciden con el filtro.
+     * @throws FuncionPeliculaNoEncontradaException Si no hay resultados o hay
+     * errores en la consulta.
+     */
     @Override
     public List<FuncionDTO> buscarFuncionesFiltradas(String textoFiltro) throws FuncionPeliculaNoEncontradaException {
         try {
@@ -126,6 +169,14 @@ public class FuncionBO implements IFuncionBO {
         }
     }
 
+    /**
+     * Busca funciones que inician en una fecha y hora especificas (validando
+     * fecha futura).
+     *
+     * @param fechaHora Fecha y hora exacta de inicio.
+     * @return Lista de FuncionDTO con el horario especificado.
+     * @throws FuncionFechaValidaException Si la fecha es nula o pasada.
+     */
     @Override
     public List<FuncionDTO> buscarFuncionFechaInicio(LocalDateTime fechaHora) throws FuncionFechaValidaException {
         if (fechaHora == null) {
@@ -144,6 +195,15 @@ public class FuncionBO implements IFuncionBO {
         return funcionesDTO;
     }
 
+    /**
+     * Calcula la hora de término de una funcion sumando la duracion de la
+     * pelicula.
+     *
+     * @param idFuncion ID de la funcion en formato String.
+     * @return Fecha y hora de término calculada.
+     * @throws FuncionValidadaException Si el ID es invalido o hay
+     * inconsistencias en los datos.
+     */
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionValidadaException {
         if (idFuncion == null || idFuncion.isEmpty()) {

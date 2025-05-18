@@ -20,7 +20,6 @@ import entidades.Funcion;
 import enums.EstadoSala;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.bson.Document;
@@ -28,7 +27,9 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
- *
+ * Implementación de la interfaz IFuncionDAO para gestionar las operaciones CRUD de Funciones en MongoDB.
+ * Incluye validaciones de negocio como duracion de películas, disponibilidad de salas y manejo de excepciones.
+ * 
  * @author Abraham Coronel Bringas
  */
 public class FuncionDAO implements IFuncionDAO {
@@ -37,6 +38,11 @@ public class FuncionDAO implements IFuncionDAO {
     private final MongoConexion conexion = new MongoConexion();
     private final String nombreColeccion = "Funciones";
 
+    /**
+     * Obtiene la instancia única del DAO (Singleton).
+     * 
+     * @return Instancia única de FuncionDAO.
+     */
     public static FuncionDAO getInstanceDAO() {
         if (instance == null) {
             instance = new FuncionDAO();
@@ -45,6 +51,15 @@ public class FuncionDAO implements IFuncionDAO {
         return instance;
     }
 
+    /**
+     * Registra una funcion validando duracion de película, disponibilidad de sala y solapamiento de horarios.
+     * 
+     * @param funcion Funcion a registrar.
+     * @return Función registrada.
+     * @throws FuncionSalaOcupadaException Si la sala está ocupada en el horario seleccionado.
+     * @throws FuncionSalaVaciaException Si la sala no está activa o es nula.
+     * @throws FuncionDuracionIncorrectaException Si la duración de la película es inválida (≤0 o nula).
+     */
     @Override
     public Funcion registrarFuncion(Funcion funcion) throws FuncionSalaOcupadaException, FuncionSalaVaciaException, FuncionDuracionIncorrectaException {
         MongoClient clienteMongo = null;
@@ -93,6 +108,13 @@ public class FuncionDAO implements IFuncionDAO {
         }
     }
 
+    /**
+     * Elimina una función de la base de datos.
+     * 
+     * @param funcion Función a eliminar.
+     * @return Función eliminada.
+     * @throws FuncionNoEncontradaException Si la función no existe en la base de datos.
+     */
     @Override
     public Funcion eliminarFuncion(Funcion funcion) throws FuncionNoEncontradaException {
         MongoClient clienteMongo = null;
@@ -116,6 +138,12 @@ public class FuncionDAO implements IFuncionDAO {
         }
     }
 
+    /**
+     * Busca una función por su ID en la base de datos.
+     * 
+     * @param idFuncion ID de la funcion a buscar.
+     * @return Funcion encontrada o null si no existe.
+     */
     private Funcion buscarFuncionId(ObjectId idFuncion) {
         MongoClient clienteMongo = conexion.crearConexion();
         try {
@@ -128,6 +156,12 @@ public class FuncionDAO implements IFuncionDAO {
         }
     }
 
+    /**
+     * Busca funciones que coincidan con el nombre de una película (busqueda insensible a mayusculas).
+     * 
+     * @param nombrePelicula Texto para filtrar por título de película.
+     * @return Lista de funciones que coinciden con el filtro.
+     */
     @Override
     public List<Funcion> buscarFuncionesPelicula(String nombrePelicula) {
         MongoClient clienteMongo = conexion.crearConexion();
@@ -143,6 +177,12 @@ public class FuncionDAO implements IFuncionDAO {
         }
     }
 
+    /**
+     * Busca funciones que inician en una fecha y hora específicas.
+     * 
+     * @param fechaHora Fecha y hora exacta de inicio.
+     * @return Lista de funciones con la fecha de inicio especificada.
+     */
     @Override
     public List<Funcion> buscarFuncionFechaInicio(LocalDateTime fechaHora) {
         MongoClient clienteMongo = conexion.crearConexion();
@@ -156,6 +196,14 @@ public class FuncionDAO implements IFuncionDAO {
         }
     }
 
+    /**
+     * Calcula la hora de término de una función sumando la duracion de la película a su hora de inicio.
+     * 
+     * @param idString ID de la funcion en formato String.
+     * @return Fecha y hora de término calculada.
+     * @throws FuncionNoEncontradaException Si el ID es inválido o la funcion no existe.
+     * @throws FuncionDuracionIncorrectaException Si la duracion de la película es nula o invalida.
+     */
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idString) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException {
         MongoClient clienteMongo = conexion.crearConexion();
@@ -184,6 +232,13 @@ public class FuncionDAO implements IFuncionDAO {
         }
     }
 
+    /**
+     * Busca funciones filtradas por número de sala o título de película, ordenadas por numero de sala.
+     * 
+     * @param textoFiltro Texto para filtrar.
+     * @return Lista de funciones que coinciden con el filtro.
+     * @throws FuncionNoEncontradaException Si hay un error en la consulta a MongoDB.
+     */
     @Override
     public List<Funcion> buscarPeliculasFiltradas(String textoFiltro) throws FuncionNoEncontradaException {
         MongoClient clienteMongo = conexion.crearConexion();
@@ -204,6 +259,12 @@ public class FuncionDAO implements IFuncionDAO {
         }
     }
 
+    /**
+     * Crea un filtro combinado para búsqueda por numero de sala o título de película.
+     * 
+     * @param textoFiltro Texto de filtro proporcionado.
+     * @return Filtro MongoDB para la consulta.
+     */
     private Bson crearFiltro(String textoFiltro) {
         List<Bson> condiciones = new ArrayList<>();
 
@@ -216,11 +277,23 @@ public class FuncionDAO implements IFuncionDAO {
 
     }
 
+    /**
+     * Genera un filtro para buscar por número de sala usando una expresion regular.
+     * 
+     * @param filtroNumSala Texto para buscar en el numero de sala.
+     * @return Filtro MongoDB para el numero de sala.
+     */
     private Bson crearFiltroNumeroSala(String filtroNumSala) {
         Pattern patron = Pattern.compile(".*" + Pattern.quote(filtroNumSala) + ".*", Pattern.CASE_INSENSITIVE);
         return Filters.regex("sala.numSala", patron);
     }
 
+    /**
+     * Genera un filtro para buscar por título de película usando una expresión regular.
+     * 
+     * @param filtroPelicula Texto para buscar en el título.
+     * @return Filtro MongoDB para el título de la película.
+     */
     private Bson crearFiltroPelicula(String filtroPelicula) {
         Pattern patron = Pattern.compile(".*" + Pattern.quote(filtroPelicula) + ".*", Pattern.CASE_INSENSITIVE);
         return Filters.regex("pelicula.titulo", patron);

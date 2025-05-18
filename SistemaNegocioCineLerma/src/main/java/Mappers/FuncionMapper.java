@@ -12,8 +12,25 @@ import entidades.Funcion;
  *
  * @author Abraham Coronel Bringas
  */
+/**
+ * Clase encargada de convertir entre la entidad Funcion y su representación
+ * DTO. Implementa el patrón Mapper para desacoplar la estructura de datos de la
+ * entidad de su representacion externa (DTO), facilitando la transferencia
+ * segura entre capas.
+ *
+ * @author Abraham Coronel Bringas
+ */
 public class FuncionMapper implements IFuncionMapper {
 
+    /**
+     * Convierte una entidad Funcion a su correspondiente DTO. - Extrae datos
+     * básicos y relaciones (sala/película) en formato simplificado. - No
+     * incluye objetos completos de sala/película, solo identificadores clave.
+     *
+     * @param funcion Entidad de dominio a convertir (no debe ser null).
+     * @return FuncionDTO con datos esenciales, o null si la entrada es
+     * inválida.
+     */
     @Override
     public FuncionDTO toFuncionDTO(Funcion funcion) {
         if (funcion == null || funcion.getSala() == null || funcion.getPelicula() == null) {
@@ -30,6 +47,14 @@ public class FuncionMapper implements IFuncionMapper {
         return dto;
     }
 
+    /**
+     * Convierte un FuncionDTO a entidad Funcion (parcial). - Asigna solo campos
+     * directos, no resuelve relaciones (sala/película). - Las relaciones deben
+     * establecerse externamente usando DAOs correspondientes.
+     *
+     * @param dto Objeto de transferencia con datos a convertir.
+     * @return Entidad Funcion con datos básicos inicializados.
+     */
     @Override
     public Funcion toFuncionEntidad(FuncionDTO dto) {
         Funcion funcion = new Funcion();
