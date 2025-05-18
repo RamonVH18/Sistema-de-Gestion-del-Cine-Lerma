@@ -168,7 +168,7 @@ public class FuncionDAO implements IFuncionDAO {
             Funcion funcion = coleccionFunciones.find(filtro).first();
 
             if (funcion == null) {
-                throw new FuncionNoEncontradaException("Rrror: Funcion no encontrada");
+                throw new FuncionNoEncontradaException("Error: Funcion no encontrada");
             }
 
             Integer duracion = funcion.getPelicula().getDuracion();

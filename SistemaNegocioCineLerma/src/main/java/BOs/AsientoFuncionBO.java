@@ -7,6 +7,7 @@ package BOs;
 import DAOs.AsientoFuncionDAO;
 import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
+import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
 import Excepciones.PersistenciaException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
@@ -19,6 +20,8 @@ import entidades.AsientoFuncion;
 import entidades.Funcion;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,7 +30,7 @@ import java.util.List;
 public class AsientoFuncionBO implements IAsientoFuncionBO {
 
     private static AsientoFuncionBO instance;
-//    private final IAsientoFuncionDAO asientoFuncionDAO = AsientoFuncionDAO.getInstance();
+    private final IAsientoFuncionDAO asientoFuncionDAO = AsientoFuncionDAO.getInstanceDAO();
     private final AsientoFuncionMapper asientoFuncionMapper = new AsientoFuncionMapper();
     private final FuncionMapper funcionMapper = new FuncionMapper();
 
@@ -53,8 +56,16 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
     }
 
     @Override
-    public List<AsientoFuncionDTO> obtenerAsientosFuncion(FuncionDTO funcion) throws AsientoFuncionBusquedaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<AsientoFuncionDTO> obtenerAsientosFuncion(FuncionDTO funcionDTO) throws AsientoFuncionBusquedaException {
+        try {
+            Funcion funcion = funcionMapper.toFuncionEntidad(funcionDTO);
+            List<AsientoFuncion> asientosFuncion = asientoFuncionDAO.mostrarListaAsientosPorFuncion(funcion, Boolean.FALSE);
+            List<AsientoFuncionDTO> asientosMapeados = asientoFuncionMapper.toAsientoFuncionDTO(asientosFuncion);
+            
+            return asientosMapeados;
+        } catch (FalloMostrarAsientosFuncionException e) {
+            throw new AsientoFuncionBusquedaException("Hubo un error al consultar los asientos de la funcion: " + e.getMessage());
+        }
     }
 
     @Override

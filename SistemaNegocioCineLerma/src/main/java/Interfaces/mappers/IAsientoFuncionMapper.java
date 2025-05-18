@@ -6,6 +6,7 @@ package Interfaces.mappers;
 
 import DTOs.AsientoFuncionDTO;
 import entidades.AsientoFuncion;
+import java.util.List;
 
 /**
  *
@@ -13,8 +14,8 @@ import entidades.AsientoFuncion;
  */
 public interface IAsientoFuncionMapper {
 
-    public AsientoFuncionDTO toAsientoFuncionDTO(AsientoFuncion asientoFuncion);
+    public List<AsientoFuncionDTO> toAsientoFuncionDTO(List<AsientoFuncion> asientos);
 
-    public AsientoFuncion toAsientoFuncionEntidad(AsientoFuncionDTO asientoFuncionDTO);
+    public List<AsientoFuncion> toAsientoFuncionEntidad(List<AsientoFuncionDTO> asientosDTO);
 
 }
