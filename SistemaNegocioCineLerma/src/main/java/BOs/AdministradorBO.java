@@ -9,7 +9,6 @@ import DTOs.AdministradorDTO;
 import Excepciones.Usuarios.EliminarUsuarioExceptionBO;
 import Excepciones.Usuarios.EncontrarAdminExceptionBO;
 import Excepciones.Usuarios.RegistrarAdminExceptionBO;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarAdministradorException;
 import Excepciones.usuarios.RegistrarAministradorException;
 import Interfaces.IAdministradorBO;

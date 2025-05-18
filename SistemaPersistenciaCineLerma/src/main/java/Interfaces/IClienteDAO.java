@@ -6,7 +6,6 @@ package Interfaces;
 
 import Excepciones.usuarios.ActualizarClienteException;
 import Excepciones.usuarios.CargarHistorialException;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarClienteException;
 import Excepciones.usuarios.RegistrarClienteException;
 import Excepciones.usuarios.ValidarUsuarioException;

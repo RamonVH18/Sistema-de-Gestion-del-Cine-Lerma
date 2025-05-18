@@ -8,6 +8,10 @@ package Excepciones.usuarios;
  *
  * @author sonic
  */
+/**
+ * Excepción personalizada que se lanza cuando ocurre un error al intentar buscar u obtener un administrador
+ * esta excepcion puede ocurrir cuando un administrador no se encuentra o cuando hay errores con la conexion a mongo
+ */
 public class EncontrarAdministradorException extends Exception {
 
     public EncontrarAdministradorException(String message) {

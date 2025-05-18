@@ -8,7 +8,6 @@ import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.Usuarios.ActualizarUsuarioExceptionBO;
 import Excepciones.Usuarios.ObtenerUsuariosExceptionBO;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import enums.EstadoUsuario;
 import enums.Rol;

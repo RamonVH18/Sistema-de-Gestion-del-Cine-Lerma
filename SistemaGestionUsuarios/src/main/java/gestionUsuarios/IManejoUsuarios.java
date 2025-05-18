@@ -25,7 +25,6 @@ import Excepciones.Usuarios.RegistrarAdminExceptionBO;
 import Excepciones.Usuarios.RegistrarClienteExceptionBO;
 import Excepciones.Usuarios.ValidarUsuarioExceptionBO;
 import Excepciones.ValidarUsuarioException;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import enums.EstadoUsuario;
 import enums.Rol;

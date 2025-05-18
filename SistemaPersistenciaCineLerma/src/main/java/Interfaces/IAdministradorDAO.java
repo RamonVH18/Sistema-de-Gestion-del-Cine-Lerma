@@ -4,8 +4,6 @@
  */
 package Interfaces;
 
-import Excepciones.usuarios.ActualizarAdministradorException;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarAdministradorException;
 import Excepciones.usuarios.RegistrarAministradorException;
 import Excepciones.usuarios.ValidarUsuarioException;

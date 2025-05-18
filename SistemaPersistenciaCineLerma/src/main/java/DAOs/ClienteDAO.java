@@ -7,7 +7,6 @@ package DAOs;
 import Conexion.MongoConexion;
 import Excepciones.usuarios.ActualizarClienteException;
 import Excepciones.usuarios.CargarHistorialException;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.EncontrarClienteException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import Excepciones.usuarios.RegistrarClienteException;
@@ -43,7 +42,6 @@ public class ClienteDAO implements IClienteDAO {
     private static ClienteDAO instance;
     private final MongoConexion conexion = new MongoConexion();
     private final String nombreColeccion = "Usuarios";
-    private final IUsuarioDAO usuarioDAO = UsuarioDAO.getInstance();
 
     //Quizas agregar una proyeccion
     ClienteDAO() {
@@ -57,6 +55,18 @@ public class ClienteDAO implements IClienteDAO {
         return instance;
     }
 
+    /**
+     * Registra un nuevo cliente en la base de datos.
+     *
+     * Este método valida la información del cliente y, si es válida, inserta el
+     * cliente en la colección. Si ocurre un error durante la validación o la
+     * inserción se lanza RegistrarClienteException
+     *
+     * @param cliente el objeto Cliente que se desea registrar.
+     * @return el objeto Cliente registrado, con información actualizada.
+     * @throws RegistrarClienteException si ocurre un error al intentar
+     * registrar el cliente.
+     */
     @Override
     public Cliente registrarCliente(Cliente cliente) throws RegistrarClienteException {
         MongoClient clienteMongo = null;
@@ -66,12 +76,12 @@ public class ClienteDAO implements IClienteDAO {
 
             MongoCollection<Cliente> coleccion = base.getCollection(nombreColeccion, Cliente.class);
 
+            //llama al metodo de validacion, este metodo revisa que no se dulplique ningun dato unico que ya este registrado en la base de datos
             validarRegistro(coleccion, cliente);
-            
-            coleccion.insertOne(cliente);
 
+            coleccion.insertOne(cliente); //Realiza la operacion de insertar un cliente en la coleccion
 
-            return cliente;
+            return cliente; // Devuelve el cliente registrado
 
         } catch (MongoException e) {
             throw new RegistrarClienteException(e.getMessage());
@@ -85,6 +95,21 @@ public class ClienteDAO implements IClienteDAO {
 
     }
 
+    /**
+     * Actualiza la información de un cliente en la base de datos.
+     *
+     * Este método busca al cliente en la base de datos utilizando su nombre de
+     * usuario, valida la información del cliente modificado y, si es válida,
+     * reemplaza el documento del cliente en la colección, antes de hacer la
+     * actualizacion del cliente realiza una busqueda con el nombre de usuario
+     * para validar que el cliente que se quiere actualizar si exista
+     *
+     * @param clienteModificado el objeto Cliente que contiene la información
+     * actualizada.
+     * @return el objeto Cliente modificado, con la información actualizada.
+     * @throws ActualizarClienteException si ocurre un error al intentar
+     * actualizar el cliente.
+     */
     @Override
     public Cliente actualizarCliente(Cliente clienteModificado) throws ActualizarClienteException {
         MongoClient clienteMongo = null;
@@ -99,9 +124,11 @@ public class ClienteDAO implements IClienteDAO {
                 throw new ActualizarClienteException("No se encontró el cliente para actualizar");
             }
 
+            //Se llama al metodo para validar la actuliazacion, como los anteriores este metodo se encarga de validar
+            //que no se repitan datos que ya estan registrados en la base, nombre de usuario, correo, telefono, etc.
             validarActualizacion(coleccion, original, clienteModificado);
 
-            // 3) Reemplazar todo el documento
+            //Reemplazar todo el documento
             UpdateResult result = coleccion.replaceOne(filtro, clienteModificado);
             if (result.getModifiedCount() == 0) {
                 throw new ActualizarClienteException("No se modificó ningún documento");
@@ -119,6 +146,22 @@ public class ClienteDAO implements IClienteDAO {
         }
     }
 
+    /**
+     * Obtiene un cliente específico basado en su nombre de usuario y
+     * contraseña.
+     *
+     * Este método busca al cliente que
+     * coincide con las credenciales proporcionadas y devuelve el objeto Cliente
+     * correspondiente. Si ocurre un error durante la conexión o la búsqueda se lanza EncontrarClienteException
+     *
+     * @param nombreUsuario el nombre de usuario del cliente que se desea
+     * obtener.
+     * @param contrasena la contraseña del cliente que se desea obtener.
+     * @return el objeto Cliente correspondiente a las credenciales
+     * proporcionadas, o null si no se encuentra.
+     * @throws EncontrarClienteException si ocurre un error al intentar obtener
+     * el cliente.
+     */
     @Override
     public Cliente obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarClienteException {
         MongoClient clienteMongo = null;
@@ -126,6 +169,8 @@ public class ClienteDAO implements IClienteDAO {
             clienteMongo = conexion.crearConexion();
             MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
 
+            //Se construye el filtro que se utilizara para buscar al cliente, busca por el nombre de usuario, la contraseña y limita la busqueda a usuarios que tengan
+            //el rol de "CLIENTE" es decir usuarios que sean clientes
             Bson filtro = Filters.and(
                     Filters.eq("nombreDeUsuario", nombreUsuario),
                     Filters.eq("contrasenia", contrasena),
@@ -168,6 +213,8 @@ public class ClienteDAO implements IClienteDAO {
         }
     }
 
+    //Metodos auxiliares para validar el registro de un cliente y la actualizacion. Si alguna de las validaciones falla
+    //se lanza un ValidarUsuarioException, hay validaciones para el nombre de usuysario, correo electronico y telefono
     public void validarRegistro(MongoCollection coleccion, Cliente cliente) throws ValidarUsuarioException {
         if (coleccion.find(Filters.eq("nombreDeUsuario", cliente.getNombreDeUsuario())).first() != null) {
             throw new ValidarUsuarioException("El nombre de usuario ya está en uso");
@@ -180,6 +227,10 @@ public class ClienteDAO implements IClienteDAO {
         }
     }
 
+    //La diferencia entre el metodo de validar registro y validar actualizacion es que 
+    //en la validacion de la actualizacion se reciben el cliente original que se encontro para ser actualizado y el cliente con el que se quiere reemplazar
+    //para hacer la actualizacion, esto por que si se hace una actualizacion en la que se deja el nombre de usuario igual que como estaba antes
+    //el sistema creera que se estan tratando de duplicar, por lo tanto se comparan el original y el modificado haciendo busquedas con filtros que excluyen al original
     public void validarActualizacion(MongoCollection<Cliente> coleccion, Cliente original, Cliente modificado) throws ValidarUsuarioException {
 
         if (!modificado.getNombreDeUsuario().equals(original.getNombreDeUsuario())) {

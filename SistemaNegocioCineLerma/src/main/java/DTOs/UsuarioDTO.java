@@ -12,6 +12,13 @@ import java.time.LocalDateTime;
  *
  * @author sonic
  */
+/**
+ * DTO que representa la información básica de un usuario
+ * en el sistema. Se utiliza para transferir datos entre las capas de la aplicación sin exponer
+ * la entidad de dominio directamente.
+ * Contiene todos los atributos esenciales de un usuario, incluyendo credenciales, información
+ * personal y estado en el sistema.
+ */
 public class UsuarioDTO {
 
     private String nombreUsuario;

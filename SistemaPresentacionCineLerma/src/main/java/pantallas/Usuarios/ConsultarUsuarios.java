@@ -568,7 +568,9 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
 
     private void cargarListaUsuarios(List<UsuarioDTO> listaUsuarios) {
         String[] columnas = {
-            "Nombre de Usuario", "Contraseña", "Correo Electrónico", "Nombre", "Apellido Paterno", "Apellido Materno", "Rol", "Estado", "Fecha de Nacimiento"
+            "Nombre de Usuario",
+                //, "Contraseña", mejor sin mostrar la contraseña
+                "Correo Electrónico", "Nombre", "Apellido Paterno", "Apellido Materno", "Rol", "Estado", "Fecha de Nacimiento"
         };
 
         Object[][] datosTabla = new Object[listaUsuarios.size()][columnas.length];
@@ -577,7 +579,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
             UsuarioDTO usuario = listaUsuarios.get(i);
             datosTabla[i] = new Object[]{
                 usuario.getNombreUsuario(),
-                usuario.getContraseña(),
+              //  usuario.getContraseña(), no mostrar la contraseña en la busqueda de usuarios
                 usuario.getCorreoElectronico(),
                 usuario.getNombre(),
                 usuario.getApellidoPaterno(),

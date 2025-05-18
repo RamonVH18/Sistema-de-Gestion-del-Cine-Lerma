@@ -5,7 +5,6 @@
 package Interfaces;
 
 import Excepciones.usuarios.ActualizarUsuarioException;
-import Excepciones.usuarios.EliminarUsuarioException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import entidades.Usuario;
 import enums.EstadoUsuario;

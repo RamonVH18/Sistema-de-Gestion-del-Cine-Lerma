@@ -8,6 +8,9 @@ package Excepciones.usuarios;
  *
  * @author sonic
  */
+/**
+ * Excepción personalizada que se lanza cuando ocurre un error al intentar actualizar un usuario.
+ */
 public class ActualizarUsuarioException extends Exception {
 
     public ActualizarUsuarioException(String message) {

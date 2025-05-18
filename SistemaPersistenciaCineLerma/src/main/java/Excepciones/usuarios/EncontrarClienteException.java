@@ -8,6 +8,10 @@ package Excepciones.usuarios;
  *
  * @author sonic
  */
+/**
+ * Excepción personalizada que se lanza cuando ocurre un error al intentar buscar u obtener un cliente,
+ * esta excepcion puede ocurrir cuando un cliente no se encuentra o cuando hay errores con la conexion a mongo
+ */
 public class EncontrarClienteException extends Exception {
 
     public EncontrarClienteException(String message) {
