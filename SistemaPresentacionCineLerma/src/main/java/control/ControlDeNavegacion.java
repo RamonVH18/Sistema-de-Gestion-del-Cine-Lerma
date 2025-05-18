@@ -70,6 +70,7 @@ import gestionUsuarios.IManejoUsuarios;
 import gestionUsuarios.ManejoUsuarios;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,7 +98,6 @@ import pantallas.Usuarios.EditarUsuario;
 import pantallas.Usuarios.HistorialCliente;
 import pantallas.Usuarios.RegistrarUsuario;
 import pantallas.administracionPeliculas.AgregarPelicula;
-import pantallas.administracionPeliculas.DetallesPelicula;
 import pantallas.administracionPeliculas.MenuAdministrarPeliculas;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
@@ -795,6 +795,17 @@ public class ControlDeNavegacion implements IControl {
             pantalla.setLocationRelativeTo(null);
             pantalla.setVisible(true);
         });
+    }
+    
+    @Override
+    public List<FuncionDTO> consultarFuncionesFiltradas(String textoFiltro) {
+        
+        try {
+            return gestionFunciones.buscarFuncionesFiltradas(textoFiltro);
+        } catch (FuncionDatosIncorrectosException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return new ArrayList<>();
+        }
     }
 
     /*

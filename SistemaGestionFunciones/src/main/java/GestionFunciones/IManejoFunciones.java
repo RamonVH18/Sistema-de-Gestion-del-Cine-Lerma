@@ -26,5 +26,7 @@ public interface IManejoFunciones {
     public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) throws FuncionDatosIncorrectosException;
     
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionDuracionException;
+    
+    public List<FuncionDTO> buscarFuncionesFiltradas(String textoFiltro) throws FuncionDatosIncorrectosException;
 
 }

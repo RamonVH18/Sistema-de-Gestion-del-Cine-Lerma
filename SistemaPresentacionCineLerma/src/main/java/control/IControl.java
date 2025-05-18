@@ -141,6 +141,8 @@ public interface IControl {
 
     public void mostrarProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula);
     
+    public List<FuncionDTO> consultarFuncionesFiltradas(String textoFiltro);
+    
     // -------------------------------METODOS DE NAVEGACION DE PELICULAS--------------------------------
     public void mostrarMenuAdministrarPeliculas(JFrame frameAnterior);
     

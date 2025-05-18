@@ -17,6 +17,7 @@ import Excepciones.FuncionDuracionException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionFechaValidaException;
+import Excepciones.funciones.FuncionPeliculaNoEncontradaException;
 import Excepciones.funciones.FuncionRegistrarException;
 import Excepciones.funciones.FuncionValidadaException;
 import Interfaces.IAsientoFuncionBO;
@@ -24,6 +25,8 @@ import Interfaces.IFuncionBO;
 import Interfaces.ISalaBO;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -127,6 +130,19 @@ public class ManejoFunciones implements IManejoFunciones {
             throw new FuncionDatosIncorrectosException("Seleccione por lo menos 1 filtro");
         } catch (FuncionFechaValidaException e) {
             throw new FuncionDatosIncorrectosException("Fecha invalida" + e.getMessage());
+        }
+    }
+    
+    @Override
+    public List<FuncionDTO> buscarFuncionesFiltradas(String textoFiltro) throws FuncionDatosIncorrectosException {
+        try {
+            if (textoFiltro == null) {
+                textoFiltro = "";
+            }
+            
+            return funcionBO.buscarFuncionesFiltradas(textoFiltro);
+        } catch (FuncionPeliculaNoEncontradaException ex) {
+            throw new FuncionDatosIncorrectosException("Hubo un problema al cargar las salas");
         }
     }
 

@@ -27,5 +27,7 @@ public interface IFuncionDAO {
     public List<Funcion> buscarFuncionFechaInicio(LocalDateTime fechaHora);
     
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionNoEncontradaException, FuncionDuracionIncorrectaException;
+    
+    public List<Funcion> buscarPeliculasFiltradas(String textoFiltro) throws FuncionNoEncontradaException;
 
 }

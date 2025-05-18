@@ -10,10 +10,12 @@ import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Interfaces.IFuncionDAO;
+import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import entidades.Funcion;
 import enums.EstadoSala;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -158,7 +161,7 @@ public class FuncionDAO implements IFuncionDAO {
         MongoClient clienteMongo = conexion.crearConexion();
 
         if (idString == null || idString.isEmpty()) {
-            throw new FuncionNoEncontradaException("Rrror: el id es nulo o esta vacio");
+            throw new FuncionNoEncontradaException("Error: el id es nulo o esta vacio");
         }
         try {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
@@ -179,6 +182,48 @@ public class FuncionDAO implements IFuncionDAO {
         } finally {
             conexion.cerrarConexion(clienteMongo);
         }
+    }
+
+    @Override
+    public List<Funcion> buscarPeliculasFiltradas(String textoFiltro) throws FuncionNoEncontradaException {
+        MongoClient clienteMongo = conexion.crearConexion();
+        try {
+            MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
+
+            Bson filtro = crearFiltro(textoFiltro);
+
+            List<Funcion> funcionesFiltradas = coleccionFunciones.find(filtro)
+                    .sort(Sorts.ascending("sala.numSala"))
+                    .into(new ArrayList<>());
+
+            return funcionesFiltradas;
+
+        } catch (MongoException e) {
+            throw new FuncionNoEncontradaException("Hubo un problema al buscar las salas filtradas: " + e.getMessage());
+        }
+    }
+
+    private Bson crearFiltro(String textoFiltro) {
+        List<Bson> condiciones = new ArrayList<>();
+
+        if (textoFiltro != null && !textoFiltro.isBlank()) {
+            condiciones.add(crearFiltroNumeroSala(textoFiltro));
+            condiciones.add(crearFiltroPelicula(textoFiltro));
+        }
+
+        return condiciones.isEmpty() ? new Document() : Filters.or(condiciones);
+
+    }
+
+    private Bson crearFiltroNumeroSala(String filtroNumSala) {
+        Pattern patron = Pattern.compile(".*" + Pattern.quote(filtroNumSala) + ".*", Pattern.CASE_INSENSITIVE);
+        return Filters.regex("sala.numSala", patron);
+    }
+
+    private Bson crearFiltroPelicula(String filtroPelicula) {
+        Pattern patron = Pattern.compile(".*" + Pattern.quote(filtroPelicula) + ".*", Pattern.CASE_INSENSITIVE);
+        return Filters.regex("pelicula.titulo", patron);
     }
 
 }

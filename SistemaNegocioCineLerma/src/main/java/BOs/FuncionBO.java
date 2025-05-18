@@ -14,6 +14,7 @@ import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.Funciones.FuncionSalaVaciaException;
 import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionFechaValidaException;
+import Excepciones.funciones.FuncionPeliculaNoEncontradaException;
 import Excepciones.funciones.FuncionRegistrarException;
 import Excepciones.funciones.FuncionValidadaException;
 import Excepciones.peliculas.BuscarPeliculaException;
@@ -109,6 +110,20 @@ public class FuncionBO implements IFuncionBO {
         }
 
         return funcionesDTO;
+    }
+
+    @Override
+    public List<FuncionDTO> buscarFuncionesFiltradas(String textoFiltro) throws FuncionPeliculaNoEncontradaException {
+        try {
+            List<FuncionDTO> funcionesDTO = new ArrayList<>();
+            List<Funcion> funcionesFiltradas = funcionDAO.buscarPeliculasFiltradas(textoFiltro);
+            for (Funcion funcion : funcionesFiltradas) {
+                funcionesDTO.add(funcionMapper.toFuncionDTO(funcion));
+            }
+            return funcionesDTO;
+        } catch (FuncionNoEncontradaException e) {
+            throw new FuncionPeliculaNoEncontradaException("No se encontraron las funciones filtradas: " + e.getMessage());
+        }
     }
 
     @Override
