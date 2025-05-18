@@ -149,6 +149,8 @@ public interface IControl {
     public void mostrarAgregarPelicula(JFrame frameAnterior);
     
     public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO);
+    
+    public void mostrarEditarPelicula(PeliculaDTO peliculaDTO);
     // -------------------------------FIN DE METODOS DE NAVEGACION DE PELICULAS-------------------------
 
     //Usuarios:
@@ -191,6 +193,14 @@ public interface IControl {
     
     // -------------------------------METODOS DE PELICULAS--------------------------------
     public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO);
+    
+    public PeliculaDTO editarPelicula(PeliculaDTO peliculaDTO);
+    
+    public boolean darAltaPelicula(PeliculaDTO peliculaDTO);
+    
+    public boolean darBajaPelicula(PeliculaDTO peliculaDTO);
+    
+    public boolean eliminarPelicula(PeliculaDTO peliculaDTO);
     // -------------------------------FIN DE METODOS DE PELICULAS-------------------------
 
 }

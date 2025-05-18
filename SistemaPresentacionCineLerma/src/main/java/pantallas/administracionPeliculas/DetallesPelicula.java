@@ -4,17 +4,39 @@
  */
 package pantallas.administracionPeliculas;
 
+import DTOs.PeliculaDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Daniel M
  */
 public class DetallesPelicula extends javax.swing.JFrame {
 
+    private final IControl control = ControlDeNavegacion.getInstancia();
+    private PeliculaDTO peliculaDTO = new PeliculaDTO();
+
     /**
      * Creates new form DetallesPelicula
+     *
+     * @param peliculaDTO
      */
-    public DetallesPelicula() {
+    public DetallesPelicula(PeliculaDTO peliculaDTO) {
         initComponents();
+        this.peliculaDTO = peliculaDTO;
+        cargarDetallesPelicula(peliculaDTO);
     }
 
     /**
@@ -28,7 +50,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
 
         jlabelTitulo = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jPanelCarteleraFiltrada = new javax.swing.JPanel();
+        jPanelImagenPelicula = new javax.swing.JPanel();
         jlabelGenero = new javax.swing.JLabel();
         jlabelTitulo2 = new javax.swing.JLabel();
         jlabelClasificacion = new javax.swing.JLabel();
@@ -51,32 +73,46 @@ public class DetallesPelicula extends javax.swing.JFrame {
         jLabel3.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(650, 880));
+        setMinimumSize(new java.awt.Dimension(650, 880));
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jPanelCarteleraFiltradaLayout = new javax.swing.GroupLayout(jPanelCarteleraFiltrada);
-        jPanelCarteleraFiltrada.setLayout(jPanelCarteleraFiltradaLayout);
-        jPanelCarteleraFiltradaLayout.setHorizontalGroup(
-            jPanelCarteleraFiltradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelImagenPelicula.setMaximumSize(new java.awt.Dimension(225, 325));
+        jPanelImagenPelicula.setMinimumSize(new java.awt.Dimension(225, 325));
+
+        javax.swing.GroupLayout jPanelImagenPeliculaLayout = new javax.swing.GroupLayout(jPanelImagenPelicula);
+        jPanelImagenPelicula.setLayout(jPanelImagenPeliculaLayout);
+        jPanelImagenPeliculaLayout.setHorizontalGroup(
+            jPanelImagenPeliculaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 225, Short.MAX_VALUE)
         );
-        jPanelCarteleraFiltradaLayout.setVerticalGroup(
-            jPanelCarteleraFiltradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelImagenPeliculaLayout.setVerticalGroup(
+            jPanelImagenPeliculaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 325, Short.MAX_VALUE)
         );
 
+        getContentPane().add(jPanelImagenPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 105, -1, -1));
+
         jlabelGenero.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelGenero.setText("Género:");
+        getContentPane().add(jlabelGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 153, -1, -1));
 
         jlabelTitulo2.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelTitulo2.setText("Título:");
+        getContentPane().add(jlabelTitulo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 111, -1, -1));
 
         jlabelClasificacion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelClasificacion.setText("Clasificación:");
+        getContentPane().add(jlabelClasificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 237, -1, -1));
 
         jlabelDuracion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelDuracion.setText("Duración:");
+        getContentPane().add(jlabelDuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 195, -1, -1));
 
         jlabelSinopsis.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelSinopsis.setText("Sinopsis:");
+        getContentPane().add(jlabelSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 279, -1, -1));
 
         btnEditarPelicula.setBackground(new java.awt.Color(162, 132, 94));
         btnEditarPelicula.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -87,6 +123,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
                 btnEditarPeliculaActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEditarPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 590, 128, -1));
 
         btnDarBaja.setBackground(new java.awt.Color(162, 132, 94));
         btnDarBaja.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -97,6 +134,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
                 btnDarBajaActionPerformed(evt);
             }
         });
+        getContentPane().add(btnDarBaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 639, -1, -1));
 
         btnEliminar.setBackground(new java.awt.Color(162, 132, 94));
         btnEliminar.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -107,6 +145,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
                 btnEliminarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 688, 128, -1));
 
         btnaVolver.setBackground(new java.awt.Color(162, 132, 94));
         btnaVolver.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -117,158 +156,46 @@ public class DetallesPelicula extends javax.swing.JFrame {
                 btnaVolverActionPerformed(evt);
             }
         });
+        getContentPane().add(btnaVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 782, -1, -1));
 
         jlabelTituloDetalles.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
         jlabelTituloDetalles.setText("Detalles Película");
+        getContentPane().add(jlabelTituloDetalles, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
 
         jLabelMostrarTitulo.setText("jLabel1");
+        getContentPane().add(jLabelMostrarTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(324, 117, -1, -1));
 
         jLabelMostrarGenero.setText("jLabel1");
+        getContentPane().add(jLabelMostrarGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 159, -1, -1));
 
         jLabelMostrarDuracion.setText("jLabel1");
+        getContentPane().add(jLabelMostrarDuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(353, 201, -1, -1));
 
         jLabelMostrarClasificacion.setText("jLabel1");
+        getContentPane().add(jLabelMostrarClasificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(386, 243, -1, -1));
 
         jLabelMostrarSinopsis.setText("jLabel1");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnaVolver)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnDarBaja)
-                                .addComponent(btnEditarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jlabelGenero)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabelMostrarGenero))
-                                        .addComponent(jlabelSinopsis)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                                    .addComponent(jlabelTitulo2)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(jLabelMostrarTitulo))
-                                                .addComponent(jlabelClasificacion))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabelMostrarClasificacion))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jlabelDuracion)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jLabelMostrarDuracion))
-                                        .addComponent(jLabelMostrarSinopsis)))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 133, Short.MAX_VALUE)
-                .addComponent(jlabelTituloDetalles)
-                .addGap(128, 128, 128))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jlabelTituloDetalles)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlabelTitulo2)
-                            .addComponent(jLabelMostrarTitulo))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlabelGenero)
-                            .addComponent(jLabelMostrarGenero))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlabelDuracion)
-                            .addComponent(jLabelMostrarDuracion))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlabelClasificacion)
-                            .addComponent(jLabelMostrarClasificacion))
-                        .addGap(18, 18, 18)
-                        .addComponent(jlabelSinopsis)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelMostrarSinopsis)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 157, Short.MAX_VALUE)
-                .addComponent(btnEditarPelicula)
-                .addGap(18, 18, 18)
-                .addComponent(btnDarBaja)
-                .addGap(18, 18, 18)
-                .addComponent(btnEliminar)
-                .addGap(66, 66, 66)
-                .addComponent(btnaVolver)
-                .addGap(17, 17, 17))
-        );
+        getContentPane().add(jLabelMostrarSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 309, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPeliculaActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_btnEditarPeliculaActionPerformed
 
     private void btnDarBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarBajaActionPerformed
-        // TODO add your handling code here:
+        darDeBajaPelicula(peliculaDTO);
     }//GEN-LAST:event_btnDarBajaActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        eliminarPelicula(peliculaDTO);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnaVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaVolverActionPerformed
-        // TODO add your handling code here:
+        control.mostrarMenuAdministrarPeliculas(this);
+        dispose();
     }//GEN-LAST:event_btnaVolverActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DetallesPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DetallesPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DetallesPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DetallesPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DetallesPelicula().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDarBaja;
@@ -281,7 +208,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelMostrarGenero;
     private javax.swing.JLabel jLabelMostrarSinopsis;
     private javax.swing.JLabel jLabelMostrarTitulo;
-    private javax.swing.JPanel jPanelCarteleraFiltrada;
+    private javax.swing.JPanel jPanelImagenPelicula;
     private javax.swing.JLabel jlabelClasificacion;
     private javax.swing.JLabel jlabelDuracion;
     private javax.swing.JLabel jlabelGenero;
@@ -290,4 +217,99 @@ public class DetallesPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel jlabelTitulo2;
     private javax.swing.JLabel jlabelTituloDetalles;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarDetallesPelicula(PeliculaDTO peliculaDTO) {
+        jLabelMostrarTitulo.setText(peliculaDTO.getTitulo());
+        jLabelMostrarGenero.setText(peliculaDTO.getGenero());
+        jLabelMostrarDuracion.setText(peliculaDTO.getDuracion().toString() + " minutos");
+        jLabelMostrarClasificacion.setText(peliculaDTO.getClasificacion());
+        jLabelMostrarSinopsis.setText("<html><body style='width:250px'>" + peliculaDTO.getSinopsis() + "</body></html>");
+        cargarImagenPromocional(peliculaDTO);
+    }
+
+    private void darDeBajaPelicula(PeliculaDTO peliculaDTO) {
+        int respuesta = JOptionPane.showConfirmDialog(
+                this,
+                "¿Estás seguro de que deseas dar de baja la película '" + peliculaDTO.getTitulo() + "'?",
+                "Confirmar baja",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            boolean exito = control.darBajaPelicula(peliculaDTO);
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "La película fue dada de baja correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    private void eliminarPelicula(PeliculaDTO peliculaDTO) {
+        int respuesta = JOptionPane.showConfirmDialog(
+                this,
+                "¿Estás seguro de que deseas eliminar la película '" + peliculaDTO.getTitulo() + "'? Esta acción no se puede deshacer.",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            boolean exito = control.eliminarPelicula(peliculaDTO);
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Película eliminada correctamente.", "Eliminación exitosa", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    private void cargarImagenPromocional(PeliculaDTO peliculaDTO) {
+        try {
+            byte[] bytesImagen = peliculaDTO.getImagen();
+            if (bytesImagen == null) {
+                System.out.println("No hay imagen en la película.");
+                return;
+            }
+
+            InputStream is = new ByteArrayInputStream(bytesImagen);
+            BufferedImage imagen = ImageIO.read(is);
+
+            if (imagen == null) {
+                System.out.println("No se pudo leer la imagen desde los bytes.");
+                return;
+            }
+
+            int panelWidth = jPanelImagenPelicula.getWidth();
+            int panelHeight = jPanelImagenPelicula.getHeight();
+
+            int imgWidth = imagen.getWidth();
+            int imgHeight = imagen.getHeight();
+
+            // Cálculo del aspect ratio
+            double panelRatio = (double) panelWidth / panelHeight;
+            double imgRatio = (double) imgWidth / imgHeight;
+
+            int drawWidth, drawHeight;
+            if (imgRatio > panelRatio) {
+                drawWidth = panelWidth;
+                drawHeight = (int) (panelWidth / imgRatio);
+            } else {
+                drawHeight = panelHeight;
+                drawWidth = (int) (panelHeight * imgRatio);
+            }
+
+            // Escalar la imagen
+            Image imagenEscalada = imagen.getScaledInstance(drawWidth, drawHeight, Image.SCALE_SMOOTH);
+            ImageIcon icono = new ImageIcon(imagenEscalada);
+
+            // Limpiar el panel y dibujar la imagen centrada
+            jPanelImagenPelicula.removeAll();
+            jPanelImagenPelicula.setLayout(new GridBagLayout()); // Centrado automático
+            jPanelImagenPelicula.add(new JLabel(icono));
+            jPanelImagenPelicula.revalidate();
+            jPanelImagenPelicula.repaint();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la imagen promocional.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }

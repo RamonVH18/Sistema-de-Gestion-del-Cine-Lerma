@@ -26,7 +26,9 @@ import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
 import Excepciones.CalcularCostoTotalException;
 import Excepciones.CargarHistorialException;
+import Excepciones.DarBajaPeliculaException;
 import Excepciones.DisponibilidadAsientosException;
+import Excepciones.EliminarPeliculaException;
 import Excepciones.EncontrarUsuarioException;
 import Excepciones.FuncionBoletosVendidosException;
 import Excepciones.FuncionCapacidadSalaException;
@@ -98,6 +100,8 @@ import pantallas.Usuarios.EditarUsuario;
 import pantallas.Usuarios.HistorialCliente;
 import pantallas.Usuarios.RegistrarUsuario;
 import pantallas.administracionPeliculas.AgregarPelicula;
+import pantallas.administracionPeliculas.DetallesPelicula;
+import pantallas.administracionPeliculas.EditarPelicula;
 import pantallas.administracionPeliculas.MenuAdministrarPeliculas;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
@@ -121,15 +125,15 @@ public class ControlDeNavegacion implements IControl {
     private PeliculaDTO peliculaSeleccionada;
     private FuncionDTO funcionSeleccionada;
     private UsuarioDTO usuarioActual;
-
+    
     private final String titulo = "¡ERROR!";
-
+    
     private List<String> asientos;
-
+    
     private int numAsientos;
-
+    
     private final ClienteDTO cliente = new ClienteDTO();
-
+    
     private static ControlDeNavegacion instancia;
 
     /**
@@ -150,7 +154,7 @@ public class ControlDeNavegacion implements IControl {
         }
         return instancia;
     }
-
+    
     @Override
     public UsuarioDTO obtenerUsuarioActual() {
         return usuarioActual;
@@ -243,7 +247,7 @@ public class ControlDeNavegacion implements IControl {
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
         } else {
-
+            
         }
     }
 
@@ -256,7 +260,7 @@ public class ControlDeNavegacion implements IControl {
             DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
             pantallaDetalleDelBoleto.setLocationRelativeTo(null);
             pantallaDetalleDelBoleto.setVisible(true);
-
+            
         });
     }
 
@@ -386,7 +390,7 @@ public class ControlDeNavegacion implements IControl {
                 String textoValidado = texto.trim();
                 numAsientos = Integer.parseInt(textoValidado);
                 manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
-
+                
                 return textoValidado;
             }
             return null;
@@ -530,7 +534,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) {
         gestionDePagos.actualizarSaldoPaypal(paypal, pago);
-
+        
     }
 
     /**
@@ -627,7 +631,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public void agregarSala(SalaNuevaDTO salaNueva) {
         try {
@@ -636,9 +640,9 @@ public class ControlDeNavegacion implements IControl {
         } catch (AgregarSalaException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
         }
-
+        
     }
-
+    
     @Override
     public Boolean validarCamposAgregarSala(String numSala, String numAsientos) {
         try {
@@ -649,7 +653,7 @@ public class ControlDeNavegacion implements IControl {
             return Boolean.FALSE;
         }
     }
-
+    
     @Override
     public void mostrarSeleccionarSala(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -659,10 +663,10 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public SalaViejaDTO consultarSala(String numSala) {
-
+        
         try {
             SalaViejaDTO sala = manejoDeSalas.cargarSalaUnica(numSala);
             return sala;
@@ -671,7 +675,7 @@ public class ControlDeNavegacion implements IControl {
         }
         return null;
     }
-
+    
     @Override
     public List<SalaViejaDTO> consultarSalas(String filtro, Boolean filtrarActivas) {
         try {
@@ -682,7 +686,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala) {
         SwingUtilities.invokeLater(() -> {
@@ -692,7 +696,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public Boolean modificarSala(String numSala, EstadoSala estadoSala) {
         try {
@@ -720,60 +724,59 @@ public class ControlDeNavegacion implements IControl {
     }
     
     @Override
-   public void mostrarConsultarFuncionesSalas(JFrame frameAnterior) {
-       SwingUtilities.invokeLater(() -> {
-           ConsultarFuncionesSalas pantallaConsultarFuncionesSalas = new ConsultarFuncionesSalas();
-           pantallaConsultarFuncionesSalas.setLocationRelativeTo(null);
-           pantallaConsultarFuncionesSalas.setVisible(true);
-           frameAnterior.dispose();
-       });
-   }
-   
+    public void mostrarConsultarFuncionesSalas(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            ConsultarFuncionesSalas pantallaConsultarFuncionesSalas = new ConsultarFuncionesSalas();
+            pantallaConsultarFuncionesSalas.setLocationRelativeTo(null);
+            pantallaConsultarFuncionesSalas.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
     @Override
-   public void mostrarConsultarAsientosReservados(JFrame frameAnterior, FuncionDTO funcionDTO) {
-       SwingUtilities.invokeLater(() -> {
-           ConsultarAsientosReservados pantallaConsultarAsientosReservados = new ConsultarAsientosReservados(funcionDTO);
-           pantallaConsultarAsientosReservados.setLocationRelativeTo(null);
-           pantallaConsultarAsientosReservados.setVisible(true);
-           frameAnterior.dispose();
-       });
-   }
-   
+    public void mostrarConsultarAsientosReservados(JFrame frameAnterior, FuncionDTO funcionDTO) {
+        SwingUtilities.invokeLater(() -> {
+            ConsultarAsientosReservados pantallaConsultarAsientosReservados = new ConsultarAsientosReservados(funcionDTO);
+            pantallaConsultarAsientosReservados.setLocationRelativeTo(null);
+            pantallaConsultarAsientosReservados.setVisible(true);
+            frameAnterior.dispose();
+        });
+    }
+    
     @Override
-   public List<AsientoFuncionDTO> agregarAsientoFuncion(FuncionDTO funcionSelecionada, SalaViejaDTO salaSelecionada) {
+    public List<AsientoFuncionDTO> agregarAsientoFuncion(FuncionDTO funcionSelecionada, SalaViejaDTO salaSelecionada) {
         try {
             return manejoDeAsientos.registrarAsientoFuncion(funcionSelecionada, salaSelecionada);
         } catch (ErrorGeneracionAsientoFuncionException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-   }
-   
+    }
+    
     @Override
-   public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar) {
+    public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar) {
         try {
             return manejoDeAsientos.reservarAsientosFuncion(asientosAReservar);
         } catch (ErrorReservacionAsientoException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-   }
-   
+    }
+    
     @Override
-   public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) {
+    public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) {
         try {
             return manejoDeAsientos.cargarListaAsientos(funcion, mostrarDisponibles);
         } catch (ErrorCargarAsientoException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-   }
+    }
 
     /*
     --------------FIN DE LOS METODOS DEL CONTROL DE NAVEGACION DE SALAS--------------
      */
-    
-    /*
+ /*
     --------------INICIO DE LOS METODOS DEL CONTROL DE NAVEGACION DE FUNCIONES--------------
      */
     @Override
@@ -787,7 +790,7 @@ public class ControlDeNavegacion implements IControl {
             }
         });
     }
-
+    
     @Override
     public void mostrarProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula) {
         SwingUtilities.invokeLater(() -> {
@@ -823,7 +826,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public void mostrarAgregarPelicula(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -832,13 +835,22 @@ public class ControlDeNavegacion implements IControl {
             pantallaAgregarPelicula.setVisible(true);
         });
     }
-
+    
     @Override
     public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO) {
         SwingUtilities.invokeLater(() -> {
-//            DetallesPelicula pantallaDetallesPelicula = new DetallesPelicula(peliculaDTO);
-//            pantallaDetallesPelicula.setLocationRelativeTo(null);
-//            pantallaDetallesPelicula.setVisible(true);
+            DetallesPelicula pantallaDetallesPelicula = new DetallesPelicula(peliculaDTO);
+            pantallaDetallesPelicula.setLocationRelativeTo(null);
+            pantallaDetallesPelicula.setVisible(true);
+        });
+    }
+    
+    @Override
+    public void mostrarEditarPelicula(PeliculaDTO peliculaDTO) {
+        SwingUtilities.invokeLater(() -> {
+            EditarPelicula pantallaEditarPelicula = new EditarPelicula(peliculaDTO);
+            pantallaEditarPelicula.setLocationRelativeTo(null);
+            pantallaEditarPelicula.setVisible(true);
         });
     }
 
@@ -854,7 +866,7 @@ public class ControlDeNavegacion implements IControl {
             pantallaIniciarSecion.setVisible(true);
         });
     }
-
+    
     @Override
     public void mostrarGestionDeUsuarios(JFrame frameAnterior, AdministradorDTO admin) {
         SwingUtilities.invokeLater(() -> {
@@ -864,7 +876,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public void mostrarEditarUsuario(JFrame frameAnterior, ClienteDTO cliente, ClienteDTO clienteAlMando) {
         SwingUtilities.invokeLater(() -> {
@@ -874,7 +886,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public void mostrarMenuReportes(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -884,7 +896,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena) {
         try {
@@ -895,7 +907,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public void mostrarRegistrarUsuario(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -905,7 +917,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public void mostrarHistorialCliente(JFrame frameAnterior, ClienteDTO cliente) {
         SwingUtilities.invokeLater(() -> {
@@ -915,7 +927,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-
+    
     @Override
     public List<UsuarioDTO> mostrarListaUsuarios() {
         try {
@@ -925,7 +937,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public List<ReporteUsuarioDTO> obtenerReporteUsuarios() {
         try {
@@ -935,7 +947,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public Boolean bloquearUsuario(UsuarioDTO usuario) {
         try {
@@ -945,7 +957,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public Boolean desbloquearUsuario(UsuarioDTO usuario) {
         try {
@@ -955,7 +967,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre) {
         try {
@@ -965,7 +977,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public ClienteDTO registrarCliente(ClienteDTO cliente) {
         try {
@@ -975,7 +987,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public ClienteDTO actualizarCliente(ClienteDTO cliente) {
         try {
@@ -985,7 +997,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) {
         try {
@@ -995,7 +1007,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) {
         try {
@@ -1005,7 +1017,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public AdministradorDTO registrarAdministrador(AdministradorDTO administrador) {
         try {
@@ -1015,7 +1027,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) {
         try {
@@ -1042,7 +1054,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) {
         try {
@@ -1052,7 +1064,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) {
         try {
@@ -1062,7 +1074,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-
+    
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) {
         try {
@@ -1089,7 +1101,38 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
+    
+    @Override
+    public PeliculaDTO editarPelicula(PeliculaDTO peliculaDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public boolean darAltaPelicula(PeliculaDTO peliculaDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public boolean darBajaPelicula(PeliculaDTO peliculaDTO) {
+        try {
+            return gestionPeliculas.darBajaPelicula(peliculaDTO);
+        } catch (DarBajaPeliculaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+    
+    @Override
+    public boolean eliminarPelicula(PeliculaDTO peliculaDTO) {
+        try {
+            return gestionPeliculas.eliminarPelicula(peliculaDTO);
+        } catch (EliminarPeliculaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
     /*
     --------------FIN DE METODOS DE ADMINISTRAR PELICULAS--------------
      */
+    
 }

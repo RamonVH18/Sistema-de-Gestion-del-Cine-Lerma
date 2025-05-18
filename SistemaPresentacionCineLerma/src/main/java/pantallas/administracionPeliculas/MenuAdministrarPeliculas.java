@@ -5,8 +5,28 @@
 package pantallas.administracionPeliculas;
 
 import DTOs.AdministradorDTO;
+import DTOs.PeliculaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -16,12 +36,13 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
 
     private final IControl control = ControlDeNavegacion.getInstancia();
     private AdministradorDTO administrador;
-    
+
     /**
      * Creates new form Cartelera
      */
     public MenuAdministrarPeliculas() {
         initComponents();
+        cargarPeliculas(control.obtenerPeliculas());
     }
 
     /**
@@ -35,15 +56,31 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
 
         jlabelTituloCartelera = new javax.swing.JLabel();
         btnAgregarPelicula = new javax.swing.JButton();
-        jComboBoxFiltrar = new javax.swing.JComboBox<>();
+        jComboBoxFiltrarEstado = new javax.swing.JComboBox<>();
         jlabelFiltrar = new javax.swing.JLabel();
         jPanelCarteleraFiltrada = new javax.swing.JPanel();
+        jScrollPanePeliculasFiltradas = new javax.swing.JScrollPane();
         btnaVolver = new javax.swing.JButton();
+        jlabelGenero = new javax.swing.JLabel();
+        jlabelEstado = new javax.swing.JLabel();
+        jlabelFiltrar3 = new javax.swing.JLabel();
+        jComboBoxFiltrarGenero = new javax.swing.JComboBox<>();
+        jComboBoxFiltrarClasificacion = new javax.swing.JComboBox<>();
+        jTextFieldFiltrarTitulo = new javax.swing.JTextField();
+        jlabelClasificacion = new javax.swing.JLabel();
+        btnConfirmarFiltrado = new javax.swing.JButton();
+        btnReiniciarFiltros = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(650, 880));
+        setMinimumSize(new java.awt.Dimension(650, 880));
+        setPreferredSize(new java.awt.Dimension(640, 830));
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlabelTituloCartelera.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
-        jlabelTituloCartelera.setText("Peliculas en Cartelera");
+        jlabelTituloCartelera.setText("Administrar Peliculas");
+        getContentPane().add(jlabelTituloCartelera, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 22, -1, -1));
 
         btnAgregarPelicula.setBackground(new java.awt.Color(162, 132, 94));
         btnAgregarPelicula.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -54,27 +91,33 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
                 btnAgregarPeliculaActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAgregarPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, -1, -1));
 
-        jComboBoxFiltrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Peliculas Activas", "Peliculas Inactivas" }));
-        jComboBoxFiltrar.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxFiltrarEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Peliculas Activas", "Peliculas Inactivas" }));
+        jComboBoxFiltrarEstado.setSelectedIndex(-1);
+        jComboBoxFiltrarEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxFiltrarActionPerformed(evt);
+                jComboBoxFiltrarEstadoActionPerformed(evt);
             }
         });
+        getContentPane().add(jComboBoxFiltrarEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 250, 134, 53));
 
         jlabelFiltrar.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
-        jlabelFiltrar.setText("Filtrar:");
+        jlabelFiltrar.setText("Filtrar por:");
+        getContentPane().add(jlabelFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, -1, -1));
 
         javax.swing.GroupLayout jPanelCarteleraFiltradaLayout = new javax.swing.GroupLayout(jPanelCarteleraFiltrada);
         jPanelCarteleraFiltrada.setLayout(jPanelCarteleraFiltradaLayout);
         jPanelCarteleraFiltradaLayout.setHorizontalGroup(
             jPanelCarteleraFiltradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addComponent(jScrollPanePeliculasFiltradas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
         );
         jPanelCarteleraFiltradaLayout.setVerticalGroup(
             jPanelCarteleraFiltradaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 385, Short.MAX_VALUE)
+            .addComponent(jScrollPanePeliculasFiltradas, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
         );
+
+        getContentPane().add(jPanelCarteleraFiltrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 374, -1, -1));
 
         btnaVolver.setBackground(new java.awt.Color(162, 132, 94));
         btnaVolver.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -85,50 +128,64 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
                 btnaVolverActionPerformed(evt);
             }
         });
+        getContentPane().add(btnaVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 790, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(jlabelTituloCartelera))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(225, 225, 225)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAgregarPelicula)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(jComboBoxFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnaVolver)
-                            .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(276, 276, 276)
-                        .addComponent(jlabelFiltrar)))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jlabelTituloCartelera)
-                .addGap(70, 70, 70)
-                .addComponent(btnAgregarPelicula)
-                .addGap(54, 54, 54)
-                .addComponent(jlabelFiltrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBoxFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jPanelCarteleraFiltrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnaVolver)
-                .addGap(16, 16, 16))
-        );
+        jlabelGenero.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        jlabelGenero.setText("Genero:");
+        getContentPane().add(jlabelGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(486, 212, -1, -1));
+
+        jlabelEstado.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        jlabelEstado.setText("Estado:");
+        getContentPane().add(jlabelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 215, -1, -1));
+
+        jlabelFiltrar3.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        jlabelFiltrar3.setText("Titulo:");
+        getContentPane().add(jlabelFiltrar3, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 330, -1, -1));
+
+        jComboBoxFiltrarGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Acción", "Aventura", "Ciencia ficción", "Fantasía", "Drama", "Comedia", "Terror", "Suspenso", "Romance", "Animación", "Musical", "Documental", "Crimen", "Histórico", "Biográfico" }));
+        jComboBoxFiltrarGenero.setSelectedIndex(-1);
+        jComboBoxFiltrarGenero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxFiltrarGeneroActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jComboBoxFiltrarGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(486, 250, 134, 53));
+
+        jComboBoxFiltrarClasificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AA", "A", "B", "B15", "C", "D" }));
+        jComboBoxFiltrarClasificacion.setSelectedIndex(-1);
+        jComboBoxFiltrarClasificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxFiltrarClasificacionActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jComboBoxFiltrarClasificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, 134, 53));
+        getContentPane().add(jTextFieldFiltrarTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(103, 330, 185, 32));
+
+        jlabelClasificacion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
+        jlabelClasificacion.setText("Clasificacion:");
+        getContentPane().add(jlabelClasificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 214, -1, -1));
+
+        btnConfirmarFiltrado.setBackground(new java.awt.Color(162, 132, 94));
+        btnConfirmarFiltrado.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        btnConfirmarFiltrado.setForeground(new java.awt.Color(255, 255, 255));
+        btnConfirmarFiltrado.setText("Filtrar");
+        btnConfirmarFiltrado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmarFiltradoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnConfirmarFiltrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(349, 329, -1, -1));
+
+        btnReiniciarFiltros.setBackground(new java.awt.Color(162, 132, 94));
+        btnReiniciarFiltros.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        btnReiniciarFiltros.setForeground(new java.awt.Color(255, 255, 255));
+        btnReiniciarFiltros.setText("Limpiar filtros");
+        btnReiniciarFiltros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReiniciarFiltrosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnReiniciarFiltros, new org.netbeans.lib.awtextra.AbsoluteConstraints(469, 329, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -138,14 +195,30 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnAgregarPeliculaActionPerformed
 
-    private void jComboBoxFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFiltrarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBoxFiltrarActionPerformed
+    private void jComboBoxFiltrarEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFiltrarEstadoActionPerformed
+
+    }//GEN-LAST:event_jComboBoxFiltrarEstadoActionPerformed
 
     private void btnaVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaVolverActionPerformed
         control.mostrarMenuAdministrador(this, administrador);
         dispose();
     }//GEN-LAST:event_btnaVolverActionPerformed
+
+    private void jComboBoxFiltrarGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFiltrarGeneroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxFiltrarGeneroActionPerformed
+
+    private void jComboBoxFiltrarClasificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFiltrarClasificacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxFiltrarClasificacionActionPerformed
+
+    private void btnConfirmarFiltradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarFiltradoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnConfirmarFiltradoActionPerformed
+
+    private void btnReiniciarFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarFiltrosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReiniciarFiltrosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,10 +260,70 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarPelicula;
+    private javax.swing.JButton btnConfirmarFiltrado;
+    private javax.swing.JButton btnReiniciarFiltros;
     private javax.swing.JButton btnaVolver;
-    private javax.swing.JComboBox<String> jComboBoxFiltrar;
+    private javax.swing.JComboBox<String> jComboBoxFiltrarClasificacion;
+    private javax.swing.JComboBox<String> jComboBoxFiltrarEstado;
+    private javax.swing.JComboBox<String> jComboBoxFiltrarGenero;
     private javax.swing.JPanel jPanelCarteleraFiltrada;
+    private javax.swing.JScrollPane jScrollPanePeliculasFiltradas;
+    private javax.swing.JTextField jTextFieldFiltrarTitulo;
+    private javax.swing.JLabel jlabelClasificacion;
+    private javax.swing.JLabel jlabelEstado;
     private javax.swing.JLabel jlabelFiltrar;
+    private javax.swing.JLabel jlabelFiltrar3;
+    private javax.swing.JLabel jlabelGenero;
     private javax.swing.JLabel jlabelTituloCartelera;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarPeliculas(List<PeliculaDTO> peliculas) {
+        JPanel panelContenedor = new JPanel();
+        panelContenedor.setLayout(new BoxLayout(panelContenedor, BoxLayout.Y_AXIS));
+        panelContenedor.setBackground(Color.WHITE); // Opcional: fondo blanco
+
+        for (PeliculaDTO pelicula : peliculas) {
+            JPanel panelPelicula = new JPanel();
+            panelPelicula.setLayout(new BorderLayout());
+            panelPelicula.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            panelPelicula.setBackground(new Color(245, 245, 245)); // Gris clarito
+
+            // Imagen
+            JLabel labelImagen = new JLabel();
+            try {
+                ImageIcon icono = new ImageIcon(pelicula.getImagen());
+                Image imagen = icono.getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH);
+                labelImagen.setIcon(new ImageIcon(imagen));
+            } catch (Exception e) {
+                labelImagen.setText("Imagen no encontrada");
+            }
+
+            // Título
+            JLabel labelTitulo = new JLabel(pelicula.getTitulo());
+            labelTitulo.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 20));
+
+            JPanel panelTexto = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            panelTexto.setOpaque(false);
+            panelTexto.add(labelTitulo);
+
+            panelPelicula.add(labelImagen, BorderLayout.WEST);
+            panelPelicula.add(panelTexto, BorderLayout.CENTER);
+
+            // Evento click
+            panelPelicula.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            panelPelicula.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    control.mostrarDetallesPelicula(pelicula);
+                    dispose();
+                }
+            });
+
+            panelContenedor.add(panelPelicula);
+        }
+
+        jScrollPanePeliculasFiltradas.setViewportView(panelContenedor);
+        jScrollPanePeliculasFiltradas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPanePeliculasFiltradas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    }
+
 }

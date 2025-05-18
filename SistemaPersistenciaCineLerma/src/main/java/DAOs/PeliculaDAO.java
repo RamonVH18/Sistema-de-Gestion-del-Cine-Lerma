@@ -269,7 +269,7 @@ public class PeliculaDAO implements IPeliculaDAO {
             MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
 
             // Buscar por título
-            Bson filtro = Filters.regex("titulo", Pattern.quote(titulo), "i");
+            Bson filtro = Filters.regex("titulo", "^" + Pattern.quote(titulo) + "$", "i");
             return coleccionPeliculas.find(filtro).first();
         } catch (MongoException e) {
             throw new BuscarPeliculaException("Error al buscar la película.");

@@ -51,6 +51,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator1 = new javax.swing.JSeparator();
         jlabelTituloAgregarEditar = new javax.swing.JLabel();
         jlabelImgPromocional = new javax.swing.JLabel();
         jPanelImgPromocional = new javax.swing.JPanel();
@@ -69,12 +70,19 @@ public class AgregarPelicula extends javax.swing.JFrame {
         btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(650, 1000));
+        setMinimumSize(new java.awt.Dimension(650, 1000));
+        setPreferredSize(new java.awt.Dimension(650, 1000));
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlabelTituloAgregarEditar.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
         jlabelTituloAgregarEditar.setText("Agregar película");
+        getContentPane().add(jlabelTituloAgregarEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, -1, -1));
 
         jlabelImgPromocional.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelImgPromocional.setText("Imágen promocional");
+        getContentPane().add(jlabelImgPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, -1, -1));
 
         jPanelImgPromocional.setMaximumSize(new java.awt.Dimension(160, 160));
         jPanelImgPromocional.setMinimumSize(new java.awt.Dimension(160, 160));
@@ -91,6 +99,8 @@ public class AgregarPelicula extends javax.swing.JFrame {
             .addGap(0, 160, Short.MAX_VALUE)
         );
 
+        getContentPane().add(jPanelImgPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 120, -1, -1));
+
         btnSubirImagen.setBackground(new java.awt.Color(162, 132, 94));
         btnSubirImagen.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
         btnSubirImagen.setForeground(new java.awt.Color(255, 255, 255));
@@ -100,31 +110,42 @@ public class AgregarPelicula extends javax.swing.JFrame {
                 btnSubirImagenActionPerformed(evt);
             }
         });
+        getContentPane().add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, 160, -1));
 
         jlabelTituloPelicula.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelTituloPelicula.setText("Título");
+        getContentPane().add(jlabelTituloPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, -1, -1));
+        getContentPane().add(jTextFieldTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 390, 350, -1));
 
         jlabelGenero.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelGenero.setText("Seleccionar género");
+        getContentPane().add(jlabelGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 430, -1, -1));
+        getContentPane().add(jTextFieldDuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 530, 350, -1));
 
         jlabelClasificacion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelClasificacion.setText("Seleccionar clasificación");
+        getContentPane().add(jlabelClasificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 570, -1, -1));
 
         jComboBoxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Acción", "Aventura", "Ciencia ficción", "Fantasía", "Drama", "Comedia", "Terror", "Suspenso", "Romance", "Animación", "Musical", "Documental", "Crimen", "Histórico", "Biográfico" }));
         jComboBoxGenero.setSelectedIndex(-1);
+        getContentPane().add(jComboBoxGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 460, 350, -1));
 
         jlabelDuracion.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelDuracion.setText("Duración en minutos");
+        getContentPane().add(jlabelDuracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 500, -1, -1));
 
         jComboBoxClasificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AA", "A", "B", "B15", "C", "D" }));
         jComboBoxClasificacion.setSelectedIndex(-1);
+        getContentPane().add(jComboBoxClasificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 600, 350, -1));
 
         jTextFieldSinopsis.setMaximumSize(new java.awt.Dimension(350, 250));
         jTextFieldSinopsis.setMinimumSize(new java.awt.Dimension(350, 250));
         jTextFieldSinopsis.setPreferredSize(new java.awt.Dimension(350, 250));
+        getContentPane().add(jTextFieldSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 670, -1, 160));
 
         jlabelSinopsis.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelSinopsis.setText("Sinopsis");
+        getContentPane().add(jlabelSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 640, -1, -1));
 
         btnCancelar.setBackground(new java.awt.Color(162, 132, 94));
         btnCancelar.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -135,6 +156,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 900, 156, -1));
 
         btnAgregar.setBackground(new java.awt.Color(162, 132, 94));
         btnAgregar.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -145,85 +167,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
                 btnAgregarActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(232, 232, 232)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnSubirImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanelImgPromocional, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(221, 221, 221)
-                        .addComponent(jlabelImgPromocional)))
-                .addContainerGap(240, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(236, 236, 236))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jlabelSinopsis)
-                            .addComponent(jlabelDuracion)
-                            .addComponent(jlabelClasificacion)
-                            .addComponent(jTextFieldDuracion, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jlabelGenero)
-                            .addComponent(jlabelTituloPelicula)
-                            .addComponent(jTextFieldTitulo)
-                            .addComponent(jComboBoxGenero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxClasificacion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldSinopsis, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(140, 140, 140))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnAgregar)
-                        .addGap(262, 262, 262))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jlabelTituloAgregarEditar)
-                        .addGap(131, 131, 131))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jlabelTituloAgregarEditar)
-                .addGap(18, 18, 18)
-                .addComponent(jlabelImgPromocional)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelImgPromocional, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnSubirImagen)
-                .addGap(28, 28, 28)
-                .addComponent(jlabelTituloPelicula)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jlabelGenero)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBoxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jlabelDuracion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jlabelClasificacion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBoxClasificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jlabelSinopsis)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldSinopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
-                .addComponent(btnAgregar)
-                .addGap(18, 18, 18)
-                .addComponent(btnCancelar)
-                .addGap(66, 66, 66))
-        );
+        getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 850, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -263,6 +207,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBoxClasificacion;
     private javax.swing.JComboBox<String> jComboBoxGenero;
     private javax.swing.JPanel jPanelImgPromocional;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextFieldDuracion;
     private javax.swing.JTextField jTextFieldSinopsis;
     private javax.swing.JTextField jTextFieldTitulo;
