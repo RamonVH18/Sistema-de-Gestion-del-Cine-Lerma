@@ -67,7 +67,7 @@ public class ManejoDeSalas implements IManejoDeSalas {
     
     private void validarExistenciaSala(String numSala) throws ValidacionSalaException {
         try {
-            List<SalaViejaDTO> salas = salaBO.buscarSalas("");
+            List<SalaViejaDTO> salas = salaBO.buscarSalas("", false);
             for (SalaViejaDTO sala : salas) {
                 if (sala.getNumSala().equalsIgnoreCase(numSala)) {
                     throw new ValidacionSalaException("Ya existe una sala con ese numero de sala");
@@ -113,13 +113,13 @@ public class ManejoDeSalas implements IManejoDeSalas {
     }
 
     @Override
-    public List<SalaViejaDTO> cargarSalas(String filtro) throws BuscarSalaException {
+    public List<SalaViejaDTO> cargarSalas(String filtro, Boolean filtrarActivas) throws BuscarSalaException {
         try {
             if (filtro == null) {
                 filtro = "";
             }
              filtro = filtro.replace(" ", "");
-            List<SalaViejaDTO> salas = salaBO.buscarSalas(filtro);
+            List<SalaViejaDTO> salas = salaBO.buscarSalas(filtro, filtrarActivas);
             return salas;
         } catch (SalaBusquedaException e) {
             throw new BuscarSalaException("Hubo un problema al mostrar las salas. \n Intentelo de nuevo mas adelante");

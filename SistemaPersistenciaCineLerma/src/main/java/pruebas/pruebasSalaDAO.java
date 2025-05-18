@@ -29,33 +29,33 @@ public class pruebasSalaDAO {
     public static void main(String[] args) throws CreacionSalaException, BuscarSalaException, ModificarSalaException {
         // TODO code application logic here
 
-        Sala sala0 = new Sala(20, "A1", EstadoSala.ACTIVA);
-        Sala sala1 = new Sala(15, "A2", EstadoSala.INACTIVA);
-        Sala sala2 = new Sala(30, "A3", EstadoSala.MANTENIMIENTO);
-        Sala sala3 = new Sala(25, "B1", EstadoSala.ACTIVA);
-        Sala sala4 = new Sala(18, "B2", EstadoSala.INACTIVA);
-        Sala sala5 = new Sala(22, "B3", EstadoSala.ACTIVA);
-        Sala sala6 = new Sala(28, "B4", EstadoSala.MANTENIMIENTO);
-        Sala sala7 = new Sala(35, "C1", EstadoSala.ACTIVA);
-        Sala sala8 = new Sala(26, "C2", EstadoSala.ACTIVA);
-        Sala sala9 = new Sala(40, "C3", EstadoSala.INACTIVA);
-        Sala sala10 = new Sala(32, "D1", EstadoSala.ACTIVA);
-
-        salaDAO.agregarSala(sala0);
-        salaDAO.agregarSala(sala1);
-        salaDAO.agregarSala(sala2);
-        salaDAO.agregarSala(sala3);
-        salaDAO.agregarSala(sala4);
-        salaDAO.agregarSala(sala5);
-        salaDAO.agregarSala(sala6);
-        salaDAO.agregarSala(sala7);
-        salaDAO.agregarSala(sala8);
-        salaDAO.agregarSala(sala9);
-        salaDAO.agregarSala(sala10);
+//        Sala sala0 = new Sala(20, "A1", EstadoSala.ACTIVA);
+//        Sala sala1 = new Sala(15, "A2", EstadoSala.INACTIVA);
+//        Sala sala2 = new Sala(30, "A3", EstadoSala.MANTENIMIENTO);
+//        Sala sala3 = new Sala(25, "B1", EstadoSala.ACTIVA);
+//        Sala sala4 = new Sala(18, "B2", EstadoSala.INACTIVA);
+//        Sala sala5 = new Sala(22, "B3", EstadoSala.ACTIVA);
+//        Sala sala6 = new Sala(28, "B4", EstadoSala.MANTENIMIENTO);
+//        Sala sala7 = new Sala(35, "C1", EstadoSala.ACTIVA);
+//        Sala sala8 = new Sala(26, "C2", EstadoSala.ACTIVA);
+//        Sala sala9 = new Sala(40, "C3", EstadoSala.INACTIVA);
+//        Sala sala10 = new Sala(32, "D1", EstadoSala.ACTIVA);
+//
+//        salaDAO.agregarSala(sala0);
+//        salaDAO.agregarSala(sala1);
+//        salaDAO.agregarSala(sala2);
+//        salaDAO.agregarSala(sala3);
+//        salaDAO.agregarSala(sala4);
+//        salaDAO.agregarSala(sala5);
+//        salaDAO.agregarSala(sala6);
+//        salaDAO.agregarSala(sala7);
+//        salaDAO.agregarSala(sala8);
+//        salaDAO.agregarSala(sala9);
+//        salaDAO.agregarSala(sala10);
 
 //        Sala ultraSala = salaDAO.buscarSala("P4");
 //
-        List<Sala> salasAlgoBien = salaDAO.buscarSalas("");
+//        List<Sala> salasAlgoBien = salaDAO.buscarSalas("");
 //        
 //        ultraSala.setEstado(EstadoSala.MANTENIMIENTO);
 //        

@@ -25,7 +25,7 @@ public interface IManejoDeSalas {
     
     public void validarSala(String numSala, String numAsientos) throws ValidacionSalaException;
     
-    public List<SalaViejaDTO> cargarSalas(String filtro) throws BuscarSalaException;
+    public List<SalaViejaDTO> cargarSalas(String filtro, Boolean filtrarActivas) throws BuscarSalaException;
     
     public SalaViejaDTO cargarSalaUnica(String numSala) throws BuscarSalaException;
     

@@ -80,10 +80,10 @@ public class SalaBO implements ISalaBO {
     }
 
     @Override
-    public List<SalaViejaDTO> buscarSalas(String filtroSalas) throws SalaBusquedaException {
+    public List<SalaViejaDTO> buscarSalas(String filtroSalas, Boolean filtrarActivas) throws SalaBusquedaException {
         try {
             
-            List<Sala> salas = salaDAO.buscarSalas(filtroSalas);
+            List<Sala> salas = salaDAO.buscarSalas(filtroSalas, filtrarActivas);
             Sala sala;
             List<SalaViejaDTO> salasViejas = new ArrayList<>();
             for (int i = 0; i < salas.size(); i++) {

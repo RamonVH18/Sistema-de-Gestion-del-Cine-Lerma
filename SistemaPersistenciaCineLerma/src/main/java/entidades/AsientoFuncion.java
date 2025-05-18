@@ -18,6 +18,8 @@ public class AsientoFuncion {
     private String idFuncion; // Id de la funcion a la que pertenecen
 
     private String numAsiento; // Asiento al que hace referencia el asientoFuncion
+    
+    private String numSala; // Numero de sala a l que pertenece el asiento original
 
     private Boolean disponibilidad; // Disponibilidad del asiento durante la funcion
 
@@ -33,13 +35,15 @@ public class AsientoFuncion {
      * @param idAsientoFuncion
      * @param idFuncion
      * @param numAsiento
+     * @param numSala
      * @param disponibilidad
      * @param idCliente
      */
-    public AsientoFuncion(ObjectId idAsientoFuncion, String idFuncion, String numAsiento, Boolean disponibilidad, String idCliente) {
+    public AsientoFuncion(ObjectId idAsientoFuncion, String idFuncion, String numAsiento, String numSala, Boolean disponibilidad, String idCliente) {
         this.idAsientoFuncion = idAsientoFuncion;
         this.idFuncion = idFuncion;
         this.numAsiento = numAsiento;
+        this.numSala = numSala;
         this.disponibilidad = disponibilidad;
         this.idCliente = idCliente;
     }
@@ -47,12 +51,14 @@ public class AsientoFuncion {
      * Constructor con todos los atributos sin el id
      * @param idFuncion
      * @param numAsiento
+     * @param numSala
      * @param disponibilidad
      * @param idCliente
      */
-    public AsientoFuncion(String idFuncion, String numAsiento, Boolean disponibilidad, String idCliente) {    
+    public AsientoFuncion(String idFuncion, String numAsiento, String numSala, Boolean disponibilidad, String idCliente) {    
         this.idFuncion = idFuncion;
         this.numAsiento = numAsiento;
+        this.numSala = numSala;
         this.disponibilidad = disponibilidad;
         this.idCliente = idCliente;
     }
@@ -99,6 +105,21 @@ public class AsientoFuncion {
     public void setNumAsiento(String numAsiento) {
         this.numAsiento = numAsiento;
     }
+    /**
+     * Metodo para obtener el numero de la sala al que pertenece el asiento original
+     * @return 
+     */
+    public String getNumSala() {
+        return numSala;
+    }
+    /**
+     * Metodo para guardar el numero de la sala al que pertenece el asiento original
+     * @param numSala 
+     */
+    public void setNumSala(String numSala) {
+        this.numSala = numSala;
+    }
+    
     /**
      * Metodo para obtener la disponibilidad del asiento durante la funcion
      * @return 

@@ -5,17 +5,23 @@
 package DAOs;
 
 import Conexion.MongoConexion;
+import DTOs.GananciaSalaDTO;
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloObtencionColeccionException;
 import Excepciones.AsientoFuncion.FalloOcuparAsientosFuncionException;
+import Excepciones.salas.BuscarSalaException;
+import Excepciones.salas.ErrorCalculoEstadisticasSalaException;
 import Interfaces.IAsientoFuncionDAO;
 import Interfaces.IFuncionDAO;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import entidades.AsientoFuncion;
@@ -23,6 +29,7 @@ import entidades.Funcion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 
 /**
@@ -126,6 +133,45 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             throw new FalloOcuparAsientosFuncionException("Hubo un error al ocupar los asientos: " + e.getMessage());
         }
     }
+    
+    @Override
+    public List<GananciaSalaDTO> obtenerEstadisticasDeSalas() throws ErrorCalculoEstadisticasSalaException {
+        MongoClient clienteMongo = null;
+        try {
+            MongoCollection<Funcion> coleccionAsientoFuncion = obtenerColeccionFunciones(clienteMongo);
+            
+            List<Bson> pipeline = Arrays.asList(
+                    Aggregates.lookup(
+                            "Salas", 
+                            "numSala", 
+                            "numSala", 
+                            "numSala"
+                    ),
+                    Aggregates.unwind("$sala"),
+                    
+                    Aggregates.lookup("Funciones", "idFuncion", "_id", "asientosFuncion"),
+                    Aggregates.unwind("$asientosFuncion"),
+                    Aggregates.group(
+        "$_id",
+        Accumulators.first("pelicula", "$pelicula"),
+        Accumulators.first("fechaHora", "$fechaHora"),
+        Accumulators.first("precio", "$precio"),
+        Accumulators.first("sala", "$sala"),
+        Accumulators.push("asientos", new Document("numAsiento", "$asientosFuncion.numAsiento")
+            .append("disponibilidad", "$asientosFuncion.disponibilidad")
+            .append("cliente", "$clienteAsiento.nombre"))
+    ),
+                    Aggregates.project(Projections.fields(
+        Projections.excludeId(),
+        Projections.include("pelicula", "fechaHora", "precio", "sala", "asientos")
+    ))
+            );
+
+        } catch (FalloObtencionColeccionException e) {
+
+        }
+        throw new UnsupportedOperationException("jns");
+    }
 
 
     private Bson filtroFuncion(String idFuncion, Boolean mostrarDisponibles) {
@@ -163,6 +209,20 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             MongoCollection<AsientoFuncion> coleccionAF = baseDatos.getCollection(nombreColeccion, AsientoFuncion.class);
 
             return coleccionAF;
+        } catch (MongoException e) {
+            throw new FalloObtencionColeccionException("Error al realizar la conexion: " + e.getMessage());
+        }
+    }
+    
+    private MongoCollection<Funcion> obtenerColeccionFunciones(MongoClient clienteMongo) throws FalloObtencionColeccionException {
+        try {
+            clienteMongo = conexion.crearConexion(); // Se llama a un metodo de la clase conexion para que se cree la conexion
+
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo); // Se obtiene la base de datos a partir de la conexion
+
+            MongoCollection<Funcion> coleccionAsientoFunciones = baseDatos.getCollection(nombreColeccion, Funcion.class); // En base al nombre de la coleccion se obtiene la coleccion
+
+            return coleccionAsientoFunciones;
         } catch (MongoException e) {
             throw new FalloObtencionColeccionException("Error al realizar la conexion: " + e.getMessage());
         }

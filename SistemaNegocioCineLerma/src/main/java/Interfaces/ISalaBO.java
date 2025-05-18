@@ -22,7 +22,7 @@ public interface ISalaBO {
     
     public SalaViejaDTO buscarSala(String numSala) throws SalaBusquedaException;
     
-    public List<SalaViejaDTO> buscarSalas(String filtroSalas) throws SalaBusquedaException;
+    public List<SalaViejaDTO> buscarSalas(String filtroSalas, Boolean filtrarActivas) throws SalaBusquedaException;
     
     public Boolean modificarSala(String numSala, EstadoSala estadoNuevo) throws SalaModificacionException;
     

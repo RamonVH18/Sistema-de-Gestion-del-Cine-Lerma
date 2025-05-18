@@ -34,7 +34,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     }
 
     private void mostrarDialogoSalas() {
-        List<SalaViejaDTO> salas = control.consultarSalas("");
+        List<SalaViejaDTO> salas = control.consultarSalas("", true);
 
         if (salas != null && !salas.isEmpty()) {
             String[] columnas = {"Numero de Sala", "Estado", "Asientos"};

@@ -15,6 +15,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Projections;
@@ -22,8 +24,11 @@ import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Asiento;
+import entidades.AsientoFuncion;
+import entidades.Funcion;
 import entidades.Sala;
 import enums.EstadoSala;
+import static enums.EstadoSala.ACTIVA;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +37,9 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 /**
- * Clase SalaDAO encargada de manipular las Salas persistidas en la base de datos
+ * Clase SalaDAO encargada de manipular las Salas persistidas en la base de
+ * datos
+ *
  * @author Ramon Valencia
  */
 public class SalaDAO implements ISalaDAO {
@@ -45,15 +52,18 @@ public class SalaDAO implements ISalaDAO {
     private final Bson projectionNormal = Projections.fields(
             Projections.include("_id", "numSala", "numAsientos", "estado", "asientos")
     ); // Proyeccion normal de una sala
-    
+
     /**
      * Constructor vacio y privado para la ejeccucion del Singleton
      */
     private SalaDAO() {
     }
+
     /**
-     * Metodo para regresar la instancia de esta clase y que de esa manera nomas se manipule una instancia
-     * @return 
+     * Metodo para regresar la instancia de esta clase y que de esa manera nomas
+     * se manipule una instancia
+     *
+     * @return
      */
     public static SalaDAO getInstanceDAO() {
         if (instance == null) {
@@ -64,9 +74,10 @@ public class SalaDAO implements ISalaDAO {
 
     /**
      * Metodo para agregar una Sala a la base de datos
+     *
      * @param sala
      * @return
-     * @throws CreacionSalaException 
+     * @throws CreacionSalaException
      */
     @Override
     public Sala agregarSala(Sala sala) throws CreacionSalaException {
@@ -90,11 +101,14 @@ public class SalaDAO implements ISalaDAO {
             conexion.cerrarConexion(clienteMongo);
         }
     }
+
     /**
-     * Metodo para buscar una Sala en la base de datos usando el numero de la sala como referencia
+     * Metodo para buscar una Sala en la base de datos usando el numero de la
+     * sala como referencia
+     *
      * @param numSala
      * @return
-     * @throws BuscarSalaException 
+     * @throws BuscarSalaException
      */
     @Override
     public Sala buscarSala(String numSala) throws BuscarSalaException {
@@ -118,21 +132,27 @@ public class SalaDAO implements ISalaDAO {
             conexion.cerrarConexion(clienteMongo);
         }
     }
+
     /**
-     * Metodo para buscar todas las salas
-     * El parametro de filtroNombre sirve para ingresar un filtro y ver que salas coinciden con ese nombre o tienen uno similar
+     * Metodo para buscar todas las salas El parametro de filtroNombre sirve
+     * para ingresar un filtro y ver que salas coinciden con ese nombre o tienen
+     * uno similar
+     *
      * @param filtroNombre
+     * @param filtrarActivas
      * @return
-     * @throws BuscarSalaException 
+     * @throws BuscarSalaException
      */
     @Override
-    public List<Sala> buscarSalas(String filtroNombre) throws BuscarSalaException {
+    public List<Sala> buscarSalas(String filtroNombre, Boolean filtrarActivas) throws BuscarSalaException {
         MongoClient clienteMongo = null; // Se crea el clienteMongo como null para mas adelante poder usarlo
         try {
             MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo); // Se llama al metodo para obtener la coleccion de salas de la base de datos
-            
-            filtro = crearFiltroNombre(filtroNombre); // se llama al metodo filtroNombre para ver si se aplica un filtor
 
+            filtro = crearFiltroNombre(filtroNombre); // se llama al metodo filtroNombre para ver si se aplica un filtor
+            
+            filtro = crearFiltroEstado(filtro, filtrarActivas);
+            
             List<Sala> salas = coleccionSalas.find(filtro)
                     .sort(Sorts.ascending("numSala"))
                     .into(new ArrayList<>()); // Se obtiene la coleccion de salas en base al filtro si es que hay o no
@@ -144,12 +164,16 @@ public class SalaDAO implements ISalaDAO {
             conexion.cerrarConexion(clienteMongo);
         }
     }
+    
+    
+
     /**
      * Metodo para modificar el estado ya existente en la base de datos
+     *
      * @param numSala
      * @param estadoNuevo
      * @return
-     * @throws ModificarSalaException 
+     * @throws ModificarSalaException
      */
     @Override
     public Boolean modificarEstadoSala(String numSala, EstadoSala estadoNuevo) throws ModificarSalaException {
@@ -169,22 +193,12 @@ public class SalaDAO implements ISalaDAO {
             conexion.cerrarConexion(clienteMongo);
         }
     }
-    
-    @Override
-     public List<GananciaSalaDTO> obtenerEstadisticasDeSalas() throws ErrorCalculoEstadisticasSalaException {
-        MongoClient clienteMongo = null;
-        try {
-            MongoCollection<Sala> coleccionSalas = obtenerColeccionSalas(clienteMongo);
-        } catch (BuscarSalaException ex) {
-            
-        }
-        throw new UnsupportedOperationException("jns");
-    }
-    
+
     /**
      * Metodo para crear el filtro del nombre
+     *
      * @param filtroNombre
-     * @return 
+     * @return
      */
     private Bson crearFiltroNombre(String filtroNombre) {
         // Primero se verifica que si se haya ingresaod algo, en caso de que no se regresara un documento vacio para que se realicen las busquedas sin filtros
@@ -200,10 +214,22 @@ public class SalaDAO implements ISalaDAO {
         }
         return new Document(); // Si filtroNombre está vacío, no aplica filtros
     }
+    
+    private Bson crearFiltroEstado(Bson filtro, Boolean filtrarActivas) {
+        if (filtrarActivas) {
+            List<Bson> filtradores = Arrays.asList(
+                    Filters.eq("estado", ACTIVA.name())
+            );
+            return Filters.and(filtradores);
+        }
+        return filtro;
+    }
+
     /**
      * Metodo para crear una lista con todos los asientos de una sala
+     *
      * @param sala
-     * @param asientosSala 
+     * @param asientosSala
      */
     private void creacionAsientos(Sala sala, List<Asiento> asientosSala) {
         // For que dura dependiendo del numero de asiento de una sala
@@ -213,11 +239,13 @@ public class SalaDAO implements ISalaDAO {
             asientosSala.add(asiento);
         }
     }
-    /** 
+
+    /**
      * Metodo para obteneer la coleccion de salas de la base de datos
+     *
      * @param clienteMongo
      * @return
-     * @throws BuscarSalaException 
+     * @throws BuscarSalaException
      */
     private MongoCollection<Sala> obtenerColeccionSalas(MongoClient clienteMongo) throws BuscarSalaException {
         try {
@@ -232,5 +260,7 @@ public class SalaDAO implements ISalaDAO {
             throw new BuscarSalaException("Error al realizar la conexion: " + e.getMessage());
         }
     }
+    
+    
 
 }

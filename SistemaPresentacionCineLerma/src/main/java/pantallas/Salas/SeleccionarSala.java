@@ -91,6 +91,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
 
         labelBuscador.setText("jLabel1");
 
+        textFieldBuscador.setEditable(false);
         textFieldBuscador.setText("jTextField1");
 
         btnModificar.setText("jButton1");
@@ -272,7 +273,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
     }
 
     private Object[][] obtenerSalas() {
-        List<SalaViejaDTO> salas = control.consultarSalas(textFieldBuscador.getText());
+        List<SalaViejaDTO> salas = control.consultarSalas(textFieldBuscador.getText(), false);
         Object[][] datos = new Object[salas.size()][3];
 
         for (int i = 0; i < salas.size(); i++) {
