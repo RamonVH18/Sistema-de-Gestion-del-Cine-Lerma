@@ -42,6 +42,8 @@ public class SeleccionarSala extends javax.swing.JFrame {
     private final Integer anchoBuscador = 150;
     private final Integer alturaBuscador = 20;
     private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
+    
+    private final Integer alturaFilas = 30;
 
     //A continuacion se encuentran las dimensiones para configurar el tamaño del boton para agregar, tambien se configura su fuente y su color
     private final Integer anchoBoton = 200;
@@ -259,7 +261,7 @@ public class SeleccionarSala extends javax.swing.JFrame {
          * para ajustar el tamaño de la columnas de la tablas Se necesito del
          * mapa donde vienen el tamaño de las columnas
          */
-        ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas);
+        ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas, alturaFilas);
         if (panelTabla.getComponentCount() > 0) {
             panelTabla.removeAll();
         }

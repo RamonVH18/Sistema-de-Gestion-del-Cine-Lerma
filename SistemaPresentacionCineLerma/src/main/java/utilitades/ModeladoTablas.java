@@ -70,8 +70,13 @@ public class ModeladoTablas {
         
     }
     
-    // Metodo para configurar el tamaño de las columnas
-    public static void ajusteTamañoColumnas(JTable tabla, Map tamañoColumnas) {
+    /**
+     * Metodo para configurar el tamaño de las columnas
+     * @param tabla
+     * @param tamañoColumnas
+     * @param tamañoFilas 
+     */
+    public static void ajusteTamañoColumnas(JTable tabla, Map tamañoColumnas, Integer tamañoFilas) {
         List<Integer> llaves = new ArrayList<>(tamañoColumnas.keySet()); // Se crea un arrayList que contenga todas las llaves del mapa
         TableColumnModel modeloColumna = tabla.getColumnModel(); // Se obtiene el modelo de la tabla
         
@@ -83,6 +88,8 @@ public class ModeladoTablas {
             columna.setPreferredWidth(tamaño); // Configuracion del tamaño de la columna
             columna.setCellRenderer(new CenterRenderer()); // Se centra el texto de la columna usando la clase CenterRenderer
         }
+        
+        tabla.setRowHeight(tamañoFilas); // Se ajusta el tamaño de las filas de la tabla
     }
 }
 

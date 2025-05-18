@@ -37,6 +37,8 @@ public class EstadisticasSala extends javax.swing.JFrame {
     private final Integer anchoBuscador = 150;
     private final Integer alturaBuscador = 20;
     private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
+    
+    private final Integer alturaFilas = 20;
     /**
      * Mapa que contiene los valores del tamaño de cada columna de la tabla de estadisticas
      * El primer valor de cada line es la llave y el segundo valor es el tamaño del ancho del boton
@@ -238,7 +240,7 @@ public class EstadisticasSala extends javax.swing.JFrame {
          * esto para ajustar el tamaño de la columnas de la tablas
          * Se necesito del mapa donde vienen el tamaño de las columnas
          */
-        ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas);
+        ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas, alturaFilas);
 
         // Se añade la tabla a un scrollpane
         JScrollPane scrollPane = new JScrollPane(tablaSalas);

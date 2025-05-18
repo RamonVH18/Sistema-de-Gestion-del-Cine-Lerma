@@ -21,9 +21,10 @@ public class AsientoMapper implements IAsientoMapper{
         List<AsientoDTO> asientosDTO = new ArrayList<>();
         
         for (int i = 0; i < asientos.size(); i++) {
-            Asiento asiento = new Asiento(
+            AsientoDTO asientoDTO = new AsientoDTO(
                     asientos.get(i).getNumero()
             );
+            asientosDTO.add(asientoDTO);
         }
         
         return asientosDTO;
@@ -34,9 +35,10 @@ public class AsientoMapper implements IAsientoMapper{
         List<Asiento> asientos = new ArrayList<>();
         
         for (int i = 0; i < asientos.size(); i++) {
-            AsientoDTO asiento = new AsientoDTO(
+            Asiento asiento = new Asiento(
                     asientosDTO.get(i).getNumAsiento()
             );
+            asientos.add(asiento);
         }
         
         return asientos;

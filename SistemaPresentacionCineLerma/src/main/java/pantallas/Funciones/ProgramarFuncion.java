@@ -4,6 +4,7 @@
  */
 package pantallas.Funciones;
 
+import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
 import DTOs.SalaViejaDTO;
 import control.ControlDeNavegacion;
@@ -111,6 +112,8 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             );
 
             FuncionDTO funcionRegistrada = control.registrarFuncion(funcionDTO);
+            SalaViejaDTO sala = control.consultarSala(numSala);
+            List<AsientoFuncionDTO> asientosRegistrado = control.agregarAsientoFuncion(funcionRegistrada, sala);
 
             if (funcionRegistrada != null) {
                 JOptionPane.showMessageDialog(this,

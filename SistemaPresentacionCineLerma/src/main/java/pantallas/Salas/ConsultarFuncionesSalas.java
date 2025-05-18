@@ -13,6 +13,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import javax.swing.Box;
@@ -34,20 +36,23 @@ import utilitades.Utilerias;
  * @author Ramon Valencia
  */
 public class ConsultarFuncionesSalas extends javax.swing.JFrame {
-    
+
     private final Utilerias utilerias = new Utilerias(); //Objeto Utilerias para poder obtener sus metodos
     private final IControl control = ControlDeNavegacion.getInstancia(); //Instancia del control de navegacion
-    
+
     // Valores del tamaño de los buscadores
     private final Integer anchoBuscador = 150;
     private final Integer alturaBuscador = 20;
     private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
-    
+
+    private final Integer alturaFilas = 40;
+
     private JPanel panelTabla;
     private JTable tablaFunciones;
     private Timer temporizador;
     
-    
+    private List<FuncionDTO> funcionesCargadas;
+
     private final Map<Integer, Number> tamañoColumnas = Map.of(
             0, 50, // Tamaño de la columna del numero de la sala
             1, 100, // Tamaño de la columna del numero de asientos de la sala
@@ -55,6 +60,7 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
             3, 75,
             4, 60
     );
+
     /**
      * Creates new form ConsultarFuncionesSalas
      */
@@ -118,24 +124,23 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
     private javax.swing.JLabel labelBuscador;
     private javax.swing.JTextField textFieldBuscador;
     // End of variables declaration//GEN-END:variables
-    
-    
+
     private void configurarConsultarFuncionesSalas() {
         configurarBotonVolver();
         configurarPanelCentral();
     }
-    
+
     private void configurarPanelCentral() {
         JPanel panelCentral = new JPanel();
-        
+
         JPanel panelBuscador = new JPanel();
         configurarPanelBuscador(panelBuscador);
-        
+
         panelTabla = new JPanel();
         configurarPanelTabla();
-        
-        panelCentral.setLayout( new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
-        
+
+        panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+
         panelCentral.add(Box.createVerticalStrut(75));
         panelCentral.add(panelBuscador);
         panelCentral.add(Box.createVerticalGlue());
@@ -146,16 +151,16 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
 
         this.add(panelCentral, BorderLayout.CENTER);
     }
-    
+
     private void configurarPanelBuscador(JPanel panelBuscador) {
         labelBuscador = new JLabel("BUSCAR: ");
         textFieldBuscador = new JTextField();
         configurarTextField(textFieldBuscador);
         panelBuscador.add(labelBuscador);
         panelBuscador.add(textFieldBuscador);
-        
+
     }
-    
+
     private void configurarTextField(JTextField textField) {
         textField.setPreferredSize(tamañoBuscador);
         textField.getDocument().addDocumentListener(new DocumentListener() {
@@ -177,7 +182,7 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
 
         });
     }
-    
+
     private void configurarPanelTabla() {
         // Arreglo de Strings de una dimension para guardar todas las columnas de la tabla
         String[] columnas = {
@@ -208,7 +213,7 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
          * para ajustar el tamaño de la columnas de la tablas Se necesito del
          * mapa donde vienen el tamaño de las columnas
          */
-        ModeladoTablas.ajusteTamañoColumnas(tablaFunciones, tamañoColumnas);
+        ModeladoTablas.ajusteTamañoColumnas(tablaFunciones, tamañoColumnas, alturaFilas);
         if (panelTabla.getComponentCount() > 0) {
             panelTabla.removeAll();
         }
@@ -219,30 +224,40 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
         revalidate();
         repaint();
     }
-    
+
     private Object[][] obtenerSalas() {
-        String loco = textFieldBuscador.getText();
-        List<FuncionDTO> funciones = control.consultarFuncionesFiltradas(textFieldBuscador.getText());
-        
-        Object[][] datos = new Object[funciones.size()][5];
+        funcionesCargadas = control.consultarFuncionesFiltradas(textFieldBuscador.getText());
+
+        Object[][] datos = new Object[funcionesCargadas.size()][5];
         SalaViejaDTO sala;
         FuncionDTO funcion;
-        for (int i = 0; i < funciones.size(); i++) {
-            funcion = funciones.get(i);
+        for (int i = 0; i < funcionesCargadas.size(); i++) {
+            funcion = funcionesCargadas.get(i);
             sala = control.consultarSala(funcion.getNumSala());
             List<AsientoFuncionDTO> asientosDisponibles = control.cargarListaAsientos(funcion, true);
+
+            LocalDateTime fecha = funcion.getFechaHora();
+            String minutosFormateados = fecha.getMinute() < 10
+                    ? "0" + fecha.getMinute()
+                    : String.valueOf(fecha.getMinute());
             
-            
+            String fechaImpresa = "<html>" 
+                    + fecha.getDayOfMonth() + "/"
+                    + fecha.getMonthValue() + "/"
+                    + fecha.getYear() + "<br>"
+                    + fecha.getHour() + ":"
+                    + minutosFormateados + "</html>";
+
             datos[i][0] = sala.getNumSala();
             datos[i][1] = funcion.getNombrePelicula();
-            datos[i][2] = funcion.getFechaHora();
+            datos[i][2] = fechaImpresa;
             datos[i][3] = asientosDisponibles.size();
             datos[i][4] = sala.getNumAsientos();
         }
 
         return datos;
     }
-    
+
     private void efectoTemporizador() {
         if (temporizador != null) {
             temporizador.stop();
@@ -253,11 +268,11 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
         });
         temporizador.start();
     }
-    
+
     private void configurarBotonInformacion() {
         btnInfo = new JButton("MAS INFO...");
     }
-    
+
     /**
      * Metodo para configurar el obtener el boton volver del frameBase y
      * configurarlo para que nos regrese a la ventana anterior
