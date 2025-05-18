@@ -108,7 +108,7 @@ public interface IControl {
 
     public SalaViejaDTO consultarSala(String numSala);
 
-    public List<SalaViejaDTO> consultarSalas(String filtro);
+    public List<SalaViejaDTO> consultarSalas(String filtro, Boolean filtrarActivas);
 
     public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala);
     

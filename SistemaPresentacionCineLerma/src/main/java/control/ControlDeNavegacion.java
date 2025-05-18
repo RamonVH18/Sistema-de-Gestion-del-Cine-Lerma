@@ -663,9 +663,9 @@ public class ControlDeNavegacion implements IControl {
     }
 
     @Override
-    public List<SalaViejaDTO> consultarSalas(String filtro) {
+    public List<SalaViejaDTO> consultarSalas(String filtro, Boolean filtrarActivas) {
         try {
-            List<SalaViejaDTO> salas = manejoDeSalas.cargarSalas(filtro);
+            List<SalaViejaDTO> salas = manejoDeSalas.cargarSalas(filtro, filtrarActivas);
             return salas;
         } catch (BuscarSalaException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
