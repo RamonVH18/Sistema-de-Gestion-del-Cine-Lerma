@@ -89,6 +89,7 @@ import pantallas.Usuarios.EditarUsuario;
 import pantallas.Usuarios.HistorialCliente;
 import pantallas.Usuarios.RegistrarUsuario;
 import pantallas.administracionPeliculas.AgregarPelicula;
+import pantallas.administracionPeliculas.DetallesPelicula;
 import pantallas.administracionPeliculas.MenuAdministrarPeliculas;
 import pantallas.reservaBoletos.SeleccionarAsientos;
 import pantallas.reservaBoletos.SeleccionarMetodoPago;
@@ -168,15 +169,6 @@ public class ControlDeNavegacion implements IControl {
             MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin(admin);
             pantallaMenuAdmin.setLocationRelativeTo(null);
             pantallaMenuAdmin.setVisible(true);
-        });
-    }
-
-    @Override
-    public void mostrarAgregarPelicula(JFrame frameAnterior) {
-        SwingUtilities.invokeLater(() -> {
-            AgregarPelicula pantallaAgregarPelicula = new AgregarPelicula();
-            pantallaAgregarPelicula.setLocationRelativeTo(null);
-            pantallaAgregarPelicula.setVisible(true);
         });
     }
 
@@ -757,6 +749,24 @@ public class ControlDeNavegacion implements IControl {
             pantallaMenuAdministrarPeliculas.setLocationRelativeTo(null);
             pantallaMenuAdministrarPeliculas.setVisible(true);
             frameAnterior.dispose();
+        });
+    }
+
+    @Override
+    public void mostrarAgregarPelicula(JFrame frameAnterior) {
+        SwingUtilities.invokeLater(() -> {
+            AgregarPelicula pantallaAgregarPelicula = new AgregarPelicula();
+            pantallaAgregarPelicula.setLocationRelativeTo(null);
+            pantallaAgregarPelicula.setVisible(true);
+        });
+    }
+
+    @Override
+    public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO) {
+        SwingUtilities.invokeLater(() -> {
+            DetallesPelicula pantallaDetallesPelicula = new DetallesPelicula(peliculaDTO);
+            pantallaDetallesPelicula.setLocationRelativeTo(null);
+            pantallaDetallesPelicula.setVisible(true);
         });
     }
 

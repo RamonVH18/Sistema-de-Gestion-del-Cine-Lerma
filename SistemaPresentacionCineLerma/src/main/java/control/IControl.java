@@ -135,6 +135,8 @@ public interface IControl {
     public void mostrarMenuAdministrarPeliculas(JFrame frameAnterior);
     
     public void mostrarAgregarPelicula(JFrame frameAnterior);
+    
+    public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO);
     // -------------------------------FIN DE METODOS DE NAVEGACION DE PELICULAS-------------------------
 
     //Usuarios:
