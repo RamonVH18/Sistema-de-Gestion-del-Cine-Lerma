@@ -5,6 +5,7 @@
 package control;
 
 import DTOs.AdministradorDTO;
+import DTOs.AsientoFuncionDTO;
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
@@ -19,7 +20,6 @@ import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
-import Excepciones.EncontrarUsuarioException;
 import Excepciones.PresentacionException;
 import enums.EstadoSala;
 import enums.EstadoUsuario;
@@ -113,6 +113,16 @@ public interface IControl {
     public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala);
     
     public Boolean modificarSala(String numSala, EstadoSala estadoSala);
+    
+    public void mostrarConsultarFuncionesSalas(JFrame frameAnterior);
+    
+    public void mostrarConsultarAsientosReservados(JFrame frameAnterior, FuncionDTO funcionDTO);
+    
+    public List<AsientoFuncionDTO> agregarAsientoFuncion(FuncionDTO funcionSelecionada, SalaViejaDTO salaSelecionada);
+    
+    public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar);
+    
+    public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles);
 
     // -----------------------------FIN DE METODOS DE SALAS-----------------------------------------
     //Metodos de navegacion de usuarios /////////////////////

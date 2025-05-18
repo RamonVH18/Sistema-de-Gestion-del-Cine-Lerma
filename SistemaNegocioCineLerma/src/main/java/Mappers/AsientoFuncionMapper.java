@@ -31,8 +31,8 @@ public class AsientoFuncionMapper implements IAsientoFuncionMapper {
 
             asientoFuncionDTO.setIdFuncion(asientoFuncion.getIdFuncion());
             asientoFuncionDTO.setAsiento(asientoFuncion.getNumAsiento());
+            asientoFuncionDTO.setNumSala(asientoFuncion.getNumSala());
             asientoFuncionDTO.setDisponibilidad(asientoFuncion.getDisponibilidad());
-            asientoFuncionDTO.setNombreCliente(asientoFuncion.getIdCliente());
 
             asientosMapeados.add(asientoFuncionDTO);
         }
@@ -50,8 +50,10 @@ public class AsientoFuncionMapper implements IAsientoFuncionMapper {
             }
 
             AsientoFuncion asientoFuncion = new AsientoFuncion();
-
+            
+            asientoFuncion.setIdFuncion(asientoDTO.getIdFuncion());
             asientoFuncion.setNumAsiento(asientoDTO.getAsiento());
+            asientoFuncion.setNumSala(asientoDTO.getNumSala());
             asientoFuncion.setDisponibilidad(asientoDTO.isDisponibilidad());
             
             asientosMapeados.add(asientoFuncion);

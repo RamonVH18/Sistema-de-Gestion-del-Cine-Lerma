@@ -5,6 +5,7 @@
 package control;
 
 import DTOs.AdministradorDTO;
+import DTOs.AsientoFuncionDTO;
 import pantallas.reservaBoletos.SeleccionarPelicula;
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
@@ -46,6 +47,9 @@ import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidacionSalaException;
 import Excepciones.ValidarCampoAsientoException;
 import Excepciones.ValidarUsuarioException;
+import Excepciones.asientos.ErrorCargarAsientoException;
+import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
+import Excepciones.asientos.ErrorReservacionAsientoException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import GestionFunciones.IManejoFunciones;
 import GestionFunciones.ManejoFunciones;
@@ -58,7 +62,9 @@ import gestionPeliculas.IManejoPeliculas;
 import gestionPeliculas.ManejoPeliculas;
 import gestionReservaBoletos.IManejoDeBoletos;
 import gestionReservaBoletos.ManejoDeBoletos;
+import gestionSalasAsientos.IManejoDeAsientos;
 import gestionSalasAsientos.IManejoDeSalas;
+import gestionSalasAsientos.ManejoDeAsientos;
 import gestionSalasAsientos.ManejoDeSalas;
 import gestionUsuarios.IManejoUsuarios;
 import gestionUsuarios.ManejoUsuarios;
@@ -80,6 +86,8 @@ import pantallas.Pagos.PantallaPago;
 import pantallas.Pagos.PantallaPagoRechazado;
 import pantallas.Reportes.Reportes;
 import pantallas.Salas.AgregarSala;
+import pantallas.Salas.ConsultarAsientosReservados;
+import pantallas.Salas.ConsultarFuncionesSalas;
 import pantallas.Salas.EstadisticasSala;
 import pantallas.Salas.MenuSalas;
 import pantallas.Salas.ModificarSala;
@@ -107,6 +115,7 @@ public class ControlDeNavegacion implements IControl {
     private final IManejoUsuarios gestionUsuarios = ManejoUsuarios.getInstance();
     private final IManejoFunciones gestionFunciones = ManejoFunciones.getInstanceDAO();
     private final IManejoPeliculas gestionPeliculas = ManejoPeliculas.getInstanceDAO();
+    private final IManejoDeAsientos manejoDeAsientos = ManejoDeAsientos.getInstanceAsientos();
 
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
     private PeliculaDTO peliculaSeleccionada;
@@ -651,6 +660,7 @@ public class ControlDeNavegacion implements IControl {
         });
     }
 
+    @Override
     public SalaViejaDTO consultarSala(String numSala) {
 
         try {
@@ -708,11 +718,62 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
+    
+    @Override
+   public void mostrarConsultarFuncionesSalas(JFrame frameAnterior) {
+       SwingUtilities.invokeLater(() -> {
+           ConsultarFuncionesSalas pantallaConsultarFuncionesSalas = new ConsultarFuncionesSalas();
+           pantallaConsultarFuncionesSalas.setLocationRelativeTo(null);
+           pantallaConsultarFuncionesSalas.setVisible(true);
+           frameAnterior.dispose();
+       });
+   }
+   
+    @Override
+   public void mostrarConsultarAsientosReservados(JFrame frameAnterior, FuncionDTO funcionDTO) {
+       SwingUtilities.invokeLater(() -> {
+           ConsultarAsientosReservados pantallaConsultarAsientosReservados = new ConsultarAsientosReservados(funcionDTO);
+           pantallaConsultarAsientosReservados.setLocationRelativeTo(null);
+           pantallaConsultarAsientosReservados.setVisible(true);
+           frameAnterior.dispose();
+       });
+   }
+   
+    @Override
+   public List<AsientoFuncionDTO> agregarAsientoFuncion(FuncionDTO funcionSelecionada, SalaViejaDTO salaSelecionada) {
+        try {
+            return manejoDeAsientos.registrarAsientoFuncion(funcionSelecionada, salaSelecionada);
+        } catch (ErrorGeneracionAsientoFuncionException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+   }
+   
+    @Override
+   public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar) {
+        try {
+            return manejoDeAsientos.reservarAsientosFuncion(asientosAReservar);
+        } catch (ErrorReservacionAsientoException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+   }
+   
+    @Override
+   public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) {
+        try {
+            return manejoDeAsientos.cargarListaAsientos(funcion, mostrarDisponibles);
+        } catch (ErrorCargarAsientoException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+   }
 
     /*
     --------------FIN DE LOS METODOS DEL CONTROL DE NAVEGACION DE SALAS--------------
      */
- /*
+    
+    /*
     --------------INICIO DE LOS METODOS DEL CONTROL DE NAVEGACION DE FUNCIONES--------------
      */
     @Override
@@ -764,9 +825,9 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO) {
         SwingUtilities.invokeLater(() -> {
-            DetallesPelicula pantallaDetallesPelicula = new DetallesPelicula(peliculaDTO);
-            pantallaDetallesPelicula.setLocationRelativeTo(null);
-            pantallaDetallesPelicula.setVisible(true);
+//            DetallesPelicula pantallaDetallesPelicula = new DetallesPelicula(peliculaDTO);
+//            pantallaDetallesPelicula.setLocationRelativeTo(null);
+//            pantallaDetallesPelicula.setVisible(true);
         });
     }
 

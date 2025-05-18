@@ -10,17 +10,17 @@ package DTOs;
  */
 public class AsientoDTO {
     
-    private Integer numAsiento;
+    private String numAsiento;
 
-    public AsientoDTO(Integer numAsiento) {
+    public AsientoDTO(String numAsiento) {
         this.numAsiento = numAsiento;
     }
 
-    public Integer getNumAsiento() {
+    public String getNumAsiento() {
         return numAsiento;
     }
 
-    public void setNumAsiento(Integer numAsiento) {
+    public void setNumAsiento(String numAsiento) {
         this.numAsiento = numAsiento;
     }
     

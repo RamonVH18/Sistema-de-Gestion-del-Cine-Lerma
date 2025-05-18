@@ -12,6 +12,7 @@ public class AsientoFuncionDTO {
 
     private String idFuncion;
     private String asiento;
+    private String numSala;
     private Boolean disponibilidad;
     private String nombreCliente;
 
@@ -26,12 +27,14 @@ public class AsientoFuncionDTO {
      *
      * @param idFuncion
      * @param asiento
+     * @param numSala
      * @param disponibilidad
      * @param nombreCliente
      */
-    public AsientoFuncionDTO(String idFuncion, String asiento, Boolean disponibilidad, String nombreCliente) {
+    public AsientoFuncionDTO(String idFuncion, String asiento, String numSala, Boolean disponibilidad, String nombreCliente) {
         this.idFuncion = idFuncion;
         this.asiento = asiento;
+        this.numSala = numSala;
         this.disponibilidad = disponibilidad;
         this.nombreCliente = nombreCliente;
     }
@@ -66,6 +69,14 @@ public class AsientoFuncionDTO {
      */
     public void setAsiento(String asiento) {
         this.asiento = asiento;
+    }
+
+    public String getNumSala() {
+        return numSala;
+    }
+
+    public void setNumSala(String numSala) {
+        this.numSala = numSala;
     }
 
     /**

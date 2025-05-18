@@ -1,0 +1,26 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
+package gestionSalasAsientos;
+
+import DTOs.AsientoFuncionDTO;
+import DTOs.FuncionDTO;
+import DTOs.SalaViejaDTO;
+import Excepciones.asientos.ErrorCargarAsientoException;
+import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
+import Excepciones.asientos.ErrorReservacionAsientoException;
+import java.util.List;
+
+/**
+ *
+ * @author Ramon Valencia
+ */
+public interface IManejoDeAsientos {
+
+    public List<AsientoFuncionDTO> registrarAsientoFuncion(FuncionDTO funcion, SalaViejaDTO sala) throws ErrorGeneracionAsientoFuncionException;
+
+    public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientoAReservar) throws ErrorReservacionAsientoException;
+    
+    public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) throws ErrorCargarAsientoException;
+}

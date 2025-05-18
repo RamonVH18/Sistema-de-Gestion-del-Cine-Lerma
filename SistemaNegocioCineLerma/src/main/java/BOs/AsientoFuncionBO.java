@@ -7,8 +7,9 @@ package BOs;
 import DAOs.AsientoFuncionDAO;
 import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
+import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
-import Excepciones.PersistenciaException;
+import Excepciones.AsientoFuncion.FalloOcuparAsientosFuncionException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
@@ -18,10 +19,7 @@ import Mappers.AsientoFuncionMapper;
 import Mappers.FuncionMapper;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -47,12 +45,28 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
 
     @Override
     public List<AsientoFuncionDTO> registrarAsientosFuncion(List<AsientoFuncionDTO> asientos) throws AsientoFuncionRegistroException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        try {
+            List<AsientoFuncion> asientosMapeados = asientoFuncionMapper.toAsientoFuncionEntidad(asientos);
+            
+            asientosMapeados = asientoFuncionDAO.agregarAsientosFuncion(asientosMapeados);
+            
+            return asientoFuncionMapper.toAsientoFuncionDTO(asientosMapeados);
+        } catch (FalloCreacionAsientosFuncionException e) {
+            throw new AsientoFuncionRegistroException("Hubo un error al consultar los asiento de la funcion: " + e.getMessage());
+        }
+        
     }
 
     @Override
     public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientos) throws AsientoFuncionReservaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            List<AsientoFuncion> asientosMapeados = asientoFuncionMapper.toAsientoFuncionEntidad(asientos);
+            
+            return asientoFuncionDAO.ocuparAsientos(asientosMapeados);
+        } catch (FalloOcuparAsientosFuncionException e) {
+            throw new AsientoFuncionReservaException("Hubo un error al reservar los asientos: " + e.getMessage());
+        }
     }
 
     @Override
@@ -69,21 +83,16 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
     }
 
     @Override
-    public List<AsientoFuncionDTO> obtenerAsientosDisponibles(FuncionDTO funcion) throws AsientoFuncionBusquedaException {
-//        try {
-//            List<AsientoFuncionDTO> asientosFuncionDTO = new ArrayList<>();
-//            Funcion funcionEntity = funcionMapper.toFuncionEntidad(funcion);
-////            List<AsientoFuncion> asientosFuncionEntity = asientoFuncionDAO.mostrarAsientosDisponibles(funcionEntity);
-////            for (AsientoFuncion asientoFuncion : asientosFuncionEntity) {
-////                AsientoFuncionDTO asientoFuncionDTO = asientoFuncionMapper.toAsientoFuncionDTO(asientoFuncion);
-////                asientosFuncionDTO.add(asientoFuncionDTO);
-////            }
-//            
-//            return asientosFuncionDTO;
-//        } catch (PersistenciaException e) {
-//            throw new AsientoFuncionBusquedaException("Ocurrio un error durante la busqueda de los asientos disponibles.");
-//        }
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<AsientoFuncionDTO> obtenerAsientosDisponibles(FuncionDTO funcionDTO) throws AsientoFuncionBusquedaException {
+        try {
+            Funcion funcion = funcionMapper.toFuncionEntidad(funcionDTO);
+            List<AsientoFuncion> asientosGuardados = asientoFuncionDAO.mostrarListaAsientosPorFuncion(funcion, Boolean.TRUE);
+            
+            return asientoFuncionMapper.toAsientoFuncionDTO(asientosGuardados);
+        } catch (FalloMostrarAsientosFuncionException e) {
+            throw new AsientoFuncionBusquedaException("Hubo un error al consultar los asientos de la funcion: " + e.getMessage());
+        }
+        
     }
 
 }

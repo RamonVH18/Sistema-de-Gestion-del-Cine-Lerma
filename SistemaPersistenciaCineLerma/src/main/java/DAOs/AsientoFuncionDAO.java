@@ -112,7 +112,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
     }
 
     @Override
-    public Boolean ocuparAsientos(List<AsientoFuncion> asientosReservados, String idFuncion) throws FalloOcuparAsientosFuncionException {
+    public Boolean ocuparAsientos(List<AsientoFuncion> asientosReservados) throws FalloOcuparAsientosFuncionException {
         MongoClient clienteMongo = null;
         try {
             MongoCollection<AsientoFuncion> coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
@@ -122,7 +122,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
                     Boolean.FALSE
             );
             
-            Bson filtroAsientosFuncion = filtroAsientoFuncion(filtroFuncion, asientosReservados, idFuncion);
+            Bson filtroAsientosFuncion = filtroAsientoFuncion(filtroFuncion, asientosReservados);
             
             Bson ocuparAsiento = Updates.set("disponibilidad", false);
             
@@ -186,7 +186,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         return filtro;
     }
     
-    private Bson filtroAsientoFuncion(Bson filtroAF, List<AsientoFuncion> asientosFuncion, String idFuncion) {
+    private Bson filtroAsientoFuncion(Bson filtroAF, List<AsientoFuncion> asientosFuncion) {
         List<Bson> filtradores = new ArrayList();
         for (AsientoFuncion asiento : asientosFuncion) {
                 List<Bson> filtrador = Arrays.asList(
