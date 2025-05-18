@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import utilitades.ModeladoTablas;
@@ -26,7 +27,7 @@ import utilitades.ModeladoTablas;
  */
 public class ConsultarFunciones extends javax.swing.JFrame {
 
-    private javax.swing.JTable tabla;
+    private JTable tabla;
 
     private IManejoFunciones manejoFunciones;
     private String nombrePelicula;
@@ -40,7 +41,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         cargarTablaFunciones();
     }
 
-    private void cargarTablaFunciones() {
+    public void cargarTablaFunciones() {
         try {
             List<FuncionDTO> funciones = manejoFunciones.buscarFunciones(nombrePelicula, null);
 
@@ -64,8 +65,8 @@ public class ConsultarFunciones extends javax.swing.JFrame {
             tabla = ModeladoTablas.creacionTablaSencilla(columnas, datos, 14, 30);
 
             tabla.setShowGrid(true);
-            tabla.setGridColor(new java.awt.Color(200, 200, 200)); 
-            tabla.setRowHeight(25); 
+            tabla.setGridColor(new java.awt.Color(200, 200, 200));
+            tabla.setRowHeight(25);
 
             DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
             centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -92,6 +93,9 @@ public class ConsultarFunciones extends javax.swing.JFrame {
             panelTablaFunciones.setLayout(new BorderLayout());
             panelTablaFunciones.add(new JScrollPane(tabla), BorderLayout.CENTER);
 
+            revalidate();
+            repaint();
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Error al cargar funciones: " + e.getMessage(),
@@ -102,8 +106,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
     }
 
     private void eliminarFuncionSeleccionada() {
-        // Obtener la fila seleccionada en la tabla
-        int filaSeleccionada = tabla.getSelectedRow(); // Asegúrate de que el nombre de la tabla coincida
+        int filaSeleccionada = tabla.getSelectedRow();
 
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(
@@ -112,6 +115,18 @@ public class ConsultarFunciones extends javax.swing.JFrame {
                     "Advertencia",
                     JOptionPane.WARNING_MESSAGE
             );
+            return;
+        }
+
+        // Confirmacion antes de eliminar
+        int confirmacion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de eliminar esta funcion?",
+                "Confirmar eliminacion",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion != JOptionPane.YES_OPTION) {
             return;
         }
 
@@ -126,11 +141,19 @@ public class ConsultarFunciones extends javax.swing.JFrame {
             if (eliminada) {
                 JOptionPane.showMessageDialog(
                         this,
-                        "Funcion eliminada correctamente",
+                        "Función eliminada correctamente",
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
                 );
-                cargarTablaFunciones(); // Recargar la tabla
+                cargarTablaFunciones();
+
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "No se pudo eliminar la funcion",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(

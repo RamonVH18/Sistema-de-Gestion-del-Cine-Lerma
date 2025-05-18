@@ -27,6 +27,7 @@ import enums.Rol;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JFrame;
+import pantallas.Funciones.ConsultarFunciones;
 
 /**
  *
@@ -128,7 +129,7 @@ public interface IControl {
     //Metodos de navegacion de Funciones
     public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula);
 
-    public void mostrarProgramarFuncion(JFrame frameAnterior, String nombrePelicula);
+    public void mostrarProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula);
     
     // -------------------------------METODOS DE NAVEGACION DE PELICULAS--------------------------------
     public void mostrarMenuAdministrarPeliculas(JFrame frameAnterior);

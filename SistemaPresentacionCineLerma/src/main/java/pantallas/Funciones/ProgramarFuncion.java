@@ -24,10 +24,10 @@ import utilitades.ModeladoTablas;
 public class ProgramarFuncion extends javax.swing.JFrame {
 
     IControl control = ControlDeNavegacion.getInstancia();
-    private JFrame frameAnterior;
+    private ConsultarFunciones frameAnterior;
     private String nombrePelicula;
 
-    public ProgramarFuncion(JFrame frameAnterior, String nombrePelicula) {
+    public ProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula) {
         this.frameAnterior = frameAnterior;
         this.nombrePelicula = nombrePelicula;
         initComponents();
@@ -117,6 +117,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                         "Función registrada exitosamente",
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE);
+                frameAnterior.cargarTablaFunciones();
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this,

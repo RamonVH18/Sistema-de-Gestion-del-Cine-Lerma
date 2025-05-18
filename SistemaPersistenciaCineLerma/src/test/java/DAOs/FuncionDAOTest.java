@@ -6,6 +6,7 @@ package DAOs;
 
 import Excepciones.Funciones.FuncionDuracionIncorrectaException;
 import Excepciones.Funciones.FuncionNoEncontradaException;
+import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.Funciones.FuncionSalaVaciaException;
 import Interfaces.IFuncionDAO;
 import entidades.Asiento;
@@ -114,22 +115,23 @@ public class FuncionDAOTest {
         });
     }
 
-//    @Test
-//    public void testRegistrarFuncionSalaOcupada() throws Exception {
-//        funcionDAO.registrarFuncion(funcionPrueba);
-//        LocalDateTime fechaHoraInicioSolapada = funcionPrueba.getFechaHora().plusMinutes(1);
-//        Funcion funcionRepetida = new Funcion(
-//                new ObjectId(),
-//                salaPrueba,
-//                peliculaPrueba,
-//                fechaHoraInicioSolapada,
-//                200.0
-//        );
-//
-//        assertThrows(FuncionSalaOcupadaException.class, () -> {
-//            funcionDAO.registrarFuncion(funcionRepetida);
-//        }, "Debe fallar al registrar funciones en la misma sala");
-//    }
+    @Test
+    public void testRegistrarFuncionSalaOcupada() throws Exception {
+        funcionDAO.registrarFuncion(funcionPrueba);
+        LocalDateTime fechaHoraInicioSolapada = funcionPrueba.getFechaHora().plusMinutes(1);
+        Funcion funcionRepetida = new Funcion(
+                new ObjectId(),
+                salaPrueba,
+                peliculaPrueba,
+                fechaHoraInicioSolapada,
+                200.0
+        );
+
+        assertThrows(FuncionSalaOcupadaException.class, () -> {
+            funcionDAO.registrarFuncion(funcionRepetida);
+        }, "Debe fallar al registrar funciones en la misma sala");
+    }
+
     /**
      * Test of eliminarFuncion method, of class FuncionDAO.
      */
@@ -182,7 +184,7 @@ public class FuncionDAOTest {
         // Crear película con duración nula
         Pelicula peliculaSinDuracion = new Pelicula(
                 new ObjectId(),
-                new byte[] {},
+                new byte[]{},
                 "PeliculaSinDuracion",
                 "Género",
                 null, // Duración nula

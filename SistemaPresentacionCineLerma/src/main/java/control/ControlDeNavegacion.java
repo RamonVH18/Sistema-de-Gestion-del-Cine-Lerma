@@ -736,7 +736,7 @@ public class ControlDeNavegacion implements IControl {
     }
 
     @Override
-    public void mostrarProgramarFuncion(JFrame frameAnterior, String nombrePelicula) {
+    public void mostrarProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula) {
         SwingUtilities.invokeLater(() -> {
             ProgramarFuncion pantalla = new ProgramarFuncion(frameAnterior, nombrePelicula);
             pantalla.setLocationRelativeTo(null);
