@@ -28,6 +28,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     IControl control = ControlDeNavegacion.getInstancia();
     private ConsultarFunciones frameAnterior;
     private String nombrePelicula;
+    private String idEmpleadoSeleccionado;
 
     public ProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula) {
         this.frameAnterior = frameAnterior;
@@ -79,8 +80,8 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         List<EmpleadoDTO> empleados = control.consultarTodosLosEmpleadosActivos();
 
         if (empleados != null && !empleados.isEmpty()) {
-            String[] columnas = {"Nombre", "Cargo"}; 
-            Object[][] datos = new Object[empleados.size()][2]; 
+            String[] columnas = {"Nombre", "Cargo"};
+            Object[][] datos = new Object[empleados.size()][2];
 
             for (int i = 0; i < empleados.size(); i++) {
                 EmpleadoDTO empleado = empleados.get(i);
@@ -103,8 +104,10 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     int row = tablaEmpleados.getSelectedRow();
                     if (row >= 0) {
-                        String idEmpleado = empleadosLista.get(row).getId();
-                        txtEmpleadoSeleccionado.setText(idEmpleado);
+                        idEmpleadoSeleccionado = empleadosLista.get(row).getId();
+                        String nombreEmpleado = empleadosLista.get(row).getNombre();
+
+                        txtEmpleadoSeleccionado.setText(nombreEmpleado);
                         dialog.dispose();
                     }
                 }
@@ -149,9 +152,9 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             String numSala = salaSeleccionada.getText();
             LocalDateTime fechaHora = FechaHoraFuncion.getDateTimeStrict();
             double precio = Double.parseDouble(precioBoleto.getText());
-            String idEmpleado = txtEmpleadoSeleccionado.getText().isEmpty() ? null : txtEmpleadoSeleccionado.getText();
+            String idEmpleado = idEmpleadoSeleccionado;
 
-            // Crear DTO con la película válida
+            // Crear DTO con la película valida
             FuncionDTO funcionDTO = new FuncionDTO(
                     numSala,
                     nombrePelicula, // Nombre de la película seleccionada
@@ -160,7 +163,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             );
 
             if (idEmpleado != null) {
-                funcionDTO.setIdEmpleado(idEmpleado); // Asume que existe este método en FuncionDTO
+                funcionDTO.setIdEmpleado(idEmpleado); 
             }
 
             FuncionDTO funcionRegistrada = control.registrarFuncion(funcionDTO);
@@ -169,21 +172,21 @@ public class ProgramarFuncion extends javax.swing.JFrame {
 
             if (funcionRegistrada != null) {
                 JOptionPane.showMessageDialog(this,
-                        "Función registrada exitosamente",
+                        "Funcion registrada exitosamente",
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE);
                 frameAnterior.cargarTablaFunciones();
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "Error al registrar la función",
+                        "Error al registrar la funcion",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
-                    "Formato de precio inválido",
+                    "Formato de precio invalido",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -391,8 +394,8 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarEmpleadosActionPerformed
 
     private void txtEmpleadoSeleccionadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmpleadoSeleccionadoActionPerformed
-       
-        
+
+
     }//GEN-LAST:event_txtEmpleadoSeleccionadoActionPerformed
 
     /**

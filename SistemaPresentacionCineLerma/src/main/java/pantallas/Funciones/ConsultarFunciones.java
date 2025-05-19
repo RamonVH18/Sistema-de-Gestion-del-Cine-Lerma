@@ -4,6 +4,7 @@
  */
 package pantallas.Funciones;
 
+import DTOs.EmpleadoDTO;
 import DTOs.FuncionDTO;
 import GestionFunciones.IManejoFunciones;
 import control.ControlDeNavegacion;
@@ -59,7 +60,14 @@ public class ConsultarFunciones extends javax.swing.JFrame {
                 datos[i][4] = String.format("$%.2f", funcion.getPrecio());
 
                 String idEmpleado = funcion.getIdEmpleado();
-                datos[i][5] = (idEmpleado == null || idEmpleado.isEmpty()) ? "No asignado" : idEmpleado;
+                String nombreEmpleado;
+                if (idEmpleado == null || idEmpleado.isEmpty()) {
+                    nombreEmpleado = "No asignado";
+                } else {
+                    EmpleadoDTO emp = control.consultarEmpleadoActivoPorId(idEmpleado);
+                    nombreEmpleado = emp.getNombre();
+                }
+                datos[i][5] = nombreEmpleado;
             }
 
             tabla = ModeladoTablas.creacionTablaSencilla(columnas, datos, 14, 30);
