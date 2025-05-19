@@ -13,6 +13,8 @@ import Excepciones.ValidacionEmpleadoIdException;
 import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -26,14 +28,13 @@ import javax.swing.JOptionPane;
  */
 public class ActualizarEmpleado extends javax.swing.JFrame {
 
-    private IManejoEmpleados manejoEmpleados;
+    private IControl control = ControlDeNavegacion.getInstancia();
     private ListaEmpleados listaEmpleados;
 
     /**
      * Creates new form ActualizarEmpleado
      */
     public ActualizarEmpleado() {
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
 
         this.listaEmpleados = new ListaEmpleados();

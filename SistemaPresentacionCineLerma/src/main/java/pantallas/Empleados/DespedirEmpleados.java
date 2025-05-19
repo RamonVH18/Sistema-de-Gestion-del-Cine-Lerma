@@ -12,6 +12,8 @@ import Excepciones.ValidacionEmpleadoIdException;
 import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -25,14 +27,14 @@ import javax.swing.JOptionPane;
  */
 public class DespedirEmpleados extends javax.swing.JFrame {
     
-    private final IManejoEmpleados manejoEmpleados;
+   private IControl control = ControlDeNavegacion.getInstancia();
     private ListaEmpleados listaEmpleados;
 
     /**
      * Creates new form DespedirEmpleados
      */
     public DespedirEmpleados() {
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
+        
         initComponents();
         
         this.listaEmpleados = new ListaEmpleados();
@@ -198,23 +200,13 @@ public class DespedirEmpleados extends javax.swing.JFrame {
                 "Confirmar Despido", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                boolean exito = false;
-                try {
-                    exito = manejoEmpleados.despedirEmpleado(seleccionado.getId());
-                } catch (ValidarEmpleadoException ex) {
-                    Logger.getLogger(DespedirEmpleados.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ValidacionEmpleadoIdException ex) {
-                    Logger.getLogger(DespedirEmpleados.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                if (exito) {
-                    JOptionPane.showMessageDialog(this, "Empleado despedido (marcado como inactivo) exitosamente.", "Despido Exitoso", JOptionPane.INFORMATION_MESSAGE);
-                    listaEmpleados.cargarEmpleadosActivos(); // Actualizar la lista
-                } else {
-                     JOptionPane.showMessageDialog(this, "El empleado no pudo ser despedido (quizás ya estaba inactivo o no se encontró).", "Aviso", JOptionPane.WARNING_MESSAGE);
-                }
-            } catch (DespedirEmpleadoException  ex) {
-                JOptionPane.showMessageDialog(this, "Error al despedir empleado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            boolean exito = false;
+            exito = control.controlDespedirEmpleado(seleccionado.getId());
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Empleado despedido (marcado como inactivo) exitosamente.", "Despido Exitoso", JOptionPane.INFORMATION_MESSAGE);
+                listaEmpleados.cargarEmpleadosActivos(); // Actualizar la lista
+            } else {
+                JOptionPane.showMessageDialog(this, "El empleado no pudo ser despedido (quizás ya estaba inactivo o no se encontró).", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         }
         

@@ -15,6 +15,8 @@ import Excepciones.ValidacionEmpleadoIdException;
 import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.bson.types.ObjectId;
@@ -25,15 +27,16 @@ import org.bson.types.ObjectId;
  */
 public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
 
-    private IManejoEmpleados manejoEmpleados;
+    private IControl control = ControlDeNavegacion.getInstancia();
     private EmpleadoDTO empleadoActualDTO; // dto del empleado que se edita
     private String empleadoId; // id del empleado que se edita
+    
 
     /**
      * Creates new form ActualizarEmpleadoDatos
      */
     public ActualizarEmpleadoDatos(String empleadoIdParaEditar) throws ValidarEmpleadoException, ObtenerEmpleadoException, ValidacionEmpleadoIdException {
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
+      
         this.empleadoId = empleadoIdParaEditar;
         initComponents();
         configurarFrame();
@@ -45,15 +48,15 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void cargarDatosEmpleado() throws ValidarEmpleadoException, ObtenerEmpleadoException, ValidacionEmpleadoIdException {
+    private void cargarDatosEmpleado() {
         if (this.empleadoId == null || empleadoId.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "No se especificó un empleado para editar.", "Error", JOptionPane.ERROR_MESSAGE);
             this.dispose();
             return;
         }
         try {
-            // Usamos el BO para buscar el empleado por ID (ya que el DTO completo podría no haber sido pasado)
-            this.empleadoActualDTO = manejoEmpleados.buscarEmpleadoActivoPorId(this.empleadoId);
+           
+            this.empleadoActualDTO = control.consultarEmpleadoActivoPorId(this.empleadoId);
 
             if (this.empleadoActualDTO == null) {
                 JOptionPane.showMessageDialog(this, "Empleado no encontrado o inactivo.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -72,20 +75,15 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
             txtCorreoE.setText(empleadoActualDTO.getCorreoE());
             txtTelefono.setText(empleadoActualDTO.getTelefono());
 
-        } catch (ValidacionEmpleadoIdException vex) { // Por ej. si el formato del ID fuera inválido (Manejo valida esto)
-            JOptionPane.showMessageDialog(this, "Error de validación al cargar datos: " + vex.getMessage(), "Error de Validación", JOptionPane.ERROR_MESSAGE);
-            this.dispose();
-        } catch (ObtenerEmpleadoException opex) { // Envuelve errores del BO (BuscarEmpleadoException, PersistenciaException)
-            JOptionPane.showMessageDialog(this, "Error al cargar datos del empleado: " + opex.getMessage(), "Error de Operación", JOptionPane.ERROR_MESSAGE);
-            if (opex.getCause() != null) {
-                System.err.println("Causa original (cargarDatosEmpleado): " + opex.getCause().getMessage());
-            }
-            this.dispose();
-        } catch (Exception e) { // Otros errores inesperados
+        }
+        
+         catch (Exception e) { // Otros errores inesperados
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar los datos: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
             this.dispose();
         }
+        
+        
 
     }
 
@@ -407,18 +405,11 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
 
         // 3. Llamar al método de ManejoEmpleados
         try {
-            EmpleadoDTO empleadoActualizado = manejoEmpleados.actualizarInformacionEmpleado(this.empleadoId, datosNuevosDTO);
+            EmpleadoDTO empleadoActualizado = control.controlActualizarInformacionEmpleado(this.empleadoId, datosNuevosDTO);
 
             JOptionPane.showMessageDialog(this, "Datos del empleado actualizados exitosamente.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
             this.empleadoActualDTO = empleadoActualizado; // Actualizar el DTO local por si acaso
 
-        } catch (ValidacionEmpleadoIdException vex) {
-            JOptionPane.showMessageDialog(this, "Error de validación al actualizar: " + vex.getMessage(), "Error de Validación", JOptionPane.ERROR_MESSAGE);
-        } catch (ActualizacionEmpleadoException opex) {
-            JOptionPane.showMessageDialog(this, "Error en la operación de actualización: " + opex.getMessage(), "Error de Operación", JOptionPane.ERROR_MESSAGE);
-            if (opex.getCause() != null) {
-                System.err.println("Causa original (guardarCambios): " + opex.getCause().getMessage());
-            }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al actualizar: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);

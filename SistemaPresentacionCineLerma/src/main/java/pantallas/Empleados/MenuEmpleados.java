@@ -8,6 +8,8 @@ import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 
 /**
  *
@@ -15,13 +17,12 @@ import GestionEmpleados.ManejoEmpleados;
  */
 public class MenuEmpleados extends javax.swing.JFrame {
     
-    private IManejoEmpleados manejoEmpleados;
+    private IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form MenuEmpleados
      */
     public MenuEmpleados() {
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
     }
 
@@ -121,8 +122,7 @@ public class MenuEmpleados extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         
-        RegistrarEmpleado frameEmpleado = new RegistrarEmpleado();
-        frameEmpleado.setVisible(true);
+       control.mostrarRegistrarEmpleado(this);
         
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
@@ -133,40 +133,27 @@ public class MenuEmpleados extends javax.swing.JFrame {
 
     private void btnDespedirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDespedirActionPerformed
         
-        DespedirEmpleados frameDespedir = new DespedirEmpleados();
-        frameDespedir.setVisible(true);
+        control.mostrarDespedirEmpleado(this);
         
     }//GEN-LAST:event_btnDespedirActionPerformed
 
     private void btnGestionCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionCargoActionPerformed
         
         // primero vamos a abrir el Dialog DialogSeleccionarEmpleado para seleccionar el empleado a actualizar su cargo
-        DialogSeleccionarEmpleado dialogSeleccion = new DialogSeleccionarEmpleado(this, true);
-        dialogSeleccion.setVisible(true);
-        
-        EmpleadoDTO empleadoActualizarCargo = dialogSeleccion.getEmpleadoSeleccionado();
-        
-        if ( empleadoActualizarCargo != null ) {
-            // si el empleado fue seleccionado a abrir el dialog para actualizarlo, 
-            DialogActualizarCargoEmpleado dialogActualizarCargoEmp = new DialogActualizarCargoEmpleado(this, true, empleadoActualizarCargo);
-            dialogActualizarCargoEmp.setVisible(true);
-        } else {
-            System.out.println("La seleccion de empleado para actualizar ha sido cancelada");
-        }
+       control.iniciarFlujoActualizarCargo(this);
         
         
     }//GEN-LAST:event_btnGestionCargoActionPerformed
 
     private void btnGestionarSueldosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarSueldosActionPerformed
         
-        SueldoOpciones opcionesSueldo = new SueldoOpciones();
-        opcionesSueldo.setVisible(true);
+        control.mostrarFrameSueldoOpciones(this);
     }//GEN-LAST:event_btnGestionarSueldosActionPerformed
 
     private void btnActualizarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarEmpleadoActionPerformed
             
-        ActualizarEmpleado frameActualizarDatos = new ActualizarEmpleado();
-        frameActualizarDatos.setVisible(true);
+        control.mostrarActualizarEmpleado(this);
+        
     }//GEN-LAST:event_btnActualizarEmpleadoActionPerformed
 
     /**

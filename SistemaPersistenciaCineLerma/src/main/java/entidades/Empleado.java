@@ -44,7 +44,7 @@ public class Empleado {
     private String colonia;
     private String numExterior;
 
-    // constructor vacio
+    // constructor 
     public Empleado() {
         
         this.activo = true; // por defecto esta activo el empleado cuando se registra

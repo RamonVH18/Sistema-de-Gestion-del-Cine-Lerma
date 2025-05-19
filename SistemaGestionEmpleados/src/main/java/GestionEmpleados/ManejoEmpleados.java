@@ -69,66 +69,66 @@ public class ManejoEmpleados implements IManejoEmpleados {
     }
 
     // ========================== METODOS PRIVADOS DE VALIDACIONES ===========================================================
-    private void validarDatosEmpleadoDTO(EmpleadoDTO dto, boolean esNuevo) throws ValidacionEmpleadoException {
+    private void validarDatosEmpleadoDTO(EmpleadoDTO dto, boolean esNuevo) throws ValidarEmpleadoException {
         if (dto == null) {
-            throw new ValidacionEmpleadoException("Los datos del empleado (DTO) no pueden ser nulos.");
+            throw new ValidarEmpleadoException("Los datos del empleado (DTO) no pueden ser nulos.");
         }
 
         // Si es una actualización (esNuevo = false), el DTO podría o no llevar el ID.
         // La verificación del ID para actualización se hará en el método público del BO que recibe el ID.
         if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
-            throw new ValidacionEmpleadoException("El nombre del empleado no puede ser nulo o vacío.");
+            throw new ValidarEmpleadoException("El nombre del empleado no puede ser nulo o vacío.");
         }
 
         if (dto.getNombre().length() < 3 || dto.getNombre().length() > 50) {
-            throw new ValidacionEmpleadoException("El nombre del empleado debe tener entre 3 y 50 caracteres.");
+            throw new ValidarEmpleadoException("El nombre del empleado debe tener entre 3 y 50 caracteres.");
         }
         if (dto.getApellidoP() == null || dto.getApellidoP().trim().isEmpty()) {
-            throw new ValidacionEmpleadoException("El apellido paterno no puede ser nulo o vacío.");
+            throw new ValidarEmpleadoException("El apellido paterno no puede ser nulo o vacío.");
         }
         if (dto.getApellidoP().length() < 3 || dto.getApellidoP().length() > 50) {
-            throw new ValidacionEmpleadoException("El apellido paterno debe tener entre 3 y 50 caracteres.");
+            throw new ValidarEmpleadoException("El apellido paterno debe tener entre 3 y 50 caracteres.");
         }
         if (dto.getApellidoM() == null || dto.getApellidoM().trim().isEmpty()) {
-            throw new ValidacionEmpleadoException("El apellido materno no puede ser nulo o vacío.");
+            throw new ValidarEmpleadoException("El apellido materno no puede ser nulo o vacío.");
         }
         if (dto.getApellidoM().length() < 3 || dto.getApellidoM().length() > 50) {
-            throw new ValidacionEmpleadoException("El apellido materno debe tener entre 3 y 50 caracteres.");
+            throw new ValidarEmpleadoException("El apellido materno debe tener entre 3 y 50 caracteres.");
         }
         if (dto.getCorreoE() == null || dto.getCorreoE().trim().isEmpty()) {
-            throw new ValidacionEmpleadoException("El correo electrónico no puede ser nulo o vacío.");
+            throw new ValidarEmpleadoException("El correo electrónico no puede ser nulo o vacío.");
         }
         if (!esCorreoValido(dto.getCorreoE())) {
-            throw new ValidacionEmpleadoException("El formato del correo electrónico es inválido.");
+            throw new ValidarEmpleadoException("El formato del correo electrónico es inválido.");
         }
         if (dto.getTelefono() == null || dto.getTelefono().trim().isEmpty()) {
-            throw new ValidacionEmpleadoException("El teléfono no puede ser nulo o vacío.");
+            throw new ValidarEmpleadoException("El teléfono no puede ser nulo o vacío.");
         }
         if (!esTelefonoValido(dto.getTelefono())) {
-            throw new ValidacionEmpleadoException("El número de teléfono debe contener 10 dígitos numéricos.");
+            throw new ValidarEmpleadoException("El número de teléfono debe contener 10 dígitos numéricos.");
         }
         if (dto.getFechaNacimiento() == null) {
-            throw new ValidacionEmpleadoException("La fecha de nacimiento es obligatoria.");
+            throw new ValidarEmpleadoException("La fecha de nacimiento es obligatoria.");
         }
         int edad = Period.between(dto.getFechaNacimiento().toLocalDate(), LocalDate.now()).getYears();
         if (edad <= 15) {
-            throw new ValidacionEmpleadoException("El empleado debe ser mayor de 18 años.");
+            throw new ValidarEmpleadoException("El empleado debe ser mayor de 18 años.");
         }
         if (edad > 70) {
-            throw new ValidacionEmpleadoException("La edad del empleado excede el límite razonable (70 años).");
+            throw new ValidarEmpleadoException("La edad del empleado excede el límite razonable (70 años).");
         }
         if (dto.getCargo() == null) {
-            throw new ValidacionEmpleadoException("El cargo del empleado es obligatorio.");
+            throw new ValidarEmpleadoException("El cargo del empleado es obligatorio.");
         }
 
         if (dto.getCalle() == null || dto.getCalle().trim().isEmpty()) {
-            throw new ValidacionEmpleadoException("La calle en la dirección es obligatoria.");
+            throw new ValidarEmpleadoException("La calle en la dirección es obligatoria.");
         }
         if (dto.getColonia() == null || dto.getColonia().trim().isEmpty()) {
-            throw new ValidacionEmpleadoException("La colonia en la dirección es obligatoria.");
+            throw new ValidarEmpleadoException("La colonia en la dirección es obligatoria.");
         }
         if (dto.getNumExterior() == null || dto.getNumExterior().trim().isEmpty()) {
-            throw new ValidacionEmpleadoException("El número exterior en la dirección es obligatorio.");
+            throw new ValidarEmpleadoException("El número exterior en la dirección es obligatorio.");
         }
 
         if (esNuevo == false) {
@@ -138,10 +138,10 @@ public class ManejoEmpleados implements IManejoEmpleados {
             // POR AHORA, para el registro, el BO asigna y luego valida el sueldo.
 
             if (dto.getSueldo() <= 0) {
-                throw new ValidacionEmpleadoException("El sueldo del empleado debe ser un valor positivo.");
+                throw new ValidarEmpleadoException("El sueldo del empleado debe ser un valor positivo.");
             }
             if (dto.getSueldo() < 1000 || dto.getSueldo() > 200000) {
-                throw new ValidacionEmpleadoException("El sueldo está fuera de los rangos permitidos (1,000 - 200,000).");
+                throw new ValidarEmpleadoException("El sueldo está fuera de los rangos permitidos (1,000 - 200,000).");
             }
         }
 
@@ -188,53 +188,15 @@ public class ManejoEmpleados implements IManejoEmpleados {
 
             return empleadoBO.actualizarSueldoGeneralPorCargo(cargo, nuevoSueldo);
 
-        } catch (ValidacionEmpleadoException e) {
-            // excepciones 
-            throw new validarActualizacionSueldoDeCargoException("Error de validación en la lógica de negocio de empleados: " + e.getMessage());
-        } catch (PersistenciaException e) {
-
-            throw new validarActualizacionSueldoDeCargoException("Error al actualizar sueldos en la base de datos: " + e.getMessage(), e);
-        } catch (Exception e) {
+        }
+        // excepciones
+         catch (Exception e) {
             // Captura cualquier otra excepción inesperada del BO
             throw new validarActualizacionSueldoDeCargoException("Error inesperado durante la actualización de sueldos: " + e.getMessage(), e);
         }
     }
 
-    // Método helper para obtener el sueldo base según el cargo
-    private double obtenerSueldoParaCargo(Cargo cargo) throws ObtenerSueldoEmpleadoException {
-        if (cargo == null) {
-
-            throw new IllegalArgumentException("El cargo no puede ser nulo para determinar el sueldo.");
-        }
-        switch (cargo) {
-            case PALOMITERO:
-                return 3000.00;
-            case REVISION_BOLETOS:
-                return 3000.00;
-            case CAJERO:
-                return 3500.00;
-            case LIMPIEZA:
-                return 3000.00;
-            case SEGURIDAD:
-                return 4000.00;
-            case PROYECCIONISTA:
-                return 3500.00;
-            case TECNICO_SONIDO:
-                return 4000.00;
-            case MANTENIMIENTO:
-                return 4500.00;
-            case JEFE_PISO:
-                return 6500.00;
-            case JEFE_CAJA:
-                return 5500.00;
-            case JEFE_ALIMENTOS:
-                return 6500.00;
-            case GERENTE:
-                return 12000.00;
-            default:
-                throw new ObtenerSueldoEmpleadoException("Cargo no reconocido para asignación de sueldo: " + cargo);
-        }
-    }
+   
 
     private void validarEmpleadoID(String empleadoIdString) throws ValidacionEmpleadoIdException {
 
@@ -247,7 +209,7 @@ public class ManejoEmpleados implements IManejoEmpleados {
     }
 
     @Override
-    public EmpleadoDTO registrarNuevoEmpleado(EmpleadoDTO empleadoDTO) throws ValidacionEmpleadoException, RegistrarNuevoEmpleadoException, PersistenciaException {
+    public EmpleadoDTO registrarNuevoEmpleado(EmpleadoDTO empleadoDTO) throws ValidarEmpleadoException, RegistrarNuevoEmpleadoException {
 
         validarDatosEmpleadoDTO(empleadoDTO, true);
 
@@ -257,15 +219,13 @@ public class ManejoEmpleados implements IManejoEmpleados {
             return empleadoBO.registrarNuevoEmpleado(empleadoDTO);
         } catch (ValidacionEmpleadoException | RegistrarEmpleadoException e) {
             throw new RegistrarNuevoEmpleadoException(e.getMessage());
-        } catch (PersistenciaException e) {
-            throw new RegistrarNuevoEmpleadoException("Error de persistencia al registrar empleado: " + e.getMessage(), e);
         } catch (Exception e) {
             throw new RegistrarNuevoEmpleadoException("Error inesperado al registrar empleado: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public EmpleadoDTO actualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoIdException, ActualizacionEmpleadoException, ValidacionEmpleadoException {
+    public EmpleadoDTO actualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoIdException, ActualizacionEmpleadoException, ValidarEmpleadoException {
 
         validarEmpleadoID(empleadoId); // llamamos al metodo privado de validacion de id
         validarDatosEmpleadoDTO(datosNuevosDTO, false); // false para indicar actualización
@@ -273,8 +233,6 @@ public class ManejoEmpleados implements IManejoEmpleados {
         // El BO se encarga de verificar existencia, estado activo, unicidad de correo si cambia, etc.
         try {
             return empleadoBO.actualizarInformacionEmpleado(empleadoId, datosNuevosDTO);
-        } catch (ValidacionEmpleadoException | ActualizarEmpleadoException e) {
-            throw new ValidacionEmpleadoIdException(e.getMessage());
         } catch (PersistenciaException e) {
             throw new ActualizacionEmpleadoException("Error de persistencia al actualizar empleado: " + e.getMessage(), e);
         } catch (Exception e) {
@@ -335,12 +293,12 @@ public class ManejoEmpleados implements IManejoEmpleados {
     }
 
     @Override
-    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws ValidacionEmpleadoException, ActualizacionDeCargoException, ValidacionEmpleadoIdException {
+    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws ValidarEmpleadoException, ActualizacionDeCargoException, ValidacionEmpleadoIdException {
 
         validarEmpleadoID(empleadoIdString);
 
         if (nuevoCargo == null) {
-            throw new ValidacionEmpleadoException("El nuevo cargo no puede ser nulo.");
+            throw new ValidarEmpleadoException("El nuevo cargo no puede ser nulo.");
         }
         // El BO se encarga de verificar existencia y estado activo del empleado.
         try {

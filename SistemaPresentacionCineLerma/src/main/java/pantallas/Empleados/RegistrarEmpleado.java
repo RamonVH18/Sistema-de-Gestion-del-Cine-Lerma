@@ -13,6 +13,8 @@ import Excepciones.RegistrarNuevoEmpleadoException;
 import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 import entidades.Empleado;
 import enums.Cargo;
 import java.time.LocalDate;
@@ -27,14 +29,15 @@ import javax.swing.JOptionPane;
  */
 public class RegistrarEmpleado extends javax.swing.JFrame {
 
-    private IManejoEmpleados manejoEmpleados;
+    private IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form RegistrarEmpleado
      */
     public RegistrarEmpleado() {
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
+        
         initComponents();
+        this.control = ControlDeNavegacion.getInstancia();
         for (Cargo cargoEnum : Cargo.values()) {
             comboboxCargo.addItem(cargoEnum);
         }
@@ -446,13 +449,10 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
                 nombre, apellidoP, apellidoM, correoE, telefono,
                 fechaNacimiento, cargoSeleccionado, calle, colonia, numExt
         );
-        // El sueldo es asignado por el BO, no se pasa desde aquí.
-
-        // 4. Llamar al método de la capa de Manejo
+        
         try {
-            // La instancia 'manejoEmpleados' debe estar inicializada en el constructor de tu JFrame
-            // por ejemplo: this.manejoEmpleados = ManejoEmpleados.getInstance();
-            EmpleadoDTO empleadoRegistradoDTO = manejoEmpleados.registrarNuevoEmpleado(nuevoEmpleadoDTO);
+            
+            EmpleadoDTO empleadoRegistradoDTO = control.controlRegistrarNuevoEmpleado(nuevoEmpleadoDTO);
 
             // 5. Mostrar mensaje de éxito
             JOptionPane.showMessageDialog(this,
@@ -462,20 +462,15 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
             limpiarCampos();
 
-        } catch (ValidacionEmpleadoException vex) {
-            // Captura la ValidacionEmpleadoException lanzada por ManejoEmpleados.validarDatosEmpleadoDTO()
-            JOptionPane.showMessageDialog(this, "Error de validación: " + vex.getMessage(), "Datos Incorrectos", JOptionPane.ERROR_MESSAGE);
-        } catch (RegistrarNuevoEmpleadoException rnex) {
-            // Captura la RegistrarNuevoEmpleadoException lanzada por ManejoEmpleados
-            // Esta excepción envuelve errores del BO (validación, persistencia, etc.)
-            JOptionPane.showMessageDialog(this, "Error al registrar empleado: " + rnex.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
-            if (rnex.getCause() != null) {
-                System.err.println("Causa original del error de registro: " + rnex.getCause().getMessage());
-            }
-        } catch (Exception e) { // Captura genérica para cualquier otro imprevisto
+        }
+        // Captura la ValidacionEmpleadoException lanzada por ManejoEmpleados.validarDatosEmpleadoDTO()
+         catch (Exception e) { // Captura genérica para cualquier otro imprevisto
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
         }
+        // Captura la RegistrarNuevoEmpleadoException lanzada por ManejoEmpleados
+        // Esta excepción envuelve errores del BO (validación, persistencia, etc.)
+        
 
     }//GEN-LAST:event_btnAceptarActionPerformed
 

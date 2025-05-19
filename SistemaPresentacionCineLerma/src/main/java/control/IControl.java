@@ -10,6 +10,7 @@ import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
 import DTOs.CuentaMercadoDTO;
+import DTOs.EmpleadoDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
@@ -21,9 +22,11 @@ import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.PresentacionException;
+import enums.Cargo;
 import enums.EstadoSala;
 import enums.EstadoUsuario;
 import enums.Rol;
+import java.awt.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JFrame;
@@ -214,5 +217,50 @@ public interface IControl {
     
     public boolean eliminarPelicula(PeliculaDTO peliculaDTO);
     // -------------------------------FIN DE METODOS DE PELICULAS-------------------------
+    
+    public void mostrarMenuAdministrarEmpleados(JFrame frame);
+
+    public void mostrarRegistrarEmpleado(JFrame frameAnterior);
+
+     public void mostrarActualizarDatosEmpleado(JFrame frameAnterior, String empleadoId);
+     
+    public void mostrarDialogActualizarCargoDeEmpleado(JFrame frameAnterior, EmpleadoDTO empleadoActual);
+
+    public void iniciarFlujoActualizarCargo(JFrame framePadre);
+
+    public void mostrarFrameSueldoOpciones(JFrame frameAnterior);
+
+    public void mostrarActualizacionSueldoPorCargo(JFrame frameAnterior);
+
+    public void mostrarActualizarEmpleado(JFrame frameAnterior);
+
+    public void mostrarDespedirEmpleado(JFrame frameAnterior);
+
+   
+    public EmpleadoDTO solicitarSeleccionEmpleado(JFrame padreFrame);
+
+    // --- metodos admin empleados
+    public boolean procesarActualizacionSueldoIndividual(String empleadoId, double nuevoSueldo, Component parentComponent);
+
+    public EmpleadoDTO controlRegistrarNuevoEmpleado(EmpleadoDTO empleadoDTO);
+
+    public EmpleadoDTO controlActualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO);
+
+    public boolean controlDespedirEmpleado(String empleadoIdString);
+
+    public EmpleadoDTO consultarEmpleadoActivoPorId(String empleadoIdString);
+
+    public List<EmpleadoDTO> consultarTodosLosEmpleadosActivos();
+
+    public List<EmpleadoDTO> consultarEmpleadosActivosPorCargo(Cargo cargo);
+
+    public boolean controlActualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo);
+
+    public boolean controlActualizarSueldoEmpleadoIndividual(String empleadoIdString, double nuevoSueldo);
+
+    public long controlActualizarSueldoGeneralPorCargo(Cargo cargo, double nuevoSueldo);
+
+    public void iniciarFlujoActualizarSueldoIndividual(JFrame framePadreSueldoOpciones);
 
 }
+

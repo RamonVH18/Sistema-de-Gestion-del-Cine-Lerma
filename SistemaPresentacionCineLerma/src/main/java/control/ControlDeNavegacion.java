@@ -11,6 +11,7 @@ import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
 import DTOs.CuentaMercadoDTO;
+import DTOs.EmpleadoDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
@@ -21,6 +22,9 @@ import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
+import Excepciones.ActualizacionDeCargoException;
+import Excepciones.ActualizacionEmpleadoException;
+import Excepciones.ActualizacionSueldoException;
 import Excepciones.ActualizarUsuarioException;
 import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
@@ -29,6 +33,7 @@ import Excepciones.CargarHistorialException;
 import Excepciones.DarBajaPeliculaException;
 import Excepciones.DisponibilidadAsientosException;
 import Excepciones.EliminarPeliculaException;
+import Excepciones.Empleados.DespedirEmpleadoException;
 import Excepciones.EncontrarUsuarioException;
 import Excepciones.FuncionBoletosVendidosException;
 import Excepciones.FuncionCapacidadSalaException;
@@ -42,19 +47,28 @@ import Excepciones.PeliculasCargaException;
 import Excepciones.ValidarCuentaException;
 import Excepciones.GenerarBoletoException;
 import Excepciones.ModificarSalaException;
+import Excepciones.ObtenerEmpleadoException;
+import Excepciones.ObtenerEmpleadoPorCargoException;
 import Excepciones.PresentacionException;
+import Excepciones.RegistrarNuevoEmpleadoException;
 import Excepciones.RegistrarPeliculaException;
 import Excepciones.RegistrarUsuarioException;
 import Excepciones.ReservarAsientoFuncionException;
+import Excepciones.ValidacionEmpleadoIdException;
 import Excepciones.ValidacionSalaException;
 import Excepciones.ValidarCampoAsientoException;
+import Excepciones.ValidarEmpleadoException;
 import Excepciones.ValidarUsuarioException;
 import Excepciones.asientos.ErrorCargarAsientoException;
 import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
 import Excepciones.asientos.ErrorReservacionAsientoException;
 import Excepciones.usuarios.ObtenerUsuariosException;
+import Excepciones.validarActualizacionSueldoDeCargoException;
+import GestionEmpleados.IManejoEmpleados;
+import GestionEmpleados.ManejoEmpleados;
 import GestionFunciones.IManejoFunciones;
 import GestionFunciones.ManejoFunciones;
+import enums.Cargo;
 import enums.EstadoSala;
 import enums.EstadoUsuario;
 import enums.Rol;
@@ -70,6 +84,7 @@ import gestionSalasAsientos.ManejoDeAsientos;
 import gestionSalasAsientos.ManejoDeSalas;
 import gestionUsuarios.IManejoUsuarios;
 import gestionUsuarios.ManejoUsuarios;
+import java.awt.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -79,6 +94,15 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import pantallas.Empleados.ActualizarEmpleado;
+import pantallas.Empleados.ActualizarEmpleadoDatos;
+import pantallas.Empleados.DespedirEmpleados;
+import pantallas.Empleados.DialogActualizarCargoEmpleado;
+import pantallas.Empleados.DialogActualizarSueldoDeCargo;
+import pantallas.Empleados.DialogSeleccionarEmpleado;
+import pantallas.Empleados.MenuEmpleados;
+import pantallas.Empleados.RegistrarEmpleado;
+import pantallas.Empleados.SueldoOpciones;
 import pantallas.Funciones.ConsultarFunciones;
 import pantallas.Funciones.ProgramarFuncion;
 import pantallas.IniciarSesion;
@@ -120,6 +144,7 @@ public class ControlDeNavegacion implements IControl {
     private final IManejoFunciones gestionFunciones = ManejoFunciones.getInstanceDAO();
     private final IManejoPeliculas gestionPeliculas = ManejoPeliculas.getInstanceDAO();
     private final IManejoDeAsientos manejoDeAsientos = ManejoDeAsientos.getInstanceAsientos();
+    private final IManejoEmpleados gestionEmpleados = ManejoEmpleados.getInstance();
 
     //Variables que se usan para guardar la pelicula Selecciona y la funcion seleccionada
     private PeliculaDTO peliculaSeleccionada;
@@ -127,13 +152,13 @@ public class ControlDeNavegacion implements IControl {
     private UsuarioDTO usuarioActual;
     private AdministradorDTO administrador;
     private ClienteDTO cliente;
-    
+
     private final String titulo = "¡ERROR!";
-    
+
     private List<String> asientos;
-    
+
     private int numAsientos;
-    
+
     private static ControlDeNavegacion instancia;
 
     /**
@@ -154,29 +179,31 @@ public class ControlDeNavegacion implements IControl {
         }
         return instancia;
     }
-    
+
     @Override
     public UsuarioDTO obtenerUsuarioActual() {
         return usuarioActual;
     }
+
     @Override
     public AdministradorDTO obtenerAdministradorActual() {
         return administrador;
     }
+
     @Override
     public void guardarAdministradorActual(AdministradorDTO administrador) {
         this.administrador = administrador;
     }
+
     @Override
     public ClienteDTO obtenerClienteActual() {
         return cliente;
     }
+
     @Override
     public void guardarClienteActual(ClienteDTO cliente) {
         this.cliente = cliente;
     }
-    
-    
 
     /**
      * Este metodo sirve para regresar al menu Principal, se encontrara la forma
@@ -261,7 +288,7 @@ public class ControlDeNavegacion implements IControl {
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
         } else {
-            
+
         }
     }
 
@@ -274,7 +301,7 @@ public class ControlDeNavegacion implements IControl {
             DetalleDelBoleto pantallaDetalleDelBoleto = new DetalleDelBoleto();
             pantallaDetalleDelBoleto.setLocationRelativeTo(null);
             pantallaDetalleDelBoleto.setVisible(true);
-            
+
         });
     }
 
@@ -402,7 +429,7 @@ public class ControlDeNavegacion implements IControl {
                 String textoValidado = texto.trim();
                 numAsientos = Integer.parseInt(textoValidado);
                 manejoDeBoletos.validarDisponibilidaDeAsientos(numAsientos, funcion);
-                
+
                 return textoValidado;
             }
             return null;
@@ -546,7 +573,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void actualizarSaldoPaypal(PaypalDTO paypal, PagoDTO pago) {
         gestionDePagos.actualizarSaldoPaypal(paypal, pago);
-        
+
     }
 
     /**
@@ -643,7 +670,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void agregarSala(SalaNuevaDTO salaNueva) {
         try {
@@ -652,9 +679,9 @@ public class ControlDeNavegacion implements IControl {
         } catch (AgregarSalaException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }
-    
+
     @Override
     public Boolean validarCamposAgregarSala(String numSala, String numAsientos) {
         try {
@@ -665,7 +692,7 @@ public class ControlDeNavegacion implements IControl {
             return Boolean.FALSE;
         }
     }
-    
+
     @Override
     public void mostrarSeleccionarSala(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -675,10 +702,10 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public SalaViejaDTO consultarSala(String numSala) {
-        
+
         try {
             SalaViejaDTO sala = manejoDeSalas.cargarSalaUnica(numSala);
             return sala;
@@ -687,7 +714,7 @@ public class ControlDeNavegacion implements IControl {
         }
         return null;
     }
-    
+
     @Override
     public List<SalaViejaDTO> consultarSalas(String filtro, Boolean filtrarActivas) {
         try {
@@ -698,7 +725,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala) {
         SwingUtilities.invokeLater(() -> {
@@ -708,7 +735,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public Boolean modificarSala(String numSala, EstadoSala estadoSala) {
         try {
@@ -734,7 +761,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarConsultarFuncionesSalas(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -744,7 +771,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarConsultarAsientosReservados(JFrame frameAnterior, FuncionDTO funcionDTO) {
         SwingUtilities.invokeLater(() -> {
@@ -754,7 +781,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public List<AsientoFuncionDTO> agregarAsientoFuncion(FuncionDTO funcionSelecionada, SalaViejaDTO salaSelecionada) {
         try {
@@ -764,7 +791,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar) {
         try {
@@ -774,7 +801,7 @@ public class ControlDeNavegacion implements IControl {
             return false;
         }
     }
-    
+
     @Override
     public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) {
         try {
@@ -802,7 +829,7 @@ public class ControlDeNavegacion implements IControl {
             }
         });
     }
-    
+
     @Override
     public void mostrarProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula) {
         SwingUtilities.invokeLater(() -> {
@@ -811,10 +838,10 @@ public class ControlDeNavegacion implements IControl {
             pantalla.setVisible(true);
         });
     }
-    
+
     @Override
     public List<FuncionDTO> consultarFuncionesFiltradas(String textoFiltro) {
-        
+
         try {
             return gestionFunciones.buscarFuncionesFiltradas(textoFiltro);
         } catch (FuncionDatosIncorrectosException e) {
@@ -838,7 +865,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarAgregarPelicula(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -847,7 +874,7 @@ public class ControlDeNavegacion implements IControl {
             pantallaAgregarPelicula.setVisible(true);
         });
     }
-    
+
     @Override
     public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO) {
         SwingUtilities.invokeLater(() -> {
@@ -856,7 +883,7 @@ public class ControlDeNavegacion implements IControl {
             pantallaDetallesPelicula.setVisible(true);
         });
     }
-    
+
     @Override
     public void mostrarEditarPelicula(PeliculaDTO peliculaDTO) {
         SwingUtilities.invokeLater(() -> {
@@ -878,7 +905,7 @@ public class ControlDeNavegacion implements IControl {
             pantallaIniciarSecion.setVisible(true);
         });
     }
-    
+
     @Override
     public void mostrarGestionDeUsuarios(JFrame frameAnterior, AdministradorDTO admin) {
         SwingUtilities.invokeLater(() -> {
@@ -888,7 +915,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarEditarUsuario(JFrame frameAnterior, ClienteDTO cliente, ClienteDTO clienteAlMando) {
         SwingUtilities.invokeLater(() -> {
@@ -898,7 +925,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarMenuReportes(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -908,7 +935,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena) {
         try {
@@ -919,7 +946,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public void mostrarRegistrarUsuario(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -929,7 +956,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public void mostrarHistorialCliente(JFrame frameAnterior, ClienteDTO cliente) {
         SwingUtilities.invokeLater(() -> {
@@ -939,7 +966,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
-    
+
     @Override
     public List<UsuarioDTO> mostrarListaUsuarios() {
         try {
@@ -949,7 +976,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public List<ReporteUsuarioDTO> obtenerReporteUsuarios() {
         try {
@@ -959,7 +986,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public Boolean bloquearUsuario(UsuarioDTO usuario) {
         try {
@@ -969,7 +996,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public Boolean desbloquearUsuario(UsuarioDTO usuario) {
         try {
@@ -979,7 +1006,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre) {
         try {
@@ -989,7 +1016,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public ClienteDTO registrarCliente(ClienteDTO cliente) {
         try {
@@ -999,7 +1026,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public ClienteDTO actualizarCliente(ClienteDTO cliente) {
         try {
@@ -1009,7 +1036,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) {
         try {
@@ -1019,7 +1046,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) {
         try {
@@ -1029,7 +1056,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public AdministradorDTO registrarAdministrador(AdministradorDTO administrador) {
         try {
@@ -1039,7 +1066,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public AdministradorDTO obtenerAdministrador(String nombreUsuario, String contrasena) {
         try {
@@ -1066,7 +1093,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) {
         try {
@@ -1076,7 +1103,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) {
         try {
@@ -1086,7 +1113,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) {
         try {
@@ -1113,17 +1140,17 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
-    
+
     @Override
     public PeliculaDTO editarPelicula(PeliculaDTO peliculaDTO) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public boolean darBajaPelicula(PeliculaDTO peliculaDTO) {
         try {
@@ -1133,7 +1160,7 @@ public class ControlDeNavegacion implements IControl {
             return false;
         }
     }
-    
+
     @Override
     public boolean eliminarPelicula(PeliculaDTO peliculaDTO) {
         try {
@@ -1143,8 +1170,387 @@ public class ControlDeNavegacion implements IControl {
             return false;
         }
     }
+
     /*
     --------------FIN DE METODOS DE ADMINISTRAR PELICULAS--------------
      */
-    
+
+ /*
+    --------------INICIO DE METODOS DE ADMINISTRAR EMPLEADOS --------------
+     */
+    @Override
+    public void mostrarMenuAdministrarEmpleados(JFrame frameAnterior) {
+
+        SwingUtilities.invokeLater(() -> {
+
+            MenuEmpleados pantallaMenu = new MenuEmpleados();
+            pantallaMenu.setLocationRelativeTo(null);
+            pantallaMenu.setVisible(true);
+
+            if (frameAnterior != null) {
+                frameAnterior.dispose();
+            }
+            System.out.println("Mostrando Menu Administrador de empleados");
+        });
+    }
+
+    @Override
+    public void mostrarRegistrarEmpleado(JFrame frameAnterior) {
+
+        SwingUtilities.invokeLater(() -> {
+
+            RegistrarEmpleado pantallaRegistrar = new RegistrarEmpleado();
+            pantallaRegistrar.setLocationRelativeTo(null);
+            pantallaRegistrar.setVisible(true);
+
+            if (frameAnterior != null) {
+                frameAnterior.dispose();
+            }
+        });
+    }
+
+    @Override
+    public void mostrarActualizarDatosEmpleado(JFrame frameAnterior, String empleadoId) {
+
+        SwingUtilities.invokeLater(() -> {
+            try {
+                // CHECAR ESTO DE LA EXCEPCIONES
+                ActualizarEmpleadoDatos pantallaActualizarDatos = new ActualizarEmpleadoDatos(empleadoId);
+                pantallaActualizarDatos.setLocationRelativeTo(null);
+                pantallaActualizarDatos.setVisible(true);
+
+                if (frameAnterior != null) {
+                    frameAnterior.dispose();
+                }
+            } catch (ValidarEmpleadoException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ObtenerEmpleadoException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ValidacionEmpleadoIdException ex) {
+                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
+
+    @Override
+    public void mostrarDialogActualizarCargoDeEmpleado(JFrame frameAnterior, EmpleadoDTO empleadoActual) {
+
+        // ponemos el dialog con el frame dandole frame padre,el dto
+        DialogActualizarCargoEmpleado dialogoCargo = new DialogActualizarCargoEmpleado(frameAnterior, true, empleadoActual);
+        dialogoCargo.setVisible(true);
+
+    }
+
+    @Override
+    public void iniciarFlujoActualizarCargo(JFrame framePadre) {
+        SwingUtilities.invokeLater(() -> {
+
+            EmpleadoDTO empleado = solicitarSeleccionEmpleado(framePadre); // Llama al metodo de seleccion
+
+            if (empleado != null) {
+                // El usuario seleccionó un empleado, ahora muestra el dialog para actualizar el cargo
+                mostrarDialogActualizarCargoDeEmpleado(framePadre, empleado);
+            }
+            // Si empleado es null, el usuario cancelo, no se hace nada más en este flujo.
+        });
+    }
+
+    @Override
+    public EmpleadoDTO solicitarSeleccionEmpleado(JFrame padreFrame) {
+
+        DialogSeleccionarEmpleado dialogoSeleccion = new DialogSeleccionarEmpleado(padreFrame, true); // true para modal
+        dialogoSeleccion.setLocationRelativeTo(padreFrame); // Centrar
+        dialogoSeleccion.setVisible(true); // Esta línea bloquea hasta que el diálogo se cierre
+
+        // despues de que el dialog se cierra, obtenemos el empleado seleccionado
+        return dialogoSeleccion.getEmpleadoSeleccionado(); // Necesitas este método en tu DialogSeleccionarEmpleado
+    }
+
+    @Override
+    public void mostrarFrameSueldoOpciones(JFrame frameAnterior) {
+
+        // esto abre el frame de las 2 opciones de actualizacion de sueldo
+        // el individual se selecciona y mediante un JOptionPane se actualiza pero con el de cargo si tiene un dialog
+        SwingUtilities.invokeLater(() -> {
+
+            SueldoOpciones pantallaOpcionesSueldo = new SueldoOpciones();
+            pantallaOpcionesSueldo.setLocationRelativeTo(null);
+            pantallaOpcionesSueldo.setVisible(true);
+
+            if (frameAnterior != null) {
+                frameAnterior.dispose();
+            }
+        });
+    }
+
+    @Override
+    public void mostrarActualizacionSueldoPorCargo(JFrame frameAnterior) {
+
+        SwingUtilities.invokeLater(() -> {
+
+            DialogActualizarSueldoDeCargo dialogActSueldoPorCargo = new DialogActualizarSueldoDeCargo(frameAnterior, true);
+            dialogActSueldoPorCargo.setLocationRelativeTo(null);
+            dialogActSueldoPorCargo.setVisible(true);
+
+            if (frameAnterior != null) {
+                frameAnterior.dispose();
+            }
+        });
+
+    }
+
+    @Override
+    public boolean procesarActualizacionSueldoIndividual(String empleadoId, double nuevoSueldo, Component parentComponent) {
+        try {
+
+            if (nuevoSueldo <= 0) {
+                JOptionPane.showMessageDialog(parentComponent, "El nuevo sueldo debe ser un valor positivo.", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            if (nuevoSueldo < 1000 || nuevoSueldo > 200000) { // Rango de tu EmpleadoBO
+                JOptionPane.showMessageDialog(parentComponent, "El sueldo está fuera de los rangos permitidos (1,000 - 200,000).", "Error de Validación", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+
+            boolean exito = gestionEmpleados.actualizarSueldoEmpleadoIndividual(empleadoId, nuevoSueldo);
+            if (exito) {
+                JOptionPane.showMessageDialog(parentComponent, "Sueldo del empleado actualizado exitosamente.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+
+                JOptionPane.showMessageDialog(parentComponent, "No se pudo actualizar el sueldo.", titulo, JOptionPane.ERROR_MESSAGE);
+            }
+            return exito;
+        } catch (ActualizacionSueldoException | ValidarEmpleadoException | ValidacionEmpleadoIdException e) {
+            JOptionPane.showMessageDialog(parentComponent, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(parentComponent, "Error inesperado al actualizar sueldo: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // inicialmente esto era un JOptionPane que en el mismo frame se actualizaba, por lo que lo movi aca
+    @Override
+    public void iniciarFlujoActualizarSueldoIndividual(JFrame framePadreSueldoOpciones) {
+
+        SwingUtilities.invokeLater(() -> {
+            EmpleadoDTO empleado = solicitarSeleccionEmpleado(framePadreSueldoOpciones); // Llama al metodo de seleccion
+
+            if (empleado != null) {
+                String nuevoSueldoStr = JOptionPane.showInputDialog(
+                        framePadreSueldoOpciones,
+                        "Ingrese el nuevo sueldo para " + empleado.getNombre() + empleado.getApellidoP() + ":",
+                        "Actualizar Sueldo Individual",
+                        JOptionPane.PLAIN_MESSAGE
+                );
+
+                if (nuevoSueldoStr != null && !nuevoSueldoStr.trim().isEmpty()) {
+                    try {
+                        double nuevoSueldoDouble = Double.parseDouble(nuevoSueldoStr.trim());
+
+                        boolean exito = procesarActualizacionSueldoIndividual(empleado.getId(), nuevoSueldoDouble, framePadreSueldoOpciones);
+
+                        if (exito) {
+
+                        }
+                    } catch (Exception nfe) {
+                        JOptionPane.showMessageDialog(
+                                framePadreSueldoOpciones,
+                                "El sueldo ingresado no es un número válido.",
+                                "Error de Formato",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void mostrarActualizarEmpleado(JFrame frameAnterior) {
+
+        SwingUtilities.invokeLater(() -> {
+
+            ActualizarEmpleado pantallaActualizarEmpleado = new ActualizarEmpleado();
+            pantallaActualizarEmpleado.setLocationRelativeTo(null);
+            pantallaActualizarEmpleado.setVisible(true);
+
+            if (frameAnterior != null) {
+                frameAnterior.dispose();
+            }
+        });
+
+    }
+
+    @Override
+    public void mostrarDespedirEmpleado(JFrame frameAnterior) {
+
+        SwingUtilities.invokeLater(() -> {
+
+            DespedirEmpleados pantallaDespedirmpleado = new DespedirEmpleados();
+            pantallaDespedirmpleado.setLocationRelativeTo(null);
+            pantallaDespedirmpleado.setVisible(true);
+
+            if (frameAnterior != null) {
+                frameAnterior.dispose();
+            }
+        });
+
+    }
+
+
+    // ------------------ METODOS DE ADMINISTRACION EMPLEADO DE OPERACIONES
+    @Override
+    public EmpleadoDTO controlRegistrarNuevoEmpleado(EmpleadoDTO empleadoDTO) {
+        try {
+            return gestionEmpleados.registrarNuevoEmpleado(empleadoDTO);
+        } catch (ValidarEmpleadoException vex) {
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
+        } catch (RegistrarNuevoEmpleadoException opex) {
+            JOptionPane.showMessageDialog(null, "Error en la operación de registro: " + opex.getMessage(), "Error de Registro (Empleados)", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original: " + opex.getCause().getMessage());
+            }
+        } catch (Exception e) { // Captura genérica final
+            JOptionPane.showMessageDialog(null, "Error inesperado al registrar empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return null; // Devuelve null si hubo error
+    }
+
+    @Override
+    public EmpleadoDTO controlActualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) {
+        try {
+            return gestionEmpleados.actualizarInformacionEmpleado(empleadoId, datosNuevosDTO);
+        } catch (ValidarEmpleadoException vex) {
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
+        } catch (ActualizacionEmpleadoException opex) {
+            JOptionPane.showMessageDialog(null, "Error en la operación de actualización: " + opex.getMessage(), "Error de Actualización (Empleados)", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original: " + opex.getCause().getMessage());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean controlDespedirEmpleado(String empleadoIdString) {
+        try {
+            return gestionEmpleados.despedirEmpleado(empleadoIdString);
+        } catch (ValidacionEmpleadoIdException vex) {
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
+        } catch (DespedirEmpleadoException opex) {
+            JOptionPane.showMessageDialog(null, "Error en la operación de despido: " + opex.getMessage(), "Error de Despido (Empleados)", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original: " + opex.getCause().getMessage());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado al despedir empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return false; // Devuelve false si hubo error
+    }
+
+    @Override
+    public EmpleadoDTO consultarEmpleadoActivoPorId(String empleadoIdString) {
+        try {
+            return gestionEmpleados.buscarEmpleadoActivoPorId(empleadoIdString);
+        } catch (ValidacionEmpleadoIdException vex) {
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
+        } catch (ObtenerEmpleadoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al buscar empleado: " + opex.getMessage(), "Error de Búsqueda (Empleados)", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original: " + opex.getCause().getMessage());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado al buscar empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<EmpleadoDTO> consultarTodosLosEmpleadosActivos() {
+        try {
+            return gestionEmpleados.obtenerTodosLosEmpleadosActivos();
+        } catch (ObtenerEmpleadoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al obtener lista de empleados: " + opex.getMessage(), "Error de Consulta (Empleados)", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original: " + opex.getCause().getMessage());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado al obtener empleados: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return new ArrayList<>(); // Devuelve lista vacía en caso de error
+    }
+
+    @Override
+    public List<EmpleadoDTO> consultarEmpleadosActivosPorCargo(Cargo cargo) {
+        try {
+            return gestionEmpleados.obtenerEmpleadosActivosPorCargo(cargo);
+        } catch (ObtenerEmpleadoPorCargoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al obtener empleados por cargo: " + opex.getMessage(), "Error de Consulta (Empleados)", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original: " + opex.getCause().getMessage());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado al obtener empleados por cargo: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public boolean controlActualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) {
+        try {
+            return gestionEmpleados.actualizarCargoEmpleado(empleadoIdString, nuevoCargo);
+        } catch (ValidarEmpleadoException vex) {
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
+        } catch (ActualizacionDeCargoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar cargo: " + opex.getMessage(), "Error de Actualización (Empleados)", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original: " + opex.getCause().getMessage());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar cargo: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean controlActualizarSueldoEmpleadoIndividual(String empleadoIdString, double nuevoSueldo) {
+        try {
+            return gestionEmpleados.actualizarSueldoEmpleadoIndividual(empleadoIdString, nuevoSueldo);
+        } catch (ValidarEmpleadoException vex) {
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
+        } catch (ActualizacionSueldoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar sueldo: " + opex.getMessage(), "Error de Actualización (Empleados)", JOptionPane.ERROR_MESSAGE);
+            if (opex.getCause() != null) {
+                System.err.println("Causa original: " + opex.getCause().getMessage());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar sueldo: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public long controlActualizarSueldoGeneralPorCargo(Cargo cargo, double nuevoSueldo) {
+        try {
+            return gestionEmpleados.actualizarSueldoGeneralPorCargo(cargo, nuevoSueldo);
+        } catch (validarActualizacionSueldoDeCargoException vex) {
+            JOptionPane.showMessageDialog(null, vex.getMessage(), titulo, JOptionPane.WARNING_MESSAGE);
+        }
+        return -1; // Devuelve un valor que indique error, ya que el original devuelve long
+    }
+
+
 }

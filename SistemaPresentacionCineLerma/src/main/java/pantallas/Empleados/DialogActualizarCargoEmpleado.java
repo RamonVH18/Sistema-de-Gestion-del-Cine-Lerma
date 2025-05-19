@@ -13,6 +13,8 @@ import Excepciones.PersistenciaException;
 import Excepciones.ValidacionEmpleadoIdException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 import enums.Cargo;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -26,7 +28,7 @@ import org.bson.types.ObjectId;
  */
 public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
 
-    private IManejoEmpleados manejoEmpleados;
+    private IControl control = ControlDeNavegacion.getInstancia();
     private String empleadoIdActualizar;
     private EmpleadoDTO empleadoActualDTO;
 
@@ -35,7 +37,7 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
      */
     public DialogActualizarCargoEmpleado(java.awt.Frame parent, boolean modal, EmpleadoDTO empleadoAActualizar) {
         super(parent, modal);
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
+      
         this.empleadoActualDTO = empleadoAActualizar;
 
         if (empleadoAActualizar == null || empleadoAActualizar.getId() == null) {
@@ -210,32 +212,11 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
                 JOptionPane.QUESTION_MESSAGE);
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-            try {
-                // Llamar al método de ManejoEmpleados
-                boolean exito = manejoEmpleados.actualizarCargoEmpleado(this.empleadoIdActualizar, nuevoCargoSeleccionado);
+           
+                // Llamar al metodo de Control
+                boolean exito = control.controlActualizarCargoEmpleado(this.empleadoIdActualizar, nuevoCargoSeleccionado);
 
-                if (exito) {
-                    JOptionPane.showMessageDialog(this, "El cargo del empleado ha sido actualizado exitosamente.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-                    // Aquí podrías tener una forma de notificar a la ventana anterior que hubo un cambio
-                    // por ejemplo, si este diálogo tiene un método como `public boolean seActualizoConExito()`
-                    // this.actualizacionExitosa = true; // Variable de instancia del diálogo
-                    this.dispose(); // Cierra este diálogo
-                } else {
-                    // Si el método de ManejoEmpleados devuelve false sin lanzar excepción
-                    // (aunque usualmente es mejor lanzar excepción para fallos).
-                    JOptionPane.showMessageDialog(this, "No se pudo actualizar el cargo del empleado (la operación no indicó error pero no tuvo éxito).", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (ValidacionEmpleadoIdException vex) { // Excepción de la capa de Manejo
-                JOptionPane.showMessageDialog(this, "Error de validación: " + vex.getMessage(), "Error en Actualización", JOptionPane.ERROR_MESSAGE);
-            } catch (ActualizacionDeCargoException opex) { // Excepción de la capa de Manejo
-                JOptionPane.showMessageDialog(this, "Error en la operación: " + opex.getMessage(), "Error en Actualización", JOptionPane.ERROR_MESSAGE);
-                if (opex.getCause() != null) {
-                    System.err.println("Causa original (Actualizar Cargo): " + opex.getCause().getMessage());
-                }
-            } catch (Exception e) { // Captura genérica para cualquier otro imprevisto
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 

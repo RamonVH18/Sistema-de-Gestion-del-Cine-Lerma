@@ -12,6 +12,8 @@ import Excepciones.PersistenciaException;
 import Excepciones.validarActualizacionSueldoDeCargoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 import enums.Cargo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,14 +27,14 @@ import org.bson.types.ObjectId;
  */
 public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
 
-    private IManejoEmpleados manejoEmpleados;
+   private IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form DialogActualizarSueldoDeCargo
      */
     public DialogActualizarSueldoDeCargo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
+       
         initComponents();
         configurarDialog();
         poblarComboboxCargo();
@@ -184,7 +186,7 @@ public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
         Cargo cargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem(); // Asumiendo que tu JComboBox se llama así
         String nuevoSueldoStr = txtNuevoSueldo.getText().trim(); // Asumiendo que tu JTextField se llama así
 
-        // validaciones, si cargo esta vacio
+        // validaciones simples, si cargo esta vacio
         if (cargoSeleccionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un cargo.", "Error de Selección", JOptionPane.ERROR_MESSAGE);
             return;
@@ -215,33 +217,7 @@ public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
             return; // El usuario canceló
         }
 
-        try {
-
-            long empleadosActualizados = this.manejoEmpleados.actualizarSueldoGeneralPorCargo(cargoSeleccionado, nuevoSueldo);
-
-            // eeee
-            // notificamos los empleaods que fueron actualizados
-            if (empleadosActualizados > 0) {
-                JOptionPane.showMessageDialog(this,
-                        empleadosActualizados + " empleado(s) activo(s) con el cargo '" + cargoSeleccionado.toString()
-                        + "' ha(n) sido actualizado(s) al nuevo sueldo.",
-                        "Operación Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "No se actualizó ningún empleado. Verifique si existen empleados activos con el cargo '"
-                        + cargoSeleccionado.toString() + "' o si el sueldo ya era el mismo.",
-                        "Operación Completada", JOptionPane.INFORMATION_MESSAGE);
-            }
-            
-            this.dispose(); // Cerrar el diálogo
-
-        // CAMIBAR LUEGO 
-        } catch (Exception e) { 
-            JOptionPane.showMessageDialog(this,
-                    "Ocurrió un error: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace(); // Es bueno loggear esto en la consola de desarrollo
-        }
+        control.controlActualizarSueldoGeneralPorCargo(cargoSeleccionado, nuevoSueldo);
 
 
     }//GEN-LAST:event_btnAceptarActionPerformed

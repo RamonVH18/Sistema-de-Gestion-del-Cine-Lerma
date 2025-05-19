@@ -8,6 +8,8 @@ import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,7 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class DialogSeleccionarEmpleado extends javax.swing.JDialog {
     
-    private IManejoEmpleados manejoEmpleados;
+    private IControl control = ControlDeNavegacion.getInstancia();
     private ListaEmpleados listaEmpleados;
     private EmpleadoDTO empleadoSeleccionado = null;
 
@@ -25,7 +27,7 @@ public class DialogSeleccionarEmpleado extends javax.swing.JDialog {
      */
     public DialogSeleccionarEmpleado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
+       
         initComponents();
         this.listaEmpleados = new ListaEmpleados();
         scrollPanela.setViewportView(this.listaEmpleados);

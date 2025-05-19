@@ -26,9 +26,9 @@ import java.util.List;
  */
 public interface IManejoEmpleados {
 
-    public EmpleadoDTO registrarNuevoEmpleado(EmpleadoDTO empleadoDTO) throws ValidacionEmpleadoException, RegistrarNuevoEmpleadoException, PersistenciaException;
+    public EmpleadoDTO registrarNuevoEmpleado(EmpleadoDTO empleadoDTO) throws ValidarEmpleadoException, RegistrarNuevoEmpleadoException;
 
-    public EmpleadoDTO actualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoIdException, ActualizacionEmpleadoException, ValidacionEmpleadoException;
+    public EmpleadoDTO actualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoIdException, ActualizacionEmpleadoException, ValidarEmpleadoException;
 
     public boolean despedirEmpleado(String empleadoIdString) throws DespedirEmpleadoException, ValidarEmpleadoException, ValidacionEmpleadoIdException;
 
@@ -36,7 +36,7 @@ public interface IManejoEmpleados {
 
     public List<EmpleadoDTO> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws ValidacionEmpleadoIdException, ObtenerEmpleadoPorCargoException;
     
-    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws ValidacionEmpleadoException, ActualizacionDeCargoException, ValidacionEmpleadoIdException;
+    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws ValidarEmpleadoException, ActualizacionDeCargoException, ValidacionEmpleadoIdException;
     
     public boolean actualizarSueldoEmpleadoIndividual(String empleadoIdString, double nuevoSueldo) throws ValidarEmpleadoException, ActualizacionSueldoException, ValidacionEmpleadoIdException;
     

@@ -12,6 +12,8 @@ import Excepciones.ValidacionEmpleadoIdException;
 import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
+import control.ControlDeNavegacion;
+import control.IControl;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -23,14 +25,14 @@ import pantallas.Empleados.DialogSeleccionarEmpleado;
  */
 
 public class SueldoOpciones extends javax.swing.JFrame {
-    private IManejoEmpleados manejoEmpleados;
+    private IControl control = ControlDeNavegacion.getInstancia();
 
     /**
      * Creates new form SueldoOpciones
      */
     public SueldoOpciones() {
-        this.manejoEmpleados = ManejoEmpleados.getInstance();
         initComponents();
+        this.control = ControlDeNavegacion.getInstancia();
     }
 
     /**
@@ -121,68 +123,13 @@ public class SueldoOpciones extends javax.swing.JFrame {
     private void btnPorCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorCargoActionPerformed
         
         // cargamos el dialog de ActualizarSueldoDeCargo 
-       DialogActualizarSueldoDeCargo dialog = new DialogActualizarSueldoDeCargo(this, true);
-       dialog.setVisible(true);
+       control.mostrarActualizacionSueldoPorCargo(this);
         
     }//GEN-LAST:event_btnPorCargoActionPerformed
 
     private void btnPorEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorEmpleadoActionPerformed
 
-        // vamos a cargar el dialog de seleccion de empleados para seleccionar el empleado a actualizar
-        DialogSeleccionarEmpleado dialogoSeleccion = new DialogSeleccionarEmpleado(this, true);
-
-        dialogoSeleccion.setVisible(true); // Esto bloquea hasta que el diálogo se cierre
-
-        // Despues de que el diálogo se cierra (por Aceptar o Cancelar):
-        EmpleadoDTO empleadoElegido = dialogoSeleccion.getEmpleadoSeleccionado();
-
-        if (empleadoElegido != null) { // si el empleado es nulo, fue porque ya hay un empleado seleccionado
-            // ahora se llama al JOptionPane con showInputDialog y actualizamos el sueldo con el BO
-            
-            
-            String mensajeDialogo = String.format("Empleado: %s %s\nSueldo Actual: $%.2f\n\nIngrese el nuevo sueldo:",
-                    empleadoElegido.getNombre(), empleadoElegido.getApellidoP(), empleadoElegido.getSueldo());
-            String nuevoSueldoStr = JOptionPane.showInputDialog(this, mensajeDialogo, "Actualizar Sueldo Individual", JOptionPane.PLAIN_MESSAGE);
-            
-            // validacion si es nulo o vacio
-            if (nuevoSueldoStr != null && !nuevoSueldoStr.trim().isEmpty()) {
-                try {
-                    double nuevoSueldo = Double.parseDouble(nuevoSueldoStr.trim());
-                    // validaciones, por mientras que nomas sea mayor a 0 ahi luego le pongo mas no se
-                    if (nuevoSueldo <= 0 ) {
-                        JOptionPane.showMessageDialog(this, "Monto de sueldo inválido.", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    // sale la confirmacion en un JOPtionPane
-                    int confirm = JOptionPane.showConfirmDialog(this,
-                            String.format("¿Desea actualizar el sueldo de %s %s a $%.2f?",
-                                    empleadoElegido.getNombre(), empleadoElegido.getApellidoP(), nuevoSueldo),
-                            "Confirmar Nuevo Sueldo", JOptionPane.YES_NO_OPTION);
-
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        boolean exito = manejoEmpleados.actualizarSueldoEmpleadoIndividual(empleadoElegido.getId(), nuevoSueldo);
-                        if (exito) {
-                            JOptionPane.showMessageDialog(this, "Sueldo actualizado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            // Aquí no necesitas actualizar la tabla del DialogSeleccionarEmpleado porque ya se cerró.
-                            // Si el FrameSueldoOpciones tuviera alguna tabla que mostrar, la actualizarías.
-                        } else {
-                            JOptionPane.showMessageDialog(this, "No se pudo actualizar el sueldo.", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Por favor, ingrese un valor numérico para el sueldo.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-                } catch (ValidarEmpleadoException ex) {
-                    Logger.getLogger(SueldoOpciones.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ActualizacionSueldoException ex) {
-                    Logger.getLogger(SueldoOpciones.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ValidacionEmpleadoIdException ex) {
-                    Logger.getLogger(SueldoOpciones.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        } else {
-            // El usuario cerró el diálogo de selección o presionó Cancelar
-            System.out.println("Selección de empleado cancelada.");
-        }
+        control.iniciarFlujoActualizarSueldoIndividual(this);
     
     }//GEN-LAST:event_btnPorEmpleadoActionPerformed
 
