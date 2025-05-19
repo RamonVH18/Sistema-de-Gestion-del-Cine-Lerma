@@ -7,33 +7,28 @@ package pruebas;
 import DAOs.AsientoFuncionDAO;
 import DAOs.FuncionDAO;
 import DAOs.SalaDAO;
+import DTOs.GananciaSalaDTO;
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
 import Excepciones.Funciones.FuncionSalaOcupadaException;
 import Excepciones.salas.BuscarSalaException;
+import Excepciones.salas.ErrorCalculoEstadisticasSalaException;
 import Interfaces.IAsientoFuncionDAO;
 import Interfaces.IFuncionDAO;
 import Interfaces.ISalaDAO;
-import entidades.Asiento;
-import entidades.AsientoFuncion;
-import entidades.Funcion;
-import entidades.Pelicula;
-import entidades.Sala;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Ramon Valencia
  */
 public class pruebasAsientoFuncionDAO {
-    private static IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO();
-    private static ISalaDAO salaDAO = SalaDAO.getInstanceDAO(); 
-    private static IAsientoFuncionDAO asientoFuncionDAO = AsientoFuncionDAO.getInstanceDAO();
+    private static final IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO();
+    private static final ISalaDAO salaDAO = SalaDAO.getInstanceDAO(); 
+    private static final IAsientoFuncionDAO asientoFuncionDAO = AsientoFuncionDAO.getInstanceDAO();
     
-    public static void main(String[] args) throws BuscarSalaException, FuncionSalaOcupadaException, FalloCreacionAsientosFuncionException {
+    public static void main(String[] args) throws BuscarSalaException, FuncionSalaOcupadaException, FalloCreacionAsientosFuncionException, ErrorCalculoEstadisticasSalaException {
+        
+        List<GananciaSalaDTO> asientos = asientoFuncionDAO.obtenerEstadisticasDeSalas();
         
 //            Sala sala = salaDAO.buscarSala("C1");
 //            Pelicula pelicula = new Pelicula("Cholos Empotrados", "Jaime", "Trans", 120, "El Abraham es gay", Boolean.TRUE);
