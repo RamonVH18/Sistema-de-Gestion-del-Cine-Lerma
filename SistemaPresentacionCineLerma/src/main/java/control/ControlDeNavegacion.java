@@ -30,13 +30,13 @@ import Excepciones.DarAltaPeliculaException;
 import Excepciones.DarBajaPeliculaException;
 import Excepciones.DisponibilidadAsientosException;
 import Excepciones.EliminarPeliculaException;
-import Excepciones.Empleados.DespedirEmpleadoException;
 import Excepciones.EncontrarUsuarioException;
 import Excepciones.FuncionBoletosVendidosException;
 import Excepciones.FuncionCapacidadSalaException;
 import Excepciones.FuncionCargaException;
 import Excepciones.FuncionDatosIncorrectosException;
 import Excepciones.FuncionDuracionException;
+import Excepciones.FuncionFechaFuturaException;
 import Excepciones.FuncionSolapamientoSalaException;
 import Excepciones.GestionReservaException;
 import Excepciones.PagoException;
@@ -89,7 +89,6 @@ import gestionSalasAsientos.ManejoDeSalas;
 import gestionUsuarios.IManejoUsuarios;
 import gestionUsuarios.ManejoUsuarios;
 import java.awt.Component;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -795,6 +794,7 @@ public class ControlDeNavegacion implements IControl {
             return null;
         }
     }
+
     @Override
     public void eliminarAsientoFuncion(String idFuncion) {
         try {
@@ -830,6 +830,13 @@ public class ControlDeNavegacion implements IControl {
  /*
     --------------INICIO DE LOS METODOS DEL CONTROL DE NAVEGACION DE FUNCIONES--------------
      */
+    /**
+     * Muestra la pantalla para consultar funciones de una pelicula especifica.
+     *
+     * @param frameAnterior JFrame anterior que se cerrara al abrir esta
+     * pantalla.
+     * @param nombrePelicula Nombre de la pelicula para filtrar las funciones.
+     */
     @Override
     public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula) {
         SwingUtilities.invokeLater(() -> {
@@ -842,6 +849,13 @@ public class ControlDeNavegacion implements IControl {
         });
     }
 
+    /**
+     * Muestra la pantalla para programar una nueva funcion de una pelicula
+     * especifica.
+     *
+     * @param frameAnterior JFrame anterior desde el que se invoca esta accion.
+     * @param nombrePelicula Nombre de la película asociada a la nueva funcion.
+     */
     @Override
     public void mostrarProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula) {
         SwingUtilities.invokeLater(() -> {
@@ -1096,6 +1110,13 @@ public class ControlDeNavegacion implements IControl {
  /*
     --------------METODOS DE FUNCION--------------
      */
+    /**
+     * Registra una nueva funcion en el sistema.
+     *
+     * @param funcionDTO Objeto que contiene los datos de la funcion a
+     * registrar.
+     * @return FuncionDTO registrada, con informacion actualizada
+     */
     @Override
     public FuncionDTO registrarFuncion(FuncionDTO funcionDTO) {
         try {
@@ -1106,6 +1127,12 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Elimina una funcion existente si no tiene boletos vendidos.
+     *
+     * @param funcionDTO Objeto que representa la funcion a eliminar.
+     * @return true si la eliminación fue exitosa, false en caso contrario.
+     */
     @Override
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) {
         try {
@@ -1116,16 +1143,47 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Busca funciones asociadas a una pelicula por su nombre.
+     *
+     * @param nombrePelicula Nombre de la película para filtrar las funciones.
+     * @return Lista de FuncionDTO que coinciden con el nombre de la pelicula.
+     */
     @Override
-    public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) {
+    public List<FuncionDTO> buscarFuncionesPorPelicula(String nombrePelicula) {
         try {
-            return gestionFunciones.buscarFunciones(nombrePelicula, null);
-        } catch (FuncionDatosIncorrectosException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            return null;
+            return gestionFunciones.buscarFuncionesPorPelicula(nombrePelicula);
+        } catch (FuncionDatosIncorrectosException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar por pelicula: " + e.getMessage(),
+                    titulo, JOptionPane.ERROR_MESSAGE);
+            return new ArrayList<>();
         }
     }
 
+    /**
+     * Busca funciones por fecha y hora, validando que la fecha sea futura.
+     *
+     * @param fechaHora Fecha y hora para filtrar las funciones.
+     * @return Lista de FuncionDTO que coinciden con la fecha proporcionada.
+     */
+    @Override
+    public List<FuncionDTO> buscarFuncionesPorFecha(LocalDateTime fechaHora) {
+        try {
+            return gestionFunciones.buscarFuncionesPorFecha(fechaHora);
+        } catch (FuncionDatosIncorrectosException | FuncionFechaFuturaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error la fecha es incorrecta", JOptionPane.ERROR_MESSAGE);
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Calcula la hora de término de una funcion basada en su duracion y hora de
+     * inicio.
+     *
+     * @param idFuncion ID unico de la funcion (formato MongoDB ObjectId
+     * válido).
+     * @return LocalDateTime con la hora estimada de termino.
+     */
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) {
         try {
@@ -1427,9 +1485,8 @@ public class ControlDeNavegacion implements IControl {
 
     }
 
-
     // ------------------ METODOS DE ADMINISTRACION EMPLEADO DE OPERACIONES
-   @Override
+    @Override
     public EmpleadoDTO controlRegistrarNuevoEmpleado(EmpleadoDTO empleadoDTO) {
         try {
             return gestionEmpleados.registrarNuevoEmpleado(empleadoDTO);
@@ -1476,8 +1533,7 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, vexId.getMessage(), "Error de ID de Empleado (Despido)", JOptionPane.WARNING_MESSAGE);
         } catch (ManejoValidarEmpleadoException vexVal) { // Si `despedirEmpleado` en Manejo lanzara esta por otras razones.
             JOptionPane.showMessageDialog(null, vexVal.getMessage(), "Error de Validación (Despido)", JOptionPane.WARNING_MESSAGE);
-        }
-        catch (ManejoDespedirEmpleadoException opex) { // Excepción específica de la operación de despido
+        } catch (ManejoDespedirEmpleadoException opex) { // Excepción específica de la operación de despido
             JOptionPane.showMessageDialog(null, "Error en la operación de despido: " + opex.getMessage(), "Error de Despido", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
                 System.err.println("Causa original (Despido): " + opex.getCause().getMessage());
@@ -1529,8 +1585,7 @@ public class ControlDeNavegacion implements IControl {
             return gestionEmpleados.obtenerEmpleadosActivosPorCargo(cargo);
         } catch (ManejoValidarEmpleadoException vex) { // Si la validación del cargo (null) se hace en Manejo y lanza esta.
             JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Consulta por Cargo)", JOptionPane.WARNING_MESSAGE);
-        }
-        catch (ManejoObtenerEmpleadoPorCargoException opex) {
+        } catch (ManejoObtenerEmpleadoPorCargoException opex) {
             JOptionPane.showMessageDialog(null, "Error al obtener empleados por cargo: " + opex.getMessage(), "Error de Consulta por Cargo", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
                 System.err.println("Causa original (Por Cargo): " + opex.getCause().getMessage());
@@ -1590,14 +1645,14 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, vexVal.getMessage(), "Error de Validación (Sueldo por Cargo)", JOptionPane.WARNING_MESSAGE);
         } catch (ManejoValidarActualizacionSueldoDeCargoException vex) { // Específica para esta operación
             JOptionPane.showMessageDialog(null, vex.getMessage(), "Error en Actualización de Sueldo por Cargo", JOptionPane.ERROR_MESSAGE);
-             if (vex.getCause() != null) {
+            if (vex.getCause() != null) {
                 System.err.println("Causa original (Sueldo por Cargo): " + vex.getCause().getMessage());
             }
         } catch (Exception e) {
-             JOptionPane.showMessageDialog(null, "Error inesperado al actualizar sueldo por cargo: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar sueldo por cargo: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return -1; // Devuelve un valor que indique error, ya que el original devuelve long
     }
+
 }
-    

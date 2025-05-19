@@ -44,7 +44,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
 
     public void cargarTablaFunciones() {
         try {
-            List<FuncionDTO> funciones = manejoFunciones.buscarFunciones(nombrePelicula, null);
+            List<FuncionDTO> funciones = manejoFunciones.buscarFuncionesPorPelicula(nombrePelicula);
 
             String[] columnas = {"ID", "Sala", "Fecha y Hora", "Hora Termino", "Precio", "Empleado"};
             Object[][] datos = new Object[funciones.size()][6];
@@ -129,7 +129,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         // Confirmacion antes de eliminar
         int confirmacion = JOptionPane.showConfirmDialog(
                 this,
-                "¿Está seguro de eliminar esta funcion?",
+                "¿Esta seguro de eliminar esta funcion?",
                 "Confirmar eliminacion",
                 JOptionPane.YES_NO_OPTION
         );
@@ -143,11 +143,8 @@ public class ConsultarFunciones extends javax.swing.JFrame {
 
             FuncionDTO funcionDTO = new FuncionDTO();
             funcionDTO.setIdFuncion(idFuncion);
-            
-            control.eliminarAsientoFuncion(idFuncion);
+
             boolean eliminada = control.eliminarFuncion(funcionDTO);
-            
-            
 
             if (eliminada) {
                 JOptionPane.showMessageDialog(

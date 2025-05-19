@@ -10,6 +10,7 @@ import Excepciones.FuncionSolapamientoSalaException;
 import Excepciones.FuncionCapacidadSalaException;
 import Excepciones.FuncionDatosIncorrectosException;
 import Excepciones.FuncionDuracionException;
+import Excepciones.FuncionFechaFuturaException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -53,18 +54,33 @@ public interface IManejoFunciones {
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionBoletosVendidosException;
 
     /**
-     * Busca funciones aplicando filtros combinados de nombre de película y/o
-     * fecha.
+     * Busca funciones por el nombre de una película, validando que el nombre no
+     * este vacío. Delega la búsqueda en el objeto de negocio correspondiente.
      *
-     * @param nombrePelicula Nombre completo o parcial de la película
-     * (opcional).
-     * @param fechaHora Fecha y hora de inicio de la funcion (opcional).
-     * @return Lista de {@link FuncionDTO} que coinciden con los filtros
-     * aplicados.
-     * @throws FuncionDatosIncorrectosException Si no se proporciona al menos un
-     * filtro o los datos son invalidos.
+     * @param nombrePelicula Nombre de la película a buscar. No puede ser nulo o
+     * vacio.
+     * @return Lista de {@link FuncionDTO} que coinciden con el nombre de la
+     * pelicula.
+     * @throws FuncionDatosIncorrectosException Si el nombre de la película es
+     * nulo, vacio o ocurre un error durante la busqueda.
      */
-    public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) throws FuncionDatosIncorrectosException;
+    public List<FuncionDTO> buscarFuncionesPorPelicula(String nombrePelicula) throws FuncionDatosIncorrectosException;
+
+    /**
+     * Busca funciones por fecha y hora, validando que la fecha sea futura y no
+     * sea nula. Utiliza el objeto de negocio para obtener las funciones que
+     * coinciden con la fecha proporcionada.
+     *
+     * @param fechaHora Fecha y hora para filtrar las funciones. No puede ser
+     * nula y debe ser futura.
+     * @return Lista de {@link FuncionDTO} que comienzan en la fecha y hora
+     * especificadas.
+     * @throws FuncionFechaFuturaException Si la fecha proporcionada es anterior
+     * a la fecha actual.
+     * @throws FuncionDatosIncorrectosException Si la fecha es nula o ocurre un
+     * error en la búsqueda.
+     */
+    public List<FuncionDTO> buscarFuncionesPorFecha(LocalDateTime fechaHora) throws FuncionFechaFuturaException, FuncionDatosIncorrectosException;
 
     /**
      * Calcula la hora de finalización de una función basada en su ID.

@@ -13,6 +13,7 @@ import Excepciones.FuncionSolapamientoSalaException;
 import Excepciones.FuncionCapacidadSalaException;
 import Excepciones.FuncionDatosIncorrectosException;
 import Excepciones.FuncionDuracionException;
+import Excepciones.FuncionFechaFuturaException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.funciones.FuncionEliminarException;
 import Excepciones.funciones.FuncionFechaValidaException;
@@ -37,7 +38,7 @@ import java.util.List;
 public class ManejoFunciones implements IManejoFunciones {
 
     /**
-     * Instancia única de la clase (patrón singleton).
+     * Instancia unica de la clase (patrón singleton).
      */
     private static ManejoFunciones instanceManejoFunciones;
 
@@ -159,40 +160,6 @@ public class ManejoFunciones implements IManejoFunciones {
     }
 
     /**
-     * Busca funciones aplicando filtros por nombre de película y/o fecha.
-     *
-     * @param nombrePelicula Nombre de la película para filtrar (opcional).
-     * @param fechaHora Fecha y hora para filtrar (opcional).
-     * @return Lista de {@link FuncionDTO} que coinciden con los filtros.
-     * @throws FuncionDatosIncorrectosException Si no se aplica ningun filtro o
-     * los datos son invalidos.
-     */
-    @Override
-    public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) throws FuncionDatosIncorrectosException {
-        try {
-            if (nombrePelicula != null && !nombrePelicula.isEmpty() && fechaHora != null) {
-                List<FuncionDTO> funcionesPorNombre = funcionBO.buscarFuncionesPelicula(nombrePelicula);
-                List<FuncionDTO> funcionesPorFecha = funcionBO.buscarFuncionFechaInicio(fechaHora);
-
-                funcionesPorNombre.retainAll(funcionesPorFecha);
-                return funcionesPorNombre;
-            }
-
-            if (nombrePelicula != null && !nombrePelicula.isEmpty()) {
-                return funcionBO.buscarFuncionesPelicula(nombrePelicula);
-            }
-
-            if (fechaHora != null) {
-                return funcionBO.buscarFuncionFechaInicio(fechaHora);
-            }
-
-            throw new FuncionDatosIncorrectosException("Seleccione por lo menos 1 filtro");
-        } catch (FuncionFechaValidaException e) {
-            throw new FuncionDatosIncorrectosException("Fecha invalida" + e.getMessage());
-        }
-    }
-
-    /**
      * Busca funciones utilizando un texto de filtro general (ej: nombre parcial
      * de película).
      *
@@ -238,6 +205,59 @@ public class ManejoFunciones implements IManejoFunciones {
 
         } catch (FuncionValidadaException e) {
             throw new FuncionDuracionException("Error al calcular la hora de término: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Busca funciones por el nombre de una película, validando que el nombre no
+     * este vacío. Delega la búsqueda en el objeto de negocio correspondiente.
+     *
+     * @param nombrePelicula Nombre de la película a buscar. No puede ser nulo o
+     * vacio.
+     * @return Lista de {@link FuncionDTO} que coinciden con el nombre de la
+     * pelicula.
+     * @throws FuncionDatosIncorrectosException Si el nombre de la película es
+     * nulo, vacio o ocurre un error durante la busqueda.
+     */
+    @Override
+    public List<FuncionDTO> buscarFuncionesPorPelicula(String nombrePelicula) throws FuncionDatosIncorrectosException {
+        if (nombrePelicula == null || nombrePelicula.isEmpty()) {
+            throw new FuncionDatosIncorrectosException("El nombre de la pelicula no puede estar vacio.");
+        }
+        try {
+            return funcionBO.buscarFuncionesPelicula(nombrePelicula);
+        } catch (Exception e) {
+            throw new FuncionDatosIncorrectosException("Error al buscar por pelicula: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Busca funciones por fecha y hora, validando que la fecha sea futura y no
+     * sea nula. Utiliza el objeto de negocio para obtener las funciones que
+     * coinciden con la fecha proporcionada.
+     *
+     * @param fechaHora Fecha y hora para filtrar las funciones. No puede ser
+     * nula y debe ser futura.
+     * @return Lista de {@link FuncionDTO} que comienzan en la fecha y hora
+     * especificadas.
+     * @throws FuncionFechaFuturaException Si la fecha proporcionada es anterior
+     * a la fecha actual.
+     * @throws FuncionDatosIncorrectosException Si la fecha es nula o ocurre un
+     * error en la búsqueda.
+     */
+    @Override
+    public List<FuncionDTO> buscarFuncionesPorFecha(LocalDateTime fechaHora) throws FuncionFechaFuturaException, FuncionDatosIncorrectosException {
+        if (fechaHora == null) {
+            throw new FuncionDatosIncorrectosException("La fecha no puede estar vacia.");
+        }
+        LocalDateTime ahora = LocalDateTime.now();
+        if (fechaHora.isBefore(ahora)) {
+            throw new FuncionFechaFuturaException("La fecha debe ser futura.");
+        }
+        try {
+            return funcionBO.buscarFuncionFechaInicio(fechaHora);
+        } catch (FuncionFechaValidaException e) {
+            throw new FuncionDatosIncorrectosException("Fecha invalida: " + e.getMessage(), e);
         }
     }
 }

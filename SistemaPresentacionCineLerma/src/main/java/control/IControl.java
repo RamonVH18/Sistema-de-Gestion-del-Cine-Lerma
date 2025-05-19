@@ -20,6 +20,8 @@ import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
+import Excepciones.FuncionDatosIncorrectosException;
+import Excepciones.FuncionFechaFuturaException;
 import Excepciones.PresentacionException;
 import enums.Cargo;
 import enums.EstadoSala;
@@ -133,7 +135,7 @@ public interface IControl {
     public void mostrarConsultarAsientosReservados(JFrame frameAnterior, FuncionDTO funcionDTO);
 
     public List<AsientoFuncionDTO> agregarAsientoFuncion(FuncionDTO funcionSelecionada, SalaViejaDTO salaSelecionada);
-    
+
     public void eliminarAsientoFuncion(String idFuncion);
 
     public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar);
@@ -201,7 +203,9 @@ public interface IControl {
 
     public Boolean eliminarFuncion(FuncionDTO funcionDTO);
 
-    public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora);
+    List<FuncionDTO> buscarFuncionesPorPelicula(String nombrePelicula);
+
+    List<FuncionDTO> buscarFuncionesPorFecha(LocalDateTime fechaHora) throws FuncionDatosIncorrectosException, FuncionFechaFuturaException;
 
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion);
 
