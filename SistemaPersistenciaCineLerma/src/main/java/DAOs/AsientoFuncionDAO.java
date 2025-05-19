@@ -166,7 +166,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         try {
             MongoCollection<Document> coleccionAsientoFuncion = obtenerColeccionDocument(clienteMongo);
 
-            Date now = new Date();//GregorianCalendar(2026, Calendar.MAY, 15).getTime();
+            Date now = new GregorianCalendar(2026, Calendar.MAY, 15).getTime();
 
             List<Bson> pipeline = Arrays.asList(
                     Aggregates.lookup(

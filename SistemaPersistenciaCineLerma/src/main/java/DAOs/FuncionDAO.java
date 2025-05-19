@@ -246,11 +246,13 @@ public class FuncionDAO implements IFuncionDAO {
     public List<Funcion> buscarPeliculasFiltradas(String textoFiltro) throws FuncionNoEncontradaException {
         MongoClient clienteMongo = conexion.crearConexion();
         try {
+            //Se busca la coleccion de las funciones
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
-
+            
+            //Se llama al metodo apra crear el filtro
             Bson filtro = crearFiltro(textoFiltro);
-
+            //Se busca las funciones que coincidan con el filtro, se ordenan en base al numSala
             List<Funcion> funcionesFiltradas = coleccionFunciones.find(filtro)
                     .sort(Sorts.ascending("sala.numSala"))
                     .into(new ArrayList<>());
@@ -270,36 +272,15 @@ public class FuncionDAO implements IFuncionDAO {
      */
     private Bson crearFiltro(String textoFiltro) {
         List<Bson> condiciones = new ArrayList<>();
-
+        //Se checa si el textoFiltro esta vacio, si no entonces se crean la lista de condiciciones
         if (textoFiltro != null && !textoFiltro.isBlank()) {
-            condiciones.add(crearFiltroNumeroSala(textoFiltro));
-            condiciones.add(crearFiltroPelicula(textoFiltro));
+            Pattern patron = Pattern.compile(".*" + Pattern.quote(textoFiltro) + ".*", Pattern.CASE_INSENSITIVE);
+            condiciones.add(Filters.regex("sala.numSala", patron));
+            condiciones.add(Filters.regex("pelicula.titulo", patron));
         }
-
+        // Operador ternario, si las condiciones estan vacias entonces se envia un documento vacio, lo cual es igual a 0 filtros
         return condiciones.isEmpty() ? new Document() : Filters.or(condiciones);
 
-    }
-
-    /**
-     * Genera un filtro para buscar por número de sala usando una expresion regular.
-     * 
-     * @param filtroNumSala Texto para buscar en el numero de sala.
-     * @return Filtro MongoDB para el numero de sala.
-     */
-    private Bson crearFiltroNumeroSala(String filtroNumSala) {
-        Pattern patron = Pattern.compile(".*" + Pattern.quote(filtroNumSala) + ".*", Pattern.CASE_INSENSITIVE);
-        return Filters.regex("sala.numSala", patron);
-    }
-
-    /**
-     * Genera un filtro para buscar por título de película usando una expresión regular.
-     * 
-     * @param filtroPelicula Texto para buscar en el título.
-     * @return Filtro MongoDB para el título de la película.
-     */
-    private Bson crearFiltroPelicula(String filtroPelicula) {
-        Pattern patron = Pattern.compile(".*" + Pattern.quote(filtroPelicula) + ".*", Pattern.CASE_INSENSITIVE);
-        return Filters.regex("pelicula.titulo", patron);
     }
 
 }
