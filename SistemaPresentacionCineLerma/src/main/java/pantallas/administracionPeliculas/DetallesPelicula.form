@@ -136,7 +136,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="262" y="279" width="-1" height="-1"/>
+          <AbsoluteConstraints x="260" y="320" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -228,16 +228,16 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JLabel" name="jlabelTituloDetalles">
+    <Component class="javax.swing.JLabel" name="jlabelEstado">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tw Cen MT Condensed" size="48" style="1"/>
+          <Font name="Tw Cen MT Condensed" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Detalles Pel&#xed;cula"/>
+        <Property name="text" type="java.lang.String" value="Estado:"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="140" y="30" width="-1" height="-1"/>
+          <AbsoluteConstraints x="260" y="280" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -287,7 +287,30 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="262" y="309" width="-1" height="-1"/>
+          <AbsoluteConstraints x="260" y="350" width="-1" height="-1"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jlabelTituloDetalles">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tw Cen MT Condensed" size="48" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Detalles Pel&#xed;cula"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="140" y="30" width="-1" height="-1"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelMostrarEstado">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="330" y="280" width="-1" height="30"/>
         </Constraint>
       </Constraints>
     </Component>

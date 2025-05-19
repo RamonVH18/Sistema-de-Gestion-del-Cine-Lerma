@@ -60,12 +60,14 @@ public class DetallesPelicula extends javax.swing.JFrame {
         btnDarBaja = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnaVolver = new javax.swing.JButton();
-        jlabelTituloDetalles = new javax.swing.JLabel();
+        jlabelEstado = new javax.swing.JLabel();
         jLabelMostrarTitulo = new javax.swing.JLabel();
         jLabelMostrarGenero = new javax.swing.JLabel();
         jLabelMostrarDuracion = new javax.swing.JLabel();
         jLabelMostrarClasificacion = new javax.swing.JLabel();
         jLabelMostrarSinopsis = new javax.swing.JLabel();
+        jlabelTituloDetalles = new javax.swing.JLabel();
+        jLabelMostrarEstado = new javax.swing.JLabel();
 
         jlabelTitulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
         jlabelTitulo.setText("Peliculas en Cartelera");
@@ -112,7 +114,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
 
         jlabelSinopsis.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelSinopsis.setText("Sinopsis:");
-        getContentPane().add(jlabelSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 279, -1, -1));
+        getContentPane().add(jlabelSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 320, -1, -1));
 
         btnEditarPelicula.setBackground(new java.awt.Color(162, 132, 94));
         btnEditarPelicula.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -158,9 +160,9 @@ public class DetallesPelicula extends javax.swing.JFrame {
         });
         getContentPane().add(btnaVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 782, -1, -1));
 
-        jlabelTituloDetalles.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
-        jlabelTituloDetalles.setText("Detalles Película");
-        getContentPane().add(jlabelTituloDetalles, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
+        jlabelEstado.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
+        jlabelEstado.setText("Estado:");
+        getContentPane().add(jlabelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 280, -1, -1));
 
         jLabelMostrarTitulo.setText("jLabel1");
         getContentPane().add(jLabelMostrarTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(324, 117, -1, -1));
@@ -175,7 +177,14 @@ public class DetallesPelicula extends javax.swing.JFrame {
         getContentPane().add(jLabelMostrarClasificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(386, 243, -1, -1));
 
         jLabelMostrarSinopsis.setText("jLabel1");
-        getContentPane().add(jLabelMostrarSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 309, -1, -1));
+        getContentPane().add(jLabelMostrarSinopsis, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 350, -1, -1));
+
+        jlabelTituloDetalles.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
+        jlabelTituloDetalles.setText("Detalles Película");
+        getContentPane().add(jlabelTituloDetalles, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
+
+        jLabelMostrarEstado.setText("jLabel1");
+        getContentPane().add(jLabelMostrarEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, -1, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -205,12 +214,14 @@ public class DetallesPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelMostrarClasificacion;
     private javax.swing.JLabel jLabelMostrarDuracion;
+    private javax.swing.JLabel jLabelMostrarEstado;
     private javax.swing.JLabel jLabelMostrarGenero;
     private javax.swing.JLabel jLabelMostrarSinopsis;
     private javax.swing.JLabel jLabelMostrarTitulo;
     private javax.swing.JPanel jPanelImagenPelicula;
     private javax.swing.JLabel jlabelClasificacion;
     private javax.swing.JLabel jlabelDuracion;
+    private javax.swing.JLabel jlabelEstado;
     private javax.swing.JLabel jlabelGenero;
     private javax.swing.JLabel jlabelSinopsis;
     private javax.swing.JLabel jlabelTitulo;
@@ -223,6 +234,12 @@ public class DetallesPelicula extends javax.swing.JFrame {
         jLabelMostrarGenero.setText(peliculaDTO.getGenero());
         jLabelMostrarDuracion.setText(peliculaDTO.getDuracion().toString() + " minutos");
         jLabelMostrarClasificacion.setText(peliculaDTO.getClasificacion());
+        if (peliculaDTO.getActivo()) {
+            jLabelMostrarEstado.setText("ACTIVA");
+        } else {
+            jLabelMostrarEstado.setText("INACTIVA");
+        }
+        
         jLabelMostrarSinopsis.setText("<html><body style='width:250px'>" + peliculaDTO.getSinopsis() + "</body></html>");
         cargarImagenPromocional(peliculaDTO);
     }

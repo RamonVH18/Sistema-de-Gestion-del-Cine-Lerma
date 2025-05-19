@@ -169,8 +169,11 @@ public class FuncionDAO implements IFuncionDAO {
             MongoDatabase database = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Funcion> coleccionFunciones = database.getCollection(nombreColeccion, Funcion.class);
 
-            Bson filtro = Filters.eq("pelicula.titulo", Pattern.compile(nombrePelicula, Pattern.CASE_INSENSITIVE));
+            //filtro original
+//            Bson filtro = Filters.eq("pelicula.titulo", Pattern.compile(nombrePelicula, Pattern.CASE_INSENSITIVE));
 
+            // filtro nuevo corregido
+            Bson filtro = Filters.regex("pelicula.titulo", "^" + Pattern.quote(nombrePelicula) + "$", "i");
             return coleccionFunciones.find(filtro).into(new ArrayList<>());
         } finally {
             conexion.cerrarConexion(clienteMongo);
