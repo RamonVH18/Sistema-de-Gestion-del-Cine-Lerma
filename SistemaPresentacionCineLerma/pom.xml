@@ -78,10 +78,11 @@
             <artifactId>SistemaGestionPeliculas</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.lgooddatepicker/LGoodDatePicker -->
         <dependency>
-            <groupId>com.github.LGoodDatePicker</groupId>
+            <groupId>com.github.lgooddatepicker</groupId>
             <artifactId>LGoodDatePicker</artifactId>
-            <version>11.2.0</version>
+            <version>11.2.1</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
