@@ -9,8 +9,6 @@ import DTOs.EmpleadoDTO;
 import Excepciones.Empleados.RegistrarEmpleadoException;
 import Excepciones.Empleados.ValidacionEmpleadoException;
 import Excepciones.PersistenciaException;
-import Excepciones.RegistrarNuevoEmpleadoException;
-import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
 import control.ControlDeNavegacion;

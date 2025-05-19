@@ -9,13 +9,15 @@ package Excepciones;
  * @author isaac
  */
 public class ManejoValidarActualizacionSueldoDeCargoException extends Exception {
-    
-     public ManejoValidarActualizacionSueldoDeCargoException(String message) {
+
+    public ManejoValidarActualizacionSueldoDeCargoException(String message) {
         super(message);
     }
 
     public ManejoValidarActualizacionSueldoDeCargoException(String message, Throwable cause) {
         super(message, cause);
     }
+    
+    
     
 }

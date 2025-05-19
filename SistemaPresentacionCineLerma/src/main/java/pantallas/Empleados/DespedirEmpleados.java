@@ -8,8 +8,6 @@ import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
 import Excepciones.Empleados.DespedirEmpleadoException;
 import Excepciones.PersistenciaException;
-import Excepciones.ValidacionEmpleadoIdException;
-import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
 import control.ControlDeNavegacion;

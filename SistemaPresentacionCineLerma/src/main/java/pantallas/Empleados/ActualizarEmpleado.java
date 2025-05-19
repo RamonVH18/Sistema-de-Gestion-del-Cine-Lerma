@@ -6,11 +6,9 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
-import Excepciones.ActualizacionEmpleadoException;
 import Excepciones.Empleados.ActualizarEmpleadoException;
-import Excepciones.ObtenerEmpleadoException;
-import Excepciones.ValidacionEmpleadoIdException;
-import Excepciones.ValidarEmpleadoException;
+import Excepciones.ManejoObtenerEmpleadoException;
+import Excepciones.ManejoValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
 import control.ControlDeNavegacion;
@@ -213,12 +211,12 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
                 // this.dispose(); // Decide si realmente quieres cerrar la ventana actual.
                 // Si lo haces, el WindowListener de arriba podría no ser la mejor
                 // forma de refrescar, ya que esta ventana ya no existiría.
-            } catch (ValidarEmpleadoException vex) { // Excepciones que PUEDE lanzar el constructor de ActualizarEmpleadoDatos
+            } catch (ManejoValidarEmpleadoException vex) { // Excepciones que PUEDE lanzar el constructor de ActualizarEmpleadoDatos
                 JOptionPane.showMessageDialog(this,
                         "Error al preparar la ventana de actualización (validación): " + vex.getMessage(),
                         "Error de Preparación", JOptionPane.ERROR_MESSAGE);
                 // frameActualizar podría ser null aquí si la excepción ocurrió muy temprano en el constructor.
-            } catch (ObtenerEmpleadoException opex) { // Excepciones que PUEDE lanzar el constructor de ActualizarEmpleadoDatos
+            } catch (ManejoObtenerEmpleadoException opex) { // Excepciones que PUEDE lanzar el constructor de ActualizarEmpleadoDatos
                 JOptionPane.showMessageDialog(this,
                         "Error al preparar la ventana de actualización (operación): " + opex.getMessage(),
                         "Error de Preparación", JOptionPane.ERROR_MESSAGE);

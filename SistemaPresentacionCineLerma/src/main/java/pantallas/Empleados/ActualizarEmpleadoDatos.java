@@ -6,13 +6,12 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
-import Excepciones.ActualizacionEmpleadoException;
 import Excepciones.Empleados.ActualizarEmpleadoException;
 import Excepciones.Empleados.ValidacionEmpleadoException;
-import Excepciones.ObtenerEmpleadoException;
+import Excepciones.ManejoObtenerEmpleadoException;
+import Excepciones.ManejoValidacionEmpleadoIdException;
+import Excepciones.ManejoValidarEmpleadoException;
 import Excepciones.PersistenciaException;
-import Excepciones.ValidacionEmpleadoIdException;
-import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
 import control.ControlDeNavegacion;
@@ -35,7 +34,7 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
     /**
      * Creates new form ActualizarEmpleadoDatos
      */
-    public ActualizarEmpleadoDatos(String empleadoIdParaEditar) throws ValidarEmpleadoException, ObtenerEmpleadoException, ValidacionEmpleadoIdException {
+    public ActualizarEmpleadoDatos(String empleadoIdParaEditar) throws ManejoValidarEmpleadoException, ManejoObtenerEmpleadoException, ManejoValidacionEmpleadoIdException {
       
         this.empleadoId = empleadoIdParaEditar;
         initComponents();
