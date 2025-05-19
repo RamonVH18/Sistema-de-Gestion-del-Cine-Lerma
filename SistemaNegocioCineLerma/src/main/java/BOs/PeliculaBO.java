@@ -161,6 +161,22 @@ public class PeliculaBO implements IPeliculaBO {
         }
     }
 
+    @Override
+    public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws MostrarPeliculasFiltradasException {
+        try {
+            List<PeliculaDTO> peliculasDTO = new ArrayList<>();
+            List<Pelicula> peliculasFiltradasEntidad = peliculaDAO.mostrarPeliculasFiltradas(activo, clasificacion, genero, titulo);
+
+            for (Pelicula pelicula : peliculasFiltradasEntidad) {
+                peliculasDTO.add(peliculaMapper.toPeliculaDTO(pelicula));
+            }
+
+            return peliculasDTO;
+        } catch (MostrarPeliculasException e) {
+            throw new MostrarPeliculasFiltradasException("Error al mostrar las peliculas filtradas.");
+        }
+    }
+
     /**
      * Muestra las películas activas o inactivas según el parámetro recibido.
      *

@@ -38,19 +38,17 @@ import pantallas.Funciones.ConsultarFunciones;
 public interface IControl {
 
 //---------------Metodos para guardar los recursos necesarios-----------------------
-
     public UsuarioDTO obtenerUsuarioActual();
-    
+
     public AdministradorDTO obtenerAdministradorActual();
-    
+
     public void guardarAdministradorActual(AdministradorDTO administrador);
-    
+
     public ClienteDTO obtenerClienteActual();
-    
+
     public void guardarClienteActual(ClienteDTO cliente);
-    
+
 //---------------Fin de los metodos para guardar los recursos necesarios-----------------------
-    
     public void mostrarMenuCliente(JFrame frameAnterior);
 
     public void mostrarSeleccionarPelicula();
@@ -66,7 +64,7 @@ public interface IControl {
     public void mostrarPantallaPagoRechazado();
 
     public void mostrarMenuAdministrador(JFrame frameAnterior);
-    
+
     public void mostrarMenuReportes(JFrame frameAnterior);
 
     public List<PeliculaDTO> obtenerPeliculas();
@@ -127,17 +125,17 @@ public interface IControl {
     public List<SalaViejaDTO> consultarSalas(String filtro, Boolean filtrarActivas);
 
     public void mostrarModificarSala(JFrame frameAnterior, SalaViejaDTO sala);
-    
+
     public Boolean modificarSala(String numSala, EstadoSala estadoSala);
-    
+
     public void mostrarConsultarFuncionesSalas(JFrame frameAnterior);
-    
+
     public void mostrarConsultarAsientosReservados(JFrame frameAnterior, FuncionDTO funcionDTO);
-    
+
     public List<AsientoFuncionDTO> agregarAsientoFuncion(FuncionDTO funcionSelecionada, SalaViejaDTO salaSelecionada);
-    
+
     public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar);
-    
+
     public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles);
 
     // -----------------------------FIN DE METODOS DE SALAS-----------------------------------------
@@ -156,18 +154,18 @@ public interface IControl {
     public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula);
 
     public void mostrarProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula);
-    
+
     public List<FuncionDTO> consultarFuncionesFiltradas(String textoFiltro);
-    
+
     // -------------------------------METODOS DE NAVEGACION DE PELICULAS--------------------------------
     public void mostrarMenuAdministrarPeliculas(JFrame frameAnterior);
-    
+
     public void mostrarAgregarPelicula(JFrame frameAnterior);
-    
+
     public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO);
-    
+
     public void mostrarEditarPelicula(PeliculaDTO peliculaDTO);
-    
+
     public PeliculaDTO encontrarPelicula(String nombrePelicula);
     // -------------------------------FIN DE METODOS DE NAVEGACION DE PELICULAS-------------------------
 
@@ -204,25 +202,27 @@ public interface IControl {
     public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora);
 
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion);
-    
+
     // -------------------------------METODOS DE PELICULAS--------------------------------
     public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO);
-    
+
     public PeliculaDTO editarPelicula(PeliculaDTO peliculaDTO);
-    
+
+    public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo);
+
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO);
-    
+
     public boolean darBajaPelicula(PeliculaDTO peliculaDTO);
-    
+
     public boolean eliminarPelicula(PeliculaDTO peliculaDTO);
     // -------------------------------FIN DE METODOS DE PELICULAS-------------------------
-    
+
     public void mostrarMenuAdministrarEmpleados(JFrame frame);
 
     public void mostrarRegistrarEmpleado(JFrame frameAnterior);
 
-     public void mostrarActualizarDatosEmpleado(JFrame frameAnterior, String empleadoId);
-     
+    public void mostrarActualizarDatosEmpleado(JFrame frameAnterior, String empleadoId);
+
     public void mostrarDialogActualizarCargoDeEmpleado(JFrame frameAnterior, EmpleadoDTO empleadoActual);
 
     public void iniciarFlujoActualizarCargo(JFrame framePadre);
@@ -235,7 +235,6 @@ public interface IControl {
 
     public void mostrarDespedirEmpleado(JFrame frameAnterior);
 
-   
     public EmpleadoDTO solicitarSeleccionEmpleado(JFrame padreFrame);
 
     // --- metodos admin empleados
@@ -262,4 +261,3 @@ public interface IControl {
     public void iniciarFlujoActualizarSueldoIndividual(JFrame framePadreSueldoOpciones);
 
 }
-

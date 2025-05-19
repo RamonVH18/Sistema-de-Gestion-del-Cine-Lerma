@@ -26,6 +26,8 @@ public interface IManejoPeliculas {
 
     public boolean darBajaPelicula(PeliculaDTO peliculaDTO) throws DarBajaPeliculaException;
 
+    public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws ObtenerPeliculasFiltradasException;
+    
     public List<PeliculaDTO> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException;
 
 }

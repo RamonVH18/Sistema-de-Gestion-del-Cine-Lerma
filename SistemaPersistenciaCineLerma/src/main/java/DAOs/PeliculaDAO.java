@@ -10,6 +10,7 @@ import Interfaces.IPeliculaDAO;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -19,6 +20,7 @@ import entidades.Pelicula;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 
 /**
@@ -275,6 +277,68 @@ public class PeliculaDAO implements IPeliculaDAO {
             throw new BuscarPeliculaException("Error al buscar la película.");
         } finally {
             conexion.cerrarConexion(clienteMongo);
+        }
+    }
+
+    @Override
+    public List<Pelicula> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws MostrarPeliculasException {
+        MongoClient clienteMongo = null;
+        List<Pelicula> peliculas = new ArrayList<>();
+        try {
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
+
+            List<Bson> filtros = new ArrayList<>(); // Lista para almacenar los filtros que se vayan aplicando.
+
+            filtroEstado(activo, filtros);
+            filtroClasificacion(clasificacion, filtros);
+            filtroGenero(genero, filtros);
+            filtroTitulo(titulo, filtros);
+
+            // Construir consulta final
+            Bson filtro = filtros.isEmpty() ? new Document() : Filters.and(filtros);
+
+            // Ejecuta la consulta y obtiene un cursor para iterar sobre los resultados.
+            MongoCursor<Pelicula> cursor = coleccionPeliculas.find(filtro).iterator();
+            while (cursor.hasNext()) {
+                Pelicula usuarioEncontrado = cursor.next();
+                peliculas.add(usuarioEncontrado);
+            }
+
+            return peliculas; // Devuelve la lista de peliculas filtradas
+        } catch (MongoException e) {
+            throw new MostrarPeliculasException("Error al mostrar las películas filtradas.");
+        }
+    }
+
+    private void filtroEstado(Boolean activo, List<Bson> filtros) {
+        //filtrar por estado activo o inactivo
+        if (activo != null) {
+            boolean activoPrimitivo = activo;
+            filtros.add(Filters.eq("activo", activoPrimitivo));
+        }
+    }
+
+    private void filtroClasificacion(String clasificacion, List<Bson> filtros) {
+        //filtrar por clasificacion
+        if (clasificacion != null) {
+            filtros.add(Filters.regex("clasificacion", "^" + Pattern.quote(clasificacion) + "$", "i"));
+        }
+    }
+
+    private void filtroGenero(String genero, List<Bson> filtros) {
+        //filtrar por genero
+        if (genero != null) {
+            filtros.add(Filters.regex("genero", "^" + Pattern.quote(genero) + "$", "i"));
+        }
+    }
+
+    private void filtroTitulo(String titulo, List<Bson> filtros) {
+        // Filtro por titulo de la pelicula
+        if (titulo != null && !titulo.isBlank()) {
+            filtros.add(Filters.regex("titulo", titulo, "i")); // Filtro que ignora mayusculas y minusculas, y que solo
+            // tiene coincidencias parciales
         }
     }
 

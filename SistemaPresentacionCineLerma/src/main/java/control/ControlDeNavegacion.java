@@ -29,6 +29,7 @@ import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
 import Excepciones.CalcularCostoTotalException;
 import Excepciones.CargarHistorialException;
+import Excepciones.DarAltaPeliculaException;
 import Excepciones.DarBajaPeliculaException;
 import Excepciones.DisponibilidadAsientosException;
 import Excepciones.EliminarPeliculaException;
@@ -49,6 +50,7 @@ import Excepciones.ModificarSalaException;
 import Excepciones.MostrarPeliculasException;
 import Excepciones.ObtenerEmpleadoException;
 import Excepciones.ObtenerEmpleadoPorCargoException;
+import Excepciones.ObtenerPeliculasFiltradasException;
 import Excepciones.PresentacionException;
 import Excepciones.RegistrarNuevoEmpleadoException;
 import Excepciones.RegistrarPeliculaException;
@@ -892,15 +894,15 @@ public class ControlDeNavegacion implements IControl {
             pantallaEditarPelicula.setVisible(true);
         });
     }
-    
+
     @Override
     public PeliculaDTO encontrarPelicula(String nombrePelicula) {
-            try {
-                return gestionPeliculas.buscarPelicula(nombrePelicula);
-            } catch (MostrarPeliculasException e) {
-                JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
+        try {
+            return gestionPeliculas.buscarPelicula(nombrePelicula);
+        } catch (MostrarPeliculasException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     /*
@@ -1148,7 +1150,12 @@ public class ControlDeNavegacion implements IControl {
 
     @Override
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return gestionPeliculas.darAltaPelicula(peliculaDTO);
+        } catch (DarAltaPeliculaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     @Override
@@ -1168,6 +1175,16 @@ public class ControlDeNavegacion implements IControl {
         } catch (EliminarPeliculaException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return false;
+        }
+    }
+
+    @Override
+    public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) {
+        try {
+            return gestionPeliculas.mostrarPeliculasFiltradas(activo, clasificacion, genero, titulo);
+        } catch (ObtenerPeliculasFiltradasException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return new ArrayList<>();
         }
     }
 
@@ -1400,7 +1417,6 @@ public class ControlDeNavegacion implements IControl {
 
     }
 
-
     // ------------------ METODOS DE ADMINISTRACION EMPLEADO DE OPERACIONES
     @Override
     public EmpleadoDTO controlRegistrarNuevoEmpleado(EmpleadoDTO empleadoDTO) {
@@ -1553,6 +1569,5 @@ public class ControlDeNavegacion implements IControl {
         }
         return -1; // Devuelve un valor que indique error, ya que el original devuelve long
     }
-
 
 }

@@ -13,9 +13,11 @@ import Excepciones.DarAltaPeliculaException;
 import Excepciones.DarBajaPeliculaException;
 import Excepciones.EliminarPeliculaException;
 import Excepciones.MostrarPeliculasException;
+import Excepciones.ObtenerPeliculasFiltradasException;
 import Excepciones.RegistrarPeliculaException;
 import Excepciones.VerificarCamposPeliculaException;
 import Excepciones.VerificarImagenException;
+import Excepciones.peliculas.MostrarPeliculasFiltradasException;
 import Excepciones.peliculas.PeliculaActualizacionException;
 import Excepciones.peliculas.PeliculaBusquedaException;
 import Excepciones.peliculas.PeliculaDarAltaException;
@@ -116,19 +118,19 @@ public class ManejoPeliculas implements IManejoPeliculas {
             throw new EliminarPeliculaException("Ocurrio un error durante la eliminacion de la pelicula: " + e.getMessage());
         }
     }
-    
+
     @Override
     public PeliculaDTO buscarPelicula(String nombrePelicula) throws MostrarPeliculasException {
         try {
             if (nombrePelicula == null || nombrePelicula.isBlank()) {
-                throw new MostrarPeliculasException("Debe ingresar un nombre valido para buscar la pelicula");    
+                throw new MostrarPeliculasException("Debe ingresar un nombre valido para buscar la pelicula");
             }
             return peliculaBO.buscarPelicula(nombrePelicula);
         } catch (PeliculaBusquedaException e) {
             throw new MostrarPeliculasException("Hubo un error al buscar la pelicula.");
         }
-        
-    } 
+
+    }
 
     @Override
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO) throws DarAltaPeliculaException {
@@ -166,6 +168,16 @@ public class ManejoPeliculas implements IManejoPeliculas {
             return peliculaBO.darBajaPelicula(peliculaDTO);
         } catch (PeliculaDarBajaException e) {
             throw new DarBajaPeliculaException("Ocurrio un error durante la baja de la pelicula: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws ObtenerPeliculasFiltradasException {
+        try {
+            List<PeliculaDTO> peliculasFiltradas = peliculaBO.mostrarPeliculasFiltradas(activo, clasificacion, genero, titulo);
+            return peliculasFiltradas;
+        } catch (MostrarPeliculasFiltradasException e) {
+            throw new ObtenerPeliculasFiltradasException("Ocurrio un error durante la obtencion de peliculas con filtros: " + e.getMessage());
         }
     }
 

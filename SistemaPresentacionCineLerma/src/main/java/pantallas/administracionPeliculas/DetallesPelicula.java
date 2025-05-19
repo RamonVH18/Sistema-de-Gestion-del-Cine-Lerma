@@ -8,8 +8,8 @@ import DTOs.PeliculaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
         jlabelDuracion = new javax.swing.JLabel();
         jlabelSinopsis = new javax.swing.JLabel();
         btnEditarPelicula = new javax.swing.JButton();
-        btnDarBaja = new javax.swing.JButton();
+        btnDarBajaOAlta = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnaVolver = new javax.swing.JButton();
         jlabelEstado = new javax.swing.JLabel();
@@ -127,16 +127,16 @@ public class DetallesPelicula extends javax.swing.JFrame {
         });
         getContentPane().add(btnEditarPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 590, 128, -1));
 
-        btnDarBaja.setBackground(new java.awt.Color(162, 132, 94));
-        btnDarBaja.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
-        btnDarBaja.setForeground(new java.awt.Color(255, 255, 255));
-        btnDarBaja.setText("Dar de baja");
-        btnDarBaja.addActionListener(new java.awt.event.ActionListener() {
+        btnDarBajaOAlta.setBackground(new java.awt.Color(162, 132, 94));
+        btnDarBajaOAlta.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        btnDarBajaOAlta.setForeground(new java.awt.Color(255, 255, 255));
+        btnDarBajaOAlta.setText("Dar de Baja/Alta");
+        btnDarBajaOAlta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDarBajaActionPerformed(evt);
+                btnDarBajaOAltaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnDarBaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 639, -1, -1));
+        getContentPane().add(btnDarBajaOAlta, new org.netbeans.lib.awtextra.AbsoluteConstraints(262, 639, -1, -1));
 
         btnEliminar.setBackground(new java.awt.Color(162, 132, 94));
         btnEliminar.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -193,9 +193,9 @@ public class DetallesPelicula extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEditarPeliculaActionPerformed
 
-    private void btnDarBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarBajaActionPerformed
-        darDeBajaPelicula(peliculaDTO);
-    }//GEN-LAST:event_btnDarBajaActionPerformed
+    private void btnDarBajaOAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarBajaOAltaActionPerformed
+
+    }//GEN-LAST:event_btnDarBajaOAltaActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         eliminarPelicula(peliculaDTO);
@@ -207,7 +207,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
     }//GEN-LAST:event_btnaVolverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDarBaja;
+    private javax.swing.JButton btnDarBajaOAlta;
     private javax.swing.JButton btnEditarPelicula;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnaVolver;
@@ -234,14 +234,46 @@ public class DetallesPelicula extends javax.swing.JFrame {
         jLabelMostrarGenero.setText(peliculaDTO.getGenero());
         jLabelMostrarDuracion.setText(peliculaDTO.getDuracion().toString() + " minutos");
         jLabelMostrarClasificacion.setText(peliculaDTO.getClasificacion());
+
         if (peliculaDTO.getActivo()) {
             jLabelMostrarEstado.setText("ACTIVA");
+            btnDarBajaOAlta.setText("Dar de Baja");
+
+            // Eliminar listeners anteriores por si acaso
+            for (ActionListener actionListeners : btnDarBajaOAlta.getActionListeners()) {
+                btnDarBajaOAlta.removeActionListener(actionListeners);
+            }
+            btnDarBajaOAlta.addActionListener(evt -> darDeBajaPelicula(peliculaDTO));
+
         } else {
             jLabelMostrarEstado.setText("INACTIVA");
+            btnDarBajaOAlta.setText("Dar de Alta");
+
+            for (ActionListener al : btnDarBajaOAlta.getActionListeners()) {
+                btnDarBajaOAlta.removeActionListener(al);
+            }
+            btnDarBajaOAlta.addActionListener(evt -> darDeAltaPelicula(peliculaDTO));
         }
-        
+
         jLabelMostrarSinopsis.setText("<html><body style='width:250px'>" + peliculaDTO.getSinopsis() + "</body></html>");
         cargarImagenPromocional(peliculaDTO);
+    }
+
+    private void darDeAltaPelicula(PeliculaDTO peliculaDTO) {
+        int respuesta = JOptionPane.showConfirmDialog(
+                this,
+                "¿Estás seguro de que deseas dar de alta la película '" + peliculaDTO.getTitulo() + "'?",
+                "Confirmar baja",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            boolean exito = control.darAltaPelicula(peliculaDTO);
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "La película fue dada de alta correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
 
     private void darDeBajaPelicula(PeliculaDTO peliculaDTO) {
