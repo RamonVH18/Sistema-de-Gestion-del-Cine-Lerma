@@ -8,12 +8,22 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaNegocioCineLerma</artifactId>
+            <artifactId>SistemaTransferenciaCineLerma</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.mycompany</groupId>
+                    <artifactId>SistemaPersistenciaCineLerma</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.mycompany</groupId>
+                    <artifactId>SistemaNegocioCineLerma</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SistemaTransferenciaCineLerma</artifactId>
+            <artifactId>SistemaNegocioCineLerma</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

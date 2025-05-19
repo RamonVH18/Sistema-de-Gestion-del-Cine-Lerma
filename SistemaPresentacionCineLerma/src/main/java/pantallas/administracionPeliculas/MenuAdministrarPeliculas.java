@@ -200,7 +200,7 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxFiltrarEstadoActionPerformed
 
     private void btnaVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaVolverActionPerformed
-        control.mostrarMenuAdministrador(this, administrador);
+        control.mostrarMenuAdministrador(this);
         dispose();
     }//GEN-LAST:event_btnaVolverActionPerformed
 

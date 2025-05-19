@@ -35,7 +35,21 @@ import pantallas.Funciones.ConsultarFunciones;
  */
 public interface IControl {
 
-    public void mostrarMenuCliente(JFrame frameAnterior, ClienteDTO cliente);
+//---------------Metodos para guardar los recursos necesarios-----------------------
+
+    public UsuarioDTO obtenerUsuarioActual();
+    
+    public AdministradorDTO obtenerAdministradorActual();
+    
+    public void guardarAdministradorActual(AdministradorDTO administrador);
+    
+    public ClienteDTO obtenerClienteActual();
+    
+    public void guardarClienteActual(ClienteDTO cliente);
+    
+//---------------Fin de los metodos para guardar los recursos necesarios-----------------------
+    
+    public void mostrarMenuCliente(JFrame frameAnterior);
 
     public void mostrarSeleccionarPelicula();
 
@@ -49,7 +63,7 @@ public interface IControl {
 
     public void mostrarPantallaPagoRechazado();
 
-    public void mostrarMenuAdministrador(JFrame frameAnterior, AdministradorDTO admin);
+    public void mostrarMenuAdministrador(JFrame frameAnterior);
     
     public void mostrarMenuReportes(JFrame frameAnterior);
 
@@ -71,7 +85,7 @@ public interface IControl {
 
     public List<MetodoPagoDTO> obtenerMetodosPago();
 
-    public BoletoDTO cargarBoleto();
+    public BoletoDTO cargarBoleto(ClienteDTO cliente);
 
     public CuentaMercadoDTO verificarCuentaMercado(CuentaMercadoDTO cuentaMercado);
 
@@ -163,8 +177,6 @@ public interface IControl {
     public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre);
 
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena);
-
-    public UsuarioDTO obtenerUsuarioActual();
     
     public List<ReporteUsuarioDTO> obtenerReporteUsuarios();
 

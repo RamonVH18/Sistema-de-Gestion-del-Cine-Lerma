@@ -5,19 +5,35 @@
 package pantallas.Salas;
 
 import DTOs.FuncionDTO;
+import control.ControlDeNavegacion;
+import control.IControl;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import utilitades.Utilerias;
 
 /**
  *
  * @author Ramon Valencia
  */
 public class ConsultarAsientosReservados extends javax.swing.JFrame {
-    
-    private FuncionDTO funcionSelecionada;
+
+    private final Utilerias utilerias = new Utilerias(); // Objeto Utilerias para poder utilizar los metodos de la clase
+    private final IControl control = ControlDeNavegacion.getInstancia(); // Instancia de la clase control de navegacion
+
+    private final FuncionDTO funcionSelecionada;
+
     /**
      * Creates new form ConsultarAsientosReservados
+     *
+     * @param funcionSelecionada
      */
     public ConsultarAsientosReservados(FuncionDTO funcionSelecionada) {
-        this.funcionSelecionada = this.funcionSelecionada;
+        this.funcionSelecionada = funcionSelecionada;
+        utilerias.configurarFrameBase(this, "CONSULTAR ASIENTOS");
+        configurarConsultarAsientosReservados();
+
     }
 
     /**
@@ -44,8 +60,24 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    private void configurarConsultarAsientosReservados() {
+        configurarBotonVolver();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    /**
+     * Metodo para configurar el obtener el boton volver del frameBase y
+     * configurarlo para que nos regrese a la ventana anterior
+     */
+    private void configurarBotonVolver() {
+        Container frame = this.getContentPane();
+        JPanel panel = (JPanel) frame.getComponent(0);
+        JButton btnVolver = (JButton) panel.getComponent(0);
+
+        btnVolver.addActionListener((ActionEvent e) -> {
+            control.mostrarConsultarFuncionesSalas(this);
+        });
+
+    }
 }

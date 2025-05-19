@@ -6,6 +6,7 @@ package pantallas.reservaBoletos;
 
 import control.ControlDeNavegacion;
 import DTOs.BoletoDTO;
+import DTOs.ClienteDTO;
 import control.IControl;
 import java.time.LocalDateTime;
 import javax.swing.ImageIcon;
@@ -28,7 +29,8 @@ public final class DetalleDelBoleto extends javax.swing.JFrame {
     public DetalleDelBoleto(){
         initComponents();
         
-        BoletoDTO boleto = control.cargarBoleto();
+        ClienteDTO cliente = control.obtenerClienteActual();
+        BoletoDTO boleto = control.cargarBoleto(cliente);
         if (boleto == null) {
             dispose();
         }
@@ -181,7 +183,7 @@ public final class DetalleDelBoleto extends javax.swing.JFrame {
 
     private void btnRegresoMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresoMenuMouseClicked
         // TODO add your handling code here:
-        control.mostrarMenuCliente(this, null);
+        control.mostrarMenuCliente(this);
         dispose();
     }//GEN-LAST:event_btnRegresoMenuMouseClicked
 

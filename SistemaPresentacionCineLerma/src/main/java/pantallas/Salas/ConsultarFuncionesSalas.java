@@ -10,8 +10,10 @@ import DTOs.SalaViejaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -46,6 +49,15 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
     private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
 
     private final Integer alturaFilas = 40;
+    
+    //A continuacion se encuentran las dimensiones para configurar el tamaño del boton para agregar, tambien se configura su fuente y su color
+    private final Integer anchoBoton = 200;
+    private final Integer alturaBoton = 40;
+    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton);
+    private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.PLAIN, 20);
+    private final Color colorBoton = new Color(162, 132, 94); // Color general del boton
+
+    private final Color colorBotonFore = new Color(255, 255, 255);
 
     private JPanel panelTabla;
     private JTable tablaFunciones;
@@ -89,6 +101,11 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
         textFieldBuscador.setText("jTextField1");
 
         btnInfo.setText("jButton1");
+        btnInfo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInfoMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,6 +134,17 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInfoMouseClicked
+        // TODO add your handling code here:
+        Integer filaSelecionada = tablaFunciones.getSelectedRow();
+        if (filaSelecionada == -1) {
+            JOptionPane.showMessageDialog(null, "Debe elegir una funcion primero", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        FuncionDTO funcionSelecionada = funcionesCargadas.get(filaSelecionada);
+        control.mostrarConsultarAsientosReservados(this, funcionSelecionada);
+    }//GEN-LAST:event_btnInfoMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -271,6 +299,17 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
 
     private void configurarBotonInformacion() {
         btnInfo = new JButton("MAS INFO...");
+        btnInfo.setPreferredSize(tamañoBoton);
+        btnInfo.setSize(tamañoBoton);
+        btnInfo.setFont(fuenteBoton);
+        btnInfo.setBackground(colorBoton);
+        btnInfo.setForeground(colorBotonFore);
+        
+        btnInfo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInfoMouseClicked(evt);
+            }
+        });
     }
 
     /**

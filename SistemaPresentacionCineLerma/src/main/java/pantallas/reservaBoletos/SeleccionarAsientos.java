@@ -7,17 +7,22 @@ package pantallas.reservaBoletos;
 import control.ControlDeNavegacion;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
+import DTOs.SalaViejaDTO;
 import control.IControl;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -30,6 +35,7 @@ import utilitades.Utilerias;
  * @author Ramon Valencia
  */
 public class SeleccionarAsientos extends javax.swing.JFrame {
+
     //Instancia de la clase ControlDeNavegacion
     private final IControl control = ControlDeNavegacion.getInstancia();
     //Objeto necesario para llamar a los metodos de la clase Utilerias
@@ -38,30 +44,35 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private final PeliculaDTO peliculaSeleccionada;
     //Se inicializa la Lista de todas Funciones, en base a la pelicula se manda a llamar a un metodo el cual se encarga de obtener las funciones de es pelicula 
     private final List<FuncionDTO> listaFunciones;
-    
+
     private FuncionDTO funcionSeleccionada;
-    
+
+    private SalaViejaDTO salaSelecionada;
+
     private final JPanel panelFunciones = new JPanel();
 
     /**
-     * Creates new form SeleccionarAsientos se inicializa la estructura y se le forma a la a varias partes 
+     * Creates new form SeleccionarAsientos se inicializa la estructura y se le
+     * forma a la a varias partes
+     *
      * @param pelicula
      */
     public SeleccionarAsientos(PeliculaDTO pelicula) {
         initComponents();
         peliculaSeleccionada = pelicula;
         //Se obtiene las funciones de la pelicula que fue seleccionada en la pantalla anterior
-        listaFunciones = control.obtenerFunciones("pelicula.getNombrePelicula()");
-        
-        // Se llama a la funcion que se encarga de darle un formato a la pagina
-        generarFormatoPagina();
-        // Se llama a la funcion que se encarga de darle un formato al scrollPane donde se ingresaran las funciones
-        generarTablaFunciones(jScrollPanel);
+        listaFunciones = control.obtenerFunciones(pelicula.getTitulo());
+        if (listaFunciones.isEmpty()) {
 
-        if (panelFunciones.getComponentCount() == 0) {
             SwingUtilities.invokeLater(() -> {
                 dispose();
+                control.mostrarSeleccionarPelicula();
             });
+        } else {
+            // Se llama a la funcion que se encarga de darle un formato a la pagina
+            generarFormatoPagina();
+            // Se llama a la funcion que se encarga de darle un formato al scrollPane donde se ingresaran las funciones
+            generarTablaFunciones(jScrollPanel);
         }
 
         revalidate();
@@ -253,10 +264,10 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         // TODO add your handling code here:
         String texto = jTextFieldNumAsientos.getText();
         FuncionDTO funcion = control.consultarFuncion();
-        
+
         //funcion que se encarga de validar los campos y que aparte de ello regresa el texto validado
         String textoValidado = control.validarCamposAsientos(texto, funcionSeleccionada);
-        
+
         if (textoValidado != null) {
             dispose();
             //Se obtiene el numAsientos y se convierto a entero esto para guardarlo y poder registrarlos mas adelante
@@ -289,36 +300,52 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     /**
-     * Metodo para darle formato a la pagina, meterle info a los jText, jLabel y toda la info
+     * Metodo para darle formato a la pagina, meterle info a los jText, jLabel y
+     * toda la info
      */
     private void generarFormatoPagina() {
-        panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
-        jTextAreaDescripcion.setText("peliculaSeleccionada.getDescripcionPelicula()");
-        //Se llama al metodo de utileria encargado de crear la imagen
-//        ImageIcon imagen = utilerias.crearImagen("peliculaSeleccionada.getPeliculaImagen()", 200, 300);
-//        jLabelImagenPelicula.setIcon(imagen);
-        jLabelNombrePelicula.setText("peliculaSeleccionada.getNombrePelicula()");
-        jTextAreaDescripcion.setEnabled(false);
-        jTextFieldNumAsientos.setText("");
+        try {
+            
+            panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
+            jTextAreaDescripcion.setText("<html><body style='width: 100px'>" 
+                            + peliculaSeleccionada.getSinopsis() 
+                            + "</body></html>"
+            );
+            //Se llama al metodo de utileria encargado de crear la imagen
+            ImageIcon imagen = utilerias.crearImagen(peliculaSeleccionada.getImagen(), 200, 300);
+            jLabelImagenPelicula.setIcon(imagen);
+            jLabelNombrePelicula.setText(peliculaSeleccionada.getTitulo());
+            jTextAreaDescripcion.setEnabled(false);
+            String asientosFormateados = salaSelecionada == null
+                    ? "0"
+                    : salaSelecionada.getNumAsientos().toString();
+            jTextFieldNumAsientos.setText(asientosFormateados);
+        } catch (IOException e) {
+
+        }
     }
-    
+
     /**
-     * Metodo que recibe el ScrollPanel y el panel y se encarga de meter uno dentro de otro
+     * Metodo que recibe el ScrollPanel y el panel y se encarga de meter uno
+     * dentro de otro
+     *
      * @param scrollPanel
-     * @param panel 
+     * @param panel
      */
     private void generarScrollPanel(JScrollPane scrollPanel, JPanel panel) {
         scrollPanel.setViewportView(panel);
         scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
     }
-    
+
     /**
-     * Metodo que se encarga de crear y generar el diseño de los botones de las funciones
+     * Metodo que se encarga de crear y generar el diseño de los botones de las
+     * funciones
+     *
      * @param panelBotones
      * @param dia
      * @param diaTexto
-     * @return 
+     * @return
      */
     private JPanel generarPanelBotones(JPanel panelBotones, LocalDateTime dia, String diaTexto) {
         panelBotones.setLayout(new GridLayout(2, 0, 10, 10));
@@ -339,30 +366,30 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         panelBotones.setVisible(true);
         return panelBotones;
     }
-    
+
     /**
-     * Metodo que se encarga de generar el panel de cada funcion donde se agrega el texto del dia de la funcion y el boton para seleccionarla
-     * 
+     * Metodo que se encarga de generar el panel de cada funcion donde se agrega
+     * el texto del dia de la funcion y el boton para seleccionarla
+     *
      * @param panelFuncionDia
      * @param dia
-     * @return 
+     * @return
      */
     private JPanel generarPanelFuncionDia(JPanel panelFuncionDia, LocalDateTime dia) {
         //Metodo de utilerias para convertir objeto Date a objeto LocalDate
-        
+
         //Se crea el string para escribir la fecha
         String diaTexto = utilerias.traducirDia(dia.getDayOfWeek()) + ", "
                 + dia.getDayOfMonth() + " de "
                 + utilerias.traducirMes(dia.getMonth());
-        
-        
+
         JLabel labelDia = new JLabel(diaTexto);
         labelDia.setHorizontalAlignment(SwingConstants.CENTER);
 
         Border borde = BorderFactory.createLineBorder(Color.BLACK, 1);
 
         labelDia.setBorder(borde);
-        
+
         //En esta parte se le da la forma al panelFuncionDia donde se le agregan el boton y el label
         panelFuncionDia.add(labelDia);
         panelFuncionDia.add(generarPanelBotones(new JPanel(), dia, diaTexto));
@@ -372,9 +399,11 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         panelFuncionDia.setVisible(true);
         return panelFuncionDia;
     }
+
     /**
      * Este metodo es para generar el Panel principal
-     * @param panelPrincipal 
+     *
+     * @param panelPrincipal
      */
     public void generarPanelPrincipal(JPanel panelPrincipal) {
         //Se crea una lista en donde se guardaran las fechas de todas las funciones
@@ -386,10 +415,11 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         }
         panelPrincipal.setVisible(true);
     }
-    
+
     /**
      * Metodo para generar las tabla las funciones
-     * @param scrollPanel 
+     *
+     * @param scrollPanel
      */
     private void generarTablaFunciones(JScrollPane scrollPanel) {
         generarPanelPrincipal(panelFunciones);
@@ -398,9 +428,10 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
 
     /**
      * Metodo para crear el boton de la funcion
+     *
      * @param funcion
      * @param diaTexto
-     * @return 
+     * @return
      */
     private JButton crearBotonFuncion(FuncionDTO funcion, String diaTexto) {
 
@@ -424,9 +455,10 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
 
     /**
      * Metodo para cargar los datos de la funcion en los labels
+     *
      * @param funcion
      * @param asientosDisponibles
-     * @param diaTexto 
+     * @param diaTexto
      */
     private void cargarDatos(FuncionDTO funcion, int asientosDisponibles, String diaTexto) {
         jLabelCosto.setText("Costo del Boleto: " + String.valueOf(funcion.getPrecio()));
@@ -435,8 +467,10 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     }
 
     /**
-     * Este metodo se encarga de obtener las todas las fechas de cada respectiva funcion
-     * @return 
+     * Este metodo se encarga de obtener las todas las fechas de cada respectiva
+     * funcion
+     *
+     * @return
      */
     private List<LocalDateTime> obtenerFechasFunciones() {
         List<LocalDateTime> fechasFunciones = new ArrayList<>();
@@ -446,7 +480,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             for (int i = 0; i < listaFunciones.size(); i++) {
                 FuncionDTO funcion = listaFunciones.get(i);
                 LocalDateTime fecha = funcion.getFechaHora();
-                
+
                 //Aqui se ingresan las fechas y al mismo tiempo se compara para revisar que no se repita ninguna fecha
                 if (!fechasFunciones.isEmpty()) {
                     for (int s = 0; s < fechasFunciones.size(); s++) {
@@ -464,9 +498,10 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
 
     /**
      * Metodo para dar la funcionalidad de un boton
+     *
      * @param boton
      * @param funcion
-     * @param diaTexto 
+     * @param diaTexto
      */
     private void funcionalidadBoton(JButton boton, FuncionDTO funcion, String diaTexto) {
         SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);

@@ -7,15 +7,9 @@ package pantallas;
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
 import DTOs.UsuarioDTO;
-import Excepciones.EncontrarUsuarioException;
-import Excepciones.ValidarUsuarioException;
 import control.ControlDeNavegacion;
 import control.IControl;
 import enums.Rol;
-import gestionUsuarios.IManejoUsuarios;
-import gestionUsuarios.ManejoUsuarios;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -161,15 +155,16 @@ public class IniciarSesion extends javax.swing.JFrame {
                 ClienteDTO clienteEncontrado = control.obtenerCliente(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
                 JOptionPane.showMessageDialog(this, "Bienvenido: " + clienteEncontrado.getNombre() + " " + clienteEncontrado.getApellidoPaterno() + " " + clienteEncontrado.getApellidoMaterno(), "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
                 
-                control.mostrarMenuCliente(this, clienteEncontrado);
+                control.guardarClienteActual(clienteEncontrado);
+                control.mostrarMenuCliente(this);
                 dispose();
                 return;
             } else if (usuarioEncontrado.getRol() == Rol.ADMINISTRADOR) {
                 AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
                 JOptionPane.showMessageDialog(this, "Bienvenido: " + adminEncontrado.getNombre() + " " + adminEncontrado.getApellidoPaterno() + " " + adminEncontrado.getApellidoMaterno(), "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
                 
-                
-                control.mostrarMenuAdministrador(this, adminEncontrado);
+                control.guardarAdministradorActual(adminEncontrado);
+                control.mostrarMenuAdministrador(this);
                 dispose();
                 return;
             }

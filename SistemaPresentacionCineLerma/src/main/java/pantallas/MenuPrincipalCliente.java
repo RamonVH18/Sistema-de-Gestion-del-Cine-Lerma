@@ -50,7 +50,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipal
      */
-    public MenuPrincipalCliente(ClienteDTO cliente) {
+    public MenuPrincipalCliente() {
         initComponents();
         setTitle(nombrePestania);
         setSize(640, 830);
@@ -62,7 +62,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         
-        this.cliente = cliente;
+        this.cliente = control.obtenerClienteActual();
 
         revalidate();
         repaint();

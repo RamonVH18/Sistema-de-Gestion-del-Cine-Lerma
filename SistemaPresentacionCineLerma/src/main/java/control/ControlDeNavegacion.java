@@ -125,14 +125,14 @@ public class ControlDeNavegacion implements IControl {
     private PeliculaDTO peliculaSeleccionada;
     private FuncionDTO funcionSeleccionada;
     private UsuarioDTO usuarioActual;
+    private AdministradorDTO administrador;
+    private ClienteDTO cliente;
     
     private final String titulo = "¡ERROR!";
     
     private List<String> asientos;
     
     private int numAsientos;
-    
-    private final ClienteDTO cliente = new ClienteDTO();
     
     private static ControlDeNavegacion instancia;
 
@@ -159,15 +159,33 @@ public class ControlDeNavegacion implements IControl {
     public UsuarioDTO obtenerUsuarioActual() {
         return usuarioActual;
     }
+    @Override
+    public AdministradorDTO obtenerAdministradorActual() {
+        return administrador;
+    }
+    @Override
+    public void guardarAdministradorActual(AdministradorDTO administrador) {
+        this.administrador = administrador;
+    }
+    @Override
+    public ClienteDTO obtenerClienteActual() {
+        return cliente;
+    }
+    @Override
+    public void guardarClienteActual(ClienteDTO cliente) {
+        this.cliente = cliente;
+    }
+    
+    
 
     /**
      * Este metodo sirve para regresar al menu Principal, se encontrara la forma
      * de de fusionar
      */
     @Override
-    public void mostrarMenuCliente(JFrame frameAnterior, ClienteDTO cliente) {
+    public void mostrarMenuCliente(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
-            MenuPrincipalCliente pantalla = new MenuPrincipalCliente(cliente);
+            MenuPrincipalCliente pantalla = new MenuPrincipalCliente();
             pantalla.setLocationRelativeTo(null);
             pantalla.setVisible(true);
         });
@@ -177,9 +195,9 @@ public class ControlDeNavegacion implements IControl {
      * Metodo que se encarga de abrir la pantalla de pago rechazado
      */
     @Override
-    public void mostrarMenuAdministrador(JFrame frameAnterior, AdministradorDTO admin) {
+    public void mostrarMenuAdministrador(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
-            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin(admin);
+            MenuPrincipalAdmin pantallaMenuAdmin = new MenuPrincipalAdmin();
             pantallaMenuAdmin.setLocationRelativeTo(null);
             pantallaMenuAdmin.setVisible(true);
         });
@@ -195,8 +213,8 @@ public class ControlDeNavegacion implements IControl {
                 SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
                 pantallaSeleccionarPelicula.setLocationRelativeTo(null);
                 pantallaSeleccionarPelicula.setVisible(true);
-            } catch (IOException ex) {
-                Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "ERROR:" + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -290,7 +308,6 @@ public class ControlDeNavegacion implements IControl {
         } catch (PeliculasCargaException e) {
             //PONER JOptionPane y cerrar la pantalla actual y volver al menuPrincipal
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            mostrarMenuCliente(null, null);
             return null;
         }
     }
@@ -321,8 +338,7 @@ public class ControlDeNavegacion implements IControl {
             return funciones;
         } catch (FuncionCargaException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            mostrarSeleccionarPelicula();
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -421,7 +437,7 @@ public class ControlDeNavegacion implements IControl {
      * excepcion
      * @throws GestionReservaException
      */
-    private List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos) {
+    private List<String> obtenerListaAsientosReservados(FuncionDTO funcion, int numAsientos, ClienteDTO cliente) {
         try {
             List<String> asientosReservados = manejoDeBoletos.reservarAsientoFuncion(funcion, numAsientos, cliente);
             this.asientos = asientosReservados;
@@ -438,8 +454,8 @@ public class ControlDeNavegacion implements IControl {
      * @return El boleto generado de la funcion, null en caso de excepcion
      */
     @Override
-    public BoletoDTO cargarBoleto() {
-        List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos);
+    public BoletoDTO cargarBoleto(ClienteDTO cliente) {
+        List<String> asientosReservados = obtenerListaAsientosReservados(funcionSeleccionada, numAsientos, cliente);
         try {
             return manejoDeBoletos.generarBoleto(peliculaSeleccionada, funcionSeleccionada, asientosReservados, cliente);
         } catch (GenerarBoletoException ex) {

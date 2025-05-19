@@ -180,7 +180,7 @@ public final class MenuSalas extends javax.swing.JFrame {
         JButton btnVolver = (JButton) panel.getComponent(0);
         // Se le añade un action listener para que cierre esta pantalla y abra la anterior
         btnVolver.addActionListener((ActionEvent e) -> {
-            control.mostrarMenuAdministrador(this, null);
+            control.mostrarMenuAdministrador(this);
             dispose();
         });
 

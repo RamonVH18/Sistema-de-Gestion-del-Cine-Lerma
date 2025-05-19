@@ -287,7 +287,7 @@ public class EditarUsuario extends javax.swing.JFrame {
         if (control.actualizarCliente(clienteActualizado) != null) {
             JOptionPane.showMessageDialog(this, "Cambios guardados correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
             if (frameAnterior instanceof MenuPrincipalCliente) {
-                control.mostrarMenuCliente(this, clienteAlMando);
+                control.mostrarMenuCliente(this);
                 dispose();
             } else if (frameAnterior instanceof ConsultarUsuarios) {
                 control.mostrarGestionDeUsuarios(this, null);
@@ -304,7 +304,7 @@ public class EditarUsuario extends javax.swing.JFrame {
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
         if (frameAnterior instanceof MenuPrincipalCliente) {
-            control.mostrarMenuCliente(this, clienteAlMando);
+            control.mostrarMenuCliente(this);
             dispose();
         } else if (frameAnterior instanceof ConsultarUsuarios) {
             control.mostrarGestionDeUsuarios(this, null);

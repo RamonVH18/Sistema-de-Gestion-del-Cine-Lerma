@@ -18,7 +18,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -45,7 +44,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipalAdmin
      */
-    public MenuPrincipalAdmin(AdministradorDTO administrador) {
+    public MenuPrincipalAdmin() {
         initComponents();
         setTitle(nombrePestania);
         setSize(640, 830);
@@ -56,7 +55,7 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
         setVisible(true);
         
 
-        this.administrador = administrador;
+        this.administrador = control.obtenerAdministradorActual();
 
         revalidate();
         repaint();

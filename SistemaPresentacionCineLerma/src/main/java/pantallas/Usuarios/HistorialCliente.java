@@ -105,14 +105,12 @@ public class HistorialCliente extends javax.swing.JFrame {
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
         if (frameAnterior instanceof MenuPrincipalCliente) {
-            control.mostrarMenuCliente(this, clienteActual);
+            control.mostrarMenuCliente(this);
             dispose();
         } else if (frameAnterior instanceof ConsultarUsuarios) {
             control.mostrarGestionDeUsuarios(this, null);
             dispose();
         }
-        
-        
         control.mostrarGestionDeUsuarios(this, null);
         dispose();
         
