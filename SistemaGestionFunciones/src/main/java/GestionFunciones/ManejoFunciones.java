@@ -6,7 +6,6 @@ package GestionFunciones;
 
 import BOs.AsientoFuncionBO;
 import BOs.FuncionBO;
-import BOs.SalaBO;
 import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
 import Excepciones.FuncionBoletosVendidosException;
@@ -22,23 +21,37 @@ import Excepciones.funciones.FuncionRegistrarException;
 import Excepciones.funciones.FuncionValidadaException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
-import Interfaces.ISalaBO;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
+ * Clase que gestiona las operaciones relacionadas con las funciones de un
+ * sistema de gestión de cine. Implementa la interfaz {@link IManejoFunciones} y
+ * utiliza patrones singleton para asegurar una única instancia. Proporciona
+ * métodos para registrar, eliminar, buscar funciones y calcular horarios de
+ * término.
  *
  * @author Abraham Coronel Bringas
+ *
  */
 public class ManejoFunciones implements IManejoFunciones {
 
+    /**
+     * Instancia única de la clase (patrón singleton).
+     */
     private static ManejoFunciones instanceManejoFunciones;
 
+    /**
+     * Constructor privado para evitar instanciación externa (singleton).
+     */
     private ManejoFunciones() {
     }
 
+    /**
+     * Obtiene la instancia única de la clase (patrón singleton).
+     *
+     * @return La única instancia de {@link ManejoFunciones}.
+     */
     public static ManejoFunciones getInstanceDAO() {
         if (instanceManejoFunciones == null) {
             instanceManejoFunciones = new ManejoFunciones();
@@ -46,10 +59,30 @@ public class ManejoFunciones implements IManejoFunciones {
         return instanceManejoFunciones;
     }
 
+    /**
+     * Objeto de negocio para gestionar funciones.
+     */
     private final IFuncionBO funcionBO = FuncionBO.getInstanceDAO();
+    /**
+     * Objeto de negocio para gestionar asientos de funciones.
+     */
     private final IAsientoFuncionBO asientoFuncionBO = AsientoFuncionBO.getInstance();
-    private final ISalaBO salaBO = SalaBO.getInstanceBO();
 
+    /**
+     * Registra una nueva función validando previamente los datos
+     * proporcionados.
+     *
+     * @param funcionDTO Objeto que contiene los datos de la funcion a
+     * registrar.
+     * @return {@link FuncionDTO} La funcion registrada, con datos actualizados
+     * (ej: ID).
+     * @throws FuncionDatosIncorrectosException Si los datos de la funcion son
+     * inválidos (nulos, precios negativos, etc.).
+     * @throws FuncionSolapamientoSalaException Si la funcion se solapa con otra
+     * en la misma sala.
+     * @throws FuncionCapacidadSalaException Si la sala asociada no tiene
+     * capacidad valida.
+     */
     @Override
     public FuncionDTO registraFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionSolapamientoSalaException, FuncionCapacidadSalaException {
         // Validar que funcionDTO no sea nulo o vacio
@@ -92,6 +125,17 @@ public class ManejoFunciones implements IManejoFunciones {
         }
     }
 
+    /**
+     * Elimina una función siempre que no tenga boletos vendidos.
+     *
+     * @param funcionDTO Objeto que contiene los datos de la funcion a eliminar.
+     * @return {@code true} si la eliminación fue exitosa, {@code false} en caso
+     * contrario.
+     * @throws FuncionDatosIncorrectosException Si la funcion no existe o los
+     * datos son invalidos.
+     * @throws FuncionBoletosVendidosException Si la funcion tiene boletos
+     * vendidos y no puede eliminarse.
+     */
     @Override
     public Boolean eliminarFuncion(FuncionDTO funcionDTO) throws FuncionDatosIncorrectosException, FuncionBoletosVendidosException {
         if (funcionDTO == null || funcionDTO.getIdFuncion() == null) {
@@ -114,6 +158,15 @@ public class ManejoFunciones implements IManejoFunciones {
         }
     }
 
+    /**
+     * Busca funciones aplicando filtros por nombre de película y/o fecha.
+     *
+     * @param nombrePelicula Nombre de la película para filtrar (opcional).
+     * @param fechaHora Fecha y hora para filtrar (opcional).
+     * @return Lista de {@link FuncionDTO} que coinciden con los filtros.
+     * @throws FuncionDatosIncorrectosException Si no se aplica ningun filtro o
+     * los datos son invalidos.
+     */
     @Override
     public List<FuncionDTO> buscarFunciones(String nombrePelicula, LocalDateTime fechaHora) throws FuncionDatosIncorrectosException {
         try {
@@ -139,6 +192,15 @@ public class ManejoFunciones implements IManejoFunciones {
         }
     }
 
+    /**
+     * Busca funciones utilizando un texto de filtro general (ej: nombre parcial
+     * de película).
+     *
+     * @param textoFiltro Texto para filtrar funciones (ej: "avengers").
+     * @return Lista de {@link FuncionDTO} que coinciden con el filtro.
+     * @throws FuncionDatosIncorrectosException Si ocurre un error al procesar
+     * el filtro.
+     */
     @Override
     public List<FuncionDTO> buscarFuncionesFiltradas(String textoFiltro) throws FuncionDatosIncorrectosException {
         try {
@@ -152,6 +214,15 @@ public class ManejoFunciones implements IManejoFunciones {
         }
     }
 
+    /**
+     * Calcula la hora de término de una función basada en su duración y hora de
+     * inicio.
+     *
+     * @param idFuncion ID unico de la función.
+     * @return {@link LocalDateTime} Hora estimada de término.
+     * @throws FuncionDuracionException Si el ID es inválido o hay errores al
+     * calcular la duración.
+     */
     @Override
     public LocalDateTime calcularHoraTerminoFuncion(String idFuncion) throws FuncionDuracionException {
         if (idFuncion == null || idFuncion.isEmpty()) {
