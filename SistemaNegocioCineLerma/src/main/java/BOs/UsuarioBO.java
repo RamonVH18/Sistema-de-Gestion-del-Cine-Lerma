@@ -5,7 +5,6 @@
 package BOs;
 
 import DAOs.UsuarioDAO;
-import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.Usuarios.ActualizarUsuarioExceptionBO;
 import Excepciones.Usuarios.ObtenerUsuariosExceptionBO;

@@ -16,7 +16,6 @@ import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
 import DTOs.PaypalDTO;
 import DTOs.PeliculaDTO;
-import DTOs.ReporteUsuarioDTO;
 import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;

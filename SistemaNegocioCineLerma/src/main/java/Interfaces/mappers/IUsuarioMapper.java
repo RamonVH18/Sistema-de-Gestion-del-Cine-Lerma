@@ -4,7 +4,6 @@
  */
 package Interfaces.mappers;
 
-import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import entidades.Usuario;
 

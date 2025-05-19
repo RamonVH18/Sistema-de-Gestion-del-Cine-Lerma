@@ -10,7 +10,6 @@ import BOs.UsuarioBO;
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
-import DTOs.ReporteUsuarioDTO;
 import DTOs.UsuarioDTO;
 import Excepciones.ActualizarUsuarioException;
 import Excepciones.CargarHistorialException;
