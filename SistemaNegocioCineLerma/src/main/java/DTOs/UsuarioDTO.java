@@ -35,6 +35,7 @@ public class UsuarioDTO {
     public UsuarioDTO() {
     }
 
+    //Getter y setter
     public String getNombreUsuario() {
         return nombreUsuario;
     }

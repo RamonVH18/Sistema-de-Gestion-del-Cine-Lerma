@@ -12,7 +12,21 @@ import entidades.Administrador;
  *
  * @author sonic
  */
+/**
+ * Mapper para convertir entre objetos de tipo Administrador
+ * a AdministradorDTO y viceversa
+ * 
+ * Esta clase permite mapear los datos entre la capa de presentación y la capa de negocio
+ * para la entidad Administrador.
+ */
 public class AdministradorMapper implements IAdministradorMapper{
+    
+    /**
+     * Convierte un objeto Administrador en un objeto AdministradorDTO.
+     *
+     * @param admin El objeto Administrador que se va a convertir.
+     * @return Un objeto AdministradorDTO que representa al administrador, o null si el administrador es null.
+     */
     @Override
     public AdministradorDTO toAdministradorDTO(Administrador admin) {
         //Primero se valida si el pago recibido es null, entonces se retornara un null
@@ -20,6 +34,7 @@ public class AdministradorMapper implements IAdministradorMapper{
             return null;
         }
         
+        //Se crea un objeto AdministradorDTO
         AdministradorDTO dto = new AdministradorDTO();
 
         // Mapeo de campos heredados de Usuario
@@ -37,11 +52,18 @@ public class AdministradorMapper implements IAdministradorMapper{
         // Mapeo del campo específico de Administrador
         dto.setRFC(admin.getRFC());
 
-        return dto;
+        return dto; //Se retorna el administradorDTO mapeado con los atributos de la entidad recibida como parametro
 
 
     }
     
+    
+      /**
+     * Convierte un objeto AdministradorDTO en un objeto Administrador.
+     *
+     * @param admindto El objeto AdministradorDTO que se va a convertir.
+     * @return Un objeto Administrador que representa al administrador, o null si el AdministradorDTO es null.
+     */
     @Override
     public Administrador toAdministradorEntidad(AdministradorDTO admindto) {
         if (admindto == null) {
@@ -65,6 +87,6 @@ public class AdministradorMapper implements IAdministradorMapper{
         // Campo específico de Administrador
         admin.setRFC(admindto.getRFC());
 
-        return admin;
+        return admin; //Se retorna el administrador mapeado con los atributos de el dto recibido como parametro
     }
 }

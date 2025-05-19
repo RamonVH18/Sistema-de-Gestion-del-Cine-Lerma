@@ -12,8 +12,21 @@ import entidades.Cliente;
  *
  * @author sonic
  */
+/**
+ * Mapper para convertir entre objetos de tipo Cliente
+ * a ClienteDTO y viceversa
+ * 
+ * Esta clase permite mapear los datos entre la capa de presentación y la capa de negocio
+ * para la entidad Administrador.
+ */
 public class ClienteMapper implements IClienteMapper {
 
+    /**
+     * Convierte un objeto Administrador en un objeto AdministradorDTO.
+     *
+     * @param cliente El objeto Cliente que se va a convertir.
+     * @return Un objeto ClienteDTO que representa al cliente, o null si el cliente es null.
+     */
     @Override
     public ClienteDTO toClienteDTO(Cliente cliente) {
         //Primero se valida si el cliente recibido es null, entonces se retornara un null
@@ -43,6 +56,13 @@ public class ClienteMapper implements IClienteMapper {
         return dto;
     }
 
+    
+      /**
+     * Convierte un objeto AdministradorDTO en un objeto Administrador.
+     *
+     * @param clientedto El objeto AdministradorDTO que se va a convertir.
+     * @return Un objeto Cliente que representa al cliente, o null si el ClienteDTO es null.
+     */
     @Override
     public Cliente toClienteEntidad(ClienteDTO clientedto) {
         //Primero se valida si el cliente recibido es null, entonces se retornara un null

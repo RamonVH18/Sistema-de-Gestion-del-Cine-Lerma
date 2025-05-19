@@ -8,8 +8,14 @@ package DTOs;
  *
  * @author sonic
  */
+/**
+ * Clase DTO que representa a un Administrador.
+ * Extiende de UsuarioDTO para incluir los atributos heredados de usuario,
+ * y añade el campo específico RFC propio de un administrador.
+ */
 public class AdministradorDTO extends UsuarioDTO{
     
+    //rfc del administrador
     private String RFC;
 
     public AdministradorDTO() {

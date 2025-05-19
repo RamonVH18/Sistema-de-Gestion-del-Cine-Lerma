@@ -8,10 +8,19 @@ package DTOs;
  *
  * @author Ramon Valencia
  */
+/**
+ * Clase que representa la información de un cliente en el sistema.
+ * Extiende de UsuarioDTO para heredar los atributos básicos de usuario.
+ * Contiene información específica de la dirección del cliente.
+ * 
+ */
 public class ClienteDTO extends UsuarioDTO{
     
+    //Nombre de la calle del domicilio del cliente
     private String calle;
+    //Codigo postal del cliente
     private String CP;
+    //numero exterior del domicilio del cliente
     private String numero;
 
     public ClienteDTO() {
