@@ -209,13 +209,9 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarSeleccionarPelicula() {
         SwingUtilities.invokeLater(() -> {
-            try {
-                SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
-                pantallaSeleccionarPelicula.setLocationRelativeTo(null);
-                pantallaSeleccionarPelicula.setVisible(true);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "ERROR:" + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
-            }
+            SeleccionarPelicula pantallaSeleccionarPelicula = new SeleccionarPelicula();
+            pantallaSeleccionarPelicula.setLocationRelativeTo(null);
+            pantallaSeleccionarPelicula.setVisible(true);
         });
     }
 
