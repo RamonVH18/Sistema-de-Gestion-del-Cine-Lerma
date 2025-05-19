@@ -8,13 +8,13 @@ package Excepciones.empleados;
  *
  * @author isaac
  */
-public class ValidacionEmpleadoException extends Exception {
+public class DAOActualizarSueldoException extends Exception{
 
-    public ValidacionEmpleadoException(String message) {
+    public DAOActualizarSueldoException(String message) {
         super(message);
     }
 
-    public ValidacionEmpleadoException(String message, Throwable cause) {
+    public DAOActualizarSueldoException(String message, Throwable cause) {
         super(message, cause);
     }
     
