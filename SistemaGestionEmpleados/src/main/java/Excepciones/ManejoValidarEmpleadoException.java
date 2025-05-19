@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author isaac
  */
-public class ObtenerEmpleadoPorCargoException extends Exception{
+public class ManejoValidarEmpleadoException extends Exception {
 
-    public ObtenerEmpleadoPorCargoException(String message) {
+    public ManejoValidarEmpleadoException(String message) {
         super(message);
     }
 
-    public ObtenerEmpleadoPorCargoException(String message, Throwable cause) {
+    public ManejoValidarEmpleadoException(String message, Throwable cause) {
         super(message, cause);
     }
     

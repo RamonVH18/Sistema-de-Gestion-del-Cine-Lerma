@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author isaac
  */
-public class ValidacionEmpleadoIdException extends Exception {
+public class ManejoValidacionEmpleadoIdException extends Exception {
 
-    public ValidacionEmpleadoIdException(String message) {
+    public ManejoValidacionEmpleadoIdException(String message) {
         super(message);
     }
 
-    public ValidacionEmpleadoIdException(String message, Throwable cause) {
+    public ManejoValidacionEmpleadoIdException(String message, Throwable cause) {
         super(message, cause);
     }
     

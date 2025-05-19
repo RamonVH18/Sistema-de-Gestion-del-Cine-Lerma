@@ -8,15 +8,16 @@ package Excepciones;
  *
  * @author isaac
  */
-public class ActualizacionSueldoException extends Exception {
+public class ManejoActualizacionEmpleadoException extends Exception {
 
-    public ActualizacionSueldoException(String message) {
+    public ManejoActualizacionEmpleadoException(String message) {
         super(message);
     }
 
-    public ActualizacionSueldoException(String message, Throwable cause) {
+    public ManejoActualizacionEmpleadoException(String message, Throwable cause) {
         super(message, cause);
     }
+    
     
     
 }

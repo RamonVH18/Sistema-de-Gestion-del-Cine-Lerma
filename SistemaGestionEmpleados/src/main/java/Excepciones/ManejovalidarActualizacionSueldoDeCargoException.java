@@ -8,16 +8,14 @@ package Excepciones;
  *
  * @author isaac
  */
-public class ObtenerEmpleadoException extends Exception {
-
-    public ObtenerEmpleadoException(String message) {
+public class ManejoValidarActualizacionSueldoDeCargoException extends Exception {
+    
+     public ManejoValidarActualizacionSueldoDeCargoException(String message) {
         super(message);
     }
 
-    public ObtenerEmpleadoException(String message, Throwable cause) {
+    public ManejoValidarActualizacionSueldoDeCargoException(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    
     
 }

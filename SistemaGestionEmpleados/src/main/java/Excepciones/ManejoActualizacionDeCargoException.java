@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author isaac
  */
-public class ActualizacionDeCargoException extends Exception {
+public class ManejoActualizacionDeCargoException extends Exception {
 
-    public ActualizacionDeCargoException(String message) {
+    public ManejoActualizacionDeCargoException(String message) {
         super(message);
     }
 
-    public ActualizacionDeCargoException(String message, Throwable cause) {
+    public ManejoActualizacionDeCargoException(String message, Throwable cause) {
         super(message, cause);
     }
     

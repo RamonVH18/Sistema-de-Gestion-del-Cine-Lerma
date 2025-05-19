@@ -8,15 +8,16 @@ package Excepciones;
  *
  * @author isaac
  */
-public class ValidarEmpleadoException extends Exception {
+public class ManejoFiltrarEmpleadosException extends Exception {
 
-    public ValidarEmpleadoException(String message) {
+    public ManejoFiltrarEmpleadosException(String message) {
         super(message);
     }
 
-    public ValidarEmpleadoException(String message, Throwable cause) {
+    public ManejoFiltrarEmpleadosException(String message, Throwable cause) {
         super(message, cause);
     }
+    
     
     
 }
