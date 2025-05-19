@@ -148,17 +148,6 @@ public class ManejoUsuarios implements IManejoUsuarios {
         }
     }
 
-    @Override
-    public List<ReporteUsuarioDTO> mostrarUsuariosParaReporte() throws ObtenerUsuariosException {
-        try {
-            List<ReporteUsuarioDTO> reporteUsuarios = usuarioBO.obtenerReporteUsuarios();
-
-            return reporteUsuarios;
-
-        } catch (ObtenerUsuariosExceptionBO e) {
-            throw new ObtenerUsuariosException("No se pudieron obtener a los usuarios para el reporte: " + e.getMessage());
-        }
-    }
 
     ///////////////////////////////////////////
     //-------------------------------------------------METODOS DE CLIENTES ---------------------------------------------------------------------------------------

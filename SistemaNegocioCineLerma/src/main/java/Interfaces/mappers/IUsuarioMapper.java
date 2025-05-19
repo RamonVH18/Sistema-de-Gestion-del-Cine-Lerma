@@ -17,6 +17,4 @@ public interface IUsuarioMapper {
         
     public Usuario toUsuarioEntidad(UsuarioDTO usuariodto);
     
-    public ReporteUsuarioDTO toReporteUsuarioDTO(Usuario usuario);
-    
 }

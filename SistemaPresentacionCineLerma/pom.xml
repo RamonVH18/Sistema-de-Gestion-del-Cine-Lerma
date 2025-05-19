@@ -94,6 +94,17 @@
             <artifactId>SistemaGestionEmpleados</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>7.2.3</version> 
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>Itext</groupId>
+            <artifactId>Itext</artifactId>
+            <version>1</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

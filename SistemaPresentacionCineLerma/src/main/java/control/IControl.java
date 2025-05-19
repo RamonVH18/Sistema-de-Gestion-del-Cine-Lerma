@@ -182,8 +182,6 @@ public interface IControl {
     public List<UsuarioDTO> mostrarListaUsuariosFiltrada(EstadoUsuario estado, Rol rol, LocalDateTime fechaInicio, LocalDateTime fechaFin, String nombre);
 
     public UsuarioDTO validarUsuario(String nombreUsuario, String contrasena);
-    
-    public List<ReporteUsuarioDTO> obtenerReporteUsuarios();
 
     //Cliente:
     public ClienteDTO registrarCliente(ClienteDTO cliente);

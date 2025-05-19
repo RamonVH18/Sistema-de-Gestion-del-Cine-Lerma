@@ -4,14 +4,19 @@
  */
 package pantallas.Reportes;
 
-import DTOs.ReporteUsuarioDTO;
+import DTOs.AdministradorDTO;
+import DTOs.ClienteDTO;
+import DTOs.UsuarioDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
+import enums.Rol;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import utilitades.CreacionReportes;
 //import utilitades.CreacionReportes;
 
 /**
@@ -19,7 +24,7 @@ import javax.swing.JOptionPane;
  * @author sonic
  */
 public class Reportes extends javax.swing.JFrame {
-    
+
     private final IControl control = ControlDeNavegacion.getInstancia();
 
     /**
@@ -39,19 +44,19 @@ public class Reportes extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnUsuarios = new javax.swing.JButton();
+        btnAdminstradores = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         titulolbl = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnClientes = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnUsuarios.setBackground(new java.awt.Color(162, 132, 94));
-        btnUsuarios.setText("Reporte de usuarios");
-        btnUsuarios.addActionListener(new java.awt.event.ActionListener() {
+        btnAdminstradores.setBackground(new java.awt.Color(162, 132, 94));
+        btnAdminstradores.setText("Reporte de administradores");
+        btnAdminstradores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUsuariosActionPerformed(evt);
+                btnAdminstradoresActionPerformed(evt);
             }
         });
 
@@ -61,8 +66,13 @@ public class Reportes extends javax.swing.JFrame {
         titulolbl.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         titulolbl.setText("Selecciona un tipo de reporte:");
 
-        jButton3.setBackground(new java.awt.Color(162, 132, 94));
-        jButton3.setText("jButton2");
+        btnClientes.setBackground(new java.awt.Color(162, 132, 94));
+        btnClientes.setText("Reporte de clientes");
+        btnClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientesActionPerformed(evt);
+            }
+        });
 
         btnVolver.setBackground(new java.awt.Color(162, 132, 94));
         btnVolver.setText("< Volver");
@@ -83,9 +93,9 @@ public class Reportes extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(185, 185, 185)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAdminstradores, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(16, 16, 16)
@@ -98,9 +108,9 @@ public class Reportes extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addComponent(titulolbl)
                 .addGap(127, 127, 127)
-                .addComponent(btnUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAdminstradores, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
@@ -111,17 +121,23 @@ public class Reportes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
+    private void btnAdminstradoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminstradoresActionPerformed
         // TODO add your handling code here:
-        generarReporte();
-        
-    }//GEN-LAST:event_btnUsuariosActionPerformed
+        generarReporteAdministradores();
+
+    }//GEN-LAST:event_btnAdminstradoresActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
         control.mostrarMenuAdministrador(this);
         dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
+        // TODO add your handling code here:
+        generarReporteClientes();
+
+    }//GEN-LAST:event_btnClientesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -159,25 +175,34 @@ public class Reportes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnUsuarios;
+    private javax.swing.JButton btnAdminstradores;
+    private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnVolver;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel titulolbl;
     // End of variables declaration//GEN-END:variables
-    private void generarReporte() {
+    private void generarReporteClientes() {
 
         try {
-            List<ReporteUsuarioDTO> usuarios = control.obtenerReporteUsuarios();
+            List<UsuarioDTO> usuarios = control.mostrarListaUsuarios();
 
             if (usuarios.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No se encontro ningun usuario registrado en el sistema", "Info", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
+            List<ClienteDTO> clientes = new ArrayList<>();
+
+            for (UsuarioDTO usuario : usuarios) {
+                if (usuario.getRol() == Rol.CLIENTE) {
+                    ClienteDTO ClienteEncontrado = control.obtenerCliente(usuario.getNombreUsuario(), usuario.getContraseña());
+                    clientes.add(ClienteEncontrado);
+                }
+            }
+
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Guardar reporte PDF");
-            fileChooser.setSelectedFile(new File("reporte_usuarios.pdf"));
+            fileChooser.setSelectedFile(new File("reporte_clientes.pdf"));
 
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 String filePath = fileChooser.getSelectedFile().getAbsolutePath();
@@ -185,7 +210,45 @@ public class Reportes extends javax.swing.JFrame {
                     filePath += ".pdf";
                 }
 
-//                CreacionReportes.generarReporteUsuariosPDF(usuarios, filePath);
+                CreacionReportes.generarReporteClientesPDF(clientes, filePath);
+                JOptionPane.showMessageDialog(this, "Reporte generado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    private void generarReporteAdministradores() {
+
+        try {
+            List<UsuarioDTO> usuarios = control.mostrarListaUsuarios();
+
+            if (usuarios.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontro ningun usuario registrado en el sistema", "Info", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            List<AdministradorDTO> administradores = new ArrayList<>();
+
+            for (UsuarioDTO usuario : usuarios) {
+                if (usuario.getRol() == Rol.ADMINISTRADOR) {
+                    AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuario.getNombreUsuario(), usuario.getContraseña());
+                    administradores.add(adminEncontrado);
+                }
+            }
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar reporte PDF");
+            fileChooser.setSelectedFile(new File("reporte_administradores.pdf"));
+
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".pdf")) {
+                    filePath += ".pdf";
+                }
+
+                CreacionReportes.generarReporteAdministradoresPDF(administradores, filePath);
                 JOptionPane.showMessageDialog(this, "Reporte generado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex) {

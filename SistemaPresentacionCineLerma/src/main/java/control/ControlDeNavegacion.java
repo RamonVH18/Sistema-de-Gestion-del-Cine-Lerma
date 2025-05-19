@@ -989,16 +989,6 @@ public class ControlDeNavegacion implements IControl {
     }
 
     @Override
-    public List<ReporteUsuarioDTO> obtenerReporteUsuarios() {
-        try {
-            return gestionUsuarios.mostrarUsuariosParaReporte();
-        } catch (ObtenerUsuariosException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
-
-    @Override
     public Boolean bloquearUsuario(UsuarioDTO usuario) {
         try {
             return gestionUsuarios.bloquearUsuario(usuario);
