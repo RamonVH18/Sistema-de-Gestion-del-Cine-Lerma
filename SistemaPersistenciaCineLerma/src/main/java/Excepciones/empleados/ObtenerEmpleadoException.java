@@ -8,13 +8,13 @@ package Excepciones.empleados;
  *
  * @author isaac
  */
-public class RegistrarEmpleadoException extends Exception {
+public class ObtenerEmpleadoException extends Exception {
 
-    public RegistrarEmpleadoException(String message) {
+    public ObtenerEmpleadoException(String message) {
         super(message);
     }
 
-    public RegistrarEmpleadoException(String message, Throwable cause) {
+    public ObtenerEmpleadoException(String message, Throwable cause) {
         super(message, cause);
     }
     

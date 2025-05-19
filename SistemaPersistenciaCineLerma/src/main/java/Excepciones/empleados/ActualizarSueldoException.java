@@ -8,15 +8,14 @@ package Excepciones.empleados;
  *
  * @author isaac
  */
-public class RegistrarEmpleadoException extends Exception {
+public class ActualizarSueldoException extends Exception{
 
-    public RegistrarEmpleadoException(String message) {
+    public ActualizarSueldoException(String message) {
         super(message);
     }
 
-    public RegistrarEmpleadoException(String message, Throwable cause) {
+    public ActualizarSueldoException(String message, Throwable cause) {
         super(message, cause);
     }
-    
     
 }

@@ -104,7 +104,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                     int row = tablaEmpleados.getSelectedRow();
                     if (row >= 0) {
                         String idEmpleado = empleadosLista.get(row).getId();
-                        jTextField1.setText(idEmpleado);
+                        txtEmpleadoSeleccionado.setText(idEmpleado);
                         dialog.dispose();
                     }
                 }
@@ -149,7 +149,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             String numSala = salaSeleccionada.getText();
             LocalDateTime fechaHora = FechaHoraFuncion.getDateTimeStrict();
             double precio = Double.parseDouble(precioBoleto.getText());
-            String idEmpleado = jTextField1.getText().isEmpty() ? null : jTextField1.getText();
+            String idEmpleado = txtEmpleadoSeleccionado.getText().isEmpty() ? null : txtEmpleadoSeleccionado.getText();
 
             // Crear DTO con la película válida
             FuncionDTO funcionDTO = new FuncionDTO(
@@ -203,7 +203,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         btnBuscarSalas = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtEmpleadoSeleccionado = new javax.swing.JTextField();
         btnBuscarEmpleados = new javax.swing.JButton();
         FechaHoraFuncion = new com.github.lgooddatepicker.components.DateTimePicker();
 
@@ -264,7 +264,12 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         jLabel3.setText("Seleccione un empleado asignado a la funcion(Opcional)");
         jLabel3.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
 
-        jTextField1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
+        txtEmpleadoSeleccionado.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 14)); // NOI18N
+        txtEmpleadoSeleccionado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEmpleadoSeleccionadoActionPerformed(evt);
+            }
+        });
 
         btnBuscarEmpleados.setText("Buscar Empleados");
         btnBuscarEmpleados.setBackground(new java.awt.Color(162, 132, 94));
@@ -304,7 +309,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                         .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(174, 174, 174)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtEmpleadoSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(189, 189, 189)
                         .addComponent(btnBuscarEmpleados))
@@ -343,7 +348,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtEmpleadoSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnBuscarEmpleados)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
@@ -385,6 +390,11 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         mostrarDialogoEmpleados();
     }//GEN-LAST:event_btnBuscarEmpleadosActionPerformed
 
+    private void txtEmpleadoSeleccionadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmpleadoSeleccionadoActionPerformed
+       
+        
+    }//GEN-LAST:event_txtEmpleadoSeleccionadoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -399,9 +409,9 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelTitulo;
     private javax.swing.JTextField precioBoleto;
     private javax.swing.JTextField salaSeleccionada;
+    private javax.swing.JTextField txtEmpleadoSeleccionado;
     // End of variables declaration//GEN-END:variables
 }

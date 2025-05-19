@@ -8,6 +8,14 @@ package Excepciones.empleados;
  *
  * @author isaac
  */
-public class ValidacionEmpleadoException {
+public class ValidacionEmpleadoException extends Exception {
+
+    public ValidacionEmpleadoException(String message) {
+        super(message);
+    }
+
+    public ValidacionEmpleadoException(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }
