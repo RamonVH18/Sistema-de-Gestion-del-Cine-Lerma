@@ -10,15 +10,19 @@ import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
 import DTOs.SalaViejaDTO;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
+import Excepciones.asientoFuncion.AsientoFuncionEliminacionException;
 import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
 import Excepciones.asientos.ErrorCargarAsientoException;
+import Excepciones.asientos.ErrorEliminacionAsientosException;
 import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
 import Excepciones.asientos.ErrorReservacionAsientoException;
 import Excepciones.asientos.ValidacionAsientosException;
 import Interfaces.IAsientoFuncionBO;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -56,6 +60,20 @@ public class ManejoDeAsientos implements IManejoDeAsientos {
         } catch (ValidacionAsientosException e) {
             throw new ErrorGeneracionAsientoFuncionException("No se pudieron generar los asientos de la funcion correctamente: " + e.getMessage());
         }
+    }
+    
+    @Override
+    public Boolean eliminarAsientos(String idFuncion) throws ErrorEliminacionAsientosException {
+        
+        try {
+            if (idFuncion == null || idFuncion.isBlank()) {
+                throw new ErrorEliminacionAsientosException("Debe ingresar una funcion existente");
+            }
+            return asientoBO.eliminarAsientosFuncion(idFuncion);
+        } catch (AsientoFuncionEliminacionException e) {
+            throw new ErrorEliminacionAsientosException("No se pudieron eliminar los asientos de la funcion");
+        }
+        
     }
 
     private void validarExistenciaAsientos(FuncionDTO funcion) throws ValidacionAsientosException {

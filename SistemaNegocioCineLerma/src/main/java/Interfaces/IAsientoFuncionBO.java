@@ -7,6 +7,7 @@ package Interfaces;
 import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
+import Excepciones.asientoFuncion.AsientoFuncionEliminacionException;
 import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.List;
 public interface IAsientoFuncionBO {
     
     public List<AsientoFuncionDTO> registrarAsientosFuncion(List<AsientoFuncionDTO> asientos) throws AsientoFuncionRegistroException;
+    
+    public Boolean eliminarAsientosFuncion(String idFuncion) throws AsientoFuncionEliminacionException;
     
     public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientos) throws AsientoFuncionReservaException;
     

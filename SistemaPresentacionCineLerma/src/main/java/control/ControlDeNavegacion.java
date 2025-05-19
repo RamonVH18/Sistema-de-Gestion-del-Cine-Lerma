@@ -64,6 +64,7 @@ import Excepciones.ValidacionSalaException;
 import Excepciones.ValidarCampoAsientoException;
 import Excepciones.ValidarUsuarioException;
 import Excepciones.asientos.ErrorCargarAsientoException;
+import Excepciones.asientos.ErrorEliminacionAsientosException;
 import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
 import Excepciones.asientos.ErrorReservacionAsientoException;
 import Excepciones.usuarios.ObtenerUsuariosException;
@@ -792,6 +793,14 @@ public class ControlDeNavegacion implements IControl {
         } catch (ErrorGeneracionAsientoFuncionException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             return null;
+        }
+    }
+    @Override
+    public void eliminarAsientoFuncion(String idFuncion) {
+        try {
+            manejoDeAsientos.eliminarAsientos(idFuncion);
+        } catch (ErrorEliminacionAsientosException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
         }
     }
 

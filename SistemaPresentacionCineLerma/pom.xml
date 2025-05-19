@@ -92,11 +92,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>RestauranteNegocio</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>SistemaGestionEmpleados</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -8,9 +8,11 @@ import DAOs.AsientoFuncionDAO;
 import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
+import Excepciones.AsientoFuncion.FalloEliminacionAsientosFuncion;
 import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloOcuparAsientosFuncionException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
+import Excepciones.asientoFuncion.AsientoFuncionEliminacionException;
 import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
 import Interfaces.IAsientoFuncionBO;
@@ -20,6 +22,8 @@ import Mappers.FuncionMapper;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -56,6 +60,15 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
             throw new AsientoFuncionRegistroException("Hubo un error al consultar los asiento de la funcion: " + e.getMessage());
         }
         
+    }
+    
+    @Override
+    public Boolean eliminarAsientosFuncion(String idFuncion) throws AsientoFuncionEliminacionException {
+        try {
+            return asientoFuncionDAO.eliminarAsientosFuncion(idFuncion);
+        } catch (FalloEliminacionAsientosFuncion e) {
+            throw new AsientoFuncionEliminacionException("Hubo un error al eliminar los asientos de la funcion: " + e.getMessage());
+        }
     }
 
     @Override

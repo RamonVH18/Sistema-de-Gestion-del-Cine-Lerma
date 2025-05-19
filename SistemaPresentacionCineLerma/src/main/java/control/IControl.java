@@ -133,6 +133,8 @@ public interface IControl {
     public void mostrarConsultarAsientosReservados(JFrame frameAnterior, FuncionDTO funcionDTO);
 
     public List<AsientoFuncionDTO> agregarAsientoFuncion(FuncionDTO funcionSelecionada, SalaViejaDTO salaSelecionada);
+    
+    public void eliminarAsientoFuncion(String idFuncion);
 
     public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar);
 

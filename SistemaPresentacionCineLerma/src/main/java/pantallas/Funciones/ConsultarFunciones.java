@@ -143,8 +143,11 @@ public class ConsultarFunciones extends javax.swing.JFrame {
 
             FuncionDTO funcionDTO = new FuncionDTO();
             funcionDTO.setIdFuncion(idFuncion);
-
+            
+            control.eliminarAsientoFuncion(idFuncion);
             boolean eliminada = control.eliminarFuncion(funcionDTO);
+            
+            
 
             if (eliminada) {
                 JOptionPane.showMessageDialog(

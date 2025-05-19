@@ -6,6 +6,7 @@ package Interfaces;
 
 import DTOs.GananciaSalaDTO;
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
+import Excepciones.AsientoFuncion.FalloEliminacionAsientosFuncion;
 import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloOcuparAsientosFuncionException;
 import Excepciones.salas.ErrorCalculoEstadisticasSalaException;
@@ -20,6 +21,8 @@ import java.util.List;
 public interface IAsientoFuncionDAO {
     
     public List<AsientoFuncion> agregarAsientosFuncion(List<AsientoFuncion> asientosFuncion) throws FalloCreacionAsientosFuncionException;
+    
+    public Boolean eliminarAsientosFuncion(String idFuncion) throws FalloEliminacionAsientosFuncion;
     
     public List<AsientoFuncion> mostrarListaAsientosPorFuncion(Funcion funcion, Boolean disponibilidad) throws FalloMostrarAsientosFuncionException;
     

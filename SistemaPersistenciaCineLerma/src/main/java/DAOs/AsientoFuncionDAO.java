@@ -7,10 +7,10 @@ package DAOs;
 import Conexion.MongoConexion;
 import DTOs.GananciaSalaDTO;
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
+import Excepciones.AsientoFuncion.FalloEliminacionAsientosFuncion;
 import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloObtencionColeccionException;
 import Excepciones.AsientoFuncion.FalloOcuparAsientosFuncionException;
-import Excepciones.salas.BuscarSalaException;
 import Excepciones.salas.ErrorCalculoEstadisticasSalaException;
 import Interfaces.IAsientoFuncionDAO;
 import Interfaces.IFuncionDAO;
@@ -21,20 +21,24 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.DeleteManyModel;
 import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
-import com.mongodb.client.model.UnwindOptions;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -82,13 +86,29 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         MongoClient clienteMongo = null;
         try {
             // Se llama al metodo para obtener la coleccion de asientos funcion de la base de datos
-            MongoCollection coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
+            MongoCollection<AsientoFuncion> coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
             // Se inserta toda la lista de asientosFuncion
             coleccionAF.insertMany(asientosFuncion);
 
             return asientosFuncion;
         } catch (FalloObtencionColeccionException e) {
             throw new FalloCreacionAsientosFuncionException("Hubo un error al insertar los asientos en la base de datos: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public Boolean eliminarAsientosFuncion(String idFuncion) throws FalloEliminacionAsientosFuncion {
+        MongoClient clienteMongo = null;
+        try {
+            MongoCollection coleccionAf = obtenerColeccionAsientoFuncion(clienteMongo);
+            
+            Bson filtro = filtroFuncion(idFuncion, Boolean.FALSE);
+            
+            DeleteResult resultado = coleccionAf.deleteMany(filtro);
+            
+            return resultado.wasAcknowledged();
+        } catch (FalloObtencionColeccionException e) {
+            throw new FalloEliminacionAsientosFuncion("Hubo un error al eliminar los asientos: " + e.getMessage());
         }
     }
 
@@ -146,7 +166,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         try {
             MongoCollection<Document> coleccionAsientoFuncion = obtenerColeccionDocument(clienteMongo);
 
-            Date now = new Date();
+            Date now = new Date();//GregorianCalendar(2026, Calendar.MAY, 15).getTime();
 
             List<Bson> pipeline = Arrays.asList(
                     Aggregates.lookup(
@@ -155,9 +175,12 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
                             "numSala",
                             "infoSala"
                     ),
+                    Aggregates.addFields(new Field<>("idFuncionObjId",
+                            new Document("$toObjectId", "$idFuncion")
+                    )),
                     Aggregates.lookup(
                             "Funciones",
-                            "idFuncion",
+                            "idFuncionObjId",
                             "_id",
                             "infoFuncion"
                     ),
@@ -170,30 +193,39 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
                             )))
                     ),
                     Aggregates.addFields(new Field<>("funcionesRealizadas",
-                            new Document("$size", new Document("$filter", new Document()
-                                    .append("input", "$infoFuncion")
-                                    .append("as", "funcion")
-                                    .append("cond", new Document("$and", Arrays.asList(
-                                            new Document("$gt", Arrays.asList("$$funcion.fechaHora", now)),
-                                            new Document("$eq", Arrays.asList("$$funcion.sala.numSala", "$numeroSala"))
-                                    )))
-                            ))
+                            new Document("$size", new Document("$ifNull", Arrays.asList(
+                                    new Document("$filter", new Document()
+                                            .append("input", "$infoFuncion")
+                                            .append("as", "funcion")
+                                            .append("cond", new Document("$and", Arrays.asList(
+                                                    new Document("$lt", Arrays.asList("$$funcion.fechaHora", now)),
+                                                    new Document("$eq", Arrays.asList("$$funcion.sala.numSala", "$numeroSala")) // ← importante: usar "$numeroSala"
+                                            )))
+                                    ),
+                                    Collections.emptyList() // valor por defecto si es null
+                            )))
                     )),
                     Aggregates.addFields(new Field<>("totalGanado",
                             new Document("$sum", new Document("$map", new Document()
-                                    .append("input", new Document("$filter", new Document()
-                                            .append("input", "$infoFuncion")
-                                            .append("as", "funcion")
-                                            .append("cond", new Document("$eq", Arrays.asList("$$funcion.sala.numSala", "$numeroSala")))
-                                    ))
+                                    .append("input", new Document("$ifNull", Arrays.asList(
+                                            new Document("$filter", new Document()
+                                                    .append("input", "$infoFuncion")
+                                                    .append("as", "funcion")
+                                                    .append("cond", new Document("$eq", Arrays.asList("$$funcion.sala.numSala", "$numeroSala")))
+                                            ),
+                                            Collections.emptyList()
+                                    )))
                                     .append("as", "f")
                                     .append("in", new Document("$multiply", Arrays.asList(
                                             "$$f.precio",
-                                            new Document("$size", new Document("$filter", new Document()
-                                                    .append("input", "$$f.asientosFuncion") // este array debe estar en cada funcion
-                                                    .append("as", "asiento")
-                                                    .append("cond", new Document("$eq", Arrays.asList("$$asiento.disponibilidad", false)))
-                                            ))
+                                            new Document("$size", new Document("$ifNull", Arrays.asList(
+                                                    new Document("$filter", new Document()
+                                                            .append("input", "$$f.asientosFuncion")
+                                                            .append("as", "asiento")
+                                                            .append("cond", new Document("$eq", Arrays.asList("$$asiento.disponibilidad", false)))
+                                                    ),
+                                                    Collections.emptyList()
+                                            )))
                                     )))
                             ))
                     )),
@@ -216,12 +248,12 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             for (Document doc : iterable) {
                 String numSala = doc.getString("numeroSala");
                 Integer capacidad = doc.getInteger("capacidad");
-//                Double totalGanado = doc.get("totalGanado", Number.class).doubleValue();
+                Double totalGanado = doc.get("totalGanado", Number.class).doubleValue();
                 Integer asientosVendidos = doc.getInteger("asientosVendidos");
                 Integer funcionesRealizadas = doc.getInteger("funcionesRealizadas");
 
-//                lista.add(new GananciaSalaDTO(numSala, capacidad,
-//                        totalGanado, asientosVendidos, funcionesRealizadas));
+                lista.add(new GananciaSalaDTO(numSala, capacidad,
+                        totalGanado, asientosVendidos, funcionesRealizadas));
             }
 
             return lista;
