@@ -262,7 +262,8 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
         for (int i = 0; i < funcionesCargadas.size(); i++) {
             funcion = funcionesCargadas.get(i);
             sala = control.consultarSala(funcion.getNumSala());
-            List<AsientoFuncionDTO> asientosDisponibles = control.cargarListaAsientos(funcion, true);
+            
+            List<AsientoFuncionDTO> asientosDisponibles = control.cargarListaAsientos(funcion, false);
 
             LocalDateTime fecha = funcion.getFechaHora();
             String minutosFormateados = fecha.getMinute() < 10

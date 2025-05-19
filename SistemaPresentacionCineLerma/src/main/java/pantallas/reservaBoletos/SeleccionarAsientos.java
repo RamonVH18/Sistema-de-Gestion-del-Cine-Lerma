@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -40,7 +38,8 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
     private final IControl control = ControlDeNavegacion.getInstancia();
     //Objeto necesario para llamar a los metodos de la clase Utilerias
     private final Utilerias utilerias = new Utilerias();
-    //
+    
+    //Pelicula que fue seleccionada en la pantalla anterior
     private final PeliculaDTO peliculaSeleccionada;
     //Se inicializa la Lista de todas Funciones, en base a la pelicula se manda a llamar a un metodo el cual se encarga de obtener las funciones de es pelicula 
     private final List<FuncionDTO> listaFunciones;
@@ -63,7 +62,6 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         //Se obtiene las funciones de la pelicula que fue seleccionada en la pantalla anterior
         listaFunciones = control.obtenerFunciones(pelicula.getTitulo());
         if (listaFunciones.isEmpty()) {
-
             SwingUtilities.invokeLater(() -> {
                 dispose();
                 control.mostrarSeleccionarPelicula();
@@ -74,7 +72,6 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
             // Se llama a la funcion que se encarga de darle un formato al scrollPane donde se ingresaran las funciones
             generarTablaFunciones(jScrollPanel);
         }
-
         revalidate();
         repaint();
 
@@ -185,10 +182,6 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
                                 .addGap(77, 77, 77))
                             .addComponent(jScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelDescripcion)
                             .addComponent(jTextAreaDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -200,7 +193,11 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
                                     .addComponent(jLabelCosto)
                                     .addComponent(jLabelAsientosDisp)
                                     .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 54, Short.MAX_VALUE)))))
+                                .addGap(0, 54, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(41, 41, 41))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -232,15 +229,15 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNumAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextAreaDescripcion))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelAsientosDisp)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelCosto)
-                .addGap(96, 96, 96)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(264, 264, 264))
+                    .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(356, 356, 356))
         );
 
         pack();
@@ -321,7 +318,9 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
                     : salaSelecionada.getNumAsientos().toString();
             jTextFieldNumAsientos.setText(asientosFormateados);
         } catch (IOException e) {
-
+            JOptionPane.showMessageDialog(null, "ERROR: Hubo al cargar la pagina. Intentar mas al rato", "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            control.mostrarSeleccionarPelicula();
+            dispose();
         }
     }
 
@@ -447,7 +446,7 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
         //Aqui se define lo que va a pasar cuando el boton de una funcion sea seleccionado
         boton.addActionListener(e -> {
             //Se llama a un metodo que se encarga de crear la funcionalidad de un boton
-            funcionalidadBoton(boton, funcion, diaTexto);
+            funcionalidadBoton(funcion, diaTexto);
         });
         boton.setVisible(true);
         return boton;
@@ -503,19 +502,15 @@ public class SeleccionarAsientos extends javax.swing.JFrame {
      * @param funcion
      * @param diaTexto
      */
-    private void funcionalidadBoton(JButton boton, FuncionDTO funcion, String diaTexto) {
-        SeleccionarAsientos seleccionarAsientos = (SeleccionarAsientos) SwingUtilities.getWindowAncestor(boton);
-        seleccionarAsientos.revalidate();
-        seleccionarAsientos.repaint();
-
-        int asientosDisponibles;
+    private void funcionalidadBoton(FuncionDTO funcion, String diaTexto) {
+        
         funcionSeleccionada = funcion;
-        asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
+        Integer asientosDisponibles = control.obtenerAsientosDisponibles(funcion);
 
-//        if (asientosDisponibles == 0) {
-//            return;
-//        }
+        if (asientosDisponibles == 0) {
+            JOptionPane.showMessageDialog(null, "ERROR: No hay asientos disponibles para esta funcion", "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         cargarDatos(funcion, asientosDisponibles, diaTexto);
-
     }
 }

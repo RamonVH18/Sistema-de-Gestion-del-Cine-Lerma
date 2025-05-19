@@ -1412,12 +1412,14 @@ public class ControlDeNavegacion implements IControl {
             JOptionPane.showMessageDialog(null, "Error en la operación de registro: " + opex.getMessage(), "Error de Registro (Empleados)", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
                 System.err.println("Causa original: " + opex.getCause().getMessage());
+                // :)
             }
         } catch (Exception e) { // Captura genérica final
             JOptionPane.showMessageDialog(null, "Error inesperado al registrar empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return null; // Devuelve null si hubo error
+
     }
 
     @Override

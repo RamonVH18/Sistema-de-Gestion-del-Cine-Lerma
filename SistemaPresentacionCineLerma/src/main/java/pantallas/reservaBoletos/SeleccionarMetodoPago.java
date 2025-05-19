@@ -12,10 +12,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -32,7 +29,6 @@ import utilitades.Utilerias;
 public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
     private final IControl control = ControlDeNavegacion.getInstancia();
-    private final Utilerias utilerias = new Utilerias();
 
     /**
      * Creates new form SeleccionarMetodoPago
@@ -124,7 +120,6 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
         // TODO add your handling code here:
-        
         control.mostrarSeleccionarAsientos(control.consultarPelicula());
         dispose();
     }//GEN-LAST:event_btnVolverMouseClicked
@@ -153,7 +148,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
         for (int i = 0; i < metodosPago.size(); i++) {
             MetodoPagoDTO metodoPago = metodosPago.get(i);
-            JButton boton = crearBotonMetodoPago(metodoPago.getImagenMetodo(), border, metodoPago.getNombreMetodo());
+            JButton boton = crearBotonMetodoPago(border, metodoPago.getNombreMetodo());
 
             JLabel label = new JLabel(metodoPago.getNombreMetodo().toUpperCase());
             label.setBorder(border);
@@ -165,8 +160,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
 
     }
 
-    private JButton crearBotonMetodoPago(String url, Border border, String nombreMetodo) {
-//        ImageIcon image = utilerias.crearImagen(url, 50, 50);
+    private JButton crearBotonMetodoPago(Border border, String nombreMetodo) {
         JButton boton = new JButton(); //image
         boton.setPreferredSize(new Dimension(150, 50));
         boton.setBorder(border);
@@ -196,8 +190,7 @@ public class SeleccionarMetodoPago extends javax.swing.JDialog {
         } catch (PresentacionException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
             control.mostrarSeleccionarMetodoPago(control.consultarFuncion());
-        }
-        
+        }  
     }
 
 }

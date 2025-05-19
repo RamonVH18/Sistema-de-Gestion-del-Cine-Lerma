@@ -20,12 +20,11 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -64,35 +63,38 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
         if (peliculas.isEmpty()) {
             SwingUtilities.invokeLater(() -> {
                 dispose();
-                control.mostrarMenuCliente(this);
+                regresarPantallaAnterior();
             });
         } else {
             configurarSeleccionarPelicula();
         }
-
-        
-        
     }
+    
     private void configurarSeleccionarPelicula() {
         try {
             // Metodos para cargar todos los elementos necesarios
-            configurarLayout();
+            getContentPane().setLayout(new BorderLayout());
+            
             generarScrollPane(jScrollPane1);
+            
             configurarPanelCartelera();
+            
             generarCartelera(panelCartelera);
+            
             configurarRedimensionamiento();
+            
             agregarComponentesAlFrame();
+            
             aplicarAjustesFrame();
+            
             verificarCarteleraVacia();
-        } catch (IOException ex) {
-            Logger.getLogger(SeleccionarPelicula.class.getName()).log(Level.SEVERE, null, ex);
+        
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, 
+                    "ERROR: Hubo un problema al cargar las imagenes de las peliculas. Favor de Intentarlo mas tarde",
+                    "¡ERROR!", 
+                    JOptionPane.ERROR_MESSAGE);
         }
-    }
-    /**
-     * Este método configura el Frame dandole el formato de BorderLayout.
-     */
-    private void configurarLayout() {
-        getContentPane().setLayout(new BorderLayout());
     }
 
     /**
@@ -233,15 +235,7 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
 
     private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
         // TODO add your handling code here:
-        UsuarioDTO usuario = control.obtenerUsuarioActual();
-        if (usuario != null && usuario.getRol() == Rol.ADMINISTRADOR) {
-            control.mostrarMenuCliente(this);
-        } else {
-            control.mostrarMenuAdministrador(this);
-        }
-        
-
-        dispose();
+        regresarPantallaAnterior();
     }//GEN-LAST:event_btnVolverMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -255,14 +249,9 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
      * Metodo que se encarga de la generacion de la cartelera, recibe un JPanel.
      *
      * @param panel Panel a recibir
+     * @throws java.io.IOException
      */
     public void generarCartelera(JPanel panel) throws IOException {
-        //Se llama a un metodo de control que es el encargado de obtenernos las Peliculas y guardardalas como una Lista de Peliculas DTO
-        
-        if (peliculas.isEmpty()) {
-            
-        }
-
         //Modificacion del JPanel para que sea 3 columnas de botones
         panel.removeAll();
 
@@ -324,7 +313,8 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
         boton.setLayout(new BorderLayout());
         boton.setHorizontalTextPosition(SwingConstants.CENTER);
         boton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        boton.setFont(new Font("Arial", Font.BOLD, calcularTamanioFuente(ancho)));
+        Integer tamanioFuente = Math.max(12, ancho / 15);
+        boton.setFont(new Font("Arial", Font.BOLD, tamanioFuente));
         boton.setForeground(Color.WHITE);
         boton.setBackground(Color.BLACK);
         boton.setOpaque(true);
@@ -357,17 +347,6 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
     }
 
     /**
-     * Metodo que calcula el tamaño de fuente correcto mediante el ancho del
-     * boton.
-     *
-     * @param anchoBoton Ancho del boton dado por el parametro
-     * @return El tamaño de la fuente proporcional al ancho del boton
-     */
-    private int calcularTamanioFuente(int anchoBoton) {
-        return Math.max(12, anchoBoton / 15); // Tamaño de fuente proporcional
-    }
-
-    /**
      * Metodo que regenera la cartelera en el panel correspondiente colocando
      * las imagenes en los botones.
      */
@@ -380,7 +359,10 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
             if (comp instanceof JButton boton) {
                 int nuevoAncho = calcularAnchoBotones();
                 boton.setPreferredSize(new Dimension(nuevoAncho, (int) (nuevoAncho * 1.5)));
-                boton.setFont(new Font("Arial", Font.BOLD, calcularTamanioFuente(nuevoAncho)));
+                
+                Integer tamanioFuente = Math.max(12, nuevoAncho / 15);
+                
+                boton.setFont(new Font("Arial", Font.BOLD, tamanioFuente));
             }
         }
         panelCartelera.revalidate();
@@ -397,6 +379,14 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
+    }
+    
+    private void regresarPantallaAnterior() {
+        UsuarioDTO usuario = control.obtenerUsuarioActual();
+        if (usuario != null && usuario.getRol() == Rol.CLIENTE) {
+            control.mostrarMenuCliente(this);
+        }
+        dispose();
     }
 
 }

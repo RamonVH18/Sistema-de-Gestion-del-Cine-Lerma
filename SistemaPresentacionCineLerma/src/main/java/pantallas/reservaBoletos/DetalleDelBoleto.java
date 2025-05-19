@@ -31,20 +31,13 @@ public final class DetalleDelBoleto extends javax.swing.JFrame {
         
         ClienteDTO cliente = control.obtenerClienteActual();
         BoletoDTO boleto = control.cargarBoleto(cliente);
+        
         if (boleto == null) {
             dispose();
         }
         llenarCamposBoleto(boleto);
         btnRegresoMenu.setVisible(false);
         setVisible(true);
-        
-        //Thread.sleep(500); Esta linea sirve para que el hilo principal tena un delay de 500 milisegundos y asi se pueda tomar bien la captura de la imagen
-        
-        //Esta parte servira para la creacion del codigo qr
-//        URL url = DetalleDelBoleto.class.getResource("img/captura.png");
-//        String rutaImagen = utilerias.sacarCapturaJFrame(this, url);
-//        ImageIcon qrIcon = utilerias.obtenerQRDesdeImagen(rutaImagen, 200);
-//        etiquetaImagenQR.setIcon(qrIcon);
         
         btnRegresoMenu.setVisible(true);
         
@@ -208,7 +201,7 @@ public final class DetalleDelBoleto extends javax.swing.JFrame {
     /*Metodo que llena los campos que requiere el boleto seteando cada atributo en un label*/
     public void llenarCamposBoleto(BoletoDTO boleto) {
         
-//        ImageIcon imagen = utilerias.crearImagen(boleto.getImagenPelicula(), 200, 300);
+//        ImageIcon imagen = utilerias.crearImagen(b, 200, 300);
 //        etiquetaImagen.setIcon(imagen);
         
         labelPelicula.setText("Pelicula: " + boleto.getNombrePelicula());

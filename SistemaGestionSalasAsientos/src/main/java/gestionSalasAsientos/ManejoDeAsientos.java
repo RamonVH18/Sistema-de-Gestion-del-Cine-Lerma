@@ -92,9 +92,9 @@ public class ManejoDeAsientos implements IManejoDeAsientos {
     public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) throws ErrorCargarAsientoException {
         try {
             if (mostrarDisponibles) {
-                return asientoBO.obtenerAsientosFuncion(funcion);
-            } else {
                 return asientoBO.obtenerAsientosDisponibles(funcion);
+            } else {
+                return asientoBO.obtenerAsientosFuncion(funcion);
             }
         } catch (AsientoFuncionBusquedaException e) {
             throw new ErrorCargarAsientoException("Hubo un problema al cargar la lista de asientos de la funcion.");

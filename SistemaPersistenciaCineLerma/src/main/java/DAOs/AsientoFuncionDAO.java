@@ -100,9 +100,9 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         try {
             MongoCollection<AsientoFuncion> coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
 
-            Bson filtroFuncion = filtroFuncion(funcion.getIdString(), mostrarDisponibles);
+            Bson filtro = filtroFuncion(funcion.getIdString(), mostrarDisponibles);
 
-            List<AsientoFuncion> asientosFuncion = coleccionAF.find(filtroFuncion).into(new ArrayList<>());
+            List<AsientoFuncion> asientosFuncion = coleccionAF.find(filtro).into(new ArrayList<>());
 
             return asientosFuncion;
 
