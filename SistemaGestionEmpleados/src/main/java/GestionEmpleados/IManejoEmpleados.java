@@ -5,18 +5,19 @@
 package GestionEmpleados;
 
 import DTOs.EmpleadoDTO;
-import Excepciones.ActualizacionDeCargoException;
-import Excepciones.ActualizacionEmpleadoException;
-import Excepciones.ActualizacionSueldoException;
+import Excepciones.ManejoActualizacionDeCargoException;
+import Excepciones.ManejoActualizacionEmpleadoException;
+import Excepciones.ManejoActualizacionSueldoException;
 import Excepciones.Empleados.DespedirEmpleadoException;
 import Excepciones.Empleados.ValidacionEmpleadoException;
-import Excepciones.ObtenerEmpleadoException;
-import Excepciones.ObtenerEmpleadoPorCargoException;
+import Excepciones.ManejoDespedirEmpleadoException;
+import Excepciones.ManejoObtenerEmpleadoException;
+import Excepciones.ManejoObtenerEmpleadoPorCargoException;
 import Excepciones.PersistenciaException;
-import Excepciones.RegistrarNuevoEmpleadoException;
-import Excepciones.ValidacionEmpleadoIdException;
-import Excepciones.ValidarEmpleadoException;
-import Excepciones.validarActualizacionSueldoDeCargoException;
+import Excepciones.ManejoRegistrarNuevoEmpleadoException;
+import Excepciones.ManejoValidacionEmpleadoIdException;
+import Excepciones.ManejoValidarEmpleadoException;
+import Excepciones.ManejoValidarActualizacionSueldoDeCargoException;
 import enums.Cargo;
 import java.util.List;
 
@@ -26,21 +27,21 @@ import java.util.List;
  */
 public interface IManejoEmpleados {
 
-    public EmpleadoDTO registrarNuevoEmpleado(EmpleadoDTO empleadoDTO) throws ValidarEmpleadoException, RegistrarNuevoEmpleadoException;
+     public EmpleadoDTO registrarNuevoEmpleado(EmpleadoDTO empleadoDTO) throws ManejoValidarEmpleadoException, ManejoRegistrarNuevoEmpleadoException;
 
-    public EmpleadoDTO actualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) throws ValidacionEmpleadoIdException, ActualizacionEmpleadoException, ValidarEmpleadoException;
+    public EmpleadoDTO actualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) throws ManejoValidacionEmpleadoIdException, ManejoActualizacionEmpleadoException, ManejoValidarEmpleadoException;
 
-    public boolean despedirEmpleado(String empleadoIdString) throws DespedirEmpleadoException, ValidarEmpleadoException, ValidacionEmpleadoIdException;
+    public boolean despedirEmpleado(String empleadoIdString) throws ManejoDespedirEmpleadoException, ManejoValidacionEmpleadoIdException, ManejoValidarEmpleadoException;
 
-    public EmpleadoDTO buscarEmpleadoActivoPorId(String empleadoIdString) throws ValidarEmpleadoException, ObtenerEmpleadoException, ValidacionEmpleadoIdException;
+    public EmpleadoDTO buscarEmpleadoActivoPorId(String empleadoIdString) throws ManejoObtenerEmpleadoException, ManejoValidacionEmpleadoIdException;
 
-    public List<EmpleadoDTO> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws ValidacionEmpleadoIdException, ObtenerEmpleadoPorCargoException;
+    public List<EmpleadoDTO> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws ManejoObtenerEmpleadoPorCargoException, ManejoValidarEmpleadoException;
     
-    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws ValidarEmpleadoException, ActualizacionDeCargoException, ValidacionEmpleadoIdException;
+    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws ManejoValidarEmpleadoException, ManejoActualizacionDeCargoException, ManejoValidacionEmpleadoIdException;
     
-    public boolean actualizarSueldoEmpleadoIndividual(String empleadoIdString, double nuevoSueldo) throws ValidarEmpleadoException, ActualizacionSueldoException, ValidacionEmpleadoIdException;
+    public boolean actualizarSueldoEmpleadoIndividual(String empleadoIdString, double nuevoSueldo) throws ManejoActualizacionSueldoException, ManejoValidacionEmpleadoIdException, ManejoValidarEmpleadoException;
     
-    public List<EmpleadoDTO> obtenerTodosLosEmpleadosActivos() throws ObtenerEmpleadoException;
+    public List<EmpleadoDTO> obtenerTodosLosEmpleadosActivos() throws ManejoObtenerEmpleadoException;
     
-    public long actualizarSueldoGeneralPorCargo(Cargo cargo, double nuevoSueldo) throws validarActualizacionSueldoDeCargoException;
+     public long actualizarSueldoGeneralPorCargo(Cargo cargo, double nuevoSueldo) throws ManejoValidarActualizacionSueldoDeCargoException, ManejoValidarEmpleadoException;
 }

@@ -21,9 +21,7 @@ import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
-import Excepciones.ActualizacionDeCargoException;
-import Excepciones.ActualizacionEmpleadoException;
-import Excepciones.ActualizacionSueldoException;
+
 import Excepciones.ActualizarUsuarioException;
 import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
@@ -46,26 +44,35 @@ import Excepciones.PagoException;
 import Excepciones.PeliculasCargaException;
 import Excepciones.ValidarCuentaException;
 import Excepciones.GenerarBoletoException;
+import Excepciones.ManejoActualizacionDeCargoException;
+import Excepciones.ManejoActualizacionEmpleadoException;
+import Excepciones.ManejoActualizacionSueldoException;
+import Excepciones.ManejoDespedirEmpleadoException;
+import Excepciones.ManejoObtenerEmpleadoException;
+import Excepciones.ManejoObtenerEmpleadoPorCargoException;
+import Excepciones.ManejoRegistrarNuevoEmpleadoException;
+import Excepciones.ManejoValidacionEmpleadoIdException;
+import Excepciones.ManejoValidarActualizacionSueldoDeCargoException;
+import Excepciones.ManejoValidarEmpleadoException;
 import Excepciones.ModificarSalaException;
 import Excepciones.MostrarPeliculasException;
-import Excepciones.ObtenerEmpleadoException;
-import Excepciones.ObtenerEmpleadoPorCargoException;
+
 import Excepciones.ObtenerPeliculasFiltradasException;
 import Excepciones.PresentacionException;
-import Excepciones.RegistrarNuevoEmpleadoException;
+
 import Excepciones.RegistrarPeliculaException;
 import Excepciones.RegistrarUsuarioException;
 import Excepciones.ReservarAsientoFuncionException;
-import Excepciones.ValidacionEmpleadoIdException;
+
 import Excepciones.ValidacionSalaException;
 import Excepciones.ValidarCampoAsientoException;
-import Excepciones.ValidarEmpleadoException;
+
 import Excepciones.ValidarUsuarioException;
 import Excepciones.asientos.ErrorCargarAsientoException;
 import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
 import Excepciones.asientos.ErrorReservacionAsientoException;
 import Excepciones.usuarios.ObtenerUsuariosException;
-import Excepciones.validarActualizacionSueldoDeCargoException;
+
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
 import GestionFunciones.IManejoFunciones;
@@ -1239,11 +1246,11 @@ public class ControlDeNavegacion implements IControl {
                 if (frameAnterior != null) {
                     frameAnterior.dispose();
                 }
-            } catch (ValidarEmpleadoException ex) {
+            } catch (ManejoValidarEmpleadoException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ObtenerEmpleadoException ex) {
+            } catch (ManejoObtenerEmpleadoException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ValidacionEmpleadoIdException ex) {
+            } catch (ManejoValidacionEmpleadoIdException ex) {
                 Logger.getLogger(ControlDeNavegacion.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -1337,7 +1344,7 @@ public class ControlDeNavegacion implements IControl {
                 JOptionPane.showMessageDialog(parentComponent, "No se pudo actualizar el sueldo.", titulo, JOptionPane.ERROR_MESSAGE);
             }
             return exito;
-        } catch (ActualizacionSueldoException | ValidarEmpleadoException | ValidacionEmpleadoIdException e) {
+        } catch (ManejoActualizacionSueldoException | ManejoValidarEmpleadoException | ManejoValidacionEmpleadoIdException e) {
             JOptionPane.showMessageDialog(parentComponent, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return false;
         } catch (Exception e) {
@@ -1417,40 +1424,42 @@ public class ControlDeNavegacion implements IControl {
 
     }
 
+
     // ------------------ METODOS DE ADMINISTRACION EMPLEADO DE OPERACIONES
-    @Override
+   @Override
     public EmpleadoDTO controlRegistrarNuevoEmpleado(EmpleadoDTO empleadoDTO) {
         try {
             return gestionEmpleados.registrarNuevoEmpleado(empleadoDTO);
-        } catch (ValidarEmpleadoException vex) {
-            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
-        } catch (RegistrarNuevoEmpleadoException opex) {
-            JOptionPane.showMessageDialog(null, "Error en la operación de registro: " + opex.getMessage(), "Error de Registro (Empleados)", JOptionPane.ERROR_MESSAGE);
+        } catch (ManejoValidarEmpleadoException vex) {
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Registro)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoRegistrarNuevoEmpleadoException opex) {
+            JOptionPane.showMessageDialog(null, "Error en la operación de registro: " + opex.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
-                System.err.println("Causa original: " + opex.getCause().getMessage());
-                // :)
+                System.err.println("Causa original (Registro): " + opex.getCause().getMessage());
+                // opex.getCause().printStackTrace(); // Para más detalle en consola si es necesario
             }
         } catch (Exception e) { // Captura genérica final
-            JOptionPane.showMessageDialog(null, "Error inesperado al registrar empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error inesperado al registrar empleado: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace(); // Importante para depuración
         }
         return null; // Devuelve null si hubo error
-
     }
 
     @Override
     public EmpleadoDTO controlActualizarInformacionEmpleado(String empleadoId, EmpleadoDTO datosNuevosDTO) {
         try {
             return gestionEmpleados.actualizarInformacionEmpleado(empleadoId, datosNuevosDTO);
-        } catch (ValidarEmpleadoException vex) {
-            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
-        } catch (ActualizacionEmpleadoException opex) {
-            JOptionPane.showMessageDialog(null, "Error en la operación de actualización: " + opex.getMessage(), "Error de Actualización (Empleados)", JOptionPane.ERROR_MESSAGE);
+        } catch (ManejoValidacionEmpleadoIdException vexId) { // Específica para error de ID
+            JOptionPane.showMessageDialog(null, vexId.getMessage(), "Error de ID de Empleado (Actualización)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoValidarEmpleadoException vex) { // Para errores de validación del DTO
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Actualización)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoActualizacionEmpleadoException opex) {
+            JOptionPane.showMessageDialog(null, "Error en la operación de actualización: " + opex.getMessage(), "Error de Actualización", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
-                System.err.println("Causa original: " + opex.getCause().getMessage());
+                System.err.println("Causa original (Actualización): " + opex.getCause().getMessage());
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar empleado: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return null;
@@ -1460,15 +1469,18 @@ public class ControlDeNavegacion implements IControl {
     public boolean controlDespedirEmpleado(String empleadoIdString) {
         try {
             return gestionEmpleados.despedirEmpleado(empleadoIdString);
-        } catch (ValidacionEmpleadoIdException vex) {
-            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
-        } catch (DespedirEmpleadoException opex) {
-            JOptionPane.showMessageDialog(null, "Error en la operación de despido: " + opex.getMessage(), "Error de Despido (Empleados)", JOptionPane.ERROR_MESSAGE);
+        } catch (ManejoValidacionEmpleadoIdException vexId) {
+            JOptionPane.showMessageDialog(null, vexId.getMessage(), "Error de ID de Empleado (Despido)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoValidarEmpleadoException vexVal) { // Si `despedirEmpleado` en Manejo lanzara esta por otras razones.
+            JOptionPane.showMessageDialog(null, vexVal.getMessage(), "Error de Validación (Despido)", JOptionPane.WARNING_MESSAGE);
+        }
+        catch (ManejoDespedirEmpleadoException opex) { // Excepción específica de la operación de despido
+            JOptionPane.showMessageDialog(null, "Error en la operación de despido: " + opex.getMessage(), "Error de Despido", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
-                System.err.println("Causa original: " + opex.getCause().getMessage());
+                System.err.println("Causa original (Despido): " + opex.getCause().getMessage());
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado al despedir empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error inesperado al despedir empleado: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return false; // Devuelve false si hubo error
@@ -1478,15 +1490,15 @@ public class ControlDeNavegacion implements IControl {
     public EmpleadoDTO consultarEmpleadoActivoPorId(String empleadoIdString) {
         try {
             return gestionEmpleados.buscarEmpleadoActivoPorId(empleadoIdString);
-        } catch (ValidacionEmpleadoIdException vex) {
-            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
-        } catch (ObtenerEmpleadoException opex) {
-            JOptionPane.showMessageDialog(null, "Error al buscar empleado: " + opex.getMessage(), "Error de Búsqueda (Empleados)", JOptionPane.ERROR_MESSAGE);
+        } catch (ManejoValidacionEmpleadoIdException vexId) {
+            JOptionPane.showMessageDialog(null, vexId.getMessage(), "Error de ID de Empleado (Búsqueda)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoObtenerEmpleadoException opex) { // Excepción específica para obtener/buscar
+            JOptionPane.showMessageDialog(null, "Error al buscar empleado: " + opex.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
-                System.err.println("Causa original: " + opex.getCause().getMessage());
+                System.err.println("Causa original (Búsqueda por ID): " + opex.getCause().getMessage());
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado al buscar empleado: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error inesperado al buscar empleado: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return null;
@@ -1496,13 +1508,13 @@ public class ControlDeNavegacion implements IControl {
     public List<EmpleadoDTO> consultarTodosLosEmpleadosActivos() {
         try {
             return gestionEmpleados.obtenerTodosLosEmpleadosActivos();
-        } catch (ObtenerEmpleadoException opex) {
-            JOptionPane.showMessageDialog(null, "Error al obtener lista de empleados: " + opex.getMessage(), "Error de Consulta (Empleados)", JOptionPane.ERROR_MESSAGE);
+        } catch (ManejoObtenerEmpleadoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al obtener lista de empleados: " + opex.getMessage(), "Error de Consulta General", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
-                System.err.println("Causa original: " + opex.getCause().getMessage());
+                System.err.println("Causa original (Todos los Activos): " + opex.getCause().getMessage());
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado al obtener empleados: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error inesperado al obtener empleados: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return new ArrayList<>(); // Devuelve lista vacía en caso de error
@@ -1512,13 +1524,16 @@ public class ControlDeNavegacion implements IControl {
     public List<EmpleadoDTO> consultarEmpleadosActivosPorCargo(Cargo cargo) {
         try {
             return gestionEmpleados.obtenerEmpleadosActivosPorCargo(cargo);
-        } catch (ObtenerEmpleadoPorCargoException opex) {
-            JOptionPane.showMessageDialog(null, "Error al obtener empleados por cargo: " + opex.getMessage(), "Error de Consulta (Empleados)", JOptionPane.ERROR_MESSAGE);
+        } catch (ManejoValidarEmpleadoException vex) { // Si la validación del cargo (null) se hace en Manejo y lanza esta.
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Consulta por Cargo)", JOptionPane.WARNING_MESSAGE);
+        }
+        catch (ManejoObtenerEmpleadoPorCargoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al obtener empleados por cargo: " + opex.getMessage(), "Error de Consulta por Cargo", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
-                System.err.println("Causa original: " + opex.getCause().getMessage());
+                System.err.println("Causa original (Por Cargo): " + opex.getCause().getMessage());
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado al obtener empleados por cargo: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error inesperado al obtener empleados por cargo: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return new ArrayList<>();
@@ -1528,15 +1543,17 @@ public class ControlDeNavegacion implements IControl {
     public boolean controlActualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) {
         try {
             return gestionEmpleados.actualizarCargoEmpleado(empleadoIdString, nuevoCargo);
-        } catch (ValidarEmpleadoException vex) {
-            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
-        } catch (ActualizacionDeCargoException opex) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar cargo: " + opex.getMessage(), "Error de Actualización (Empleados)", JOptionPane.ERROR_MESSAGE);
+        } catch (ManejoValidacionEmpleadoIdException vexId) {
+            JOptionPane.showMessageDialog(null, vexId.getMessage(), "Error de ID de Empleado (Actualizar Cargo)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoValidarEmpleadoException vexVal) { // Para validación de nuevoCargo == null
+            JOptionPane.showMessageDialog(null, vexVal.getMessage(), "Error de Validación (Actualizar Cargo)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoActualizacionDeCargoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar cargo: " + opex.getMessage(), "Error de Actualización de Cargo", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
-                System.err.println("Causa original: " + opex.getCause().getMessage());
+                System.err.println("Causa original (Actualizar Cargo): " + opex.getCause().getMessage());
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar cargo: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar cargo: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return false;
@@ -1546,15 +1563,17 @@ public class ControlDeNavegacion implements IControl {
     public boolean controlActualizarSueldoEmpleadoIndividual(String empleadoIdString, double nuevoSueldo) {
         try {
             return gestionEmpleados.actualizarSueldoEmpleadoIndividual(empleadoIdString, nuevoSueldo);
-        } catch (ValidarEmpleadoException vex) {
-            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error de Validación (Empleados)", JOptionPane.WARNING_MESSAGE);
-        } catch (ActualizacionSueldoException opex) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar sueldo: " + opex.getMessage(), "Error de Actualización (Empleados)", JOptionPane.ERROR_MESSAGE);
+        } catch (ManejoValidacionEmpleadoIdException vexId) {
+            JOptionPane.showMessageDialog(null, vexId.getMessage(), "Error de ID de Empleado (Actualizar Sueldo)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoValidarEmpleadoException vexVal) { // Para validación de rangos de sueldo, etc.
+            JOptionPane.showMessageDialog(null, vexVal.getMessage(), "Error de Validación (Actualizar Sueldo)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoActualizacionSueldoException opex) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar sueldo: " + opex.getMessage(), "Error de Actualización de Sueldo", JOptionPane.ERROR_MESSAGE);
             if (opex.getCause() != null) {
-                System.err.println("Causa original: " + opex.getCause().getMessage());
+                System.err.println("Causa original (Actualizar Sueldo): " + opex.getCause().getMessage());
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar sueldo: " + e.getMessage(), "Error General (Empleados)", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error inesperado al actualizar sueldo: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return false;
@@ -1564,10 +1583,17 @@ public class ControlDeNavegacion implements IControl {
     public long controlActualizarSueldoGeneralPorCargo(Cargo cargo, double nuevoSueldo) {
         try {
             return gestionEmpleados.actualizarSueldoGeneralPorCargo(cargo, nuevoSueldo);
-        } catch (validarActualizacionSueldoDeCargoException vex) {
-            JOptionPane.showMessageDialog(null, vex.getMessage(), titulo, JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoValidarEmpleadoException vexVal) { // Si la validación de sueldo/cargo lanza esta
+            JOptionPane.showMessageDialog(null, vexVal.getMessage(), "Error de Validación (Sueldo por Cargo)", JOptionPane.WARNING_MESSAGE);
+        } catch (ManejoValidarActualizacionSueldoDeCargoException vex) { // Específica para esta operación
+            JOptionPane.showMessageDialog(null, vex.getMessage(), "Error en Actualización de Sueldo por Cargo", JOptionPane.ERROR_MESSAGE);
+             if (vex.getCause() != null) {
+                System.err.println("Causa original (Sueldo por Cargo): " + vex.getCause().getMessage());
+            }
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, "Error inesperado al actualizar sueldo por cargo: " + e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
         return -1; // Devuelve un valor que indique error, ya que el original devuelve long
     }
-
 }

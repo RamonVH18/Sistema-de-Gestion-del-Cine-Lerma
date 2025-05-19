@@ -5,6 +5,11 @@
 package Interfaces;
 
 import Excepciones.PersistenciaException;
+import Excepciones.empleados.DAOActualizarEmpleadoException;
+import Excepciones.empleados.DAODespedirEmpleadoException;
+import Excepciones.empleados.DAOObtenerEmpleadoException;
+import Excepciones.empleados.DAORegistrarEmpleadoException;
+import Excepciones.empleados.DAOValidacionEmpleadoException;
 import entidades.Empleado;
 import enums.Cargo;
 import java.util.List;
@@ -15,27 +20,27 @@ import org.bson.types.ObjectId;
  * @author isaac
  */
 public interface IEmpleadoDAO {
-    
-    public boolean registrarEmpleado(Empleado empleado) throws PersistenciaException;
-    
-    public Empleado obtenerEmpleadoActivoPorId(ObjectId empleadoId) throws PersistenciaException;
-    
-    public List<Empleado> obtenerTodosLosEmpleadosActivos() throws PersistenciaException;
 
-    public Empleado obtenerEmpleadoPorIdInterno(ObjectId empleadoId) throws PersistenciaException;
+    public boolean registrarEmpleado(Empleado empleado) throws DAORegistrarEmpleadoException;
 
-    public boolean actualizarEmpleado(Empleado empleado) throws PersistenciaException;
+    public List<Empleado> obtenerTodosLosEmpleadosActivos() throws DAOObtenerEmpleadoException;
 
-    public boolean despedirEmpleado(ObjectId empleadoId) throws PersistenciaException;
+    public Empleado obtenerEmpleadoActivoPorId(ObjectId empleadoId) throws DAOObtenerEmpleadoException;
 
-    public List<Empleado> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws PersistenciaException;
+    public Empleado obtenerEmpleadoPorIdInterno(ObjectId empleadoId) throws DAOObtenerEmpleadoException;
 
-    public boolean actualizarCargoEmpleado(ObjectId empleadoId, Cargo nuevoCargo) throws PersistenciaException;
+    public boolean actualizarEmpleado(Empleado empleado) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException;
 
-    public boolean actualizarSueldoIndividual(ObjectId empleadoId, double nuevoSueldo) throws PersistenciaException;
+    public boolean despedirEmpleado(ObjectId empleadoId) throws DAODespedirEmpleadoException, DAOValidacionEmpleadoException;
 
-    public long actualizarSueldoPorCargo(Cargo cargo, double nuevoSueldo) throws PersistenciaException;
-    
-    public Empleado consultarPorCorreoActivoExcluyendoId(String correoE, ObjectId excluirEmpleadoId) throws PersistenciaException;
+    public List<Empleado> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws DAOObtenerEmpleadoException;
+
+    public boolean actualizarCargoEmpleado(ObjectId empleadoId, Cargo nuevoCargo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException;
+
+    public boolean actualizarSueldoIndividual(ObjectId empleadoId, double nuevoSueldo) throws DAOActualizarEmpleadoException,DAOValidacionEmpleadoException;
+
+    public long actualizarSueldoPorCargo(Cargo cargo, double nuevoSueldo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException;
+
+    public Empleado consultarPorCorreoActivoExcluyendoId(String correoE, ObjectId excluirEmpleadoId) throws DAOObtenerEmpleadoException;
 
 }
