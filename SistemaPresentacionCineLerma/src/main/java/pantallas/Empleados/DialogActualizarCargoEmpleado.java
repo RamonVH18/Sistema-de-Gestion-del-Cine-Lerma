@@ -177,12 +177,13 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         
+        // validaciones del JOptionPane que se abre aqui
         // validacion simple que no este nulo o vacio
         if (empleadoIdActualizar == null || empleadoIdActualizar.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Error: No hay un empleado seleccionado para actualizar.", "Error Interno", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
         Cargo nuevoCargoSeleccionado = (Cargo) comboboxCargo.getSelectedItem(); // agararamos el cargo del comboBox
         
         // validacion simple que no este nulo el cargo
@@ -221,6 +222,8 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+       
+        control.mostrarFrameSueldoOpciones(null);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 

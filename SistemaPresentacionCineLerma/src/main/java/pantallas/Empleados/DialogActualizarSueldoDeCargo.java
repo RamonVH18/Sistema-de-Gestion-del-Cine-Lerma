@@ -18,6 +18,7 @@ import enums.Cargo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.bson.types.ObjectId;
 
@@ -28,13 +29,14 @@ import org.bson.types.ObjectId;
 public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
 
    private IControl control = ControlDeNavegacion.getInstancia();
+   private SueldoOpciones frameAnterior;
 
     /**
      * Creates new form DialogActualizarSueldoDeCargo
      */
     public DialogActualizarSueldoDeCargo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-       
+        this.frameAnterior = (SueldoOpciones) parent;
         initComponents();
         configurarDialog();
         poblarComboboxCargo();
@@ -217,14 +219,19 @@ public class DialogActualizarSueldoDeCargo extends javax.swing.JDialog {
             return; // El usuario canceló
         }
 
+        // llaammos a control para actualizar
         control.controlActualizarSueldoGeneralPorCargo(cargoSeleccionado, nuevoSueldo);
 
 
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-
+        
         this.dispose();
+        SueldoOpciones sueldoOp = new SueldoOpciones();
+        sueldoOp.setVisible(true);
+        
+        
     }//GEN-LAST:event_btnVolverActionPerformed
 
 

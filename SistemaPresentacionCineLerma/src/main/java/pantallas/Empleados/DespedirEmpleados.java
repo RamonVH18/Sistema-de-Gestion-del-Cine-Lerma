@@ -151,7 +151,8 @@ public class DespedirEmpleados extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-      
+        
+        control.mostrarMenuAdministrarEmpleados(this);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
@@ -201,8 +202,10 @@ public class DespedirEmpleados extends javax.swing.JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             boolean exito = false;
-            exito = control.controlDespedirEmpleado(seleccionado.getId());
+            
+            exito = control.controlDespedirEmpleado(seleccionado.getId()); // usamos el control para llamara a controlDespedirEmpleado
             if (exito) {
+                
                 JOptionPane.showMessageDialog(this, "Empleado despedido (marcado como inactivo) exitosamente.", "Despido Exitoso", JOptionPane.INFORMATION_MESSAGE);
                 listaEmpleados.cargarEmpleadosActivos(); // Actualizar la lista
             } else {

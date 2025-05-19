@@ -34,6 +34,13 @@ public class SueldoOpciones extends javax.swing.JFrame {
         initComponents();
         this.control = ControlDeNavegacion.getInstancia();
     }
+    
+    
+    public void cerrarFrame() {
+        
+        dispose();
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -135,6 +142,7 @@ public class SueldoOpciones extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         
+        control.mostrarMenuAdministrarEmpleados(this);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 

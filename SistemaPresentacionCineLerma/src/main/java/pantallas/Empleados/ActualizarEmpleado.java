@@ -38,8 +38,9 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
         initComponents();
 
         this.listaEmpleados = new ListaEmpleados();
+        if(scrollPanela != null) {
         scrollPanela.setViewportView(this.listaEmpleados);
-
+        } 
         //  configuracion adiciones del frame
         setLocationRelativeTo(null); // centrar la ventana
 
@@ -141,7 +142,7 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-
+        control.mostrarMenuAdministrarEmpleados(this);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 

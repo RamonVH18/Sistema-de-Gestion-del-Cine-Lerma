@@ -403,7 +403,7 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
         datosNuevosDTO.setFechaNacimiento(empleadoActualDTO.getFechaNacimiento()); // Mantener fecha nacimiento original
         // El ID no se pone en el DTO de datosNuevos, se pasa como parámetro separado.
 
-        // 3. Llamar al método de ManejoEmpleados
+        // 3. Llamar al método de xcontrol
         try {
             EmpleadoDTO empleadoActualizado = control.controlActualizarInformacionEmpleado(this.empleadoId, datosNuevosDTO);
 
@@ -418,6 +418,8 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+       
+        control.mostrarActualizarEmpleado(this);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 

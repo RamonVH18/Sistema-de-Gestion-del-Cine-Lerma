@@ -463,32 +463,24 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
             limpiarCampos();
 
         }
-        // Captura la ValidacionEmpleadoException lanzada por ManejoEmpleados.validarDatosEmpleadoDTO()
-         catch (Exception e) { // Captura genérica para cualquier otro imprevisto
+       
+         catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
         }
-        // Captura la RegistrarNuevoEmpleadoException lanzada por ManejoEmpleados
-        // Esta excepción envuelve errores del BO (validación, persistencia, etc.)
+        
         
 
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
 
+        control.mostrarMenuAdministrarEmpleados(this);
         this.dispose();
 
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
-                new RegistrarEmpleado().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
