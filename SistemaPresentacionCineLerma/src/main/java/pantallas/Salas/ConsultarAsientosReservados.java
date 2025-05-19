@@ -4,6 +4,7 @@
  */
 package pantallas.Salas;
 
+import DTOs.AsientoFuncionDTO;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import DTOs.SalaViejaDTO;
@@ -11,11 +12,15 @@ import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -35,9 +40,13 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
     private final FuncionDTO funcionSelecionada;
     private final PeliculaDTO peliculaFuncion;
     private final SalaViejaDTO salaFuncion;
+    private final List<AsientoFuncionDTO> asientosDisponibles;
 
     private final Integer anchoImagen = 200;
     private final Integer alturaImagen = 300;
+
+    private final Font fuenteLabel1 = new Font("Tw Cen MT Condensed", Font.BOLD, 20);
+    private final Font fuenteLabel2 = new Font("Tw Cen MT Condensed", Font.PLAIN, 20);
 
     /**
      * Creates new form ConsultarAsientosReservados
@@ -49,6 +58,8 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
         utilerias.configurarFrameBase(this, "CONSULTAR ASIENTOS");
         peliculaFuncion = control.encontrarPelicula(funcionSelecionada.getNombrePelicula());
         salaFuncion = control.consultarSala(funcionSelecionada.getNumSala());
+        asientosDisponibles = control.cargarListaAsientos(funcionSelecionada, true);
+
         configurarConsultarAsientosReservados();
 
     }
@@ -184,7 +195,7 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
             labelImagen = new JLabel(imagenPelicula);
 
             panelImagen.add(labelImagen);
-
+            panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.X_AXIS));
             panelCentral.add(panelImagen);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "ERROR: Hubo al cargar la pagina. Intentar mas al rato", "¡ERROR!", JOptionPane.ERROR_MESSAGE);
@@ -195,25 +206,60 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
 
     private void configurarPanelDatos(JPanel panelCentral) {
         JPanel panelDatos = new JPanel();
+        panelDatos.setLayout(new BoxLayout(panelDatos, BoxLayout.Y_AXIS));
 
+        Integer numeroAsientos = salaFuncion.getNumAsientos();
+        panelDatos.add(Box.createVerticalStrut(50));
+
+        // Labels de horario
         labelHorario1 = new JLabel("HORARIO:");
-        panelDatos.add(labelHorario1);
+        labelHorario2 = new JLabel(configurarHoraFuncion());
+        configuracionLabel(panelDatos, labelHorario1, labelHorario2);
 
+// Labels de sala
+        labelSala1 = new JLabel("SALA:");
+        labelSala2 = new JLabel(funcionSelecionada.getNumSala());
+        configuracionLabel(panelDatos, labelSala1, labelSala2);
+        
+        labelPelicula1 = new JLabel("PELICULA:");
+        labelPelicula2 = new JLabel(funcionSelecionada.getNombrePelicula());
+        configuracionLabel(panelDatos, labelPelicula1, labelPelicula2);
+
+// Labels de total de asientos
+        labelTotalAsientos1 = new JLabel("TOTAL ASIENTOS:");
+
+        labelTotalAsientos2 = new JLabel(numeroAsientos.toString());
+        configuracionLabel(panelDatos, labelTotalAsientos1, labelTotalAsientos2);
+
+// Labels de ocupados y disponibles
+        labelDisponibles = new JLabel("Asientos disponibles: " + asientosDisponibles.size());
+        labelOcupados = new JLabel("Asientos ocupados: " + (numeroAsientos - asientosDisponibles.size()));
+        configuracionLabel(panelDatos, labelOcupados, labelDisponibles);
+        
+        panelDatos.add(Box.createVerticalGlue());
+        panelCentral.add(panelDatos);
+
+    }
+
+    private void configuracionLabel(JPanel panelDatos, JLabel label1, JLabel label2) {
+        panelDatos.add(label1);
+        panelDatos.add(label2);
+        label1.setFont(fuenteLabel1);
+        label2.setFont(fuenteLabel2);
+    }
+
+    private String configurarHoraFuncion() {
         LocalDateTime fecha = funcionSelecionada.getFechaHora();
         String minutosFormateados = fecha.getMinute() < 10
                 ? "0" + fecha.getMinute()
                 : String.valueOf(fecha.getMinute());
-        
-        labelHorario2 = new JLabel(minutosFormateados);
-        
-        labelSala1 = new JLabel("SALA:");
-        labelSala2 = new JLabel(funcionSelecionada.getNumSala());
-        
-        labelPelicula1 = new JLabel("PELICULA");
-        labelPelicula2 = new JLabel(funcionSelecionada.getNombrePelicula());
-        
-        labelTotalAsientos1 = new JLabel("TOTAL ASIENTOS");
-        
+        String horaFuncion = fecha.getHour() + ":" + minutosFormateados;
+
+        String diaTexto = utilerias.traducirDia(fecha.getDayOfWeek()) + ", "
+                + fecha.getDayOfMonth() + " de "
+                + utilerias.traducirMes(fecha.getMonth());
+
+        return diaTexto + " " + horaFuncion;
     }
 
     /**
