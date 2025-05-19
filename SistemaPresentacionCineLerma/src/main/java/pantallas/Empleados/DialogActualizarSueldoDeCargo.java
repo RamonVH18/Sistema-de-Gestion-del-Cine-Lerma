@@ -6,10 +6,10 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
-import Excepciones.ManejoActualizacionSueldoException;
+import Excepciones.ActualizacionSueldoException;
 import Excepciones.Empleados.ValidacionEmpleadoException;
 import Excepciones.PersistenciaException;
-import Excepciones.ManejoValidarActualizacionSueldoDeCargoException;
+import Excepciones.validarActualizacionSueldoDeCargoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
 import control.ControlDeNavegacion;

@@ -6,12 +6,12 @@ package pantallas.Empleados;
 
 import BOs.EmpleadoBO;
 import DTOs.EmpleadoDTO;
-import Excepciones.ManejoFiltrarEmpleadosException;
-import Excepciones.ManejoObtenerEmpleadoException;
-import Excepciones.ManejoObtenerEmpleadoPorCargoException;
+import Excepciones.FiltrarEmpleadosException;
+import Excepciones.ObtenerEmpleadoException;
+import Excepciones.ObtenerEmpleadoPorCargoException;
 import Excepciones.PersistenciaException;
-import Excepciones.ManejoValidacionEmpleadoIdException;
-import Excepciones.ManejoValidarEmpleadoException;
+import Excepciones.ValidacionEmpleadoIdException;
+import Excepciones.ValidarEmpleadoException;
 import GestionEmpleados.IManejoEmpleados;
 import GestionEmpleados.ManejoEmpleados;
 import enums.Cargo;
@@ -89,9 +89,9 @@ public class ListaEmpleados extends JPanel {
         btnFiltrar.addActionListener(e -> {
             try {
                 filtrarEmpleados();
-            } catch (ManejoValidacionEmpleadoIdException ex) {
+            } catch (ValidacionEmpleadoIdException ex) {
                 Logger.getLogger(ListaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ManejoObtenerEmpleadoPorCargoException ex) {
+            } catch (ObtenerEmpleadoPorCargoException ex) {
                 Logger.getLogger(ListaEmpleados.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -134,7 +134,7 @@ public class ListaEmpleados extends JPanel {
             mostrarEmpleadosEnTabla(empleados);
             txtFiltroNombre.setText("");
             comboFiltroCargo.setSelectedItem(null); // Restablece el ComboBox
-        } catch (ManejoObtenerEmpleadoException ex) { // Capturamos la excepción de la capa de Manejo
+        } catch (ObtenerEmpleadoException ex) { // Capturamos la excepción de la capa de Manejo
             mostrarError("Error al cargar empleados: " + ex.getMessage());
             // Para depuración:
             if (ex.getCause() != null) {
@@ -143,7 +143,7 @@ public class ListaEmpleados extends JPanel {
         }
     }
 
-    private void filtrarEmpleados() throws ManejoValidacionEmpleadoIdException, ManejoObtenerEmpleadoPorCargoException {
+    private void filtrarEmpleados() throws ValidacionEmpleadoIdException, ObtenerEmpleadoPorCargoException {
         Cargo cargoSeleccionado = (Cargo) comboFiltroCargo.getSelectedItem();
         String nombreFiltro = txtFiltroNombre.getText().trim().toLowerCase();
         List<EmpleadoDTO> resultadosFiltrados;
@@ -175,7 +175,7 @@ public class ListaEmpleados extends JPanel {
             }
             mostrarEmpleadosEnTabla(resultadosFiltrados);
 
-        } catch (ManejoObtenerEmpleadoException vex) { // Por ej. si cargo es nulo y el método lo valida así
+        } catch (ObtenerEmpleadoException vex) { // Por ej. si cargo es nulo y el método lo valida así
              mostrarError("Error de validación al filtrar: " + vex.getMessage());
         } catch (Exception ex) {
             mostrarError("Error al filtrar empleados: " + ex.getMessage());
