@@ -111,7 +111,6 @@ public class HistorialCliente extends javax.swing.JFrame {
             control.mostrarGestionDeUsuarios(this, null);
             dispose();
         }
-        control.mostrarGestionDeUsuarios(this, null);
         dispose();
         
     }//GEN-LAST:event_btnVolverActionPerformed
