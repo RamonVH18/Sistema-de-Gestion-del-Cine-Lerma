@@ -30,6 +30,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
@@ -114,6 +116,19 @@ public class ManejoPeliculas implements IManejoPeliculas {
             throw new EliminarPeliculaException("Ocurrio un error durante la eliminacion de la pelicula: " + e.getMessage());
         }
     }
+    
+    @Override
+    public PeliculaDTO buscarPelicula(String nombrePelicula) throws MostrarPeliculasException {
+        try {
+            if (nombrePelicula == null || nombrePelicula.isBlank()) {
+                throw new MostrarPeliculasException("Debe ingresar un nombre valido para buscar la pelicula");    
+            }
+            return peliculaBO.buscarPelicula(nombrePelicula);
+        } catch (PeliculaBusquedaException e) {
+            throw new MostrarPeliculasException("Hubo un error al buscar la pelicula.");
+        }
+        
+    } 
 
     @Override
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO) throws DarAltaPeliculaException {

@@ -47,6 +47,7 @@ import Excepciones.PeliculasCargaException;
 import Excepciones.ValidarCuentaException;
 import Excepciones.GenerarBoletoException;
 import Excepciones.ModificarSalaException;
+import Excepciones.MostrarPeliculasException;
 import Excepciones.ObtenerEmpleadoException;
 import Excepciones.ObtenerEmpleadoPorCargoException;
 import Excepciones.PresentacionException;
@@ -891,6 +892,16 @@ public class ControlDeNavegacion implements IControl {
             pantallaEditarPelicula.setLocationRelativeTo(null);
             pantallaEditarPelicula.setVisible(true);
         });
+    }
+    
+    @Override
+    public PeliculaDTO encontrarPelicula(String nombrePelicula) {
+            try {
+                return gestionPeliculas.buscarPelicula(nombrePelicula);
+            } catch (MostrarPeliculasException e) {
+                JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
     }
 
     /*

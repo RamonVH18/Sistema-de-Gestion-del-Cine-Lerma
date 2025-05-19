@@ -168,6 +168,8 @@ public interface IControl {
     public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO);
     
     public void mostrarEditarPelicula(PeliculaDTO peliculaDTO);
+    
+    public PeliculaDTO encontrarPelicula(String nombrePelicula);
     // -------------------------------FIN DE METODOS DE NAVEGACION DE PELICULAS-------------------------
 
     //Usuarios:
