@@ -8,14 +8,16 @@ package Excepciones;
  *
  * @author isaac
  */
-public class validarActualizacionSueldoDeCargoException extends Exception {
-    
-     public validarActualizacionSueldoDeCargoException(String message) {
+public class ManejoValidacionEmpleadoIdException extends Exception {
+
+    public ManejoValidacionEmpleadoIdException(String message) {
         super(message);
     }
 
-    public validarActualizacionSueldoDeCargoException(String message, Throwable cause) {
+    public ManejoValidacionEmpleadoIdException(String message, Throwable cause) {
         super(message, cause);
     }
+    
+    
     
 }

@@ -9,13 +9,13 @@ package Excepciones;
  *
  * @author isaac
  */
-public class DespedirEmpleadoException extends Exception {
+public class ManejoDespedirEmpleadoException extends Exception {
 
-    public DespedirEmpleadoException(String message) {
+    public ManejoDespedirEmpleadoException(String message) {
         super(message);
     }
 
-    public DespedirEmpleadoException(String message, Throwable cause) {
+    public ManejoDespedirEmpleadoException(String message, Throwable cause) {
         super(message, cause);
     }
     

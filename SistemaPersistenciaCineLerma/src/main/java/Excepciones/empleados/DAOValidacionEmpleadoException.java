@@ -2,22 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Excepciones;
+package Excepciones.empleados;
 
 /**
  *
  * @author isaac
  */
-public class RegistrarNuevoEmpleadoException extends Exception {
+public class DAOValidacionEmpleadoException extends Exception {
 
-    public RegistrarNuevoEmpleadoException(String message) {
+    public DAOValidacionEmpleadoException(String message) {
         super(message);
     }
 
-    public RegistrarNuevoEmpleadoException(String message, Throwable cause) {
+    public DAOValidacionEmpleadoException(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    
     
 }

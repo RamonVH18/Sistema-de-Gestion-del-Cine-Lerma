@@ -8,13 +8,13 @@ package Excepciones;
  *
  * @author isaac
  */
-public class ActualizacionEmpleadoException extends Exception {
+public class ManejoFiltrarEmpleadosException extends Exception {
 
-    public ActualizacionEmpleadoException(String message) {
+    public ManejoFiltrarEmpleadosException(String message) {
         super(message);
     }
 
-    public ActualizacionEmpleadoException(String message, Throwable cause) {
+    public ManejoFiltrarEmpleadosException(String message, Throwable cause) {
         super(message, cause);
     }
     

@@ -2,19 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Excepciones.empleados;
+package Excepciones;
 
 /**
  *
  * @author isaac
  */
-public class ActualizarEmpleadoException  extends Exception {
+public class ManejoObtenerEmpleadoPorCargoException extends Exception{
 
-    public ActualizarEmpleadoException(String message) {
+    public ManejoObtenerEmpleadoPorCargoException(String message) {
         super(message);
     }
 
-    public ActualizarEmpleadoException(String message, Throwable cause) {
+    public ManejoObtenerEmpleadoPorCargoException(String message, Throwable cause) {
         super(message, cause);
     }
     

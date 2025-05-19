@@ -8,13 +8,13 @@ package Excepciones.empleados;
  *
  * @author isaac
  */
-public class ObtenerEmpleadoException extends Exception {
+public class DAODespedirEmpleadoException extends Exception {
 
-    public ObtenerEmpleadoException(String message) {
+    public DAODespedirEmpleadoException(String message) {
         super(message);
     }
 
-    public ObtenerEmpleadoException(String message, Throwable cause) {
+    public DAODespedirEmpleadoException(String message, Throwable cause) {
         super(message, cause);
     }
     

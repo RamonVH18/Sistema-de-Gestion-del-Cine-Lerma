@@ -8,15 +8,14 @@ package Excepciones.empleados;
  *
  * @author isaac
  */
-public class DespedirEmpleadoException extends Exception {
+public class DAOActualizarSueldoException extends Exception{
 
-    public DespedirEmpleadoException(String message) {
+    public DAOActualizarSueldoException(String message) {
         super(message);
     }
 
-    public DespedirEmpleadoException(String message, Throwable cause) {
+    public DAOActualizarSueldoException(String message, Throwable cause) {
         super(message, cause);
     }
-    
     
 }
