@@ -30,13 +30,11 @@ public class ConsultarFunciones extends javax.swing.JFrame {
 
     private JTable tabla;
 
-    private IManejoFunciones manejoFunciones;
     private String nombrePelicula;
     IControl control = ControlDeNavegacion.getInstancia();
 
-    public ConsultarFunciones(String nombrePelicula, IManejoFunciones manejoFunciones) {
+    public ConsultarFunciones(String nombrePelicula) {
         initComponents();
-        this.manejoFunciones = manejoFunciones;
         this.nombrePelicula = nombrePelicula;
         labelNombrePelicula.setText("Funciones de la pelicula: " + nombrePelicula);
         cargarTablaFunciones();
@@ -44,7 +42,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
 
     public void cargarTablaFunciones() {
         try {
-            List<FuncionDTO> funciones = manejoFunciones.buscarFuncionesPorPelicula(nombrePelicula);
+            List<FuncionDTO> funciones = control.buscarFuncionesPorPelicula(nombrePelicula);
 
             String[] columnas = {"ID", "Sala", "Fecha y Hora", "Hora Termino", "Precio", "Empleado"};
             Object[][] datos = new Object[funciones.size()][6];

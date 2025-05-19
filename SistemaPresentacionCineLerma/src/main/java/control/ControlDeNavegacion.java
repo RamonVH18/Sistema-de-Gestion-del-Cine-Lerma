@@ -840,7 +840,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula) {
         SwingUtilities.invokeLater(() -> {
-            ConsultarFunciones pantalla = new ConsultarFunciones(nombrePelicula, gestionFunciones);
+            ConsultarFunciones pantalla = new ConsultarFunciones(nombrePelicula);
             pantalla.setLocationRelativeTo(null);
             pantalla.setVisible(true);
             if (frameAnterior != null) {
