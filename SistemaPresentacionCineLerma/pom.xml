@@ -24,6 +24,12 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>7.2.3</version> 
+            <type>pom</type>
+        </dependency>
+        <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE250</version>
@@ -96,14 +102,8 @@
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
-            <artifactId>itext7-core</artifactId>
-            <version>7.2.3</version> 
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>Itext</groupId>
-            <artifactId>Itext</artifactId>
-            <version>1</version>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.2</version>
         </dependency>
     </dependencies>
     <properties>
