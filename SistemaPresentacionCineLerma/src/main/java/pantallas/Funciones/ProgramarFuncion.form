@@ -249,6 +249,9 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarEmpleadosActionPerformed"/>
+      </Events>
     </Component>
     <Component class="com.github.lgooddatepicker.components.DateTimePicker" name="FechaHoraFuncion">
     </Component>

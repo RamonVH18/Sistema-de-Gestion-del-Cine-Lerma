@@ -5,6 +5,7 @@
 package pantallas.Funciones;
 
 import DTOs.AsientoFuncionDTO;
+import DTOs.EmpleadoDTO;
 import DTOs.FuncionDTO;
 import DTOs.SalaViejaDTO;
 import control.ControlDeNavegacion;
@@ -74,6 +75,52 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         }
     }
 
+    private void mostrarDialogoEmpleados() {
+        List<EmpleadoDTO> empleados = control.consultarTodosLosEmpleadosActivos();
+
+        if (empleados != null && !empleados.isEmpty()) {
+            String[] columnas = {"Nombre", "Cargo"}; 
+            Object[][] datos = new Object[empleados.size()][2]; 
+
+            for (int i = 0; i < empleados.size(); i++) {
+                EmpleadoDTO empleado = empleados.get(i);
+                datos[i][0] = empleado.getNombre();
+                datos[i][1] = empleado.getCargo();
+            }
+
+            JTable tablaEmpleados = ModeladoTablas.creacionTablaSencilla(
+                    columnas, datos, 14, 30
+            );
+
+            JDialog dialog = new JDialog(this, "Seleccionar Empleado", true);
+            dialog.setSize(500, 300);
+            dialog.add(new JScrollPane(tablaEmpleados));
+
+            List<EmpleadoDTO> empleadosLista = empleados;
+
+            tablaEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    int row = tablaEmpleados.getSelectedRow();
+                    if (row >= 0) {
+                        String idEmpleado = empleadosLista.get(row).getId();
+                        jTextField1.setText(idEmpleado);
+                        dialog.dispose();
+                    }
+                }
+            });
+
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No hay empleados activos disponibles",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
     private boolean validarCampos() {
         if (salaSeleccionada.getText().isEmpty()
                 || FechaHoraFuncion.getDateTimeStrict() == null
@@ -102,6 +149,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             String numSala = salaSeleccionada.getText();
             LocalDateTime fechaHora = FechaHoraFuncion.getDateTimeStrict();
             double precio = Double.parseDouble(precioBoleto.getText());
+            String idEmpleado = jTextField1.getText().isEmpty() ? null : jTextField1.getText();
 
             // Crear DTO con la película válida
             FuncionDTO funcionDTO = new FuncionDTO(
@@ -110,6 +158,10 @@ public class ProgramarFuncion extends javax.swing.JFrame {
                     fechaHora,
                     precio
             );
+
+            if (idEmpleado != null) {
+                funcionDTO.setIdEmpleado(idEmpleado); // Asume que existe este método en FuncionDTO
+            }
 
             FuncionDTO funcionRegistrada = control.registrarFuncion(funcionDTO);
             SalaViejaDTO sala = control.consultarSala(numSala);
@@ -218,6 +270,11 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         btnBuscarEmpleados.setBackground(new java.awt.Color(162, 132, 94));
         btnBuscarEmpleados.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         btnBuscarEmpleados.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscarEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarEmpleadosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -323,6 +380,10 @@ public class ProgramarFuncion extends javax.swing.JFrame {
     private void btnBuscarSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarSalasActionPerformed
         mostrarDialogoSalas();
     }//GEN-LAST:event_btnBuscarSalasActionPerformed
+
+    private void btnBuscarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEmpleadosActionPerformed
+        mostrarDialogoEmpleados();
+    }//GEN-LAST:event_btnBuscarEmpleadosActionPerformed
 
     /**
      * @param args the command line arguments
