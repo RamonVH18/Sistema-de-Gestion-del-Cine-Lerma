@@ -4,12 +4,15 @@
  */
 package pantallas.Salas;
 
+
+import DTOs.EstadisticaSalaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.util.List;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,6 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import utilitades.ModeladoTablas;
 import utilitades.Utilerias;
 
@@ -39,6 +45,10 @@ public class EstadisticasSala extends javax.swing.JFrame {
     private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
     
     private final Integer alturaFilas = 20;
+    
+    JPanel panelTabla;
+    private JTable tablaSalas;
+    private Timer temporizador;
     /**
      * Mapa que contiene los valores del tamaño de cada columna de la tabla de estadisticas
      * El primer valor de cada line es la llave y el segundo valor es el tamaño del ancho del boton
@@ -68,21 +78,9 @@ public class EstadisticasSala extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        textFieldBuscador = new javax.swing.JTextField();
-        labelBuscador = new javax.swing.JLabel();
-        labelOrdenamiento = new javax.swing.JLabel();
-        comboBoxOrdenamiento = new javax.swing.JComboBox<>();
         botonPDF = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        textFieldBuscador.setText("jTextField1");
-
-        labelBuscador.setText("jLabel1");
-
-        labelOrdenamiento.setText("jLabel2");
-
-        comboBoxOrdenamiento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         botonPDF.setText("jButton1");
 
@@ -90,33 +88,15 @@ public class EstadisticasSala extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelBuscador)
-                    .addComponent(textFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(85, 85, 85)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(comboBoxOrdenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelOrdenamiento))
-                .addContainerGap(246, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(319, Short.MAX_VALUE)
                 .addComponent(botonPDF)
                 .addGap(123, 123, 123))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelBuscador)
-                    .addComponent(labelOrdenamiento))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboBoxOrdenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
+                .addContainerGap(399, Short.MAX_VALUE)
                 .addComponent(botonPDF)
                 .addGap(221, 221, 221))
         );
@@ -127,10 +107,6 @@ public class EstadisticasSala extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonPDF;
-    private javax.swing.JComboBox<String> comboBoxOrdenamiento;
-    private javax.swing.JLabel labelBuscador;
-    private javax.swing.JLabel labelOrdenamiento;
-    private javax.swing.JTextField textFieldBuscador;
     // End of variables declaration//GEN-END:variables
     
     /**
@@ -146,67 +122,21 @@ public class EstadisticasSala extends javax.swing.JFrame {
      */
     private void configurarPanelCentral() {
         JPanel panelCentral = new JPanel();
-        // Se configura el buscador de la pantalla
-        JPanel panelBuscador = new JPanel();
-        configurarPanelBuscador(panelBuscador);
         // Configuracion de la tabla
-        JPanel panelTabla = new JPanel();
+        panelTabla = new JPanel();
         configurarPanelTabla(panelTabla);
 
         // Se agregan los componentes en cierto orden 
         panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
 
         panelCentral.add(Box.createVerticalStrut(75));
-        panelCentral.add(panelBuscador);
-        panelCentral.add(Box.createVerticalGlue());
         panelCentral.add(panelTabla);
+        panelCentral.add(Box.createVerticalGlue());
+        
 
         this.add(panelCentral, BorderLayout.CENTER);
     }
-    /** 
-     * Metodo para configurar el panel donde van el buscador y el comboBox encargado del ordenamiento de una sala
-     * @param panel 
-     */
-    private void configurarPanelBuscador(JPanel panel) {
-        // Configuracion del buscador
-        JPanel panelBuscador = new JPanel();
-        labelBuscador = new JLabel("BUSCAR SALA: ");
-        textFieldBuscador = new JTextField();
-        textFieldBuscador.setPreferredSize(tamañoBuscador);
-        panelBuscador.add(labelBuscador);
-        panelBuscador.add(textFieldBuscador);
-        // Configuracion del comboBox para ordenar el 
-        JPanel panelOrdenamiento = new JPanel();
-        labelOrdenamiento = new JLabel("ORDENAR POR: ");
-        configurarComboBoxOrdenamiento();
-        panelOrdenamiento.add(labelOrdenamiento);
-        panelOrdenamiento.add(comboBoxOrdenamiento);
-
-        // Se agregan ambos paneles
-        panel.add(panelBuscador);
-        panel.add(panelOrdenamiento);
-
-    }
-    /**
-     * Metodo para la configuracion del comboBox encargado del ordenamiento
-     * Aqui lo que se hace es agregar las opciones al modelo del comboBox
-     */
-    private void configurarComboBoxOrdenamiento() {
-        comboBoxOrdenamiento = new JComboBox<>();
-        DefaultComboBoxModel<String> modeloComboBox = new DefaultComboBoxModel<>();
-        // Opciones disponibles del comboBox
-        modeloComboBox.addElement(""); // Se le agrega uno vacio para que se muestren por defecto asi
-        modeloComboBox.addElement("Capacidad");
-        modeloComboBox.addElement("Numero de Funciones");
-        modeloComboBox.addElement("Ingresos Totales");
-        modeloComboBox.addElement("Funciones Canceladas");
-        comboBoxOrdenamiento.setModel(modeloComboBox);
-        // Se le agrega un actionListener para que al momento de que se cambie de opcion simplemente se cambie el orden
-        comboBoxOrdenamiento.addActionListener((ActionEvent e) -> {
-            //actualizarTabla(comboBoxOrdenamiento.getSelectedItem());
-        });
-
-    }
+    
     /**
      * Metodo para configurar la tabla con los datos
      * @param panelTabla 
@@ -218,10 +148,10 @@ public class EstadisticasSala extends javax.swing.JFrame {
             "CAPACIDAD",
             "<html>NUMERO DE<br>FUNCIONES</html>", // A estas tres opciones se le agrego esa escritura de html para poder hacer un salto de linea
             "<html>INGRESOS<br>TOTALES</html>", 
-            "<html>FUNCIONES<br>CANCELADAS</html>"
+            "<html>ASIENTOS<br>VENDIDOS</html>"
         };
         // Arreglo de Objetos de dos dimensiones para guardar las estadisticas de cada sala
-        Object[][] datos = {};
+        Object[][] datos = obtenerDatos();
 
         // Valor del tamaño del encabezado
         Integer tamañoEncabezado = 40;
@@ -233,8 +163,10 @@ public class EstadisticasSala extends javax.swing.JFrame {
          * Se llama al metodo estatico de la clase de ModeladoTablas para poder crear una tablaSencilla en base a:
          * El arreglo de columnas, el arreglo de datos y finalmente el tamaño del encabezado
          */
-        JTable tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoFuente, tamañoEncabezado);
-
+        tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoFuente, tamañoEncabezado);
+        if (panelTabla.getComponentCount() > 0) {
+            panelTabla.removeAll();
+        }
         /**        
          * Se llama nuevamente a otro metodo de la clase ModeladoTablas
          * esto para ajustar el tamaño de la columnas de la tablas
@@ -246,6 +178,32 @@ public class EstadisticasSala extends javax.swing.JFrame {
         JScrollPane scrollPane = new JScrollPane(tablaSalas);
         panelTabla.add(scrollPane);
 
+    }
+    
+    private Object[][] obtenerDatos() {
+        List<EstadisticaSalaDTO> estadisticas = control.consultarEstadisticasSala();
+        Object[][] datos = new Object[estadisticas.size()][5];
+        
+        for(int i = 0; i < estadisticas.size(); i++) {
+            datos[i][0] = estadisticas.get(i).getNumSala();
+            datos[i][1] = estadisticas.get(i).getCapacidad();
+            datos[i][2] = estadisticas.get(i).getFuncionesRealizadas();
+            datos[i][3] = estadisticas.get(i).getTotalGanado();
+            datos[i][4] = estadisticas.get(i).getAsientosVendidos();
+        }
+        
+        return datos;
+    }
+    
+    private void efectoTemporizador() {
+        if (temporizador != null) {
+            temporizador.stop();
+        }
+        temporizador = new Timer(500, e -> {
+            configurarPanelTabla(panelTabla);
+            temporizador.stop();
+        });
+        temporizador.start();
     }
 
     /**

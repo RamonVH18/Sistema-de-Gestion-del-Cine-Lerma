@@ -11,6 +11,7 @@ import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
 import DTOs.CuentaMercadoDTO;
 import DTOs.EmpleadoDTO;
+import DTOs.EstadisticaSalaDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
@@ -119,6 +120,8 @@ public interface IControl {
     public Boolean validarCamposAgregarSala(String numSala, String numAsientos);
 
     public void mostrarEstadisticasSala(JFrame frameAnterior);
+    
+    public List<EstadisticaSalaDTO> consultarEstadisticasSala();
 
     public void mostrarSeleccionarSala(JFrame frameAnterior);
 

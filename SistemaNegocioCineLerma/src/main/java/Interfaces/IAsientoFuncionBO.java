@@ -5,11 +5,13 @@
 package Interfaces;
 
 import DTOs.AsientoFuncionDTO;
+import DTOs.EstadisticaSalaDTO;
 import DTOs.FuncionDTO;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.asientoFuncion.AsientoFuncionEliminacionException;
 import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
+import Excepciones.asientoFuncion.ErrorAlObtenerEstadisticasException;
 import java.util.List;
 
 /**
@@ -27,5 +29,7 @@ public interface IAsientoFuncionBO {
     public List<AsientoFuncionDTO> obtenerAsientosFuncion(FuncionDTO funcion) throws AsientoFuncionBusquedaException;
     
     public List<AsientoFuncionDTO> obtenerAsientosDisponibles(FuncionDTO funcion) throws AsientoFuncionBusquedaException;
+    
+    public List<EstadisticaSalaDTO> obtenerEstadisticasSala() throws ErrorAlObtenerEstadisticasException;
     
 }

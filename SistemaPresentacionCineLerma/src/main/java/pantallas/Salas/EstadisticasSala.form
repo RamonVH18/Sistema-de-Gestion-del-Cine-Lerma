@@ -23,21 +23,8 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="labelBuscador" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="textFieldBuscador" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="comboBoxOrdenamiento" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelOrdenamiento" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="246" max="32767" attributes="0"/>
-          </Group>
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="319" max="32767" attributes="0"/>
               <Component id="botonPDF" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="123" max="-2" attributes="0"/>
           </Group>
@@ -46,17 +33,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelBuscador" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelOrdenamiento" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="textFieldBuscador" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="comboBoxOrdenamiento" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="299" max="32767" attributes="0"/>
+              <EmptySpace pref="399" max="32767" attributes="0"/>
               <Component id="botonPDF" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="221" max="-2" attributes="0"/>
           </Group>
@@ -64,36 +41,6 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JTextField" name="textFieldBuscador">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField1"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelBuscador">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel1"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelOrdenamiento">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel2"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="comboBoxOrdenamiento">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JButton" name="botonPDF">
       <Properties>
         <Property name="text" type="java.lang.String" value="jButton1"/>

@@ -15,18 +15,16 @@ public class EstadisticaSalaDTO {
     private Double totalGanado;
     private Integer asientosVendidos;
     private Integer funcionesRealizadas;
-    private Integer funcionesCanceladas;
 
     public EstadisticaSalaDTO() {
     }
 
-    public EstadisticaSalaDTO(String numSala, Integer capacidad, Double totalGanado, Integer asientosVendidos, Integer funcionesRealizadas, Integer funcionesCanceladas) {
+    public EstadisticaSalaDTO(String numSala, Integer capacidad, Double totalGanado, Integer asientosVendidos, Integer funcionesRealizadas) {
         this.numSala = numSala;
         this.capacidad = capacidad;
         this.totalGanado = totalGanado;
         this.asientosVendidos = asientosVendidos;
         this.funcionesRealizadas = funcionesRealizadas;
-        this.funcionesCanceladas = funcionesCanceladas;
     }
 
     public String getNumSala() {
@@ -68,14 +66,4 @@ public class EstadisticaSalaDTO {
     public void setFuncionesRealizadas(Integer funcionesRealizadas) {
         this.funcionesRealizadas = funcionesRealizadas;
     }
-
-    public Integer getFuncionesCanceladas() {
-        return funcionesCanceladas;
-    }
-
-    public void setFuncionesCanceladas(Integer funcionesCanceladas) {
-        this.funcionesCanceladas = funcionesCanceladas;
-    }
-    
-    
 }

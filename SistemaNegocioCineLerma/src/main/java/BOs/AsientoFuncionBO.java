@@ -6,7 +6,9 @@ package BOs;
 
 import DAOs.AsientoFuncionDAO;
 import DTOs.AsientoFuncionDTO;
+import DTOs.EstadisticaSalaDTO;
 import DTOs.FuncionDTO;
+import DTOs.GananciaSalaDTO;
 import Excepciones.AsientoFuncion.FalloCreacionAsientosFuncionException;
 import Excepciones.AsientoFuncion.FalloEliminacionAsientosFuncion;
 import Excepciones.AsientoFuncion.FalloMostrarAsientosFuncionException;
@@ -15,12 +17,15 @@ import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.asientoFuncion.AsientoFuncionEliminacionException;
 import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
+import Excepciones.asientoFuncion.ErrorAlObtenerEstadisticasException;
+import Excepciones.salas.ErrorCalculoEstadisticasSalaException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IAsientoFuncionDAO;
 import Mappers.AsientoFuncionMapper;
 import Mappers.FuncionMapper;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,19 +54,19 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
 
     @Override
     public List<AsientoFuncionDTO> registrarAsientosFuncion(List<AsientoFuncionDTO> asientos) throws AsientoFuncionRegistroException {
-        
+
         try {
             List<AsientoFuncion> asientosMapeados = asientoFuncionMapper.toAsientoFuncionEntidad(asientos);
-            
+
             asientosMapeados = asientoFuncionDAO.agregarAsientosFuncion(asientosMapeados);
-            
+
             return asientoFuncionMapper.toAsientoFuncionDTO(asientosMapeados);
         } catch (FalloCreacionAsientosFuncionException e) {
             throw new AsientoFuncionRegistroException("Hubo un error al consultar los asiento de la funcion: " + e.getMessage());
         }
-        
+
     }
-    
+
     @Override
     public Boolean eliminarAsientosFuncion(String idFuncion) throws AsientoFuncionEliminacionException {
         try {
@@ -75,7 +80,7 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
     public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientos) throws AsientoFuncionReservaException {
         try {
             List<AsientoFuncion> asientosMapeados = asientoFuncionMapper.toAsientoFuncionEntidad(asientos);
-            
+
             return asientoFuncionDAO.ocuparAsientos(asientosMapeados);
         } catch (FalloOcuparAsientosFuncionException e) {
             throw new AsientoFuncionReservaException("Hubo un error al reservar los asientos: " + e.getMessage());
@@ -88,7 +93,7 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
             Funcion funcion = funcionMapper.toFuncionEntidad(funcionDTO);
             List<AsientoFuncion> asientosFuncion = asientoFuncionDAO.mostrarListaAsientosPorFuncion(funcion, Boolean.FALSE);
             List<AsientoFuncionDTO> asientosMapeados = asientoFuncionMapper.toAsientoFuncionDTO(asientosFuncion);
-            
+
             return asientosMapeados;
         } catch (FalloMostrarAsientosFuncionException e) {
             throw new AsientoFuncionBusquedaException("Hubo un error al consultar los asientos de la funcion: " + e.getMessage());
@@ -100,12 +105,37 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
         try {
             Funcion funcion = funcionMapper.toFuncionEntidad(funcionDTO);
             List<AsientoFuncion> asientosGuardados = asientoFuncionDAO.mostrarListaAsientosPorFuncion(funcion, Boolean.TRUE);
-            
+
             return asientoFuncionMapper.toAsientoFuncionDTO(asientosGuardados);
         } catch (FalloMostrarAsientosFuncionException e) {
             throw new AsientoFuncionBusquedaException("Hubo un error al consultar los asientos de la funcion: " + e.getMessage());
         }
-        
+
+    }
+
+    @Override
+    public List<EstadisticaSalaDTO> obtenerEstadisticasSala() throws ErrorAlObtenerEstadisticasException {
+        try {
+            List<GananciaSalaDTO> gananciasSalas = asientoFuncionDAO.obtenerEstadisticasDeSalas();
+            GananciaSalaDTO ganancias;
+            List<EstadisticaSalaDTO> estadisticas = new ArrayList<>();
+
+            for (int i = 0; i < gananciasSalas.size(); i++) {
+                ganancias = gananciasSalas.get(i);
+
+                estadisticas.add(
+                        new EstadisticaSalaDTO(ganancias.getNumSala(),
+                                ganancias.getCapacidad(),
+                                ganancias.getTotalGanado(),
+                                ganancias.getAsientosVendidos(),
+                                ganancias.getFuncionesRealizadas()
+                        )
+                );
+            }
+            return estadisticas;
+        } catch (ErrorCalculoEstadisticasSalaException e) {
+            throw new ErrorAlObtenerEstadisticasException("Hubo un error al consultar las estadisticas de las salas: " + e.getMessage());
+        }
     }
 
 }

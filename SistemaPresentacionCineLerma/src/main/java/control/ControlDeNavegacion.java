@@ -12,6 +12,7 @@ import DTOs.ClienteDTO;
 import DTOs.CompraDTO;
 import DTOs.CuentaMercadoDTO;
 import DTOs.EmpleadoDTO;
+import DTOs.EstadisticaSalaDTO;
 import DTOs.FuncionDTO;
 import DTOs.MetodoPagoDTO;
 import DTOs.PagoDTO;
@@ -66,6 +67,7 @@ import Excepciones.ValidarUsuarioException;
 import Excepciones.asientos.ErrorCargarAsientoException;
 import Excepciones.asientos.ErrorEliminacionAsientosException;
 import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
+import Excepciones.asientos.ErrorObtencionEstadisticasException;
 import Excepciones.asientos.ErrorReservacionAsientoException;
 import Excepciones.usuarios.ObtenerUsuariosException;
 import GestionEmpleados.IManejoEmpleados;
@@ -763,6 +765,15 @@ public class ControlDeNavegacion implements IControl {
             pantallaEstadisticasSala.setVisible(true);
             frameAnterior.dispose();
         });
+    }
+    @Override
+    public List<EstadisticaSalaDTO> consultarEstadisticasSala() {
+        try {
+            return manejoDeAsientos.obtenerEstadisticasSalas();
+        } catch (ErrorObtencionEstadisticasException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return new ArrayList<>();
+        }
     }
 
     @Override

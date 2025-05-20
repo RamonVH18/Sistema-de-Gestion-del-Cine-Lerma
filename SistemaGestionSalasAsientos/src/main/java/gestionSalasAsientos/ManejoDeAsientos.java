@@ -7,19 +7,23 @@ package gestionSalasAsientos;
 import BOs.AsientoFuncionBO;
 import DTOs.AsientoDTO;
 import DTOs.AsientoFuncionDTO;
+import DTOs.EstadisticaSalaDTO;
 import DTOs.FuncionDTO;
 import DTOs.SalaViejaDTO;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.asientoFuncion.AsientoFuncionEliminacionException;
 import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
+import Excepciones.asientoFuncion.ErrorAlObtenerEstadisticasException;
 import Excepciones.asientos.ErrorCargarAsientoException;
 import Excepciones.asientos.ErrorEliminacionAsientosException;
 import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
+import Excepciones.asientos.ErrorObtencionEstadisticasException;
 import Excepciones.asientos.ErrorReservacionAsientoException;
 import Excepciones.asientos.ValidacionAsientosException;
 import Interfaces.IAsientoFuncionBO;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,6 +120,20 @@ public class ManejoDeAsientos implements IManejoDeAsientos {
             }
         } catch (AsientoFuncionBusquedaException e) {
             throw new ErrorCargarAsientoException("Hubo un problema al cargar la lista de asientos de la funcion.");
+        }
+    }
+    
+    @Override
+    public List<EstadisticaSalaDTO> obtenerEstadisticasSalas() throws ErrorObtencionEstadisticasException {
+        try {
+            List<EstadisticaSalaDTO> estadisticas = asientoBO.obtenerEstadisticasSala();
+            estadisticas.sort(Comparator.comparing(p -> p.getNumSala()));
+            if (estadisticas.isEmpty()) {
+                throw new ErrorObtencionEstadisticasException("");
+            }
+            return estadisticas;
+        } catch (ErrorAlObtenerEstadisticasException e) {
+            throw new ErrorObtencionEstadisticasException("No se pudieron obtener las estadisticas de las salas. Favor de intentar luego.");
         }
     }
 }
