@@ -67,8 +67,9 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
 
     private final Bson projeccionGanancia = project(fields(
             excludeId(),
-            include("numeroSala", "asientosVendidos", "funcionesRealizadas", "totalGanado"),
+            include("numeroSala", "asientosVendidos", "funcionesRealizadas", "precioFuncion"),
             computed("capacidad", new Document("$arrayElemAt", Arrays.asList("$infoSala.numAsientos", 0)))
+            
     ));
 
     /**
@@ -190,28 +191,16 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
                     group("$numSala",
                             first("numeroSala", "$numSala"),
                             first("infoSala", "$infoSala"),
+                            first("precioFuncion", "$infoFuncion.precio"),
                             sum("asientosVendidos", new Document("$cond",
-                                    Arrays.asList(new Document("$eq", Arrays.asList("$disponibilidad", false)), 1, 0)))
+                                    Arrays.asList(new Document("$eq", Arrays.asList("$disponibilidad", false)), 1, 0))),
+                            sum("funcionesRealizadas", 1)
                     ),
-                    //crearAggregateTotalGanado(),
                     new Document("$sort", new Document("numeroSala", -1)),
                     projeccionGanancia
             );
 
             AggregateIterable<Document> iterable = coleccionAsientoFuncion.aggregate(pipeline);
-
-            AggregateIterable<Document> resultado = coleccionAsientoFuncion.aggregate(Arrays.asList(
-                    // Paso 1: Agrupar por idFuncion y numSala para obtener combinaciones únicas
-                    Aggregates.group(
-                            new Document("idFuncion", "$idFuncion").append("numSala", "$numSala")
-                    ),
-                    // Paso 2: Agrupar por numSala y contar cuántos idFuncion únicos hay por sala
-                    Aggregates.group("$_id.numSala", Accumulators.sum("cantidadFunciones", 1)),
-                    new Document("$sort", new Document("numeroSala", -1))
-            ));
-
-            List<Document> documentos = iterable.into(new ArrayList<>());
-            List<Document> resultados = resultado.into(new ArrayList<>());
 
             return crearListaGanancias(iterable);
 
@@ -225,13 +214,20 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         List<GananciaSalaDTO> lista = new ArrayList<>();
         for (Document doc : iterable) {
             String numSala = doc.getString("numeroSala");
+            
             Integer capacidad = doc.getInteger("capacidad");
-            Double totalGanado = 0.0;//doc.get("totalGanado", Number.class).doubleValue();
             Integer asientosVendidos = doc.getInteger("asientosVendidos");
+            List<Double> precioFuncion = (List<Double>) doc.get("precioFuncion");
+            Double precio = precioFuncion.get(0);
+            Double totalGanado = precio * asientosVendidos;
+            
+            
             Integer funcionesRealizadas = doc.getInteger("funcionesRealizadas");
-
+            funcionesRealizadas = (funcionesRealizadas/capacidad);
+            
             lista.add(new GananciaSalaDTO(numSala, capacidad,
                     totalGanado, asientosVendidos, funcionesRealizadas));
+            
         }
         return lista;
     }
