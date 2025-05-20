@@ -4,13 +4,20 @@
  */
 package pantallas;
 
+import com.mycompany.bueaegg.ifuknow;
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
 import DTOs.UsuarioDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
 import enums.Rol;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -45,6 +52,44 @@ public class IniciarSesion extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         usuarioField = new javax.swing.JTextField();
         contrasenaField = new javax.swing.JPasswordField();
+        jPanel2 = new javax.swing.JPanel(){
+            {
+                // Configuración de invisibilidad total
+                setOpaque(false);
+                setBackground(new Color(0, 0, 0, 0));
+                setBorder(null);
+
+                // Tamaño del área clickeable (ajustar según necesidad)
+                setPreferredSize(new java.awt.Dimension(40, 40));
+
+                addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        javax.swing.JFrame parentFrame = (javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(jPanel2);
+                        ifuknow.showSplash(
+                            parentFrame,
+                            "/burro.png",
+                            "/sonido.wav",
+                            2000
+                        );
+                        jPanel2.setVisible(false);
+                    }
+                });
+            }
+
+            // Para asegurar invisibilidad en runtime
+            @Override
+            protected void paintComponent(Graphics g) {
+                // No pintar nada
+            }
+
+            // Opcional: hacer todo el área clickeable
+            @Override
+            public boolean contains(int x, int y) {
+                return true;
+            }
+
+        }
+        ;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Iniciar sesion");
@@ -84,12 +129,23 @@ public class IniciarSesion extends javax.swing.JFrame {
 
         jLabel4.setText("No tienes una cuenta?");
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 14, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 11, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(112, Short.MAX_VALUE)
+                .addContainerGap(92, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -101,22 +157,29 @@ public class IniciarSesion extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addGap(273, 273, 273))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addGap(86, 86, 86))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2)
                             .addComponent(btnIniciarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                             .addComponent(jLabel3)
                             .addComponent(usuarioField)
-                            .addComponent(contrasenaField))
+                            .addComponent(contrasenaField)
+                            .addComponent(jLabel2))
                         .addGap(214, 214, 214))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 224, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -154,7 +217,7 @@ public class IniciarSesion extends javax.swing.JFrame {
             if (usuarioEncontrado.getRol() == Rol.CLIENTE) {
                 ClienteDTO clienteEncontrado = control.obtenerCliente(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
                 JOptionPane.showMessageDialog(this, "Bienvenido: " + clienteEncontrado.getNombre() + " " + clienteEncontrado.getApellidoPaterno() + " " + clienteEncontrado.getApellidoMaterno(), "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
-                
+
                 control.guardarClienteActual(clienteEncontrado);
                 control.mostrarMenuCliente(this);
                 dispose();
@@ -162,7 +225,7 @@ public class IniciarSesion extends javax.swing.JFrame {
             } else if (usuarioEncontrado.getRol() == Rol.ADMINISTRADOR) {
                 AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
                 JOptionPane.showMessageDialog(this, "Bienvenido: " + adminEncontrado.getNombre() + " " + adminEncontrado.getApellidoPaterno() + " " + adminEncontrado.getApellidoMaterno(), "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
-                
+
                 control.guardarAdministradorActual(adminEncontrado);
                 control.mostrarMenuAdministrador(this);
                 dispose();
@@ -223,6 +286,8 @@ public class IniciarSesion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField usuarioField;
     // End of variables declaration//GEN-END:variables
+
 }
