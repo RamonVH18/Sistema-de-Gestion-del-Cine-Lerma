@@ -20,6 +20,9 @@ import utilitades.ModeladoTablas;
  *
  * @author sonic
  */
+/**
+ * Clase que representa la interfaz gráfica para mostrar el historial de compras de un cliente.
+ */
 public class HistorialCliente extends javax.swing.JFrame {
     private JFrame frameAnterior;
     private ClienteDTO clienteActual;
@@ -33,9 +36,13 @@ public class HistorialCliente extends javax.swing.JFrame {
         this.clienteActual = clienteActual;
         this.frameAnterior = frameAnterior;
         
+        // Muestra el nombre completo del cliente en un label segun el cliente que se haya encontrado
         lblNombreCompleto.setText(clienteActual.getNombre() + " " + clienteActual.getApellidoPaterno() + " " + clienteActual.getApellidoMaterno());
         
+        //Se obtiene la lista de compras del cliente en especifico llamando al metodo del control cargarHistorialCompras
         List<CompraDTO> listaCompras = control.cargarHistorialCompras(clienteActual);
+        
+        //Una vez que se obtuvo la lista de compras del cliente se llama al metodo para cargar la lista de compras en la tabla del frame
         cargarListaCompras(listaCompras);
     }
 
@@ -119,28 +126,33 @@ public class HistorialCliente extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     
+    //Metodo auxiliar que genera una tabla con la informacion de el historial de compras de un cliente especifico
     private void cargarListaCompras(List<CompraDTO> listaUsuarios) {
+        //Primero se definen las columnas de la tabla
         String[] columnas = {
             "Usuario", "Monto", "FechaHoraPago", "EstadoPago", "MetodoPago", "FechaCompra"
         };
 
+        //Se crea un array que contendra los datos que llenaran la tabla
         Object[][] datosTabla = new Object[listaUsuarios.size()][columnas.length];
 
         for (int i = 0; i < listaUsuarios.size(); i++) {
-            CompraDTO compra = listaUsuarios.get(i);
+            CompraDTO compra = listaUsuarios.get(i); //por cada compraDTO de la lista se creara una fila de la tabla con:
             datosTabla[i] = new Object[]{
-                compra.getUsuarioCliente(),
-                compra.getPago().getMonto(),
-                compra.getPago().getFechaHora(),
-                compra.getPago().getEstado(),
-                compra.getMetodoPago(),
-                compra.getFecha()
+                compra.getUsuarioCliente(), //nombre del usuario asociado a la compra
+                compra.getPago().getMonto(), //monto pagado en dicha compra
+                compra.getPago().getFechaHora(), //fecha y hora de la transaccion
+                compra.getPago().getEstado(), //estado del pago de la compra
+                compra.getMetodoPago(), //metodo de pago utilizado
+                compra.getFecha() //fecha de la compra
             };
         }
 
+        //Se llama al metodo creacionTablaSencilla de la utileria para generar la tabla con los datos que definimos anteriormente
         JTable tablaUsuarios = ModeladoTablas.creacionTablaSencilla(columnas, datosTabla, 14, 28);
 
 
+        //Se le setea la tabla generada con todos los datos de las compras del cliente que se esta consultando al scrollpane del frame
         panelTabla.setViewportView(tablaUsuarios);
 
     }

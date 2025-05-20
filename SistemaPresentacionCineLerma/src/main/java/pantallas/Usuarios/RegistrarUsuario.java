@@ -21,17 +21,21 @@ import javax.swing.JOptionPane;
  *
  * @author sonic
  */
+/**
+ * Clase que representa la interfaz gráfica para el registro de un nuevo usuario, ya sea cliente o administrador.
+ */
 public class RegistrarUsuario extends javax.swing.JFrame {
 
-    private final IControl control = ControlDeNavegacion.getInstancia();
+    private final IControl control = ControlDeNavegacion.getInstancia(); //obtener instancia del control de navegacion
 
     /**
      * Creates new form RegistrarUsuario
      */
     public RegistrarUsuario() {
-        initComponents();
-        ocultarTodosLosCampos();
-        contrasenaField.setText("");
+        initComponents(); //inicializar componentes
+        ocultarTodosLosCampos(); //llamar al metodo auxiliar para ocultar todos los campos y labels, esto por que 
+                                 //al llamar a este frame estara vacio hasta que se elija el rol del usuario que se quiere registrar
+        contrasenaField.setText(""); //vaciar el campo de la contrasena
 
     }
 
@@ -291,20 +295,31 @@ public class RegistrarUsuario extends javax.swing.JFrame {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         // TODO add your handling code here:
+        //Al presionar el boton de confirmar entonces ocurrira lo siguiente:
+        
+        //Se obtiene el objeto Rol segun lo que se haya seleciconado en el comboBox para llamar a diferentes metodos del control y construir al cliente o al admin y tambien
+        //para asignarselo al cliente o administrador que se quiere registrar
         String rolSeleccionadoTexto = (String) comboRol.getSelectedItem();
         Rol rolSeleccionado = Rol.valueOf(rolSeleccionadoTexto.toUpperCase());
 
+        //Si el usuario no eligio una fecha de nacimiento aparecera una ventana que indique que es obligatorio poner una fecha de nacimiento para el usuario
         if (jDateChooser1.getDate() == null) {
             JOptionPane.showMessageDialog(this, "La fecha de nacimiento es obligatoria.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
+        //Si el rol seleciconado fue cliente entonces se llamara al metodo auxiliar para construir el DTO de cliente con todos los datos ingresados por el usuario
         if (Rol.CLIENTE.equals(rolSeleccionado)) {
             
+            //se crea un nuevo objeto ClienteDTO que sera mapeado por el metodo construirClienteDTO
             ClienteDTO clienteRegistrar = construirClienteDTO(rolSeleccionado);
 
+            //Una vez que se construyo el clienteDTO que se va a registrar entonces se llama al metodo del control para realizar la operacion de registro
+            //del cliente
             ClienteDTO clienteRegistrado = control.registrarCliente(clienteRegistrar);
 
+            //Si el registro fue exitoso se mostrara una ventana con un mensaje de exito y se cerrara la pantalla
+            //para devolver al usuario a la pantalla de iniciar sesion
             if (clienteRegistrado != null) {
                 JOptionPane.showMessageDialog(this, "Cliente registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
@@ -313,12 +328,18 @@ public class RegistrarUsuario extends javax.swing.JFrame {
 
         }
 
+        //Si el rol seleciconado fue administrador entonces se llamara al metodo auxiliar para construir el DTO de administrador con todos los datos ingresados por el usuario
         if (Rol.ADMINISTRADOR.equals(rolSeleccionado)) {
             
+            //se crea un nuevo objeto AdministradorDTO que sera mapeado por el metodo construirAdminDTO
             AdministradorDTO adminRegistrar = construirAdminDTO(rolSeleccionado);
 
+            //Una vez que se construyo el administradorDTO que se va a registrar entonces se llama al metodo del control para realizar la operacion de registro
+            //del admin
             AdministradorDTO administradorRegistrado = control.registrarAdministrador(adminRegistrar);
 
+            //Si el registro fue exitoso se mostrara una ventana con un mensaje de exito y se cerrara la pantalla
+            //para devolver al usuario a la pantalla de iniciar sesion
             if (administradorRegistrado != null) {
                 JOptionPane.showMessageDialog(this, "Administrador registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
@@ -343,18 +364,26 @@ public class RegistrarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_usuarioFieldActionPerformed
 
     private void comboRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboRolActionPerformed
+        //El comboBox comboRol es importante por que contiene los dos tipos de usuario que se pueden registrar, cliente y administrador
+        
+        //El rol del usuario se obtiene del comboBox
         String rolSeleccionado = (String) comboRol.getSelectedItem();
 
         if (comboRol.getItemCount() > 2) {
-            comboRol.removeItemAt(2);
+            comboRol.removeItemAt(2); //esto se utiliza para que el objeto seleciconado del comboBox por default sea uno vacio o null
         }
+        
+        //Por cada vez que el usuario elija uno de los dos roles en el comboBox se limpiaran todos los campos  para posteriormente mostrar
+        //los campos correspondientes al rol que haya elegido
         limpiarCampos();
 
-        // Mostrar campos comunes para ambos roles
+        // Mostrar campos comunes para ambos roles, independientemente del rol que se haya seleccionado se cargaran siempre los campos comunes del usuario
         mostrarCamposComunes();
 
+        //Si el rol que se selecciono es "CLIENTE" entonces se cargaran tambien los campos exclusivos de un cliente asi como los comunes del usuario
         if ("CLIENTE".equals(rolSeleccionado)) {
             mostrarCamposCliente();
+        //Si el rol que se selecciono es "ADMINISTRADOR" entonces se cargaran tambien los campos exclusivos de un administrador asi como los comunes del usuario
         } else if ("ADMINISTRADOR".equals(rolSeleccionado)) {
             mostrarCamposAdministrador();
         }
@@ -363,6 +392,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         this.repaint();
     }
 
+    //Metodo auxiliar uqe muestra los campos comunes para hacer el registro de un usuario, estos campos son los del Usuario, atributos que poseen tanto el cliente y el admin
     private void mostrarCamposComunes() {
         // Mostrar campos comunes a ambos roles
         nombrelbl.setVisible(true);
@@ -384,6 +414,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         jDateChooser1.setVisible(true);
     }
 
+    //Metodo que muestra los campos exclusivos de un cliente para su registro, estos son los campos de direccion
     private void mostrarCamposCliente() {
         // Mostrar campos específicos de cliente
         callelbl.setVisible(true);
@@ -400,6 +431,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         RFCField.setText("");
     }
 
+    //Metodo que muestra los campos exclusivos de un administrador para su registro, este es el campo de RFC
     private void mostrarCamposAdministrador() {
         // Mostrar campos específicos de administrador
         RFClbl.setVisible(true);
@@ -452,6 +484,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         });
     }
 
+    //Metodo auxiliar que oculta todos los fields y labels de la pantalla
     private void ocultarTodosLosCampos() {
         // Ocultar todos los labels
         nombrelbl.setVisible(false);
@@ -485,6 +518,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         limpiarCampos();
     }
 
+    //metodo auxiliar que limpia todos los fields
     private void limpiarCampos() {
         nombreField.setText("");
         apellidoPaternoField.setText("");
@@ -500,6 +534,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
         jDateChooser1.setDate(null);
     }
 
+    //Metodo que construye un objteto AdministradorDTO segun los datos ingresados en los fields por el usuario que buscar registrar un administrador
     private AdministradorDTO construirAdminDTO(Rol rolSeleccionado) {
         AdministradorDTO adminRegistrar = new AdministradorDTO();
 
@@ -525,6 +560,7 @@ public class RegistrarUsuario extends javax.swing.JFrame {
             return adminRegistrar;
     }
     
+    //Metodo que construye un objteto ClienteDTO segun los datos ingresados en los fields por el usuario que buscar registrar un administrador
     private ClienteDTO construirClienteDTO(Rol rolSeleccionado) {
         ClienteDTO clienteRegistrar = new ClienteDTO();
 

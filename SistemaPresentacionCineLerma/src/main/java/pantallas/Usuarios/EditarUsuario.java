@@ -15,6 +15,10 @@ import pantallas.MenuPrincipalCliente;
  *
  * @author sonic
  */
+/**
+ * Clase que representa la interfaz gráfica para editar la información de un usuario.
+ * permite a los administradores y a los clientes modificar los datos de un cliente.
+ */
 public class EditarUsuario extends javax.swing.JFrame {
 
     private JFrame frameAnterior;
@@ -28,17 +32,19 @@ public class EditarUsuario extends javax.swing.JFrame {
      * Creates new form EditarUsuario
      */
     public EditarUsuario(JFrame frameAnterior, ClienteDTO clienteEncontrado, ClienteDTO clienteAlMando) {
-        initComponents();
+        initComponents(); // Inicializa los componentes de la interfaz gráfica
 
-        this.clienteAlMando = clienteAlMando;
-        this.clienteEncontrado = clienteEncontrado;
+        this.clienteAlMando = clienteAlMando; // Asigna el cliente que está realizando la edición a si mismo
+        this.clienteEncontrado = clienteEncontrado; // Asigna el cliente que se está editando
         this.frameAnterior = frameAnterior;
 
+        //Campos del cliente que se pueden editar solo si el cliente a editar es el mismo editanose a si mismo
         contrasenaField.setVisible(false);
         contrasenalbl.setVisible(false);
         nombreUsuariolbl.setVisible(false);
         nombreUsuarioField.setVisible(false);
 
+        //si es asi dichos campos se van a mostrar
         if (clienteAlMando != null) {
             contrasenaField.setVisible(true);
             contrasenalbl.setVisible(true);
@@ -46,6 +52,7 @@ public class EditarUsuario extends javax.swing.JFrame {
             nombreUsuarioField.setVisible(true);
         }
 
+        //metodo que inicializa los campos de la pantalla de editar cliente
         inicializarCampos();
 
     }
@@ -242,12 +249,18 @@ public class EditarUsuario extends javax.swing.JFrame {
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
+        //Al presionar el boton de confirmar cambios se crea un nuevo objeto ClienteDTO que sera el cliente que se va a actualizar
         ClienteDTO clienteActualizado = new ClienteDTO();
 
-        if (clienteEncontrado != null) {
+        //Dependiendo de si el cliente es uno manipulado por un administrador o manipulado por el cliente mismo entonces
+        //se va a mapear el cliente que se actualizara tomando los datos de los campos disponibles y con datos que el cliente ya posee que no se pueden editar
+        if (clienteEncontrado != null) { //si el cliente esta siendo manipulado por un administrador
+            //no se pueden actualizar el nombre de usuario ni contraseña por lo que se dejan los que ya tenia
             clienteActualizado.setNombreUsuario(clienteEncontrado.getNombreUsuario());
             clienteActualizado.setContraseña(clienteEncontrado.getContraseña());
 
+            //Se setean el nombre, apellido paterno, apellido materno, telefono, correo y direccion segun se hayan editado en los fields, 
+            //si no se tocaron entonces se mantendran igual que como estaban
             clienteActualizado.setNombre(nombreField.getText().trim());
             clienteActualizado.setApellidoPaterno(apellidoPaternoField.getText().trim());
             clienteActualizado.setApellidoMaterno(apellidoMaternoField.getText().trim());
@@ -258,13 +271,15 @@ public class EditarUsuario extends javax.swing.JFrame {
             clienteActualizado.setCalle(CalleField.getText().trim());
             clienteActualizado.setNumero(domicilioField.getText().trim());
 
+            //Campos como rol, estado y fecha de nacimiento no se pueden editar asi que quedan igual que como ya estaban registrados en el cliente
             clienteActualizado.setRol(clienteEncontrado.getRol());
             clienteActualizado.setEstado(clienteEncontrado.getEstado());
             clienteActualizado.setFechaNacimiento(clienteEncontrado.getFechaNacimiento());
 
         }
 
-        if (clienteAlMando != null) {
+        if (clienteAlMando != null) { //si el cliente esta siendo manipulado por si mismo
+            //entonces los nombre de usuario y contraseña se pueden editar, asi que se tomaran de los campos para ser actualizados segun el usuario los haya manipulado
             clienteActualizado.setNombreUsuario(nombreUsuarioField.getText().trim());
             clienteActualizado.setContraseña(new String(contrasenaField.getPassword()));
 
@@ -284,6 +299,10 @@ public class EditarUsuario extends javax.swing.JFrame {
 
         }
 
+        //Una vez que ya se mapeo el cliente para ser actualizado entonces se llamara al metodo del control para actualizar un cliente pasandole
+        //como parametro dicho cliente que acabamos de mapear. Si tiene exito la actualizacion entonces se mostrara un mensaje de exito y 
+        //se regresara al usuario a la gestion de usuarios si es un administrador editando un cliente y si es un cliente mismo entonces
+        //se le devolvera al menu de cliente.
         if (control.actualizarCliente(clienteActualizado) != null) {
             JOptionPane.showMessageDialog(this, "Cambios guardados correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
             if (frameAnterior instanceof MenuPrincipalCliente) {
@@ -340,6 +359,9 @@ public class EditarUsuario extends javax.swing.JFrame {
     private javax.swing.JTextField telefonoField;
     private javax.swing.JLabel titulolbl;
     // End of variables declaration//GEN-END:variables
+    //metodo auxiliar que inicializa todos los campos de la pantalla de editar, si se detecta
+    //que el cliente esta siendo manipulado por un administrador entonces se muetran ciertos campos y labels, si
+    //se detecta que el cliente esta siendo manipulado por el mismo entonces se mostraran otros campos exta 
     private void inicializarCampos() {
 
         if (clienteEncontrado != null) {

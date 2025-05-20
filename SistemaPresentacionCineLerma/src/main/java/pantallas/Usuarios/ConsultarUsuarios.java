@@ -29,6 +29,11 @@ import utilitades.ModeladoTablas;
  *
  * @author sonic
  */
+/**
+ * Clase que representa la interfaz gráfica para la consulta y administración de
+ * usuarios. permite a los administradores gestionar la información de los
+ * usuarios.
+ */
 public class ConsultarUsuarios extends javax.swing.JFrame {
 
     private final IControl control = ControlDeNavegacion.getInstancia();
@@ -41,26 +46,28 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
      * Creates new form AdministracionDeUsuario
      */
     public ConsultarUsuarios(AdministradorDTO administrador) {
-        initComponents();
+        initComponents(); //inicializar componentes graficos
 
-        List<UsuarioDTO> listaUsuarios = control.mostrarListaUsuarios();
-        cargarListaUsuarios(listaUsuarios);
+        List<UsuarioDTO> listaUsuarios = control.mostrarListaUsuarios(); //obtener la lista completa de usuarios registrados en el sistema
+        cargarListaUsuarios(listaUsuarios); //llamar al metodo auxiliar privado para cargar la lista de usuarios en una tabla, esta se cargara
+        //al momento de abrir este frame
 
         //Configurar comboBoxes
-        comboRol.addItem(null);
-        for (Rol rolActual : Rol.values()) {
+        comboRol.addItem(null); //agregar un espacio vacio en el comboBox de rol
+        for (Rol rolActual : Rol.values()) { //agregar los valores del enum Rol al comboBox
             comboRol.addItem(rolActual);
         }
-        comboRol.setSelectedIndex(-1);
+        comboRol.setSelectedIndex(-1); //setear como default seleccionado el elemento vacio del comboBox
 
-        comboEstado.addItem(null);
-        for (EstadoUsuario estado : EstadoUsuario.values()) {
+        comboEstado.addItem(null); //agregar un espacio vacio en el comboBox de rol
+        for (EstadoUsuario estado : EstadoUsuario.values()) { //agregar los valores del enum EstadoUsuario al comboBox
             comboEstado.addItem(estado);
         }
-        comboEstado.setSelectedIndex(-1);
+        comboEstado.setSelectedIndex(-1); //setear como default seleccionado el elemento vacio del comboBox
 
         this.administrador = administrador;
 
+        //ocultar todas los label de informacion de un cliente por default
         lblNombre.setVisible(false);
         lblApellidoPaterno.setVisible(false);
         lblApellidoMaterno.setVisible(false);
@@ -445,10 +452,19 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         // TODO add your handling code here:
 
+        //Cuando se presiona el boton de filtrar se hace lo siguiente:
+        
+        //Filtro de nombre de usuario, se obtiene del field usuarioField
         String usuario = usuarioField.getText().trim();
+        
+        //Filtro por estado del usuario, se obtiene del comboBox comboEstado
         EstadoUsuario estadoSeleccionado = (EstadoUsuario) comboEstado.getSelectedItem();
+        
+         //Filtro por rol, se obtiene del comboBox comboRol
         Rol rolSeleccionado = (Rol) comboRol.getSelectedItem();
 
+        //Filtro por periodo de fechas de nacimiento
+        //ambas fechas se obtienen de los jDateChooser, ya que este objeto regresa una DATE esta se tiene que convertir a LocalDateTime
         java.util.Date fechaInicioUtil = fechaInicioChooser.getDate();
         LocalDateTime fechaInicio = null;
         if (fechaInicioUtil != null) {
@@ -466,6 +482,8 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
                     .with(LocalTime.MAX);
         }
 
+        //Obtener los usuarios filtrados por los parametros seleccionados anteriormente, una vez que se obtiene la lista filtrada se carga de nuevo la tabla de usuarios
+        //ahora con esta lista filtrada
         List<UsuarioDTO> usuariosFiltrados = control.mostrarListaUsuariosFiltrada(
                 estadoSeleccionado,
                 rolSeleccionado,
@@ -501,7 +519,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         if (clienteEncontrado != null) {
             control.mostrarEditarUsuario(this, clienteEncontrado, null);
             dispose();
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "No se selecciono ningun cliente, solo los clientes se pueden editar");
         }
@@ -520,9 +538,9 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "No se selecciono ningun cliente, solo los clientes tienen historial");
             return;
         }
-        
+
         control.mostrarHistorialCliente(this, clienteEncontrado);
-        
+
     }//GEN-LAST:event_botonHistorialActionPerformed
 
     /**
@@ -566,20 +584,34 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Carga la lista de usuarios en una tabla
+     *
+     * Este método toma una lista de objetos UsuarioDTO y los muestra en una
+     * tabla, configurando las columnas y los datos correspondientes. También
+     * añade un listener para manejar los clics en las filas de la tabla,
+     * permitiendo mostrar información adicional sobre el usuario seleccionado.
+     *
+     * @param listaUsuarios la lista de objetos UsuarioDTO que se desea mostrar
+     * en la tabla
+     */
     private void cargarListaUsuarios(List<UsuarioDTO> listaUsuarios) {
+        //Se hace una lista de String que defina las columnas de la tabla
         String[] columnas = {
             "Nombre de Usuario",
-                //, "Contraseña", mejor sin mostrar la contraseña
-                "Correo Electrónico", "Nombre", "Apellido Paterno", "Apellido Materno", "Rol", "Estado", "Fecha de Nacimiento"
+            //, "Contraseña", mejor sin mostrar la contraseña
+            "Correo Electrónico", "Nombre", "Apellido Paterno", "Apellido Materno", "Rol", "Estado", "Fecha de Nacimiento"
         };
 
+        // Inicializa la matriz de datos para la tabla
         Object[][] datosTabla = new Object[listaUsuarios.size()][columnas.length];
 
+        // Rellena la matriz de datos con la información de los usuarios
         for (int i = 0; i < listaUsuarios.size(); i++) {
             UsuarioDTO usuario = listaUsuarios.get(i);
             datosTabla[i] = new Object[]{
                 usuario.getNombreUsuario(),
-              //  usuario.getContraseña(), no mostrar la contraseña en la busqueda de usuarios
+                //  usuario.getContraseña(), no mostrar la contraseña en la busqueda de usuarios
                 usuario.getCorreoElectronico(),
                 usuario.getNombre(),
                 usuario.getApellidoPaterno(),
@@ -590,28 +622,32 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
             };
         }
 
+        //Crear la tabla utilizando el metodo de la clase de utilerias para modelar tablas, el metodo creacionTablaSencilla
+        //recibe la definicion de las columnas de la tabla, el array de datos de la tabla y configuracion del tamaño de la fuente
         JTable tablaUsuarios = ModeladoTablas.creacionTablaSencilla(columnas, datosTabla, 14, 28);
 
+        //Crear un listener de mouse para cuando el usuario haga clic en alguna fila de la tabla de usuarios
         tablaUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
 
+            //Añadir una accion par acuando se haga click en la tabla
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int row = tablaUsuarios.getSelectedRow();
+                int row = tablaUsuarios.getSelectedRow(); 
                 if (row != -1) {
 
                     usuarioEncontrado = listaUsuarios.get(row);
 
                     //obtener cliente
                     if (usuarioEncontrado.getRol() == Rol.CLIENTE) {
-                            clienteEncontrado = control.obtenerCliente(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
-                            mostrarInfoCliente(clienteEncontrado);
+                        clienteEncontrado = control.obtenerCliente(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
+                        mostrarInfoCliente(clienteEncontrado);
                     }
 
                     if (usuarioEncontrado.getRol() == Rol.ADMINISTRADOR) {
-                            adminEncontrado = control.obtenerAdministrador(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
-                            mostrarInfoAdmin(adminEncontrado);
-                        }
+                        adminEncontrado = control.obtenerAdministrador(usuarioEncontrado.getNombreUsuario(), usuarioEncontrado.getContraseña());
+                        mostrarInfoAdmin(adminEncontrado);
                     }
+                }
             }
         });
 
@@ -619,6 +655,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
 
     }
 
+    //Metodo auxiliar que muestra la informacion debida de un cliente en caso de que sea seleccionado por el usuario
     private void mostrarInfoCliente(ClienteDTO cliente) {
         fieldNombre.setText(cliente.getNombre());
         fieldApellidoPaterno.setText(cliente.getApellidoPaterno());
@@ -655,6 +692,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         lblTitulo1.setText("Cliente seleccionado:");
     }
 
+    //Metodo auxiliar que muestra la informacion debida de un administrador en caso de que sea seleccionado por el usuario
     private void mostrarInfoAdmin(AdministradorDTO admin) {
         fieldNombre.setText(admin.getNombre());
         fieldApellidoPaterno.setText(admin.getApellidoPaterno());
