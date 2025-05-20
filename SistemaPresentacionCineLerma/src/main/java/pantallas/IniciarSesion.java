@@ -82,12 +82,6 @@ public class IniciarSesion extends javax.swing.JFrame {
                 // No pintar nada
             }
 
-            // Opcional: hacer todo el área clickeable
-            @Override
-            public boolean contains(int x, int y) {
-                return true;
-            }
-
         }
         ;
 
