@@ -19,6 +19,7 @@ import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
 import static com.mongodb.client.model.Accumulators.first;
 import static com.mongodb.client.model.Accumulators.sum;
 import com.mongodb.client.model.Aggregates;
@@ -63,12 +64,12 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
     private final MongoConexion conexion = new MongoConexion(); // Se inicia una conexionMongo
     private final IFuncionDAO funcionDAO = FuncionDAO.getInstanceDAO();
     private final String nombreColeccion = "AsientosFuncion";
-    
+
     private final Bson projeccionGanancia = project(fields(
-                            excludeId(),
-                            include("numeroSala", "asientosVendidos", "funcionesRealizadas", "totalGanado"),
-                            computed("capacidad", new Document("$arrayElemAt", Arrays.asList("$infoSala.numAsientos", 0)))
-                    ));
+            excludeId(),
+            include("numeroSala", "asientosVendidos", "funcionesRealizadas", "totalGanado"),
+            computed("capacidad", new Document("$arrayElemAt", Arrays.asList("$infoSala.numAsientos", 0)))
+    ));
 
     /**
      * Constructor privado y vacio para la ejecuccion del SingleTone
@@ -180,7 +181,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         MongoClient clienteMongo = null;
         try {
             MongoCollection<Document> coleccionAsientoFuncion = obtenerColeccionDocument(clienteMongo);
-            
+
             List<Bson> pipeline = Arrays.asList(
                     lookup("Salas", "numSala", "numSala", "infoSala"),
                     addFields(new Field<>("idFuncionObjId",
@@ -192,14 +193,25 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
                             sum("asientosVendidos", new Document("$cond",
                                     Arrays.asList(new Document("$eq", Arrays.asList("$disponibilidad", false)), 1, 0)))
                     ),
-//                    crearAggregateFuncionesRealizadas(),
-//                    crearAggregateTotalGanado(),
+                    //crearAggregateTotalGanado(),
                     new Document("$sort", new Document("numeroSala", -1)),
                     projeccionGanancia
             );
 
             AggregateIterable<Document> iterable = coleccionAsientoFuncion.aggregate(pipeline);
+
+            AggregateIterable<Document> resultado = coleccionAsientoFuncion.aggregate(Arrays.asList(
+                    // Paso 1: Agrupar por idFuncion y numSala para obtener combinaciones únicas
+                    Aggregates.group(
+                            new Document("idFuncion", "$idFuncion").append("numSala", "$numSala")
+                    ),
+                    // Paso 2: Agrupar por numSala y contar cuántos idFuncion únicos hay por sala
+                    Aggregates.group("$_id.numSala", Accumulators.sum("cantidadFunciones", 1)),
+                    new Document("$sort", new Document("numeroSala", -1))
+            ));
+
             List<Document> documentos = iterable.into(new ArrayList<>());
+            List<Document> resultados = resultado.into(new ArrayList<>());
 
             return crearListaGanancias(iterable);
 
@@ -208,19 +220,19 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         }
         throw new UnsupportedOperationException("jns");
     }
-    
+
     private List<GananciaSalaDTO> crearListaGanancias(AggregateIterable<Document> iterable) {
         List<GananciaSalaDTO> lista = new ArrayList<>();
         for (Document doc : iterable) {
-                String numSala = doc.getString("numeroSala");
-                Integer capacidad = doc.getInteger("capacidad");
-                Double totalGanado = 0.0;//doc.get("totalGanado", Number.class).doubleValue();
-                Integer asientosVendidos = doc.getInteger("asientosVendidos");
-                Integer funcionesRealizadas = 0;//doc.getInteger("funcionesRealizadas");
+            String numSala = doc.getString("numeroSala");
+            Integer capacidad = doc.getInteger("capacidad");
+            Double totalGanado = 0.0;//doc.get("totalGanado", Number.class).doubleValue();
+            Integer asientosVendidos = doc.getInteger("asientosVendidos");
+            Integer funcionesRealizadas = doc.getInteger("funcionesRealizadas");
 
-                lista.add(new GananciaSalaDTO(numSala, capacidad,
-                        totalGanado, asientosVendidos, funcionesRealizadas));
-            }
+            lista.add(new GananciaSalaDTO(numSala, capacidad,
+                    totalGanado, asientosVendidos, funcionesRealizadas));
+        }
         return lista;
     }
 
@@ -276,44 +288,37 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             throw new FalloObtencionColeccionException("Error al realizar la conexion: " + e.getMessage());
         }
     }
-    
+
     private Bson crearAggregateFuncionesRealizadas() {
         Date now = new GregorianCalendar(2026, Calendar.MAY, 15).getTime();
-        
-        Bson bson = addFields(new Field<>("funcionesRealizadas", new Document("$let",
-                            new Document("vars", new Document("numeroSalaActual", "$numeroSala"))
-                                    .append("in", new Document("$size", new Document("$filter", new Document()
-                                            .append("input", new Document("$ifNull", Arrays.asList("$$f.asientosFuncion", Collections.emptyList())))
-                                            .append("as", "funcion")
-                                            .append("cond", new Document("$and", Arrays.asList(
-                                                    new Document("$lt", Arrays.asList("$$funcion.fechaHora", now)),
-                                                    new Document("$eq", Arrays.asList("$$funcion.sala.numSala", "$$numeroSalaActual"))
-                                            )))
-                                    )))
-                    )));
+
+        Bson bson = group("$numSala",
+                sum("funcionesRealizadas", new Document("$cond",
+                        Arrays.asList(new Document("$eq", Arrays.asList("idFuncion", false)), 1, 0))));
+
         return bson;
     }
-    
+
     private Bson crearAggregateTotalGanado() {
         Bson bson = addFields(new Field<>("totalGanado", new Document("$let",
-                            new Document("vars", new Document("funcionesDeSalaActual", new Document("$filter", new Document()
-                                    .append("input", "$infoFuncion")
-                                    .append("as", "f")
-                                    .append("cond", new Document("$eq", Arrays.asList("$$f.sala.numSala", "$numeroSala")))
-                            )))
-                                    .append("in", new Document("$sum", new Document("$map", new Document()
-                                            .append("input", "$$funcionesDeSalaActual")
-                                            .append("as", "f")
-                                            .append("in", new Document("$multiply", Arrays.asList(
-                                                    "$$f.precio",
-                                                    new Document("$size", new Document("$filter", new Document()
-                                                            .append("input", new Document("$ifNull", Arrays.asList("$$f.asientosFuncion", Collections.emptyList())))
-                                                            .append("as", "asiento")
-                                                            .append("cond", new Document("$eq", Arrays.asList("$$asiento.disponibilidad", false)))
-                                                    ))
-                                            )))
-                                    )))
-                    )));
+                new Document("vars", new Document("funcionesDeSalaActual", new Document("$filter", new Document()
+                        .append("input", "$infoFuncion")
+                        .append("as", "f")
+                        .append("cond", new Document("$eq", Arrays.asList("$$f.sala.numSala", "$numeroSala")))
+                )))
+                        .append("in", new Document("$sum", new Document("$map", new Document()
+                                .append("input", "$$funcionesDeSalaActual")
+                                .append("as", "f")
+                                .append("in", new Document("$multiply", Arrays.asList(
+                                        "$$f.precio",
+                                        new Document("$size", new Document("$filter", new Document()
+                                                .append("input", new Document("$ifNull", Arrays.asList("$$f.asientosFuncion", Collections.emptyList())))
+                                                .append("as", "asiento")
+                                                .append("cond", new Document("$eq", Arrays.asList("$$asiento.disponibilidad", false)))
+                                        ))
+                                )))
+                        )))
+        )));
         return bson;
     }
 }
