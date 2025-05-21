@@ -19,10 +19,8 @@ import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Accumulators;
 import static com.mongodb.client.model.Accumulators.first;
 import static com.mongodb.client.model.Accumulators.sum;
-import com.mongodb.client.model.Aggregates;
 import static com.mongodb.client.model.Aggregates.addFields;
 import static com.mongodb.client.model.Aggregates.lookup;
 import static com.mongodb.client.model.Aggregates.project;
@@ -34,21 +32,13 @@ import static com.mongodb.client.model.Projections.excludeId;
 import static com.mongodb.client.model.Projections.fields;
 import static com.mongodb.client.model.Projections.include;
 import com.mongodb.client.model.Updates;
-import static com.mongodb.client.model.Updates.push;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import entidades.AsientoFuncion;
 import entidades.Funcion;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -205,9 +195,8 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             return crearListaGanancias(iterable);
 
         } catch (FalloObtencionColeccionException e) {
-
+            throw new ErrorCalculoEstadisticasSalaException("Hubo un erro al calcular las estadisticas de la base de datos: " + e.getMessage());
         }
-        throw new UnsupportedOperationException("jns");
     }
 
     private List<GananciaSalaDTO> crearListaGanancias(AggregateIterable<Document> iterable) {
@@ -283,38 +272,5 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         } catch (MongoException e) {
             throw new FalloObtencionColeccionException("Error al realizar la conexion: " + e.getMessage());
         }
-    }
-
-    private Bson crearAggregateFuncionesRealizadas() {
-        Date now = new GregorianCalendar(2026, Calendar.MAY, 15).getTime();
-
-        Bson bson = group("$numSala",
-                sum("funcionesRealizadas", new Document("$cond",
-                        Arrays.asList(new Document("$eq", Arrays.asList("idFuncion", false)), 1, 0))));
-
-        return bson;
-    }
-
-    private Bson crearAggregateTotalGanado() {
-        Bson bson = addFields(new Field<>("totalGanado", new Document("$let",
-                new Document("vars", new Document("funcionesDeSalaActual", new Document("$filter", new Document()
-                        .append("input", "$infoFuncion")
-                        .append("as", "f")
-                        .append("cond", new Document("$eq", Arrays.asList("$$f.sala.numSala", "$numeroSala")))
-                )))
-                        .append("in", new Document("$sum", new Document("$map", new Document()
-                                .append("input", "$$funcionesDeSalaActual")
-                                .append("as", "f")
-                                .append("in", new Document("$multiply", Arrays.asList(
-                                        "$$f.precio",
-                                        new Document("$size", new Document("$filter", new Document()
-                                                .append("input", new Document("$ifNull", Arrays.asList("$$f.asientosFuncion", Collections.emptyList())))
-                                                .append("as", "asiento")
-                                                .append("cond", new Document("$eq", Arrays.asList("$$asiento.disponibilidad", false)))
-                                        ))
-                                )))
-                        )))
-        )));
-        return bson;
     }
 }
