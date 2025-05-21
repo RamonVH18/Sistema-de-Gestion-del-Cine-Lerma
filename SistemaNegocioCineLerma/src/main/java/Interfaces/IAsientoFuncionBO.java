@@ -5,6 +5,7 @@
 package Interfaces;
 
 import DTOs.AsientoFuncionDTO;
+import DTOs.ClienteDTO;
 import DTOs.EstadisticaSalaDTO;
 import DTOs.FuncionDTO;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
@@ -24,7 +25,7 @@ public interface IAsientoFuncionBO {
     
     public Boolean eliminarAsientosFuncion(String idFuncion) throws AsientoFuncionEliminacionException;
     
-    public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientos) throws AsientoFuncionReservaException;
+    public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientos, ClienteDTO clienteDTO) throws AsientoFuncionReservaException;
     
     public List<AsientoFuncionDTO> obtenerAsientosFuncion(FuncionDTO funcion) throws AsientoFuncionBusquedaException;
     

@@ -171,6 +171,15 @@ public class Usuario {
         this.rol = rol;
     }
     
+    
+    public String getIdString() {
+        return idUsuario.toString();
+    }
+    
+    public void setIdString(String idString) {
+        this.idUsuario = new ObjectId(idString);
+    }
+    
 
     @Override
     public String toString() {

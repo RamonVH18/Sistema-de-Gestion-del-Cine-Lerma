@@ -8,8 +8,10 @@ import control.ControlDeNavegacion;
 import DTOs.BoletoDTO;
 import DTOs.ClienteDTO;
 import control.IControl;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import utilitades.Utilerias;
 
 /**
@@ -201,28 +203,32 @@ public final class DetalleDelBoleto extends javax.swing.JFrame {
     /*Metodo que llena los campos que requiere el boleto seteando cada atributo en un label*/
     public void llenarCamposBoleto(BoletoDTO boleto) {
         
-//        ImageIcon imagen = utilerias.crearImagen(b, 200, 300);
-//        etiquetaImagen.setIcon(imagen);
-        
-        labelPelicula.setText("Pelicula: " + boleto.getNombrePelicula());
-        
-        LocalDateTime fecha = boleto.getFechaHoraFuncion();
-        
-        labelFecha.setText("Fecha: " + utilerias.traducirDia(fecha.getDayOfWeek()) + ", " + 
-                                    fecha.getDayOfMonth() + " de " + 
-                                    utilerias.traducirMes(fecha.getMonth()));
-        
-        String funcionMinutos = (boleto.getFechaHoraFuncion().getMinute()< 10) ? "0" + 
-                Integer.toString(boleto.getFechaHoraFuncion().getMinute()) : 
-                Integer.toString(boleto.getFechaHoraFuncion().getMinute());
-        
-        labelHora.setText("Hora: " + boleto.getFechaHoraFuncion().getHour() + ":" + funcionMinutos);
-        
-        labelSala.setText("Sala: " + boleto.getNumeroSala());
-        
-        String numAsientos = String.join(", ", boleto.getListaAsientosSeleccionados());
-        labelAsiento.setText("Asiento/s: " + numAsientos);
-        
-        labelCliente.setText("Cliente: " + boleto.getNombreCliente());
+        try {
+            ImageIcon imagen = utilerias.crearImagen(boleto.getImagen(), 200, 300);
+            etiquetaImagen.setIcon(imagen);
+            
+            labelPelicula.setText("Pelicula: " + boleto.getNombrePelicula());
+            
+            LocalDateTime fecha = boleto.getFechaHoraFuncion();
+            
+            labelFecha.setText("Fecha: " + utilerias.traducirDia(fecha.getDayOfWeek()) + ", " +
+                    fecha.getDayOfMonth() + " de " +
+                    utilerias.traducirMes(fecha.getMonth()));
+            
+            String funcionMinutos = (boleto.getFechaHoraFuncion().getMinute()< 10) ? "0" +
+                    Integer.toString(boleto.getFechaHoraFuncion().getMinute()) :
+                    Integer.toString(boleto.getFechaHoraFuncion().getMinute());
+            
+            labelHora.setText("Hora: " + boleto.getFechaHoraFuncion().getHour() + ":" + funcionMinutos);
+            
+            labelSala.setText("Sala: " + boleto.getNumeroSala());
+            
+            String numAsientos = String.join(", ", boleto.getListaAsientosSeleccionados());
+            labelAsiento.setText("Asiento/s: " + numAsientos);
+            
+            labelCliente.setText("Cliente: " + boleto.getNombreCliente());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "¡ERROR!", "ERROR: Hubo un problema al cargar la imagen del boleto", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

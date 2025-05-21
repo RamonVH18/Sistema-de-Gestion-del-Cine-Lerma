@@ -8,13 +8,13 @@ package pantallas;
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
 import DTOs.UsuarioDTO;
-import com.mycompany.bueaegg.ifuknow;
 import control.ControlDeNavegacion;
 import control.IControl;
 import enums.Rol;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JOptionPane;
+import wep.ifuknow;
 
 /**
  *

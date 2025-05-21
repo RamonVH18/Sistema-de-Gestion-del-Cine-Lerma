@@ -818,16 +818,6 @@ public class ControlDeNavegacion implements IControl {
     }
 
     @Override
-    public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar) {
-        try {
-            return manejoDeAsientos.reservarAsientosFuncion(asientosAReservar);
-        } catch (ErrorReservacionAsientoException e) {
-            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-
-    @Override
     public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) {
         try {
             return manejoDeAsientos.cargarListaAsientos(funcion, mostrarDisponibles);

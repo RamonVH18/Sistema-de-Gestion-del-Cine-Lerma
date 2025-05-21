@@ -90,26 +90,8 @@ public class ManejoDeAsientos implements IManejoDeAsientos {
             throw new ValidacionAsientosException("Ya existen asientos para esta funcion");
         }
     }
-    
-    @Override
-    public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientoAReservar) throws ErrorReservacionAsientoException {
-        try {
-            validarDisponibilidadAsientos(asientoAReservar);
-            return asientoBO.reservarAsientosFuncion(asientoAReservar);
-        } catch (AsientoFuncionReservaException ex) {
-            throw new ErrorReservacionAsientoException("Hubo un error al reservar los asientos. Porfavor intente mas al rato");
-        } catch (ValidacionAsientosException e) {
-            throw new ErrorReservacionAsientoException(e.getMessage());
-        }
-    }
 
-    private void validarDisponibilidadAsientos(List<AsientoFuncionDTO> asientosAReservar) throws ValidacionAsientosException {
-        for (AsientoFuncionDTO asiento : asientosAReservar) {
-            if (!asiento.isDisponibilidad()) {
-                throw new ValidacionAsientosException("Uno de los asientos ya se encuentra reservado");
-            }
-        }
-    }
+    
     @Override
     public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) throws ErrorCargarAsientoException {
         try {

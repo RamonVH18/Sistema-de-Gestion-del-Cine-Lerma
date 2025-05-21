@@ -141,8 +141,6 @@ public interface IControl {
 
     public void eliminarAsientoFuncion(String idFuncion);
 
-    public Boolean reservarAsientos(List<AsientoFuncionDTO> asientosAReservar);
-
     public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles);
 
     // -----------------------------FIN DE METODOS DE SALAS-----------------------------------------

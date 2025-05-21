@@ -5,7 +5,9 @@
 package BOs;
 
 import DAOs.AsientoFuncionDAO;
+import DAOs.ClienteDAO;
 import DTOs.AsientoFuncionDTO;
+import DTOs.ClienteDTO;
 import DTOs.EstadisticaSalaDTO;
 import DTOs.FuncionDTO;
 import DTOs.GananciaSalaDTO;
@@ -19,11 +21,18 @@ import Excepciones.asientoFuncion.AsientoFuncionRegistroException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
 import Excepciones.asientoFuncion.ErrorAlObtenerEstadisticasException;
 import Excepciones.salas.ErrorCalculoEstadisticasSalaException;
+import Excepciones.usuarios.EncontrarClienteException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IAsientoFuncionDAO;
+import Interfaces.IClienteDAO;
+import Interfaces.IUsuarioBO;
+import Interfaces.mappers.IAsientoFuncionMapper;
+import Interfaces.mappers.IClienteMapper;
 import Mappers.AsientoFuncionMapper;
+import Mappers.ClienteMapper;
 import Mappers.FuncionMapper;
 import entidades.AsientoFuncion;
+import entidades.Cliente;
 import entidades.Funcion;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +47,9 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
 
     private static AsientoFuncionBO instance;
     private final IAsientoFuncionDAO asientoFuncionDAO = AsientoFuncionDAO.getInstanceDAO();
-    private final AsientoFuncionMapper asientoFuncionMapper = new AsientoFuncionMapper();
+    private final IClienteMapper clienteMapper = new ClienteMapper();
+    private final IClienteDAO clienteDAO = ClienteDAO.getInstance();
+    private final IAsientoFuncionMapper asientoFuncionMapper = new AsientoFuncionMapper();
     private final FuncionMapper funcionMapper = new FuncionMapper();
 
     private AsientoFuncionBO() {
@@ -77,13 +88,29 @@ public class AsientoFuncionBO implements IAsientoFuncionBO {
     }
 
     @Override
-    public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientos) throws AsientoFuncionReservaException {
+    public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientos, ClienteDTO clienteDTO) throws AsientoFuncionReservaException {
         try {
             List<AsientoFuncion> asientosMapeados = asientoFuncionMapper.toAsientoFuncionEntidad(asientos);
+            
+            Cliente cliente = clienteDAO.obtenerCliente(clienteDTO.getNombreUsuario(), clienteDTO.getContraseña());
+            
+            List<AsientoFuncion> asientosReservados = new ArrayList<>();
+            AsientoFuncion asiento;
+            for (int i = 0; i < asientosMapeados.size(); i++) {
+                
+                asiento = asientosMapeados.get(i);
+                
+                asiento.setIdCliente(cliente.getIdString());
+                
+                asientosReservados.add(asiento);
+            
+            }
 
-            return asientoFuncionDAO.ocuparAsientos(asientosMapeados);
+            return asientoFuncionDAO.ocuparAsientos(asientosReservados);
         } catch (FalloOcuparAsientosFuncionException e) {
             throw new AsientoFuncionReservaException("Hubo un error al reservar los asientos: " + e.getMessage());
+        } catch (EncontrarClienteException e) {
+            throw new AsientoFuncionReservaException("Hubo un error al consultar el cliente en el asiento: " + e.getMessage());
         }
     }
 

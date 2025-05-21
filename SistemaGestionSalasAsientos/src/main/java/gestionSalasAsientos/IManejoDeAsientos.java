@@ -12,7 +12,6 @@ import Excepciones.asientos.ErrorCargarAsientoException;
 import Excepciones.asientos.ErrorEliminacionAsientosException;
 import Excepciones.asientos.ErrorGeneracionAsientoFuncionException;
 import Excepciones.asientos.ErrorObtencionEstadisticasException;
-import Excepciones.asientos.ErrorReservacionAsientoException;
 import java.util.List;
 
 /**
@@ -24,8 +23,6 @@ public interface IManejoDeAsientos {
     public List<AsientoFuncionDTO> registrarAsientoFuncion(FuncionDTO funcion, SalaViejaDTO sala) throws ErrorGeneracionAsientoFuncionException;
     
     public Boolean eliminarAsientos(String idFuncion) throws ErrorEliminacionAsientosException;
-
-    public Boolean reservarAsientosFuncion(List<AsientoFuncionDTO> asientoAReservar) throws ErrorReservacionAsientoException;
     
     public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) throws ErrorCargarAsientoException;
     

@@ -16,7 +16,7 @@ public class BoletoDTO {
     
     private String nombrePelicula;
     
-    private String imagenPelicula; // LUEGO LO CAMBIAMOS A UN ARREGLO DE BYTES
+    private byte[] imagen;
     
     private LocalDateTime fechaHoraFuncion;
     
@@ -35,23 +35,23 @@ public class BoletoDTO {
     /**
      * Constructor normal
      * @param nombrePelicula
-     * @param imagenPelicula
+     * @param imagen
      * @param fechaHoraFuncion
      * @param numeroSala
      * @param listaAsientosSeleccionados
      * @param nombreCliente 
      */
-    public BoletoDTO(String nombrePelicula, String imagenPelicula, LocalDateTime fechaHoraFuncion, String numeroSala, List<String> listaAsientosSeleccionados, String nombreCliente) {
+    public BoletoDTO(String nombrePelicula, byte[] imagen, LocalDateTime fechaHoraFuncion, String numeroSala, String nombreCliente, List<String> listaAsientosSeleccionados) {
         this.nombrePelicula = nombrePelicula;
-        this.imagenPelicula = imagenPelicula;
+        this.imagen = imagen;
         this.fechaHoraFuncion = fechaHoraFuncion;
         this.numeroSala = numeroSala;
-        this.listaAsientosSeleccionados = listaAsientosSeleccionados;
         this.nombreCliente = nombreCliente;
+        this.listaAsientosSeleccionados = listaAsientosSeleccionados;
     }
-    
+
     /**
-     * 
+     *
      * @return 
      */
     public String getNombrePelicula() {
@@ -68,18 +68,20 @@ public class BoletoDTO {
      * 
      * @return 
      */
-    public String getImagenPelicula() {
-        return imagenPelicula;
+    public byte[] getImagen() {
+        return imagen;
     }
+
     /**
      * 
-     * @param imagenPelicula 
+     * @param imagen
      */
-    public void setImagenPelicula(String imagenPelicula) {
-        this.imagenPelicula = imagenPelicula;
+    public void setImagen(byte[] imagen) {    
+        this.imagen = imagen;
     }
+
     /**
-     * 
+     *
      * @return 
      */
     public LocalDateTime getFechaHoraFuncion() {
