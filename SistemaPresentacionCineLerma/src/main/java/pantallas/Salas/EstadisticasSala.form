@@ -45,6 +45,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="jButton1"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="botonPDFMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

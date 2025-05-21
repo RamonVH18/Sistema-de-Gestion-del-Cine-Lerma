@@ -4,69 +4,78 @@
  */
 package pantallas.Salas;
 
-
 import DTOs.EstadisticaSalaDTO;
+import Excepciones.PresentacionException;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.Timer;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import utilitades.CreacionReportes;
 import utilitades.ModeladoTablas;
 import utilitades.Utilerias;
 
 /**
- * Clase para la creacion de la pantalla que muestra las estadisticas de cada sala
+ * Clase para la creacion de la pantalla que muestra las estadisticas de cada
+ * sala
+ *
  * @author Ramon Valencia
  */
 public class EstadisticasSala extends javax.swing.JFrame {
 
     private final Utilerias utilerias = new Utilerias(); // Objeto Utilerias para poder utilizar los metodos de la clase
     private final IControl control = ControlDeNavegacion.getInstancia(); // Instancia de la clase control de navegacion
-    
-    // Valores del tamaño del buscador de salas
-    private final Integer anchoBuscador = 150;
-    private final Integer alturaBuscador = 20;
-    private final Dimension tamañoBuscador = new Dimension(anchoBuscador, alturaBuscador);
-    
+
+    private List<EstadisticaSalaDTO> estadisticas;
     private final Integer alturaFilas = 20;
     
+    // Variables para la configuracion de los botones
+    private final int alturaBoton = 40; //Altura del boton
+    private final int anchoBoton = 300; // Ancho del boton
+    private final Font fuenteBoton = new Font("Tw Cen MT Condensed", Font.BOLD, 24); // Fuente del boton
+    private final Dimension tamañoBoton = new Dimension(anchoBoton, alturaBoton); // Dimension del boton
+    private final Color colorBoton = new Color(162, 132, 94); // Color general del boton
+    private final Color colorBotonFore = new Color(255, 255, 255); //Color del contorno del boton
+
     JPanel panelTabla;
     private JTable tablaSalas;
-    private Timer temporizador;
     /**
-     * Mapa que contiene los valores del tamaño de cada columna de la tabla de estadisticas
-     * El primer valor de cada line es la llave y el segundo valor es el tamaño del ancho del boton
+     * Mapa que contiene los valores del tamaño de cada columna de la tabla de
+     * estadisticas El primer valor de cada line es la llave y el segundo valor
+     * es el tamaño del ancho del boton
      */
-     private final Map<Integer, Number> tamañoColumnas = Map.of(
+    private final Map<Integer, Number> tamañoColumnas = Map.of(
             0, 50, // Tamaño de la columna de la sala
             1, 75, // Tamaño de la columna de la capacidad de la sala
             2, 90, // Tamaño de la columna del Total de funciones de la sala
             3, 85, // Tamaño de la columna de Ingresos Totales de la sala
             4, 90 //  Tamaño de la columna del Total de funciones canceladas de la sala
     );
-    
+
     /**
      * Constructor vacio de la pantalla EstadisticasSala
      */
     public EstadisticasSala() {
-        utilerias.configurarFrameBase(this, "ESTADISTICAS"); // Metodo para la configuracion base de una pantalla
+        utilerias.configurarFrameBase(this, "ESTADISTICAS DE SALAS"); // Metodo para la configuracion base de una pantalla
         configurarEstadisticasSala(); // Metodo para la configuracion adicional de esta pantalla
+
     }
 
     /**
@@ -83,6 +92,11 @@ public class EstadisticasSala extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         botonPDF.setText("jButton1");
+        botonPDF.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonPDFMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -103,12 +117,17 @@ public class EstadisticasSala extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
+    private void botonPDFMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonPDFMouseClicked
+        // TODO add your handling code here:
+        generarReporteEstadisticas();
+    }//GEN-LAST:event_botonPDFMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonPDF;
     // End of variables declaration//GEN-END:variables
-    
+
     /**
      * Metodo para la configuracion unica de esta pantalla
      */
@@ -116,7 +135,7 @@ public class EstadisticasSala extends javax.swing.JFrame {
         configurarBotonVolver();
         configurarPanelCentral();
     }
-    
+
     /**
      * Metodo para configurar el panel central de esta pantalla
      */
@@ -131,23 +150,26 @@ public class EstadisticasSala extends javax.swing.JFrame {
 
         panelCentral.add(Box.createVerticalStrut(75));
         panelCentral.add(panelTabla);
-        panelCentral.add(Box.createVerticalGlue());
         
+        configurarBtnPdf();
+        panelCentral.add(botonPDF);
+        panelCentral.add(Box.createVerticalGlue());
 
         this.add(panelCentral, BorderLayout.CENTER);
     }
-    
+
     /**
      * Metodo para configurar la tabla con los datos
-     * @param panelTabla 
+     *
+     * @param panelTabla
      */
     private void configurarPanelTabla(JPanel panelTabla) {
         // Arreglo de Strings de una dimension para guardar todas las columnas de la tabla
         String[] columnas = {
-            "SALA", 
+            "SALA",
             "CAPACIDAD",
             "<html>NUMERO DE<br>FUNCIONES</html>", // A estas tres opciones se le agrego esa escritura de html para poder hacer un salto de linea
-            "<html>INGRESOS<br>TOTALES</html>", 
+            "<html>INGRESOS<br>TOTALES</html>",
             "<html>ASIENTOS<br>VENDIDOS</html>"
         };
         // Arreglo de Objetos de dos dimensiones para guardar las estadisticas de cada sala
@@ -155,22 +177,23 @@ public class EstadisticasSala extends javax.swing.JFrame {
 
         // Valor del tamaño del encabezado
         Integer tamañoEncabezado = 40;
-        
+
         //Valor del tamaño de la fuente del encabezado
         Integer tamañoFuente = 14;
-        
+
         /**
-         * Se llama al metodo estatico de la clase de ModeladoTablas para poder crear una tablaSencilla en base a:
-         * El arreglo de columnas, el arreglo de datos y finalmente el tamaño del encabezado
+         * Se llama al metodo estatico de la clase de ModeladoTablas para poder
+         * crear una tablaSencilla en base a: El arreglo de columnas, el arreglo
+         * de datos y finalmente el tamaño del encabezado
          */
         tablaSalas = ModeladoTablas.creacionTablaSencilla(columnas, datos, tamañoFuente, tamañoEncabezado);
         if (panelTabla.getComponentCount() > 0) {
             panelTabla.removeAll();
         }
-        /**        
-         * Se llama nuevamente a otro metodo de la clase ModeladoTablas
-         * esto para ajustar el tamaño de la columnas de la tablas
-         * Se necesito del mapa donde vienen el tamaño de las columnas
+        /**
+         * Se llama nuevamente a otro metodo de la clase ModeladoTablas esto
+         * para ajustar el tamaño de la columnas de la tablas Se necesito del
+         * mapa donde vienen el tamaño de las columnas
          */
         ModeladoTablas.ajusteTamañoColumnas(tablaSalas, tamañoColumnas, alturaFilas);
 
@@ -179,31 +202,33 @@ public class EstadisticasSala extends javax.swing.JFrame {
         panelTabla.add(scrollPane);
 
     }
-    
+
     private Object[][] obtenerDatos() {
-        List<EstadisticaSalaDTO> estadisticas = control.consultarEstadisticasSala();
+        estadisticas = control.consultarEstadisticasSala();
         Object[][] datos = new Object[estadisticas.size()][5];
-        
-        for(int i = 0; i < estadisticas.size(); i++) {
+
+        for (int i = 0; i < estadisticas.size(); i++) {
             datos[i][0] = estadisticas.get(i).getNumSala();
             datos[i][1] = estadisticas.get(i).getCapacidad();
             datos[i][2] = estadisticas.get(i).getFuncionesRealizadas();
             datos[i][3] = estadisticas.get(i).getTotalGanado();
             datos[i][4] = estadisticas.get(i).getAsientosVendidos();
         }
-        
+
         return datos;
     }
     
-    private void efectoTemporizador() {
-        if (temporizador != null) {
-            temporizador.stop();
-        }
-        temporizador = new Timer(500, e -> {
-            configurarPanelTabla(panelTabla);
-            temporizador.stop();
+    private void configurarBtnPdf() {
+        botonPDF = new JButton("IMPRIMIR PDF");
+        botonPDF.setPreferredSize(tamañoBoton);
+        botonPDF.setFont(fuenteBoton);
+        botonPDF.setBackground(colorBoton);
+        botonPDF.setForeground(colorBotonFore);
+        botonPDF.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonPDFMouseClicked(evt);
+            }
         });
-        temporizador.start();
     }
 
     /**
@@ -220,4 +245,28 @@ public class EstadisticasSala extends javax.swing.JFrame {
         });
 
     }
+
+    private void generarReporteEstadisticas() {
+        try {
+            if (estadisticas.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "ERROR: La tabla no contiene ningun dato que se pueda imprimir", "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            }
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar reporte estadisticas de las salas PDF");
+            fileChooser.setSelectedFile(new File("estadisticas_salas.pdf"));
+
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".pdf")) {
+                    filePath += ".pdf";
+                }
+
+                CreacionReportes.generarReportesSalas(estadisticas, filePath);
+                JOptionPane.showMessageDialog(this, "Reporte generado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (PresentacionException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }

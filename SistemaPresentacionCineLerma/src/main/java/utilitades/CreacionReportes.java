@@ -6,9 +6,11 @@ package utilitades;
 
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
-import DTOs.UsuarioDTO;
+import DTOs.EstadisticaSalaDTO;
+import Excepciones.PresentacionException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
@@ -17,8 +19,8 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -30,6 +32,7 @@ import java.util.List;
  * @author sonic
  */
 public class CreacionReportes {
+
     public static void generarReporteClientesPDF(List<ClienteDTO> clientes, String filePath) throws Exception {
         Document document = new Document() {
         };
@@ -51,7 +54,7 @@ public class CreacionReportes {
         document.add(date);
 
         // Tabla de usuarios
-        PdfPTable table = new PdfPTable(7); 
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100);
         table.setSpacingBefore(10f);
         table.setSpacingAfter(10f);
@@ -62,14 +65,13 @@ public class CreacionReportes {
         // Contenido de la tabla
         for (ClienteDTO cliente : clientes) {
             addClienteRow(table, cliente);
-            
-            
+
         }
 
         document.add(table);
         document.close();
     }
-    
+
     public static void generarReporteAdministradoresPDF(List<AdministradorDTO> administradores, String filePath) throws Exception {
         Document document = new Document() {
         };
@@ -91,7 +93,7 @@ public class CreacionReportes {
         document.add(date);
 
         // Tabla de usuarios
-        PdfPTable table = new PdfPTable(7); 
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100);
         table.setSpacingBefore(10f);
         table.setSpacingAfter(10f);
@@ -102,14 +104,12 @@ public class CreacionReportes {
         // Contenido de la tabla
         for (AdministradorDTO administrador : administradores) {
             addAdministradoresRow(table, administrador);
-            
-            
+
         }
 
         document.add(table);
         document.close();
     }
-
 
     /**
      * Agrega los encabezados de la tabla de usuarios al documento PDF.
@@ -136,24 +136,24 @@ public class CreacionReportes {
     private static void addClienteRow(PdfPTable table, ClienteDTO usuario) {
         // nombre completo
         table.addCell(usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno());
-        
+
         //numero de telefono
         table.addCell(usuario.getTelefono());
-        
+
         //correo electronico
         table.addCell(usuario.getCorreoElectronico());
-        
+
         table.addCell(usuario.getEstado().toString());
-        
+
         table.addCell(usuario.getFechaNacimiento() != null
                 ? usuario.getFechaNacimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 : "Sin fecha");
-        
+
         table.addCell(String.valueOf(Period.between(usuario.getFechaNacimiento().toLocalDate(), LocalDate.now()).getYears()));
-        
+
         table.addCell(usuario.getCalle() + " " + usuario.getNumero() + " " + usuario.getCP());
     }
-    
+
     /**
      * Agrega los encabezados de la tabla de usuarios al documento PDF.
      *
@@ -179,23 +179,94 @@ public class CreacionReportes {
     private static void addAdministradoresRow(PdfPTable table, AdministradorDTO usuario) {
         // nombre completo
         table.addCell(usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno());
-        
+
         //numero de telefono
         table.addCell(usuario.getTelefono());
-        
+
         //correo electronico
         table.addCell(usuario.getCorreoElectronico());
-        
+
         table.addCell(usuario.getEstado().toString());
-        
+
         table.addCell(usuario.getFechaNacimiento() != null
                 ? usuario.getFechaNacimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 : "Sin fecha");
-        
+
         table.addCell(String.valueOf(Period.between(usuario.getFechaNacimiento().toLocalDate(), LocalDate.now()).getYears()));
-        
+
         table.addCell(usuario.getRFC());
     }
+
+    public static void generarReportesSalas(List<EstadisticaSalaDTO> estadisticas, String filePath) throws PresentacionException {
+
+        try {
+            Document document = new Document() {
+            };
+
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            // Título del documento
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Paragraph title = new Paragraph("Reporte de estadisticas de salas - CINE LERMA", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20f);
+            document.add(title);
+
+            // Fecha de generacion
+            Font dateFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+            Paragraph date = new Paragraph("Generado el: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), dateFont);
+            date.setAlignment(Element.ALIGN_RIGHT);
+            date.setSpacingAfter(20f);
+            document.add(date);
+
+            // Tabla de usuarios
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10f);
+            table.setSpacingAfter(10f);
+
+            // Encabezados de la tabla
+            addTableHeaderEstadisticasSalas(table);
+
+            // Contenido de la tabla
+            for (EstadisticaSalaDTO estadisticasSala : estadisticas) {
+                addEstadisticasSalasRow(table, estadisticasSala);
+            }
+
+            document.add(table);
+            document.close();
+
+        } catch (FileNotFoundException | DocumentException e) {
+            throw new PresentacionException("Hubo un problema al generar el pdf");
+        }
+
+    }
     
+    private static void addTableHeaderEstadisticasSalas(PdfPTable table) {
+        String[] headers = {"Sala", "Capacidad", "Numero de Funciones", "Ingresos Totales", "Asientos Vendidos"};
+        for (String header : headers) {
+            PdfPCell cell = new PdfPCell();
+            cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            cell.setBorderWidth(1);
+            cell.setPhrase(new Phrase(header));
+            table.addCell(cell);
+        }
+    }
     
+    private static void addEstadisticasSalasRow(PdfPTable table, EstadisticaSalaDTO estadisticasSala) {
+        // nombre completo
+        table.addCell(estadisticasSala.getNumSala());
+
+        //numero de telefono
+        table.addCell(estadisticasSala.getCapacidad().toString());
+
+        //correo electronico
+        table.addCell(estadisticasSala.getFuncionesRealizadas().toString());
+
+        table.addCell(estadisticasSala.getTotalGanado().toString());
+
+        table.addCell(estadisticasSala.getAsientosVendidos().toString());
+    }
+
 }

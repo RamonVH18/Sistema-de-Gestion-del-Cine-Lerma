@@ -4,7 +4,7 @@
  */
 package pantallas;
 
-import com.mycompany.bueaegg.ifuknow;
+
 import DTOs.AdministradorDTO;
 import DTOs.ClienteDTO;
 import DTOs.UsuarioDTO;
@@ -12,12 +12,9 @@ import control.ControlDeNavegacion;
 import control.IControl;
 import enums.Rol;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Insets;
-import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import wep.ifuknow;
 
 /**
  *
