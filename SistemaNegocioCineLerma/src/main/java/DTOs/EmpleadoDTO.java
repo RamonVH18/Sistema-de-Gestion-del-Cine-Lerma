@@ -26,7 +26,7 @@ public class EmpleadoDTO {
     private LocalDateTime fechaNacimiento;
 
     private Cargo cargo;
-    private double sueldo;    
+    private Double sueldo;    
     private boolean activo; // para habilitar o desabilitar si esta activo el empleado
     
     private LocalDate fechaRegistro;
@@ -167,11 +167,11 @@ public class EmpleadoDTO {
         this.cargo = cargo;
     }
 
-    public double getSueldo() {
+    public Double getSueldo() {
         return sueldo;
     }
 
-    public void setSueldo(double sueldo) {
+    public void setSueldo(Double sueldo) {
         this.sueldo = sueldo;
     }
 

@@ -6,7 +6,6 @@ package Mappers;
 
 import DTOs.EmpleadoDTO;
 import entidades.Empleado;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -17,24 +16,6 @@ public class EmpleadoMapper {
     public EmpleadoMapper() {
     }
 
-    // --- Métodos de conversión String <-> ObjectId ---
-    public ObjectId toObjectId(String idHex) {
-        if (idHex == null || idHex.trim().isEmpty()) {
-            return null;
-        }
-        try {
-            return new ObjectId(idHex);
-        } catch (IllegalArgumentException e) {
-            // Manejar el caso de un String de ID inválido si es necesario
-            System.err.println("Error al convertir String a ObjectId: " + idHex + " - " + e.getMessage());
-            return null; // O lanzar una excepción personalizada
-        }
-    }
-
-    public String toStringId(ObjectId objectId) {
-        return objectId != null ? objectId.toHexString() : null;
-    }
-
     // --- Mapeo DTO -> Entidad ---
     public Empleado convertirDTOAEntidad(EmpleadoDTO dto) {
         if (dto == null) {
@@ -42,10 +23,7 @@ public class EmpleadoMapper {
         }
         Empleado entidad = new Empleado();
 
-        // El ID del DTO (String) se convierte a ObjectId para la entidad.
-        // Si el DTO.getId() es null (nuevo empleado), entidad.setId() recibirá null.
-        // El DAO luego generará un ObjectId para la entidad si es necesario.
-        entidad.setId(toObjectId(dto.getId()));
+        entidad.setIdString((dto.getId()));
 
         entidad.setNombre(dto.getNombre());
         entidad.setApellidoP(dto.getApellidoP());
@@ -90,9 +68,9 @@ public class EmpleadoMapper {
         if (entidad == null) {
             return null;
         }
-        // Usa el constructor de EmpleadoDTO que toma String id
+
         return new EmpleadoDTO(
-                toStringId(entidad.getId()), // Convierte ObjectId a String
+                entidad.getIdString(),
                 entidad.getNombre(),
                 entidad.getApellidoP(),
                 entidad.getApellidoM(),

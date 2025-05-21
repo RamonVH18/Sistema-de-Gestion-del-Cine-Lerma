@@ -25,22 +25,24 @@ public interface IEmpleadoDAO {
 
     public List<Empleado> obtenerTodosLosEmpleadosActivos() throws DAOObtenerEmpleadoException;
 
-    public Empleado obtenerEmpleadoActivoPorId(ObjectId empleadoId) throws DAOObtenerEmpleadoException;
+    public Empleado obtenerEmpleadoActivoPorId(String empleadoIdString) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException;
 
-    public Empleado obtenerEmpleadoPorIdInterno(ObjectId empleadoId) throws DAOObtenerEmpleadoException;
+    public Empleado obtenerEmpleadoPorIdInterno(String empleadoIdString) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException;
 
     public boolean actualizarEmpleado(Empleado empleado) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException;
 
-    public boolean despedirEmpleado(ObjectId empleadoId) throws DAODespedirEmpleadoException, DAOValidacionEmpleadoException;
+    public boolean despedirEmpleado(String empleadoIdString) throws DAODespedirEmpleadoException, DAOValidacionEmpleadoException;
 
-    public List<Empleado> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws DAOObtenerEmpleadoException;
+    public List<Empleado> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException;
 
-    public boolean actualizarCargoEmpleado(ObjectId empleadoId, Cargo nuevoCargo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException;
+    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException;
 
-    public boolean actualizarSueldoIndividual(ObjectId empleadoId, double nuevoSueldo) throws DAOActualizarEmpleadoException,DAOValidacionEmpleadoException;
+    public boolean actualizarSueldoIndividual(String empleadoIdString, Double nuevoSueldo) throws DAOActualizarEmpleadoException,DAOValidacionEmpleadoException;
 
-    public long actualizarSueldoPorCargo(Cargo cargo, double nuevoSueldo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException;
+    public long actualizarSueldoPorCargo(Cargo cargo, Double nuevoSueldo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException;
+    
+    public boolean existeEmpleadoConEseCorreo(String correoE) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException;
 
-    public Empleado consultarPorCorreoActivoExcluyendoId(String correoE, ObjectId excluirEmpleadoId) throws DAOObtenerEmpleadoException;
+    public Empleado consultarPorCorreoActivoExcluyendoId(String correoE, String excluirEmpleadoIdString) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException;
 
 }

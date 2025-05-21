@@ -15,7 +15,7 @@ import org.bson.types.ObjectId;
  * @author isaac
  */
 public class Empleado {
-    
+
     @BsonId
     private ObjectId id;
 
@@ -33,12 +33,12 @@ public class Empleado {
 
     private Cargo cargo;
 
-    private double sueldo;
-    
+    private Double sueldo;
+
     private boolean activo; // para habilitar o desabilitar si esta activo el empleado
-    
+
     private LocalDate fechaRegistro;
-    
+
     // DIRECCION DEL EMPLEADO
     private String calle;
     private String colonia;
@@ -46,14 +46,13 @@ public class Empleado {
 
     // constructor 
     public Empleado() {
-        
+
         this.activo = true; // por defecto esta activo el empleado cuando se registra
         this.fechaRegistro = LocalDate.now(); // se registra con la fecha actual
 
     }
 
     // constructor con todo 
-
     public Empleado(ObjectId id, String nombre, String apellidoP, String apellidoM, String correoE, String telefono, LocalDateTime fechaNacimiento, Cargo cargo, double sueldo, boolean activo, LocalDate fechaRegistro, String calle, String colonia, String numExterior) {
         this.id = id;
         this.nombre = nombre;
@@ -70,10 +69,9 @@ public class Empleado {
         this.colonia = colonia;
         this.numExterior = numExterior;
     }
-  
 
     //constructor con todo menos id
-    public Empleado(String nombre, String apellidoP, String apellidoM, String correoE, String telefono, LocalDateTime fechaNacimiento, Cargo cargo, double sueldo, boolean activo, LocalDate fechaRegistro, String calle, String colonia, String numExterior) {    
+    public Empleado(String nombre, String apellidoP, String apellidoM, String correoE, String telefono, LocalDateTime fechaNacimiento, Cargo cargo, double sueldo, boolean activo, LocalDate fechaRegistro, String calle, String colonia, String numExterior) {
         this.nombre = nombre;
         this.apellidoP = apellidoP;
         this.apellidoM = apellidoM;
@@ -96,6 +94,18 @@ public class Empleado {
 
     public void setId(ObjectId id) {
         this.id = id;
+    }
+
+    public String getIdString() {
+        return id.toString();
+    }
+
+    public void setIdString(String idString) {
+        if (idString != null && ObjectId.isValid(idString)) { // PARA QUE NO TRUENE ACA
+            this.id = new ObjectId(idString);
+        } else {
+            this.id = null;  
+        }
     }
 
     public String getNombre() {
@@ -158,7 +168,7 @@ public class Empleado {
         return sueldo;
     }
 
-    public void setSueldo(double sueldo) {
+    public void setSueldo(Double sueldo) {
         this.sueldo = sueldo;
     }
 
@@ -206,9 +216,5 @@ public class Empleado {
     public String toString() {
         return "Empleado{" + "id=" + id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correoE=" + correoE + ", telefono=" + telefono + ", fechaNacimiento=" + fechaNacimiento + ", cargo=" + cargo + ", sueldo=" + sueldo + ", activo=" + activo + ", fechaRegistro=" + fechaRegistro + ", calle=" + calle + ", colonia=" + colonia + ", numExterior=" + numExterior + '}';
     }
-
-    
-
-    
 
 }

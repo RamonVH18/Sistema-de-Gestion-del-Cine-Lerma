@@ -33,7 +33,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
      * Creates new form RegistrarEmpleado
      */
     public RegistrarEmpleado() {
-        
+
         initComponents();
         this.control = ControlDeNavegacion.getInstancia();
         for (Cargo cargoEnum : Cargo.values()) {
@@ -447,27 +447,26 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
                 nombre, apellidoP, apellidoM, correoE, telefono,
                 fechaNacimiento, cargoSeleccionado, calle, colonia, numExt
         );
-        
+
         try {
-            
+
             EmpleadoDTO empleadoRegistradoDTO = control.controlRegistrarNuevoEmpleado(nuevoEmpleadoDTO);
 
-            // 5. Mostrar mensaje de éxito
-            JOptionPane.showMessageDialog(this,
-                    "Empleado registrado exitosamente con ID: " + empleadoRegistradoDTO.getId()
-                    + "\nSueldo Asignado: $" + String.format("%.2f", empleadoRegistradoDTO.getSueldo()),
-                    "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+            if (empleadoRegistradoDTO != null) {
 
-            limpiarCampos();
+                // 5. Mostrar mensaje de éxito
+                JOptionPane.showMessageDialog(this,
+                        "Empleado registrado exitosamente con ID: " + empleadoRegistradoDTO.getId()
+                        + "\nSueldo Asignado: $" + String.format("%.2f", empleadoRegistradoDTO.getSueldo()),
+                        "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
 
-        }
-       
-         catch (Exception e) {
-            e.printStackTrace();
+                limpiarCampos();
+
+            }
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
         }
-        
-        
+
 
     }//GEN-LAST:event_btnAceptarActionPerformed
 
@@ -478,7 +477,6 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

@@ -46,7 +46,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -133,10 +132,6 @@ public class ManejoEmpleados implements IManejoEmpleados {
         }
 
         if (esNuevo == false) {
-            // Solo validamos el sueldo si NO es un empleado nuevo (esNuevo == false),
-            // lo que implicaría una actualización donde el sueldo podría estar presente en el DTO.
-            // O si en el futuro, para registrar, decides que el sueldo debe venir y ser validado aquí.
-            // POR AHORA, para el registro, el BO asigna y luego valida el sueldo.
 
             if (dto.getSueldo() <= 0) {
                 throw new ManejoValidarEmpleadoException("El sueldo del empleado debe ser un valor positivo.");
@@ -173,9 +168,6 @@ public class ManejoEmpleados implements IManejoEmpleados {
 
         if (empleadoIdString == null || empleadoIdString.trim().isEmpty()) {
             throw new ManejoValidacionEmpleadoIdException("El ID del empleado no puede ser nulo o vacío.");
-        }
-        if (!ObjectId.isValid(empleadoIdString)) {
-            throw new ManejoValidacionEmpleadoIdException("El formato del ID del empleado ('" + empleadoIdString + "') no es válido.");
         }
     }
 

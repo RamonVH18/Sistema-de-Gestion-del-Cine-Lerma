@@ -36,18 +36,28 @@ import org.bson.types.ObjectId;
 public class EmpleadoDAO implements IEmpleadoDAO {
 
     private static EmpleadoDAO instance;
-    private final MongoConexion mongoConexion; // instancia conexion
+    private final MongoConexion mongoConexion;
 
     private EmpleadoDAO() {
-        this.mongoConexion = new MongoConexion(); // Asumiendo que así la inicializas
+        this.mongoConexion = new MongoConexion();
     }
 
-    // get instance del dao
     public static synchronized EmpleadoDAO getInstance() {
         if (instance == null) {
             instance = new EmpleadoDAO();
         }
         return instance;
+    }
+
+    // Método de utilidad privado para convertir y validar String a ObjectId
+    private ObjectId convertirAObjectId(String idString, String contextoError) throws DAOValidacionEmpleadoException {
+        if (idString == null || idString.trim().isEmpty()) {
+            throw new DAOValidacionEmpleadoException("El ID (" + contextoError + ") no puede ser nulo o vacío.");
+        }
+        if (!ObjectId.isValid(idString)) {
+            throw new DAOValidacionEmpleadoException("Formato de ID (" + contextoError + ") inválido: " + idString);
+        }
+        return new ObjectId(idString);
     }
 
     @Override
@@ -58,16 +68,14 @@ public class EmpleadoDAO implements IEmpleadoDAO {
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
 
-            // Asegurar que el empleado tenga un ID antes de insertar.
-            // El constructor de Empleado ya inicializa 'activo' y 'fechaRegistro'.
-            if (empleado.getId() == null) {
-                empleado.setId(new ObjectId()); // Genera un ID si no existe
+            if (empleado.getId() == null) { // El ObjectId de la entidad
+                empleado.setId(new ObjectId());
             }
 
             coleccion.insertOne(empleado);
             return true;
-
         } catch (MongoException e) {
+
             throw new DAORegistrarEmpleadoException("Error al registrar empleado: " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
@@ -76,7 +84,6 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // obtiene todos los empleados activos
     @Override
     public List<Empleado> obtenerTodosLosEmpleadosActivos() throws DAOObtenerEmpleadoException {
         MongoClient clienteMongo = null;
@@ -85,8 +92,6 @@ public class EmpleadoDAO implements IEmpleadoDAO {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
-            // Filtrar para obtener solo empleados activos
             coleccion.find(Filters.eq("activo", true)).into(empleados);
             return empleados;
         } catch (MongoException e) {
@@ -98,23 +103,21 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // obtiene un empleado activo buscandolo por su id
     @Override
-    public Empleado obtenerEmpleadoActivoPorId(ObjectId empleadoId) throws DAOObtenerEmpleadoException {
+    public Empleado obtenerEmpleadoActivoPorId(String empleadoIdString) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException {
+        ObjectId empleadoId = convertirAObjectId(empleadoIdString, "obtener activo por ID");
         MongoClient clienteMongo = null;
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
-            // Buscar por _id y que esté activo
             Bson filtro = Filters.and(
                     Filters.eq("_id", empleadoId),
                     Filters.eq("activo", true)
             );
             return coleccion.find(filtro).first();
         } catch (MongoException e) {
-            throw new DAOObtenerEmpleadoException("Error al obtener empleado activo por ID " + empleadoId + ": " + e.getMessage(), e);
+            throw new DAOObtenerEmpleadoException("Error al obtener empleado activo por ID " + empleadoIdString + ": " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
@@ -122,9 +125,9 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // obtiene un empleado por su id sin importar que este activo o no
     @Override
-    public Empleado obtenerEmpleadoPorIdInterno(ObjectId empleadoId) throws DAOObtenerEmpleadoException {
+    public Empleado obtenerEmpleadoPorIdInterno(String empleadoIdString) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException {
+        ObjectId empleadoId = convertirAObjectId(empleadoIdString, "obtener interno por ID");
         MongoClient clienteMongo = null;
         try {
             clienteMongo = mongoConexion.crearConexion();
@@ -132,7 +135,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
             return coleccion.find(Filters.eq("_id", empleadoId)).first();
         } catch (MongoException e) {
-            throw new DAOObtenerEmpleadoException("Error al obtener empleado (interno) por ID " + empleadoId + ": " + e.getMessage(), e);
+            throw new DAOObtenerEmpleadoException("Error al obtener empleado (interno) por ID " + empleadoIdString + ": " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
@@ -140,23 +143,20 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // actualiza un empleado dado un empleado
     @Override
-    public boolean actualizarEmpleado(Empleado empleado) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException{
+    public boolean actualizarEmpleado(Empleado empleado) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException {
         MongoClient clienteMongo = null;
-        if (empleado.getId() == null) {
-            throw new DAOValidacionEmpleadoException("El empleado a actualizar debe tener un ID.");
+        if (empleado.getId() == null) { // Aquí se refiere al ObjectId de la entidad
+            throw new DAOValidacionEmpleadoException("El empleado a actualizar debe tener un ID (ObjectId).");
         }
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
             UpdateResult result = coleccion.replaceOne(Filters.eq("_id", empleado.getId()), empleado);
             return result.getModifiedCount() > 0;
-
         } catch (MongoException e) {
-            throw new DAOActualizarEmpleadoException("Error al actualizar empleado con ID " + empleado.getId() + ": " + e.getMessage(), e);
+            throw new DAOActualizarEmpleadoException("Error al actualizar empleado con ID " + empleado.getId().toHexString() + ": " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
@@ -164,29 +164,23 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // marca un empleado como inactivo dado el id, osea lo despide
     @Override
-    public boolean despedirEmpleado(ObjectId empleadoId) throws DAODespedirEmpleadoException, DAOValidacionEmpleadoException {
+    public boolean despedirEmpleado(String empleadoIdString) throws DAODespedirEmpleadoException, DAOValidacionEmpleadoException {
+        ObjectId empleadoId = convertirAObjectId(empleadoIdString, "despedir empleado");
         MongoClient clienteMongo = null;
-        if (empleadoId == null) {
-            throw new DAOValidacionEmpleadoException("El ID del empleado para la baja no puede ser nulo.");
-        }
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
             Bson filtro = Filters.and(
                     Filters.eq("_id", empleadoId),
-                    Filters.eq("activo", true) // Solo dar de baja si está activo
+                    Filters.eq("activo", true)
             );
             Bson actualizacion = Updates.set("activo", false);
             UpdateResult result = coleccion.updateOne(filtro, actualizacion);
-
             return result.getModifiedCount() > 0;
-
         } catch (MongoException e) {
-            throw new DAODespedirEmpleadoException("Error al marcar como inactivo al empleado con ID " + empleadoId + ": " + e.getMessage(), e);
+            throw new DAODespedirEmpleadoException("Error al marcar como inactivo al empleado con ID " + empleadoIdString + ": " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
@@ -194,18 +188,19 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // obtiene todos los empleados activos por un cargo especifico
     @Override
-    public List<Empleado> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws DAOObtenerEmpleadoException {
+    public List<Empleado> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException {
+        if (cargo == null) {
+            throw new DAOValidacionEmpleadoException("El cargo no puede ser nulo para buscar empleados.");
+        }
         MongoClient clienteMongo = null;
         List<Empleado> empleados = new ArrayList<>();
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
             Bson filtro = Filters.and(
-                    Filters.eq("cargo", cargo.name()),
+                    Filters.eq("cargo", cargo.name()), // Guardar el nombre del enum
                     Filters.eq("activo", true)
             );
             coleccion.find(filtro).into(empleados);
@@ -219,29 +214,26 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // actualiza el cargo de un empleado activo por su id, si fue exitoso retorna true, false si no
     @Override
-    public boolean actualizarCargoEmpleado(ObjectId empleadoId, Cargo nuevoCargo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException {
-        MongoClient clienteMongo = null;
-        if (empleadoId == null || nuevoCargo == null) {
-            throw new DAOValidacionEmpleadoException("ID de empleado y nuevo cargo no pueden ser nulos.");
+    public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException {
+        ObjectId empleadoId = convertirAObjectId(empleadoIdString, "actualizar cargo");
+        if (nuevoCargo == null) {
+            throw new DAOValidacionEmpleadoException("El nuevo cargo no puede ser nulo.");
         }
+        MongoClient clienteMongo = null;
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
             Bson filtro = Filters.and(
                     Filters.eq("_id", empleadoId),
                     Filters.eq("activo", true)
             );
             Bson actualizacion = Updates.set("cargo", nuevoCargo.name());
             UpdateResult result = coleccion.updateOne(filtro, actualizacion);
-
             return result.getModifiedCount() > 0;
-
         } catch (MongoException e) {
-            throw new DAOActualizarEmpleadoException("Error al actualizar cargo del empleado con ID " + empleadoId + ": " + e.getMessage(), e);
+            throw new DAOActualizarEmpleadoException("Error al actualizar cargo del empleado con ID " + empleadoIdString + ": " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
@@ -249,29 +241,25 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // actualiza el saldo de un empleado de manera individual por su id, true si fue exitoso, false si no
     @Override
-    public boolean actualizarSueldoIndividual(ObjectId empleadoId, double nuevoSueldo) throws DAOActualizarEmpleadoException,DAOValidacionEmpleadoException  {
+    public boolean actualizarSueldoIndividual(String empleadoIdString, Double nuevoSueldo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException {
+        ObjectId empleadoId = convertirAObjectId(empleadoIdString, "actualizar sueldo individual");
+        // La validación de rangos de sueldo es más lógica de negocio, el DAO se enfoca en la operación.
         MongoClient clienteMongo = null;
-        if (empleadoId == null) {
-            throw new DAOValidacionEmpleadoException("ID de empleado no puede ser nulo para actualizar sueldo.");
-        }
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
             Bson filtro = Filters.and(
                     Filters.eq("_id", empleadoId),
                     Filters.eq("activo", true)
             );
             Bson actualizacion = Updates.set("sueldo", nuevoSueldo);
             UpdateResult result = coleccion.updateOne(filtro, actualizacion);
-
             return result.getModifiedCount() > 0;
-
         } catch (MongoException e) {
-            throw new DAOActualizarEmpleadoException("Error al actualizar sueldo del empleado con ID " + empleadoId + ": " + e.getMessage(), e);
+            // Podrías lanzar DAOActualizarSueldoException si la tienes y es específica
+            throw new DAOActualizarEmpleadoException("Error al actualizar sueldo del empleado con ID " + empleadoIdString + ": " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
@@ -279,88 +267,78 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         }
     }
 
-    // actualiza el saldo de todos los empleados activos con ese cargo, retorna el numero de empleados actualizados
     @Override
-    public long actualizarSueldoPorCargo(Cargo cargo, double nuevoSueldo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException {
-        MongoClient clienteMongo = null;
+    public long actualizarSueldoPorCargo(Cargo cargo, Double nuevoSueldo) throws DAOActualizarEmpleadoException, DAOValidacionEmpleadoException {
         if (cargo == null) {
             throw new DAOValidacionEmpleadoException("El cargo no puede ser nulo para actualizar sueldos masivamente.");
         }
+        MongoClient clienteMongo = null;
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
             Bson filtro = Filters.and(
                     Filters.eq("cargo", cargo.name()),
-                    Filters.eq("activo", true) // Solo actualizar empleados activos
+                    Filters.eq("activo", true)
             );
             Bson actualizacion = Updates.set("sueldo", nuevoSueldo);
             UpdateResult result = coleccion.updateMany(filtro, actualizacion);
-
             return result.getModifiedCount();
-
         } catch (MongoException e) {
+            // Podrías lanzar DAOActualizarSueldoException si la tienes
             throw new DAOActualizarEmpleadoException("Error al actualizar sueldos por cargo '" + cargo.name() + "': " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
             }
-        } 
-   }
+        }
+    }
 
-    public boolean existeEmpleadoConEseCorreo(String correoE) throws DAOObtenerEmpleadoException {
-
+    @Override
+    public boolean existeEmpleadoConEseCorreo(String correoE) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException {
+        if (correoE == null || correoE.trim().isEmpty()) {
+            throw new DAOValidacionEmpleadoException("El correo para verificar existencia no puede ser nulo o vacío.");
+        }
         MongoClient clienteMongo = null;
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
             Bson filtro = Filters.eq("correoE", correoE);
-
-            Empleado empleado = coleccion.find(filtro).first();
-
-            if (empleado != null) {
-                return true;
-            } else {
-                return false;
-            }
+            return coleccion.countDocuments(filtro) > 0; // Más eficiente que traer el documento
         } catch (MongoException e) {
-            throw new DAOObtenerEmpleadoException("Error al ver la existencia de un empleado por correo ");
+            throw new DAOObtenerEmpleadoException("Error al verificar existencia de empleado por correo: " + e.getMessage(), e);
         } finally {
             if (clienteMongo != null) {
                 mongoConexion.cerrarConexion(clienteMongo);
             }
         }
-
     }
-    
+
     @Override
-    public Empleado consultarPorCorreoActivoExcluyendoId(String correoE, ObjectId excluirEmpleadoId) throws DAOObtenerEmpleadoException {
-    MongoClient clienteMongo = null;
-    if (correoE == null || correoE.trim().isEmpty() || excluirEmpleadoId == null) {
-       
-        return null;
-    }
-    try {
-        clienteMongo = mongoConexion.crearConexion();
-        MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-        MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
-
-        Bson filtro = Filters.and(
-                Filters.eq("correoE", correoE.trim()),
-                Filters.eq("activo", true),
-                Filters.ne("_id", excluirEmpleadoId) // ne = Not Equal (no igual a este ID)
-        );
-        return coleccion.find(filtro).first();
-    } catch (MongoException e) {
-        throw new DAOObtenerEmpleadoException("Error al consultar empleado por correoE '" + correoE + "' excluyendo ID " + excluirEmpleadoId + ": " + e.getMessage(), e);
-    } finally {
-        if (clienteMongo != null) {
-            mongoConexion.cerrarConexion(clienteMongo);
+    public Empleado consultarPorCorreoActivoExcluyendoId(String correoE, String excluirEmpleadoIdString) throws DAOObtenerEmpleadoException, DAOValidacionEmpleadoException {
+        if (correoE == null || correoE.trim().isEmpty()) {
+            throw new DAOValidacionEmpleadoException("El correo para consultar no puede ser nulo o vacío.");
+        }
+        ObjectId excluirEmpleadoId = convertirAObjectId(excluirEmpleadoIdString, "consultar correo excluyendo ID");
+        MongoClient clienteMongo = null;
+        try {
+            clienteMongo = mongoConexion.crearConexion();
+            MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            Bson filtro = Filters.and(
+                    Filters.eq("correoE", correoE.trim()),
+                    Filters.eq("activo", true),
+                    Filters.ne("_id", excluirEmpleadoId)
+            );
+            return coleccion.find(filtro).first();
+        } catch (MongoException e) {
+            throw new DAOObtenerEmpleadoException("Error al consultar empleado por correoE '" + correoE + "' excluyendo ID " + excluirEmpleadoIdString + ": " + e.getMessage(), e);
+        } finally {
+            if (clienteMongo != null) {
+                mongoConexion.cerrarConexion(clienteMongo);
+            }
         }
     }
-}
 
 }

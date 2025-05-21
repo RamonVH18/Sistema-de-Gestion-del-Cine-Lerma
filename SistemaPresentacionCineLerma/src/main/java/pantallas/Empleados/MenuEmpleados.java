@@ -128,6 +128,7 @@ public class MenuEmpleados extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         
+        this.dispose();
        control.mostrarMenuAdministrador(this);
     }//GEN-LAST:event_btnSalirActionPerformed
 

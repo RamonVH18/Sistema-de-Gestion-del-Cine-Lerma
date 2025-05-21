@@ -214,14 +214,13 @@ public class DialogActualizarCargoEmpleado extends javax.swing.JDialog {
            
                 // Llamar al metodo de Control
                 boolean exito = control.controlActualizarCargoEmpleado(this.empleadoIdActualizar, nuevoCargoSeleccionado);
-
-            
         }
+        
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
        
-        control.mostrarFrameSueldoOpciones(null);
+        
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
