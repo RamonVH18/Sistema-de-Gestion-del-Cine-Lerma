@@ -6,7 +6,6 @@ package pantallas.Funciones;
 
 import DTOs.EmpleadoDTO;
 import DTOs.FuncionDTO;
-import GestionFunciones.IManejoFunciones;
 import control.ControlDeNavegacion;
 import control.IControl;
 import java.awt.BorderLayout;
@@ -23,16 +22,38 @@ import javax.swing.table.JTableHeader;
 import utilitades.ModeladoTablas;
 
 /**
+ * Ventana grafica para consultar y gestionar las funciones de una pelicula
+ * especifica. Permite visualizar las funciones existentes, programar nuevas,
+ * eliminar funciones seleccionadas y regresar a la pantalla anterior. Los datos
+ * se muestran en una tabla con detalles como sala, horarios, precios y empleado
+ * asignado.
  *
  * @author Abraham Coronel Bringas
  */
 public class ConsultarFunciones extends javax.swing.JFrame {
 
+    /**
+     * Tabla que muestra la lista de funciones de la pelicula.
+     */
     private JTable tabla;
 
+    /**
+     * Nombre de la pelicula cuyas funciones se estan consultando.
+     */
     private String nombrePelicula;
+
+    /**
+     * Controlador para gestionar la navegacion y logica de la aplicacion.
+     */
     IControl control = ControlDeNavegacion.getInstancia();
 
+    /**
+     * Constructor que inicializa la ventana con las funciones de una pelicula
+     * especifica.
+     *
+     * @param nombrePelicula Nombre de la película a consultar. No puede ser
+     * nulo o vacio.
+     */
     public ConsultarFunciones(String nombrePelicula) {
         initComponents();
         this.nombrePelicula = nombrePelicula;
@@ -40,6 +61,13 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         cargarTablaFunciones();
     }
 
+    /**
+     * Carga los datos de las funciones en la tabla. Obtiene la lista de
+     * funciones desde el controlador y formatea los datos para su
+     * visualizacion. Incluye manejo de errores para casos de fallo en la carga
+     * de datos.
+     *
+     */
     public void cargarTablaFunciones() {
         try {
             List<FuncionDTO> funciones = control.buscarFuncionesPorPelicula(nombrePelicula);
@@ -111,6 +139,12 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Elimina la función seleccionada en la tabla después de confirmacion del
+     * usuario. Realiza una validacion previa para asegurar que haya una fila
+     * seleccionada. Muestra mensajes de exito/error segun el resultado de la
+     * operacion.
+     */
     private void eliminarFuncionSeleccionada() {
         int filaSeleccionada = tabla.getSelectedRow();
 
@@ -284,15 +318,30 @@ public class ConsultarFunciones extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Accion del boton "Programar función". Navega a la pantalla de
+     * programacion de nuevas funciones.
+     *
+     */
     private void btnProgramarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProgramarActionPerformed
         control.mostrarProgramarFuncion(this, nombrePelicula);
     }//GEN-LAST:event_btnProgramarActionPerformed
 
+    /**
+     * Accion del boton "Volver". Cierra la ventana actual y regresa a la
+     * pantalla de seleccion de películas.
+     *
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         control.mostrarSeleccionarPelicula();
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    /**
+     * Accion del botón "Eliminar funcion". Ejecuta la logica para eliminar la
+     * funcion seleccionada.
+     *
+     */
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         eliminarFuncionSeleccionada();
     }//GEN-LAST:event_btnEliminarActionPerformed

@@ -13,29 +13,61 @@ import control.IControl;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import utilitades.ModeladoTablas;
 
 /**
+ * Ventana grafica para programar nuevas funciones de una película especifica.
+ * Permite seleccionar sala, fecha y hora, precio del boleto y asignar empleados
+ * opcionalmente. Incluye diálogos interactivos para buscar salas disponibles y
+ * empleados activos. Valida los datos ingresados antes de registrar la funcion
+ * en el sistema.
  *
  * @author Abraham Coronel Bringas
  */
 public class ProgramarFuncion extends javax.swing.JFrame {
 
+    /**
+     * Controlador para gestionar la navegacion y logica de la aplicacion.
+     */
     IControl control = ControlDeNavegacion.getInstancia();
+
+    /**
+     * Referencia a la ventana anterior (ConsultarFunciones) para actualizar
+     * datos despues del registro.
+     */
     private ConsultarFunciones frameAnterior;
+    /**
+     * Nombre de la película asociada a la funcion que se esta programando.
+     */
     private String nombrePelicula;
+    /**
+     * ID del empleado seleccionado para asignar a la funcion.
+     */
     private String idEmpleadoSeleccionado;
 
+    /**
+     * Constructor que inicializa la ventana con la pelicula seleccionada y la
+     * ventana anterior.
+     *
+     * @param frameAnterior Ventana de consulta de funciones para actualizar
+     * datos post-registro.
+     * @param nombrePelicula Nombre de la pelicula a la que se asociará la
+     * funcion. No puede ser nulo.
+     */
     public ProgramarFuncion(ConsultarFunciones frameAnterior, String nombrePelicula) {
         this.frameAnterior = frameAnterior;
         this.nombrePelicula = nombrePelicula;
         initComponents();
     }
 
+    /**
+     * Muestra un dialogo modal con la lista de salas disponibles. Permite
+     * seleccionar una sala haciendo clic en la tabla. Si no hay salas, muestra
+     * un mensaje de error.
+     */
     private void mostrarDialogoSalas() {
         List<SalaViejaDTO> salas = control.consultarSalas("", true);
 
@@ -76,6 +108,11 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Muestra un diálogo modal con la lista de empleados activos. Al
+     * seleccionar un empleado, guarda su ID y muestra su nombre en el campo
+     * correspondiente. Si no hay empleados, muestra un mensaje de error.
+     */
     private void mostrarDialogoEmpleados() {
         List<EmpleadoDTO> empleados = control.consultarTodosLosEmpleadosActivos();
 
@@ -124,6 +161,12 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Valida que los campos obligatorios estén completos y tengan formato
+     * correcto. Campos obligatorios: sala, fecha/hora y precio.
+     *
+     * @return true si todos los campos son validos, false en caso contrario.
+     */
     private boolean validarCampos() {
         if (salaSeleccionada.getText().isEmpty()
                 || FechaHoraFuncion.getDateTimeStrict() == null
@@ -143,6 +186,14 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         return true;
     }
 
+    /**
+     * Registra la funcion en el sistema después de validar los campos. Crea un
+     * DTO con los datos ingresados, asigna empleado (si existe), y genera los
+     * asientos asociados a la funcion. Muestra mensajes de exito/error y
+     * actualiza la ventana anterior al completarse.
+     *
+     * @throws NumberFormatException Si el precio no es un numero valido.
+     */
     private void registrarFuncion() {
         if (!validarCampos()) {
             return;
@@ -163,7 +214,7 @@ public class ProgramarFuncion extends javax.swing.JFrame {
             );
 
             if (idEmpleado != null) {
-                funcionDTO.setIdEmpleado(idEmpleado); 
+                funcionDTO.setIdEmpleado(idEmpleado);
             }
 
             FuncionDTO funcionRegistrada = control.registrarFuncion(funcionDTO);
@@ -370,10 +421,20 @@ public class ProgramarFuncion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Accion del botón "Confirmar". Ejecuta el registro de la funcion.
+     *
+     * @param evt Evento de accion del boton.
+     */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         registrarFuncion();
     }//GEN-LAST:event_btnConfirmarActionPerformed
-
+    /**
+     * Accion del boton "Volver". Cierra esta ventana y reactiva la ventana
+     * anterior.
+     *
+     * @param evt Evento de accion del boton.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         if (frameAnterior != null) {
             frameAnterior.setVisible(true);
