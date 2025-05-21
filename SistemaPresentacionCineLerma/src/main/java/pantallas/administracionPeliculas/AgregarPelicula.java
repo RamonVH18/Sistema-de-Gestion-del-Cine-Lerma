@@ -7,9 +7,6 @@ package pantallas.administracionPeliculas;
 import DTOs.PeliculaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
-import entidades.Pelicula;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -17,13 +14,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -82,7 +76,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
 
         jlabelImgPromocional.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelImgPromocional.setText("Imágen promocional");
-        getContentPane().add(jlabelImgPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, -1, -1));
+        getContentPane().add(jlabelImgPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, -1, -1));
 
         jPanelImgPromocional.setMaximumSize(new java.awt.Dimension(160, 160));
         jPanelImgPromocional.setMinimumSize(new java.awt.Dimension(160, 160));
@@ -96,10 +90,10 @@ public class AgregarPelicula extends javax.swing.JFrame {
         );
         jPanelImgPromocionalLayout.setVerticalGroup(
             jPanelImgPromocionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 160, Short.MAX_VALUE)
+            .addGap(0, 200, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanelImgPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 120, -1, -1));
+        getContentPane().add(jPanelImgPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, -1, 200));
 
         btnSubirImagen.setBackground(new java.awt.Color(162, 132, 94));
         btnSubirImagen.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -110,7 +104,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
                 btnSubirImagenActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, 160, -1));
+        getContentPane().add(btnSubirImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 320, 160, -1));
 
         jlabelTituloPelicula.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 18)); // NOI18N
         jlabelTituloPelicula.setText("Título");
@@ -221,9 +215,9 @@ public class AgregarPelicula extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void agregarPelicula() {
-        String titulo = jTextFieldTitulo.getText();
-        String sinopsis = jTextFieldSinopsis.getText();
-        String duracionStr = jTextFieldDuracion.getText();
+        String titulo = jTextFieldTitulo.getText().trim();
+        String sinopsis = jTextFieldSinopsis.getText().trim();
+        String duracionStr = jTextFieldDuracion.getText().trim();
         String genero = (String) jComboBoxGenero.getSelectedItem();
         String clasificacion = (String) jComboBoxClasificacion.getSelectedItem();
 
@@ -246,7 +240,6 @@ public class AgregarPelicula extends javax.swing.JFrame {
             control.mostrarMenuAdministrarPeliculas(this);
             dispose();
         }
-
     }
 
     private void mostrarImagenSeleccionada(BufferedImage imagen) {

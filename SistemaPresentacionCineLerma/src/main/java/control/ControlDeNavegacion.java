@@ -22,6 +22,7 @@ import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import DTOs.TarjetaDTO;
 import DTOs.UsuarioDTO;
+import Excepciones.ActualizarPeliculaException;
 import Excepciones.ActualizarUsuarioException;
 import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
@@ -766,6 +767,7 @@ public class ControlDeNavegacion implements IControl {
             frameAnterior.dispose();
         });
     }
+
     @Override
     public List<EstadisticaSalaDTO> consultarEstadisticasSala() {
         try {
@@ -933,7 +935,7 @@ public class ControlDeNavegacion implements IControl {
     @Override
     public PeliculaDTO encontrarPelicula(String nombrePelicula) {
         try {
-            return gestionPeliculas.buscarPelicula(nombrePelicula);
+            return gestionPeliculas.buscarPeliculaPorTitulo(nombrePelicula);
         } catch (MostrarPeliculasException e) {
             JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
             return null;
@@ -1223,8 +1225,13 @@ public class ControlDeNavegacion implements IControl {
     }
 
     @Override
-    public PeliculaDTO editarPelicula(PeliculaDTO peliculaDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public PeliculaDTO actualizarPelicula(PeliculaDTO peliculaDTO) {
+        try {
+            return gestionPeliculas.actualizarPelicula(peliculaDTO);
+        } catch (ActualizarPeliculaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     @Override
@@ -1264,6 +1271,16 @@ public class ControlDeNavegacion implements IControl {
         } catch (ObtenerPeliculasFiltradasException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
             return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public PeliculaDTO buscarPeliculaPorId(String idPelicula) {
+        try {
+            return gestionPeliculas.buscarPeliculaPorId(idPelicula);
+        } catch (MostrarPeliculasException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+            return null;
         }
     }
 

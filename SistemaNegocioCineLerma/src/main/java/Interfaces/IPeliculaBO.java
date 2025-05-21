@@ -26,9 +26,9 @@ public interface IPeliculaBO {
     
     public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws MostrarPeliculasFiltradasException;
     
-    public PeliculaDTO buscarPelicula(String titulo) throws PeliculaBusquedaException;
+    public PeliculaDTO buscarPeliculaPorTitulo(String titulo) throws PeliculaBusquedaException;
+    
+    public PeliculaDTO buscarPeliculaPorId(String idPelicula) throws PeliculaBusquedaException;
     
     public List<PeliculaDTO> mostrarPeliculasActivasOInactivas(boolean activo) throws PeliculasActivasInactivasException;
-    
-    public List<PeliculaDTO> mostrarTodasLasPeliculas() throws PeliculasMostrarTodasException;
 }

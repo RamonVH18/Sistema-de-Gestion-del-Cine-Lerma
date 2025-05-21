@@ -20,7 +20,9 @@ public interface IManejoPeliculas {
 
     public boolean eliminarPelicula(PeliculaDTO peliculaDTO) throws EliminarPeliculaException;
     
-    public PeliculaDTO buscarPelicula(String nombrePelicula) throws MostrarPeliculasException;
+    public PeliculaDTO buscarPeliculaPorTitulo(String nombrePelicula) throws MostrarPeliculasException;
+    
+    public PeliculaDTO buscarPeliculaPorId(String idPelicula) throws MostrarPeliculasException;
 
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO) throws DarAltaPeliculaException;
 

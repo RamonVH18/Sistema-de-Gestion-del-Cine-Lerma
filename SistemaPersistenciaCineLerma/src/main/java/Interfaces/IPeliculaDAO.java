@@ -8,6 +8,7 @@ import Excepciones.PersistenciaException;
 import Excepciones.peliculas.*;
 import entidades.Pelicula;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -20,16 +21,16 @@ public interface IPeliculaDAO {
     public Pelicula actualizarPelicula(Pelicula pelicula) throws ActualizarPeliculaException;
 
     public Boolean eliminarPelicula(Pelicula pelicula) throws EliminarPeliculaException;
-    
+
     public Boolean darAltaPelicula(Pelicula pelicula) throws DarAltaPeliculaException;
-    
+
     public Boolean darBajaPelicula(Pelicula pelicula) throws DarBajaPeliculaException;
 
-    public Pelicula buscarPelicula(String titulo) throws BuscarPeliculaException;
+    public Pelicula buscarPeliculaPorTitulo(String titulo) throws BuscarPeliculaException;
 
-    public List<Pelicula> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws MostrarPeliculasException;
-    
+    public Pelicula buscarPeliculaPorId(String idPelicula) throws BuscarPeliculaException;
+
     public List<Pelicula> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException;
 
-    public List<Pelicula> mostrarTodasLasPeliculas() throws MostrarPeliculasException;
+    public List<Pelicula> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws MostrarPeliculasException;
 }

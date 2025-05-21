@@ -85,7 +85,7 @@ public class PeliculaBO implements IPeliculaBO {
             Pelicula peliculaActualizada = peliculaDAO.actualizarPelicula(peliculaActualizar);
             return peliculaMapper.toPeliculaDTO(peliculaActualizada);
         } catch (ActualizarPeliculaException e) {
-            throw new PeliculaActualizacionException("Error al actualizar la película.");
+            throw new PeliculaActualizacionException("Error al actualizar la película." + e.getMessage());
         }
     }
 
@@ -152,9 +152,26 @@ public class PeliculaBO implements IPeliculaBO {
      * @throws PeliculaBusquedaException si ocurre un error durante la búsqueda.
      */
     @Override
-    public PeliculaDTO buscarPelicula(String titulo) throws PeliculaBusquedaException {
+    public PeliculaDTO buscarPeliculaPorTitulo(String titulo) throws PeliculaBusquedaException {
         try {
-            Pelicula peliculaBuscar = peliculaDAO.buscarPelicula(titulo);
+            Pelicula peliculaBuscar = peliculaDAO.buscarPeliculaPorTitulo(titulo);
+            return peliculaMapper.toPeliculaDTO(peliculaBuscar);
+        } catch (BuscarPeliculaException e) {
+            throw new PeliculaBusquedaException("Error al buscar la película.");
+        }
+    }
+    
+    /**
+     * Busca una película por su id.
+     *
+     * @param idPelicula Id de la película a buscar.
+     * @return PelículaDTO encontrada.
+     * @throws PeliculaBusquedaException si ocurre un error durante la búsqueda.
+     */
+    @Override
+    public PeliculaDTO buscarPeliculaPorId(String idPelicula) throws PeliculaBusquedaException {
+        try {
+            Pelicula peliculaBuscar = peliculaDAO.buscarPeliculaPorId(idPelicula);
             return peliculaMapper.toPeliculaDTO(peliculaBuscar);
         } catch (BuscarPeliculaException e) {
             throw new PeliculaBusquedaException("Error al buscar la película.");
@@ -198,29 +215,6 @@ public class PeliculaBO implements IPeliculaBO {
             return peliculasDTO;
         } catch (MostrarPeliculasException e) {
             throw new PeliculasActivasInactivasException("Error al mostrar películas activas o inactivas.");
-        }
-    }
-
-    /**
-     * Muestra todas las películas existentes en la base de datos sin importar
-     * si son activas o inactivas.
-     *
-     * @return Lista de todos los objetos PeliculaDTO.
-     * @throws PeliculasMostrarTodasException si ocurre un error al obtener la
-     * información.
-     */
-    @Override
-    public List<PeliculaDTO> mostrarTodasLasPeliculas() throws PeliculasMostrarTodasException {
-        try {
-            List<PeliculaDTO> peliculasDTO = new ArrayList<>();
-            List<Pelicula> peliculasEntidad = peliculaDAO.mostrarTodasLasPeliculas();
-            for (Pelicula pelicula : peliculasEntidad) {
-                peliculasDTO.add(peliculaMapper.toPeliculaDTO(pelicula));
-            }
-
-            return peliculasDTO;
-        } catch (MostrarPeliculasException e) {
-            throw new PeliculasMostrarTodasException("Error al mostrar todas las películas.");
         }
     }
 }

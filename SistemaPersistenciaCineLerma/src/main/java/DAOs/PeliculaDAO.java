@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 /**
  * Clase DAO para manejar operaciones relacionadas con la colección de películas
@@ -102,8 +103,8 @@ public class PeliculaDAO implements IPeliculaDAO {
             MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
 
-            // Buscar la película por título
-            Bson filtro = Filters.eq("titulo", pelicula.getTitulo());
+            // Buscar la película por id
+            Bson filtro = Filters.eq("_id", pelicula.getIdPelicula());
             Pelicula peliculaActualizar = coleccionPeliculas.find(filtro).first();
 
             // Validar que existe
@@ -262,7 +263,7 @@ public class PeliculaDAO implements IPeliculaDAO {
      * un error
      */
     @Override
-    public Pelicula buscarPelicula(String titulo) throws BuscarPeliculaException {
+    public Pelicula buscarPeliculaPorTitulo(String titulo) throws BuscarPeliculaException {
         MongoClient clienteMongo = null;
         try {
             // Establecer conexión
@@ -275,6 +276,64 @@ public class PeliculaDAO implements IPeliculaDAO {
             return coleccionPeliculas.find(filtro).first();
         } catch (MongoException e) {
             throw new BuscarPeliculaException("Error al buscar la película.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
+    }
+
+    /**
+     * Busca una película por su Id.
+     *
+     * @param idPelicula Id de la película a buscar
+     * @return Película encontrada
+     * @throws BuscarPeliculaException si no se encuentra la película o ocurre
+     * un error
+     */
+    @Override
+    public Pelicula buscarPeliculaPorId(String idPelicula) throws BuscarPeliculaException {
+        MongoClient clienteMongo = null;
+        try {
+            // Establecer conexión
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
+
+            // Buscar por id
+            Bson filtro = Filters.eq("_id", new ObjectId(idPelicula));
+            return coleccionPeliculas.find(filtro).first();
+        } catch (MongoException e) {
+            throw new BuscarPeliculaException("Error al buscar la película.");
+        } finally {
+            conexion.cerrarConexion(clienteMongo);
+        }
+    }
+
+    /**
+     * Obtiene una lista de películas activas o inactivas dependiendo del
+     * parametro recibido
+     *
+     * @param activo true para filtrar por peliculas activas, false para filtrar
+     * por inactivas
+     * @return Lista de películas activas/inactivas.
+     * @throws MostrarPeliculasException si ocurre un error al obtener las
+     * películas.
+     */
+    @Override
+    public List<Pelicula> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException {
+        MongoClient clienteMongo = null;
+        try {
+            // Se establece la conexión con la base de datos y se accede a la colección
+            clienteMongo = conexion.crearConexion();
+            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
+            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
+
+            // Se filtran las películas dependiendo el filtro recibido
+            Bson filtro = Filters.eq("activo", activo);
+            List<Pelicula> peliculasFiltradas = coleccionPeliculas.find(filtro).into(new ArrayList<>());
+
+            return peliculasFiltradas;
+        } catch (MongoException e) {
+            throw new MostrarPeliculasException("Error al mostrar las películas.");
         } finally {
             conexion.cerrarConexion(clienteMongo);
         }
@@ -341,62 +400,4 @@ public class PeliculaDAO implements IPeliculaDAO {
             // tiene coincidencias parciales
         }
     }
-
-    /**
-     * Obtiene una lista de películas activas o inactivas dependiendo del
-     * parametro recibido
-     *
-     * @param activo true para filtrar por peliculas activas, false para filtrar
-     * por inactivas
-     * @return Lista de películas activas/inactivas.
-     * @throws MostrarPeliculasException si ocurre un error al obtener las
-     * películas.
-     */
-    @Override
-    public List<Pelicula> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException {
-        MongoClient clienteMongo = null;
-        try {
-            // Se establece la conexión con la base de datos y se accede a la colección
-            clienteMongo = conexion.crearConexion();
-            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
-
-            // Se filtran las películas dependiendo el filtro recibido
-            Bson filtro = Filters.eq("activo", activo);
-            List<Pelicula> peliculasFiltradas = coleccionPeliculas.find(filtro).into(new ArrayList<>());
-
-            return peliculasFiltradas;
-        } catch (MongoException e) {
-            throw new MostrarPeliculasException("Error al mostrar las películas.");
-        } finally {
-            conexion.cerrarConexion(clienteMongo);
-        }
-    }
-
-    /**
-     * Obtiene una lista con todas las películas en la base de datos, sin
-     * importar si están activas o inactivas.
-     *
-     * @return Lista de todas las películas.
-     * @throws MostrarPeliculasException si ocurre un error al obtener las
-     * películas.
-     */
-    @Override
-    public List<Pelicula> mostrarTodasLasPeliculas() throws MostrarPeliculasException {
-        MongoClient clienteMongo = null;
-        try {
-            // Se establece la conexión con la base de datos y se accede a la colección
-            clienteMongo = conexion.crearConexion();
-            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
-
-            // Se obtienen todas las películas sin aplicar ningún filtro
-            return coleccionPeliculas.find().into(new ArrayList<>());
-        } catch (MongoException e) {
-            throw new MostrarPeliculasException("Error al mostrar todas las películas.");
-        } finally {
-            conexion.cerrarConexion(clienteMongo);
-        }
-    }
-
 }

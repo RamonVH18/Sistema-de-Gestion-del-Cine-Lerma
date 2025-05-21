@@ -54,6 +54,26 @@ public class Pelicula {
     public void setIdPelicula(ObjectId idPelicula) {
         this.idPelicula = idPelicula;
     }
+    
+    /**
+     * @return ID de la función en formato String (útil para APIs y UI).
+     */
+    public String getIdPeliculaString() {
+        return idPelicula.toString();
+    }
+
+    /**
+     * Convierte un String en ObjectId para asignar el ID.
+     *
+     * @param idImportado ID en formato String (ej: "507f1f77bcf86cd799439011").
+     */
+    public void setIdPeliculaString(String idImportado) {
+        if (idImportado != null && !idImportado.isEmpty()) {
+            this.idPelicula = new ObjectId(idImportado);
+        } else {
+            this.idPelicula = null;
+        }
+    }
 
     public byte[] getImagen() {
         return imagen;

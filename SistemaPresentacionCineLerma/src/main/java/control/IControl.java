@@ -215,9 +215,11 @@ public interface IControl {
     // -------------------------------METODOS DE PELICULAS--------------------------------
     public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO);
 
-    public PeliculaDTO editarPelicula(PeliculaDTO peliculaDTO);
+    public PeliculaDTO actualizarPelicula(PeliculaDTO peliculaDTO);
 
     public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo);
+    
+    public PeliculaDTO buscarPeliculaPorId(String idPelicula);
 
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO);
 

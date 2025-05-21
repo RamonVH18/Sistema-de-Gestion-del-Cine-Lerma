@@ -30,6 +30,7 @@ import Interfaces.IPeliculaBO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -63,7 +64,7 @@ public class ManejoPeliculas implements IManejoPeliculas {
     public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO) throws RegistrarPeliculaException {
         try {
             verificarCamposPelicula(peliculaDTO);
-            PeliculaDTO peliculaExistente = peliculaBO.buscarPelicula(peliculaDTO.getTitulo());
+            PeliculaDTO peliculaExistente = peliculaBO.buscarPeliculaPorTitulo(peliculaDTO.getTitulo());
 
             if (peliculaExistente != null) {
                 throw new RegistrarPeliculaException("No es posible registrar la pelicula ya que ya existe.");
@@ -84,18 +85,30 @@ public class ManejoPeliculas implements IManejoPeliculas {
     }
 
     @Override
-    public PeliculaDTO actualizarPelicula(PeliculaDTO peliculaDTO) throws ActualizarPeliculaException {
+    public PeliculaDTO actualizarPelicula(PeliculaDTO peliculaActualizarDTO) throws ActualizarPeliculaException {
         try {
-            verificarCamposPelicula(peliculaDTO);
+            verificarCamposPelicula(peliculaActualizarDTO);
+            verificarImagenCompleta(peliculaActualizarDTO.getImagen());
 
-            PeliculaDTO peliculaExistente = peliculaBO.buscarPelicula(peliculaDTO.getTitulo());
+            PeliculaDTO peliculaExistente = peliculaBO.buscarPeliculaPorTitulo(peliculaActualizarDTO.getTitulo());
 
-            if (peliculaExistente != null) {
+            // para evitar poner el titulo exacto de otra pelicula
+            if (peliculaExistente != null && !peliculaExistente.getIdPelicula().equals(peliculaActualizarDTO.getIdPelicula())) {
                 throw new ActualizarPeliculaException("No es posible actualizar la pelicula ya que ya existe una con el mismo titulo.");
             }
 
-            return peliculaBO.actualizarPelicula(peliculaDTO);
+            if (peliculaExistente != null) {
+                if (Arrays.equals(peliculaExistente.getImagen(), peliculaActualizarDTO.getImagen()) && peliculaExistente.getTitulo().equals(peliculaActualizarDTO.getTitulo())
+                        && peliculaExistente.getGenero().equals(peliculaActualizarDTO.getGenero()) && peliculaExistente.getDuracion().equals(peliculaActualizarDTO.getDuracion())
+                        && peliculaExistente.getClasificacion().equals(peliculaActualizarDTO.getClasificacion()) && peliculaExistente.getSinopsis().equals(peliculaActualizarDTO.getSinopsis())) {
+                    throw new ActualizarPeliculaException("Para actualizar la pelicula debe modificar al menos un campo.");
+                }
+            }
+
+            return peliculaBO.actualizarPelicula(peliculaActualizarDTO);
         } catch (VerificarCamposPeliculaException e) {
+            throw new ActualizarPeliculaException("No se pudo actualizar la pelicula: " + e.getMessage());
+        } catch (VerificarImagenException e) {
             throw new ActualizarPeliculaException("No se pudo actualizar la pelicula: " + e.getMessage());
         } catch (PeliculaBusquedaException e) {
             throw new ActualizarPeliculaException("Ocurrio un error durante la verificacion de la pelicula: " + e.getMessage());
@@ -120,16 +133,28 @@ public class ManejoPeliculas implements IManejoPeliculas {
     }
 
     @Override
-    public PeliculaDTO buscarPelicula(String nombrePelicula) throws MostrarPeliculasException {
+    public PeliculaDTO buscarPeliculaPorTitulo(String nombrePelicula) throws MostrarPeliculasException {
         try {
             if (nombrePelicula == null || nombrePelicula.isBlank()) {
                 throw new MostrarPeliculasException("Debe ingresar un nombre valido para buscar la pelicula");
             }
-            return peliculaBO.buscarPelicula(nombrePelicula);
+            return peliculaBO.buscarPeliculaPorTitulo(nombrePelicula);
         } catch (PeliculaBusquedaException e) {
             throw new MostrarPeliculasException("Hubo un error al buscar la pelicula.");
         }
-
+    }
+    
+    @Override
+    public PeliculaDTO buscarPeliculaPorId(String idPelicula) throws MostrarPeliculasException {
+        try {
+            if (idPelicula == null || idPelicula.isBlank()) {
+                throw new MostrarPeliculasException("El id no puede ser nulo.");
+            }
+            
+            return peliculaBO.buscarPeliculaPorId(idPelicula);
+        } catch (PeliculaBusquedaException e) {
+            throw new MostrarPeliculasException("Hubo un error al buscar la pelicula.");
+        }
     }
 
     @Override
@@ -239,12 +264,11 @@ public class ManejoPeliculas implements IManejoPeliculas {
         verificarTamanioImagen(imagen);
         verificarFormatoImagen(imagen);
         verificarImagenValida(imagen);
-//        verificarDimensionesImagen(imagen);            
     }
 
     private void verificarTamanioImagen(byte[] imagen) throws VerificarImagenException {
         if (imagen == null) {
-            throw new VerificarImagenException("La imagen no puede ser nula.");
+            throw new VerificarImagenException("La imagen es obligatoria.");
         }
         final int MAX_SIZE = 5 * 1024 * 1024; // 5MB maximo
         if (imagen.length > MAX_SIZE) {
@@ -263,24 +287,6 @@ public class ManejoPeliculas implements IManejoPeliculas {
         }
     }
 
-//    private void verificarDimensionesImagen(byte[] imagen) throws VerificarImagenException {
-//        try {
-//            BufferedImage img = ImageIO.read(new ByteArrayInputStream(imagen));
-//            if (img == null) {
-//                throw new VerificarImagenException("La imagen proporcionada no es válida.");
-//            }
-//            int ancho = img.getWidth();
-//            int alto = img.getHeight();
-//            final int MAX_ANCHO = 1920;
-//            final int MAX_ALTO = 1080;
-//
-//            if (ancho > MAX_ANCHO || alto > MAX_ALTO) {
-//                throw new VerificarImagenException("Las dimensiones de la imagen no deben superar " + MAX_ANCHO + "x" + MAX_ALTO + " píxeles.");
-//            }
-//        } catch (Exception e) {
-//            throw new VerificarImagenException("Error al verificar dimensiones de la imagen: " + e.getMessage());
-//        }
-//    }
     private void verificarFormatoImagen(byte[] imagen) throws VerificarImagenException {
         try (ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(imagen))) {
             Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);

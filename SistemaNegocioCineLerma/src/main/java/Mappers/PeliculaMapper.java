@@ -22,6 +22,7 @@ public class PeliculaMapper implements IPeliculaMapper {
 
         PeliculaDTO dto = new PeliculaDTO();
 
+        dto.setIdPelicula(pelicula.getIdPeliculaString());
         dto.setImagen(pelicula.getImagen());
         dto.setTitulo(pelicula.getTitulo());
         dto.setGenero(pelicula.getGenero());
@@ -40,7 +41,8 @@ public class PeliculaMapper implements IPeliculaMapper {
         }
 
         Pelicula pelicula = new Pelicula();
-
+        
+        pelicula.setIdPeliculaString(dto.getIdPelicula());
         pelicula.setImagen(dto.getImagen());
         pelicula.setTitulo(dto.getTitulo());
         pelicula.setGenero(dto.getGenero());

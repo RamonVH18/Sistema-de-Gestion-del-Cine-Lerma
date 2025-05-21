@@ -83,7 +83,7 @@ public class FuncionBO implements IFuncionBO {
         try {
             Funcion funcionRegistrar = funcionMapper.toFuncionEntidad(funcionDTO);
 
-            Pelicula pelicula = peliculaDAO.buscarPelicula(funcionDTO.getNombrePelicula());
+            Pelicula pelicula = peliculaDAO.buscarPeliculaPorTitulo(funcionDTO.getNombrePelicula());
             Sala sala = salaDAO.buscarSala(funcionDTO.getNumSala());
 
             funcionRegistrar.setPelicula(pelicula);

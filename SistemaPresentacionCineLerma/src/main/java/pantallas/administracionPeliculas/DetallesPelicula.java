@@ -190,7 +190,8 @@ public class DetallesPelicula extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPeliculaActionPerformed
-
+        control.mostrarEditarPelicula(peliculaDTO);
+        dispose();
     }//GEN-LAST:event_btnEditarPeliculaActionPerformed
 
     private void btnDarBajaOAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarBajaOAltaActionPerformed
@@ -263,7 +264,7 @@ public class DetallesPelicula extends javax.swing.JFrame {
         int respuesta = JOptionPane.showConfirmDialog(
                 this,
                 "¿Estás seguro de que deseas dar de alta la película '" + peliculaDTO.getTitulo() + "'?",
-                "Confirmar baja",
+                "Confirmar alta",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
         );
@@ -272,6 +273,10 @@ public class DetallesPelicula extends javax.swing.JFrame {
             boolean exito = control.darAltaPelicula(peliculaDTO);
             if (exito) {
                 JOptionPane.showMessageDialog(this, "La película fue dada de alta correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                PeliculaDTO peliculaActualizada = control.buscarPeliculaPorId(peliculaDTO.getIdPelicula());
+                this.peliculaDTO = peliculaActualizada;
+                cargarDetallesPelicula(peliculaActualizada);
             }
         }
     }
@@ -289,6 +294,10 @@ public class DetallesPelicula extends javax.swing.JFrame {
             boolean exito = control.darBajaPelicula(peliculaDTO);
             if (exito) {
                 JOptionPane.showMessageDialog(this, "La película fue dada de baja correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                PeliculaDTO peliculaActualizada = control.buscarPeliculaPorId(peliculaDTO.getIdPelicula());
+                this.peliculaDTO = peliculaActualizada;
+                cargarDetallesPelicula(peliculaActualizada);
             }
         }
     }
@@ -306,6 +315,8 @@ public class DetallesPelicula extends javax.swing.JFrame {
             boolean exito = control.eliminarPelicula(peliculaDTO);
             if (exito) {
                 JOptionPane.showMessageDialog(this, "Película eliminada correctamente.", "Eliminación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                control.mostrarMenuAdministrarPeliculas(this);
+                dispose();
             }
         }
     }
