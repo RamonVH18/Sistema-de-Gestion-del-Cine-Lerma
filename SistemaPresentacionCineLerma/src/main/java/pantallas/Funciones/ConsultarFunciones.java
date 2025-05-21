@@ -289,6 +289,7 @@ public class ConsultarFunciones extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProgramarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        control.mostrarSeleccionarPelicula();
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
