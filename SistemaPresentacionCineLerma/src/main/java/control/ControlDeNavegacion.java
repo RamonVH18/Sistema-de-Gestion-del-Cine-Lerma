@@ -127,7 +127,6 @@ import pantallas.Salas.ModificarSala;
 import pantallas.Salas.SeleccionarSala;
 import pantallas.Usuarios.ConsultarUsuarios;
 import pantallas.Usuarios.EditarUsuario;
-import pantallas.Usuarios.HistorialCliente;
 import pantallas.Usuarios.RegistrarUsuario;
 import pantallas.administracionPeliculas.AgregarPelicula;
 import pantallas.administracionPeliculas.DetallesPelicula;
@@ -1005,16 +1004,6 @@ public class ControlDeNavegacion implements IControl {
             RegistrarUsuario pantallaRegistrarUsuario = new RegistrarUsuario();
             pantallaRegistrarUsuario.setLocationRelativeTo(null);
             pantallaRegistrarUsuario.setVisible(true);
-            frameAnterior.dispose();
-        });
-    }
-
-    @Override
-    public void mostrarHistorialCliente(JFrame frameAnterior, ClienteDTO cliente) {
-        SwingUtilities.invokeLater(() -> {
-            HistorialCliente pantallaHistorialCliente = new HistorialCliente(frameAnterior, cliente);
-            pantallaHistorialCliente.setLocationRelativeTo(null);
-            pantallaHistorialCliente.setVisible(true);
             frameAnterior.dispose();
         });
     }

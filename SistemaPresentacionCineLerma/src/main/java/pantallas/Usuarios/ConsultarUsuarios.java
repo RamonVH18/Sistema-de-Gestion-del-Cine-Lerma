@@ -76,6 +76,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         lblCalle.setVisible(false);
         lblCp.setVisible(false);
         lblDomicilio.setVisible(false);
+        
 
     }
 
@@ -104,7 +105,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         comboRol = new javax.swing.JComboBox<>();
         lblRol = new javax.swing.JLabel();
         botonEditar = new javax.swing.JButton();
-        botonHistorial = new javax.swing.JButton();
         botonDesBloquear = new javax.swing.JButton();
         panelSeleccionado = new javax.swing.JPanel();
         fieldNombre = new javax.swing.JTextField();
@@ -165,14 +165,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         botonEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonEditarActionPerformed(evt);
-            }
-        });
-
-        botonHistorial.setBackground(new java.awt.Color(162, 132, 94));
-        botonHistorial.setText("Ver Historial de Compras");
-        botonHistorial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonHistorialActionPerformed(evt);
             }
         });
 
@@ -381,9 +373,7 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
                                         .addComponent(botonDesBloquear)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(botonBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(botonHistorial, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                                        .addComponent(botonEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(58, 58, 58))))))
         );
         layout.setVerticalGroup(
@@ -431,8 +421,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
                             .addComponent(botonBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(botonHistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -531,17 +519,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         List<UsuarioDTO> listaUsuarios = control.mostrarListaUsuarios();
         cargarListaUsuarios(listaUsuarios);
     }//GEN-LAST:event_botonBloquearActionPerformed
-
-    private void botonHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHistorialActionPerformed
-        // TODO add your handling code here:
-        if (clienteEncontrado == null) {
-            JOptionPane.showMessageDialog(null, "No se selecciono ningun cliente, solo los clientes tienen historial");
-            return;
-        }
-
-        control.mostrarHistorialCliente(this, clienteEncontrado);
-
-    }//GEN-LAST:event_botonHistorialActionPerformed
 
     /**
      * @param args the command line arguments
@@ -736,7 +713,6 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
     private javax.swing.JButton botonBloquear;
     private javax.swing.JButton botonDesBloquear;
     private javax.swing.JButton botonEditar;
-    private javax.swing.JButton botonHistorial;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<EstadoUsuario> comboEstado;

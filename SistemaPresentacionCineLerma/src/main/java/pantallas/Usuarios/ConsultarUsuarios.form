@@ -103,10 +103,7 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="botonBloquear" min="-2" pref="88" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="botonHistorial" alignment="0" pref="197" max="32767" attributes="0"/>
-                                      <Component id="botonEditar" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="botonEditar" alignment="0" min="-2" pref="197" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
                           </Group>
@@ -172,8 +169,6 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="botonEditar" min="-2" pref="54" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="botonHistorial" min="-2" pref="54" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -286,17 +281,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonEditarActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="botonHistorial">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="5e" green="84" red="a2" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Ver Historial de Compras"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonHistorialActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="botonDesBloquear">

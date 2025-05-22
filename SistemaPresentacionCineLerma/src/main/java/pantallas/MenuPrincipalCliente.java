@@ -86,7 +86,6 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         btnRegresoMenu1 = new javax.swing.JButton();
         labelTitulo = new javax.swing.JLabel();
         btnCarteleraMenu = new javax.swing.JButton();
-        btnHistorialMenu = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
         btnEditarUsuario = new javax.swing.JButton();
 
@@ -121,17 +120,6 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         btnCarteleraMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCarteleraMenuActionPerformed(evt);
-            }
-        });
-
-        btnHistorialMenu.setBackground(new java.awt.Color(162, 132, 94));
-        btnHistorialMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
-        btnHistorialMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnHistorialMenu.setText("Historial de Compras");
-        btnHistorialMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnHistorialMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHistorialMenuActionPerformed(evt);
             }
         });
 
@@ -179,8 +167,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnCerrarSesion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEditarUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnHistorialMenu, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))))
+                            .addComponent(btnEditarUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -188,11 +175,9 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(labelTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(39, 39, 39)
                 .addComponent(btnCarteleraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(222, 222, 222)
-                .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(183, 183, 183)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 422, Short.MAX_VALUE)
                 .addComponent(btnEditarUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCerrarSesion)
@@ -209,12 +194,6 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
     private void btnCarteleraMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarteleraMenuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCarteleraMenuActionPerformed
-
-    private void btnHistorialMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialMenuActionPerformed
-        // TODO add your handling code here:
-        control.mostrarHistorialCliente(this, cliente);
-        dispose();
-    }//GEN-LAST:event_btnHistorialMenuActionPerformed
 
     private void btnCarteleraMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCarteleraMenuMouseClicked
         // TODO add your handling code here:
@@ -246,7 +225,6 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnCarteleraMenu;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnEditarUsuario;
-    private javax.swing.JButton btnHistorialMenu;
     private javax.swing.JButton btnRegresoMenu1;
     private javax.swing.JLabel labelTitulo;
     // End of variables declaration//GEN-END:variables
@@ -279,7 +257,6 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
 
         //Agregar cada boton al panel de botones utilizando boxLayout
         agregarBotonEnBox(btnCarteleraMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        agregarBotonEnBox(btnHistorialMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
 
         panelBotones.setVisible(true);
         panelBotones.revalidate();

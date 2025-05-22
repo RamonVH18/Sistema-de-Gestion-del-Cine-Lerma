@@ -153,8 +153,6 @@ public interface IControl {
 
     public void mostrarRegistrarUsuario(JFrame frameAnterior);
 
-    public void mostrarHistorialCliente(JFrame frameAnterior, ClienteDTO cliente);
-
     //Metodos de navegacion de Funciones
     public void mostrarConsultarFunciones(JFrame frameAnterior, String nombrePelicula);
 
