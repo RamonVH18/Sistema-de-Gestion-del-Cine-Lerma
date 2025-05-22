@@ -65,7 +65,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Container class="javax.swing.JPanel" name="jPanelImgPromocional">
+    <Container class="javax.swing.JPanel" name="jPanelImagenPromocional">
       <Properties>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[160, 160]"/>

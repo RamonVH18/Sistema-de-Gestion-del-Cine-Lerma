@@ -51,6 +51,9 @@ public class PeliculaBO implements IPeliculaBO {
     /**
      * Registra una nueva película en la base de datos.
      *
+     * Utiliza la capa DAO para recuperar la entidad desde la base de datos y
+     * luego la convierte a DTO usando el mapper correspondiente.
+     *
      * @param peliculaDTO Objeto DTO con los datos de la película a registrar.
      * @return DTO de la película registrada.
      * @throws PeliculaRegistroException si ocurre un error al registrar la
@@ -59,11 +62,8 @@ public class PeliculaBO implements IPeliculaBO {
     @Override
     public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO) throws PeliculaRegistroException {
         try {
-            // Convertimos el DTO a entidad
             Pelicula peliculaRegistrar = peliculaMapper.toPeliculaEntidad(peliculaDTO);
-            // Registramos en la base de datos
             Pelicula peliculaRegistrada = peliculaDAO.registrarPelicula(peliculaRegistrar);
-            // Convertimos de nuevo a DTO para retornarlo
             return peliculaMapper.toPeliculaDTO(peliculaRegistrada);
         } catch (RegistrarPeliculaException e) {
             throw new PeliculaRegistroException("Error al registrar la película.");
@@ -72,6 +72,9 @@ public class PeliculaBO implements IPeliculaBO {
 
     /**
      * Actualiza los datos de una película existente.
+     *
+     * Utiliza la capa DAO para recuperar la entidad desde la base de datos y
+     * luego la convierte a DTO usando el mapper correspondiente.
      *
      * @param peliculaDTO Objeto DTO con los datos actualizados de la película.
      * @return DTO de la película actualizada.
@@ -92,6 +95,9 @@ public class PeliculaBO implements IPeliculaBO {
     /**
      * Elimina una película que no tenga funciones existentes.
      *
+     * Utiliza la capa DAO para recuperar la entidad desde la base de datos y
+     * luego la convierte a DTO usando el mapper correspondiente.
+     *
      * @param peliculaDTO Película a eliminar.
      * @return true si la operación fue exitosa, false en caso contrario.
      * @throws PeliculaEliminarException si ocurre un error durante la
@@ -111,6 +117,9 @@ public class PeliculaBO implements IPeliculaBO {
     /**
      * Da de alta una película previamente dada de baja.
      *
+     * Utiliza la capa DAO para recuperar la entidad desde la base de datos y
+     * luego la convierte a DTO usando el mapper correspondiente.
+     *
      * @param peliculaDTO Película a dar de alta.
      * @return true si la operación fue exitosa.
      * @throws PeliculaDarAltaException si ocurre un error durante la operación.
@@ -128,6 +137,9 @@ public class PeliculaBO implements IPeliculaBO {
 
     /**
      * Da de baja una película activa que no tenga funciones existentes.
+     *
+     * Utiliza la capa DAO para recuperar la entidad desde la base de datos y
+     * luego la convierte a DTO usando el mapper correspondiente.
      *
      * @param peliculaDTO Película a dar de baja.
      * @return true si la operación fue exitosa.
@@ -147,6 +159,9 @@ public class PeliculaBO implements IPeliculaBO {
     /**
      * Busca una película por su título.
      *
+     * Utiliza la capa DAO para recuperar la entidad desde la base de datos y
+     * luego la convierte a DTO usando el mapper correspondiente.
+     *
      * @param titulo Título de la película a buscar.
      * @return PelículaDTO encontrada.
      * @throws PeliculaBusquedaException si ocurre un error durante la búsqueda.
@@ -160,9 +175,12 @@ public class PeliculaBO implements IPeliculaBO {
             throw new PeliculaBusquedaException("Error al buscar la película.");
         }
     }
-    
+
     /**
      * Busca una película por su id.
+     *
+     * Utiliza la capa DAO para recuperar la entidad desde la base de datos y
+     * luego la convierte a DTO usando el mapper correspondiente.
      *
      * @param idPelicula Id de la película a buscar.
      * @return PelículaDTO encontrada.
@@ -178,12 +196,33 @@ public class PeliculaBO implements IPeliculaBO {
         }
     }
 
+    /**
+     * Obtiene una lista de películas filtradas según los criterios
+     * especificados: estado (activo/inactivo), clasificación, género y título.
+     *
+     * Utiliza la capa DAO para recuperar las entidades desde la base de datos y
+     * luego las convierte a DTOs usando el mapper correspondiente.
+     *
+     * @param activo Estado de activación de la película (true para activas,
+     * false para inactivas, null para ignorar).
+     * @param clasificacion Clasificación de la película (puede ser null o estar
+     * vacio para no filtrar por clasificación).
+     * @param genero Género de la película (puede ser null o estar vacio para no
+     * filtrar por género).
+     * @param titulo Título parcial o completo de la película (puede ser null o
+     * estar vacio para no filtrar por título).
+     * @return Una lista de objetos PeliculaDTO que cumplen con los filtros
+     * proporcionados.
+     * @throws MostrarPeliculasFiltradasException Si ocurre un error durante la
+     * obtención o mapeo de los datos.
+     */
     @Override
     public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws MostrarPeliculasFiltradasException {
         try {
             List<PeliculaDTO> peliculasDTO = new ArrayList<>();
             List<Pelicula> peliculasFiltradasEntidad = peliculaDAO.mostrarPeliculasFiltradas(activo, clasificacion, genero, titulo);
 
+            // Convertimos cada entidad a DTO
             for (Pelicula pelicula : peliculasFiltradasEntidad) {
                 peliculasDTO.add(peliculaMapper.toPeliculaDTO(pelicula));
             }
@@ -197,6 +236,9 @@ public class PeliculaBO implements IPeliculaBO {
     /**
      * Muestra las películas activas o inactivas según el parámetro recibido.
      *
+     * Utiliza la capa DAO para recuperar las entidades desde la base de datos y
+     * luego las convierte a DTOs usando el mapper correspondiente.
+     *
      * @param activo true para mostrar activas, false para inactivas.
      * @return Lista de PeliculaDTO filtradas por estado.
      * @throws PeliculasActivasInactivasException si ocurre un error al obtener
@@ -207,6 +249,7 @@ public class PeliculaBO implements IPeliculaBO {
         try {
             List<PeliculaDTO> peliculasDTO = new ArrayList<>();
             List<Pelicula> peliculasEntidad = peliculaDAO.mostrarPeliculasActivasOInactivas(activo);
+
             // Convertimos cada entidad a DTO
             for (Pelicula pelicula : peliculasEntidad) {
                 peliculasDTO.add(peliculaMapper.toPeliculaDTO(pelicula));

@@ -7,30 +7,30 @@ package pantallas.administracionPeliculas;
 import DTOs.PeliculaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import utilitades.RenderizadorImagenPelicula;
 
 /**
+ * Clase que representa la pantalla de Agregar Pelicula.
+ *
+ * Accede a la clase de control de navegacion para navegar entre distintas
+ * pantallas del CU y darles funcionamiento.
  *
  * @author Daniel M
  */
 public class AgregarPelicula extends javax.swing.JFrame {
 
     private final IControl control = ControlDeNavegacion.getInstancia();
-    private byte[] imagenSeleccionada;
+    private byte[] imagenSeleccionadaBytes;
 
     /**
-     * Creates new form AdministradorPeliculas
+     * Constructor de la clase. Inicializa la ventana.
+     *
      */
     public AgregarPelicula() {
         initComponents();
@@ -48,7 +48,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jlabelTituloAgregarEditar = new javax.swing.JLabel();
         jlabelImgPromocional = new javax.swing.JLabel();
-        jPanelImgPromocional = new javax.swing.JPanel();
+        jPanelImagenPromocional = new javax.swing.JPanel();
         btnSubirImagen = new javax.swing.JButton();
         jlabelTituloPelicula = new javax.swing.JLabel();
         jTextFieldTitulo = new javax.swing.JTextField();
@@ -78,22 +78,22 @@ public class AgregarPelicula extends javax.swing.JFrame {
         jlabelImgPromocional.setText("Imágen promocional");
         getContentPane().add(jlabelImgPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, -1, -1));
 
-        jPanelImgPromocional.setMaximumSize(new java.awt.Dimension(160, 160));
-        jPanelImgPromocional.setMinimumSize(new java.awt.Dimension(160, 160));
-        jPanelImgPromocional.setPreferredSize(new java.awt.Dimension(160, 160));
+        jPanelImagenPromocional.setMaximumSize(new java.awt.Dimension(160, 160));
+        jPanelImagenPromocional.setMinimumSize(new java.awt.Dimension(160, 160));
+        jPanelImagenPromocional.setPreferredSize(new java.awt.Dimension(160, 160));
 
-        javax.swing.GroupLayout jPanelImgPromocionalLayout = new javax.swing.GroupLayout(jPanelImgPromocional);
-        jPanelImgPromocional.setLayout(jPanelImgPromocionalLayout);
-        jPanelImgPromocionalLayout.setHorizontalGroup(
-            jPanelImgPromocionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanelImagenPromocionalLayout = new javax.swing.GroupLayout(jPanelImagenPromocional);
+        jPanelImagenPromocional.setLayout(jPanelImagenPromocionalLayout);
+        jPanelImagenPromocionalLayout.setHorizontalGroup(
+            jPanelImagenPromocionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 160, Short.MAX_VALUE)
         );
-        jPanelImgPromocionalLayout.setVerticalGroup(
-            jPanelImgPromocionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelImagenPromocionalLayout.setVerticalGroup(
+            jPanelImagenPromocionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 200, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanelImgPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, -1, 200));
+        getContentPane().add(jPanelImagenPromocional, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, -1, 200));
 
         btnSubirImagen.setBackground(new java.awt.Color(162, 132, 94));
         btnSubirImagen.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
@@ -166,6 +166,13 @@ public class AgregarPelicula extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Evento que se ejecuta al presionar el botón "Subir Imagen". Abre un
+     * selector de archivos para elegir una imagen desde el sistema. Si se
+     * selecciona una imagen válida, se lee en bytes y se muestra en el panel.
+     *
+     * @param evt Evento de acción generado por el botón
+     */
     private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("jpg", "jpeg", "png"));
@@ -175,21 +182,31 @@ public class AgregarPelicula extends javax.swing.JFrame {
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File archivo = fileChooser.getSelectedFile();
             try {
-                imagenSeleccionada = Files.readAllBytes(archivo.toPath());
-                BufferedImage imagen = ImageIO.read(archivo);
-                mostrarImagenSeleccionada(imagen);
-
+                imagenSeleccionadaBytes = Files.readAllBytes(archivo.toPath());
+                RenderizadorImagenPelicula.renderizarImagen(jPanelImagenPromocional, imagenSeleccionadaBytes);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error al leer la imagen.");
             }
         }
     }//GEN-LAST:event_btnSubirImagenActionPerformed
 
+    /**
+     * Evento que se ejecuta al presionar el botón "Cancelar". Regresa al menú
+     * de administración de películas y cierra la ventana actual.
+     *
+     * @param evt Evento de acción generado por el botón
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         control.mostrarMenuAdministrarPeliculas(this);
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    /**
+     * Evento que se ejecuta al presionar el botón "Agregar". Llama al método
+     * que procesa la creación y registro de una nueva película.
+     *
+     * @param evt Evento de acción generado por el botón
+     */
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         agregarPelicula();
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -200,7 +217,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
     private javax.swing.JButton btnSubirImagen;
     private javax.swing.JComboBox<String> jComboBoxClasificacion;
     private javax.swing.JComboBox<String> jComboBoxGenero;
-    private javax.swing.JPanel jPanelImgPromocional;
+    private javax.swing.JPanel jPanelImagenPromocional;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextFieldDuracion;
     private javax.swing.JTextField jTextFieldSinopsis;
@@ -214,6 +231,11 @@ public class AgregarPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel jlabelTituloPelicula;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Obtiene los datos ingresados en el formulario para una nueva película,
+     * valida la duración, crea un objeto PeliculaDTO y lo registra en el
+     * sistema. Muestra mensajes de éxito o error según el resultado.
+     */
     private void agregarPelicula() {
         String titulo = jTextFieldTitulo.getText().trim();
         String sinopsis = jTextFieldSinopsis.getText().trim();
@@ -232,7 +254,7 @@ public class AgregarPelicula extends javax.swing.JFrame {
             return;
         }
 
-        PeliculaDTO nuevaPeliculaDTO = new PeliculaDTO(imagenSeleccionada, titulo, genero, duracion, clasificacion, sinopsis, true);
+        PeliculaDTO nuevaPeliculaDTO = new PeliculaDTO(imagenSeleccionadaBytes, titulo, genero, duracion, clasificacion, sinopsis, true);
         PeliculaDTO exito = control.registrarPelicula(nuevaPeliculaDTO);
 
         if (exito != null) {
@@ -241,40 +263,4 @@ public class AgregarPelicula extends javax.swing.JFrame {
             dispose();
         }
     }
-
-    private void mostrarImagenSeleccionada(BufferedImage imagen) {
-
-        // Escalar la imagen con aspect ratio al tamaño del panel
-        int panelWidth = jPanelImgPromocional.getWidth();
-        int panelHeight = jPanelImgPromocional.getHeight();
-
-        int imgWidth = imagen.getWidth();
-        int imgHeight = imagen.getHeight();
-
-        // Cálculo del aspect ratio
-        double panelRatio = (double) panelWidth / panelHeight;
-        double imgRatio = (double) imgWidth / imgHeight;
-
-        int drawWidth, drawHeight;
-        if (imgRatio > panelRatio) {
-            drawWidth = panelWidth;
-            drawHeight = (int) (panelWidth / imgRatio);
-        } else {
-            drawHeight = panelHeight;
-            drawWidth = (int) (panelHeight * imgRatio);
-        }
-
-        // Escalar la imagen
-        Image imagenEscalada = imagen.getScaledInstance(drawWidth, drawHeight, Image.SCALE_SMOOTH);
-        ImageIcon icono = new ImageIcon(imagenEscalada);
-
-        // Limpiar el panel y dibujar la imagen centrada
-        jPanelImgPromocional.removeAll();
-        jPanelImgPromocional.setLayout(new GridBagLayout()); // Para centrar
-        jPanelImgPromocional.add(new JLabel(icono));
-        jPanelImgPromocional.revalidate();
-        jPanelImgPromocional.repaint();
-
-    }
-
 }

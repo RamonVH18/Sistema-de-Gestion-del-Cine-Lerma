@@ -882,8 +882,15 @@ public class ControlDeNavegacion implements IControl {
     /*
     --------------Fin DE LOS METODOS DEL CONTROL DE NAVEGACION DE FUNCIONES--------------
      */
- /*
+    
+    /*
     --------------INICIO DE LOS METODOS DEL CONTROL DE NAVEGACION DE ADMINISTRACION DE PELICULAS--------------
+     */
+    /**
+     * Muestra la ventana del menú principal para administrar películas. Cierra
+     * el frame anterior después de abrir la nueva ventana.
+     *
+     * @param frameAnterior la ventana actual que será cerrada
      */
     @Override
     public void mostrarMenuAdministrarPeliculas(JFrame frameAnterior) {
@@ -895,6 +902,12 @@ public class ControlDeNavegacion implements IControl {
         });
     }
 
+    /**
+     * Muestra la ventana para agregar una nueva película. No cierra la ventana
+     * anterior.
+     *
+     * @param frameAnterior la ventana desde la que se llama esta acción
+     */
     @Override
     public void mostrarAgregarPelicula(JFrame frameAnterior) {
         SwingUtilities.invokeLater(() -> {
@@ -904,6 +917,11 @@ public class ControlDeNavegacion implements IControl {
         });
     }
 
+    /**
+     * Muestra la ventana con los detalles de una película específica.
+     *
+     * @param peliculaDTO el objeto de la película cuyos detalles se mostrarán
+     */
     @Override
     public void mostrarDetallesPelicula(PeliculaDTO peliculaDTO) {
         SwingUtilities.invokeLater(() -> {
@@ -913,6 +931,11 @@ public class ControlDeNavegacion implements IControl {
         });
     }
 
+    /**
+     * Muestra la ventana para editar los datos de una película específica.
+     *
+     * @param peliculaDTO el objeto de la película que se desea editar
+     */
     @Override
     public void mostrarEditarPelicula(PeliculaDTO peliculaDTO) {
         SwingUtilities.invokeLater(() -> {
@@ -921,20 +944,10 @@ public class ControlDeNavegacion implements IControl {
             pantallaEditarPelicula.setVisible(true);
         });
     }
-
-    @Override
-    public PeliculaDTO encontrarPelicula(String nombrePelicula) {
-        try {
-            return gestionPeliculas.buscarPeliculaPorTitulo(nombrePelicula);
-        } catch (MostrarPeliculasException e) {
-            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
-
     /*
     --------------FIN DE LOS METODOS DEL CONTROL DE NAVEGACION DE ADMINISTRACION DE PELICULAS--------------
      */
+    
     //METODOS DE NAVEGACION DE LA GESTION DE USUARIOS
     @Override
     public void mostrarIniciarSesion() {
@@ -1200,9 +1213,16 @@ public class ControlDeNavegacion implements IControl {
     /*
     --------------FIN DE METODOS DE FUNCION--------------
      */
-
- /*
-    --------------METODOS DE ADMINISTRAR PELICULAS--------------
+    /**
+     * --------------MÉTODOS DE ADMINISTRAR PELÍCULAS--------------
+     */
+    /**
+     * Registra una nueva película utilizando el subsistema de gestión de
+     * películas. Muestra un mensaje de error en caso de excepción.
+     *
+     * @param peliculaDTO el DTO con los datos de la película a registrar.
+     * @return el DTO registrado con los datos actualizados, o null si ocurre un
+     * error.
      */
     @Override
     public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO) {
@@ -1214,6 +1234,13 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Actualiza una película existente con nuevos datos. Muestra un mensaje de
+     * error en caso de excepción.
+     *
+     * @param peliculaDTO el DTO con los datos actualizados de la película.
+     * @return el DTO actualizado, o null si ocurre un error.
+     */
     @Override
     public PeliculaDTO actualizarPelicula(PeliculaDTO peliculaDTO) {
         try {
@@ -1224,6 +1251,13 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Da de alta una película previamente dada de baja. Muestra un mensaje de
+     * error en caso de excepción.
+     *
+     * @param peliculaDTO el DTO de la película a dar de alta.
+     * @return true si se activó exitosamente; false si ocurrió un error.
+     */
     @Override
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO) {
         try {
@@ -1234,6 +1268,13 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Da de baja una película sin eliminarla permanentemente. Muestra un
+     * mensaje de error en caso de excepción.
+     *
+     * @param peliculaDTO el DTO de la película a desactivar.
+     * @return true si se desactivó exitosamente; false si ocurrió un error.
+     */
     @Override
     public boolean darBajaPelicula(PeliculaDTO peliculaDTO) {
         try {
@@ -1244,6 +1285,13 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Elimina una película permanentemente del sistema. Muestra un mensaje de
+     * error en caso de excepción.
+     *
+     * @param peliculaDTO el DTO de la película a eliminar.
+     * @return true si se eliminó correctamente; false si ocurrió un error.
+     */
     @Override
     public boolean eliminarPelicula(PeliculaDTO peliculaDTO) {
         try {
@@ -1254,6 +1302,17 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Obtiene una lista de películas que coincidan con los filtros
+     * especificados. Muestra un mensaje de error en caso de excepción.
+     *
+     * @param activo estado de la película (activa o inactiva); puede ser null.
+     * @param clasificacion la clasificación de la película; puede ser null.
+     * @param genero el género de la película; puede ser {@code null}.
+     * @param titulo el título (o parte de él) de la película; puede ser null.
+     * @return una lista de películas filtradas; si ocurre un error, se retorna
+     * una lista vacía.
+     */
     @Override
     public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) {
         try {
@@ -1264,6 +1323,14 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Busca una película por su ID único. Muestra un mensaje de error en caso
+     * de excepción.
+     *
+     * @param idPelicula el ID de la película a buscar.
+     * @return el DTO de la película encontrada, o null si no se encuentra o
+     * ocurre un error.
+     */
     @Override
     public PeliculaDTO buscarPeliculaPorId(String idPelicula) {
         try {
@@ -1274,8 +1341,26 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
+    /**
+     * Busca una película por su título exacto o parcial. Muestra un mensaje de
+     * error en caso de excepción.
+     *
+     * @param titulo el título de la película a buscar.
+     * @return el DTO de la película si se encuentra, o null si no se encuentra
+     * o hay error.
+     */
+    @Override
+    public PeliculaDTO buscarPeliculaPorTitulo(String titulo) {
+        try {
+            return gestionPeliculas.buscarPeliculaPorTitulo(titulo);
+        } catch (MostrarPeliculasException e) {
+            JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
     /*
-    --------------FIN DE METODOS DE ADMINISTRAR PELICULAS--------------
+    --------------FIN DE MÉTODOS DE ADMINISTRAR PELÍCULAS--------------
      */
 
  /*

@@ -56,7 +56,7 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
     public ConsultarAsientosReservados(FuncionDTO funcionSelecionada) {
         this.funcionSelecionada = funcionSelecionada;
         utilerias.configurarFrameBase(this, "CONSULTAR ASIENTOS");
-        peliculaFuncion = control.encontrarPelicula(funcionSelecionada.getNombrePelicula());
+        peliculaFuncion = control.buscarPeliculaPorTitulo(funcionSelecionada.getNombrePelicula());
         salaFuncion = control.consultarSala(funcionSelecionada.getNumSala());
         asientosDisponibles = control.cargarListaAsientos(funcionSelecionada, true);
 

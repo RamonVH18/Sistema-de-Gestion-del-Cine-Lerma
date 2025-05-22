@@ -33,33 +33,58 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 /**
+ * Clase que implementa la interfaz IManejoPeliculas.
+ *
+ * Esta clase actúa como un intermediario entre la capa de presentación y la
+ * capa de negocio. Su propósito es facilitar el manejo de operaciones
+ * relacionadas con películas, como registrar, actualizar, eliminar, dar de
+ * alta/baja, entre otras. Implementa validaciones previas antes de delegar las
+ * operaciones al subsistema de negocio correspondiente.
+ *
+ * Se implementa como Singleton para asegurar una única instancia en todo el
+ * sistema.
  *
  * @author Daniel M
  */
 public class ManejoPeliculas implements IManejoPeliculas {
 
+    // Singleton para manejar instancia única de la clase
     private static ManejoPeliculas instancePeliculas;
+
+    // Interfaces de la capa de negocio para delegar operaciones
     private final IPeliculaBO peliculaBO = PeliculaBO.getInstanceBO();
     private final IFuncionBO funcionBO = FuncionBO.getInstanceDAO();
 
+    // Constructor privado para el Singleton
     private ManejoPeliculas() {
     }
 
+    /**
+     * Devuelve la instancia única de ManejoPeliculas (Singleton).
+     *
+     * @return instancia única de ManejoPeliculas
+     */
     public static ManejoPeliculas getInstanceDAO() {
         if (instancePeliculas == null) {
             instancePeliculas = new ManejoPeliculas();
         }
-
         return instancePeliculas;
     }
 
+    /**
+     * Registra una nueva película en el sistema después de realizar las
+     * validaciones correspondientes.
+     *
+     * @param peliculaDTO DTO de la película a registrar
+     * @return PeliculaDTO registrada
+     * @throws RegistrarPeliculaException si ocurre algún error durante el
+     * proceso
+     */
     @Override
     public PeliculaDTO registrarPelicula(PeliculaDTO peliculaDTO) throws RegistrarPeliculaException {
         try {
@@ -67,23 +92,26 @@ public class ManejoPeliculas implements IManejoPeliculas {
             PeliculaDTO peliculaExistente = peliculaBO.buscarPeliculaPorTitulo(peliculaDTO.getTitulo());
 
             if (peliculaExistente != null) {
-                throw new RegistrarPeliculaException("No es posible registrar la pelicula ya que ya existe.");
+                throw new RegistrarPeliculaException("No es posible registrar la película ya que ya existe.");
             }
 
             verificarImagenCompleta(peliculaDTO.getImagen());
 
             return peliculaBO.registrarPelicula(peliculaDTO);
-        } catch (VerificarCamposPeliculaException e) {
-            throw new RegistrarPeliculaException("No se pudo registrar la pelicula: " + e.getMessage());
-        } catch (VerificarImagenException e) {
-            throw new RegistrarPeliculaException("No se pudo registrar la pelicula: " + e.getMessage());
-        } catch (PeliculaBusquedaException e) {
-            throw new RegistrarPeliculaException("Ocurrio un error durante la verificacion de la pelicula: " + e.getMessage());
-        } catch (PeliculaRegistroException e) {
-            throw new RegistrarPeliculaException("Ocurrio un error durante el registro de la pelicula: " + e.getMessage());
+        } catch (VerificarCamposPeliculaException | VerificarImagenException
+                | PeliculaBusquedaException | PeliculaRegistroException e) {
+            throw new RegistrarPeliculaException("No se pudo registrar la película: " + e.getMessage());
         }
     }
 
+    /**
+     * Actualiza los datos de una película existente tras realizar validaciones.
+     *
+     * @param peliculaActualizarDTO DTO de la película con los nuevos datos
+     * @return PeliculaDTO actualizada
+     * @throws ActualizarPeliculaException si ocurre algún error durante el
+     * proceso
+     */
     @Override
     public PeliculaDTO actualizarPelicula(PeliculaDTO peliculaActualizarDTO) throws ActualizarPeliculaException {
         try {
@@ -92,135 +120,214 @@ public class ManejoPeliculas implements IManejoPeliculas {
 
             PeliculaDTO peliculaExistente = peliculaBO.buscarPeliculaPorTitulo(peliculaActualizarDTO.getTitulo());
 
-            // para evitar poner el titulo exacto de otra pelicula
-            if (peliculaExistente != null && !peliculaExistente.getIdPelicula().equals(peliculaActualizarDTO.getIdPelicula())) {
-                throw new ActualizarPeliculaException("No es posible actualizar la pelicula ya que ya existe una con el mismo titulo.");
+            // Verifica que no se repita el título con otra película
+            if (peliculaExistente != null
+                    && !peliculaExistente.getIdPelicula().equals(peliculaActualizarDTO.getIdPelicula())) {
+                throw new ActualizarPeliculaException("Ya existe una película con ese título.");
             }
 
-            if (peliculaExistente != null) {
-                if (Arrays.equals(peliculaExistente.getImagen(), peliculaActualizarDTO.getImagen()) && peliculaExistente.getTitulo().equals(peliculaActualizarDTO.getTitulo())
-                        && peliculaExistente.getGenero().equals(peliculaActualizarDTO.getGenero()) && peliculaExistente.getDuracion().equals(peliculaActualizarDTO.getDuracion())
-                        && peliculaExistente.getClasificacion().equals(peliculaActualizarDTO.getClasificacion()) && peliculaExistente.getSinopsis().equals(peliculaActualizarDTO.getSinopsis())) {
-                    throw new ActualizarPeliculaException("Para actualizar la pelicula debe modificar al menos un campo.");
-                }
+            // Evita que se actualice si no hay cambios reales
+            if (peliculaExistente != null
+                    && Arrays.equals(peliculaExistente.getImagen(), peliculaActualizarDTO.getImagen())
+                    && peliculaExistente.getTitulo().equals(peliculaActualizarDTO.getTitulo())
+                    && peliculaExistente.getGenero().equals(peliculaActualizarDTO.getGenero())
+                    && peliculaExistente.getDuracion().equals(peliculaActualizarDTO.getDuracion())
+                    && peliculaExistente.getClasificacion().equals(peliculaActualizarDTO.getClasificacion())
+                    && peliculaExistente.getSinopsis().equals(peliculaActualizarDTO.getSinopsis())) {
+                throw new ActualizarPeliculaException("Debe modificar al menos un campo.");
             }
 
             return peliculaBO.actualizarPelicula(peliculaActualizarDTO);
-        } catch (VerificarCamposPeliculaException e) {
-            throw new ActualizarPeliculaException("No se pudo actualizar la pelicula: " + e.getMessage());
-        } catch (VerificarImagenException e) {
-            throw new ActualizarPeliculaException("No se pudo actualizar la pelicula: " + e.getMessage());
-        } catch (PeliculaBusquedaException e) {
-            throw new ActualizarPeliculaException("Ocurrio un error durante la verificacion de la pelicula: " + e.getMessage());
-        } catch (PeliculaActualizacionException e) {
-            throw new ActualizarPeliculaException("Ocurrio un error durante la actualizacion de la pelicula: " + e.getMessage());
+        } catch (VerificarCamposPeliculaException | VerificarImagenException
+                | PeliculaBusquedaException | PeliculaActualizacionException e) {
+            throw new ActualizarPeliculaException("No se pudo actualizar la película: " + e.getMessage());
         }
     }
 
+    /**
+     * Elimina una película del sistema si no tiene funciones existentes.
+     *
+     * @param peliculaDTO DTO de la película a eliminar
+     * @return true si la película fue eliminada correctamente
+     * @throws EliminarPeliculaException si ocurre algún error durante la
+     * eliminación
+     */
     @Override
     public boolean eliminarPelicula(PeliculaDTO peliculaDTO) throws EliminarPeliculaException {
         try {
             List<FuncionDTO> funcionesExistentes = funcionBO.buscarFuncionesPelicula(peliculaDTO.getTitulo());
 
+            // No permite eliminar si hay funciones asociadas
             if (!funcionesExistentes.isEmpty()) {
-                throw new EliminarPeliculaException("No es posible eliminar la pelicula ya que tiene funciones existentes.");
+                throw new EliminarPeliculaException("La película tiene funciones asociadas.");
             }
 
             return peliculaBO.eliminarPelicula(peliculaDTO);
         } catch (PeliculaEliminarException e) {
-            throw new EliminarPeliculaException("Ocurrio un error durante la eliminacion de la pelicula: " + e.getMessage());
+            throw new EliminarPeliculaException("Error al eliminar la película: " + e.getMessage());
         }
     }
 
+    /**
+     * Busca una película por su título.
+     *
+     * @param nombrePelicula título de la película
+     * @return PeliculaDTO correspondiente
+     * @throws MostrarPeliculasException si ocurre un error o el título es
+     * inválido
+     */
     @Override
     public PeliculaDTO buscarPeliculaPorTitulo(String nombrePelicula) throws MostrarPeliculasException {
         try {
+            // verifica que se haya ingresado el titulo
             if (nombrePelicula == null || nombrePelicula.isBlank()) {
-                throw new MostrarPeliculasException("Debe ingresar un nombre valido para buscar la pelicula");
+                throw new MostrarPeliculasException("Debe ingresar un nombre válido.");
             }
             return peliculaBO.buscarPeliculaPorTitulo(nombrePelicula);
         } catch (PeliculaBusquedaException e) {
-            throw new MostrarPeliculasException("Hubo un error al buscar la pelicula.");
+            throw new MostrarPeliculasException("Error al buscar la película.");
         }
     }
-    
+
+    /**
+     * Busca una película por su identificador único.
+     *
+     * @param idPelicula identificador de la película
+     * @return PeliculaDTO correspondiente
+     * @throws MostrarPeliculasException si ocurre un error
+     */
     @Override
     public PeliculaDTO buscarPeliculaPorId(String idPelicula) throws MostrarPeliculasException {
         try {
+            // verifica si no llego un identificador vacio
             if (idPelicula == null || idPelicula.isBlank()) {
-                throw new MostrarPeliculasException("El id no puede ser nulo.");
+                throw new MostrarPeliculasException("El ID no puede estar vacío.");
             }
-            
+
             return peliculaBO.buscarPeliculaPorId(idPelicula);
         } catch (PeliculaBusquedaException e) {
-            throw new MostrarPeliculasException("Hubo un error al buscar la pelicula.");
+            throw new MostrarPeliculasException("Error al buscar la película.");
         }
     }
 
+    /**
+     * Activa una película previamente desactivada.
+     *
+     * @param peliculaDTO DTO de la película a dar de alta
+     * @return true si se activó correctamente
+     * @throws DarAltaPeliculaException si ocurre un error o ya está activa
+     */
     @Override
     public boolean darAltaPelicula(PeliculaDTO peliculaDTO) throws DarAltaPeliculaException {
         try {
+            // verifica que la pelicula no sea nula
             if (peliculaDTO == null) {
-                throw new DarAltaPeliculaException("No se pudo dar de alta la pelicula ya que los datos estan vacios.");
+                throw new DarAltaPeliculaException("Los datos de la película están vacíos.");
             }
 
+            // verifica si la pelicula ya estaba activa
             if (peliculaDTO.getActivo()) {
-                throw new DarAltaPeliculaException("No se pudo dar de alta la pelicula ya que ya esta dada de alta.");
+                throw new DarAltaPeliculaException("La película ya está activa.");
             }
+
             return peliculaBO.darAltaPelicula(peliculaDTO);
         } catch (PeliculaDarAltaException e) {
-            throw new DarAltaPeliculaException("Ocurrio un error durante el alta de la pelicula: " + e.getMessage());
+            throw new DarAltaPeliculaException("Error al dar de alta la película: " + e.getMessage());
         }
     }
 
+    /**
+     * Desactiva una película si no tiene funciones asociadas.
+     *
+     * @param peliculaDTO DTO de la película a dar de baja
+     * @return true si se desactivó correctamente
+     * @throws DarBajaPeliculaException si ocurre un error o tiene funciones
+     * existentes
+     */
     @Override
     public boolean darBajaPelicula(PeliculaDTO peliculaDTO) throws DarBajaPeliculaException {
         try {
+            // verifica que la pelicula no sea nula
             if (peliculaDTO == null) {
-                throw new DarBajaPeliculaException("No se pudo dar de baja la pelicula ya que los datos estan vacios.");
+                throw new DarBajaPeliculaException("Los datos de la película están vacíos.");
             }
 
+            // verifica si la pelicula ya estaba activa
             if (!peliculaDTO.getActivo()) {
-                throw new DarBajaPeliculaException("No se pudo dar de baja la pelicula ya que ya esta dada de baja.");
+                throw new DarBajaPeliculaException("La película ya está inactiva.");
             }
 
             List<FuncionDTO> funcionesExistentes = funcionBO.buscarFuncionesPelicula(peliculaDTO.getTitulo());
 
+            // verifica que no tenga funciones activas
             if (!funcionesExistentes.isEmpty()) {
-                throw new DarBajaPeliculaException("No es posible dar de baja la pelicula ya que tiene funciones existentes.");
+                throw new DarBajaPeliculaException("Tiene funciones asociadas.");
             }
 
             return peliculaBO.darBajaPelicula(peliculaDTO);
         } catch (PeliculaDarBajaException e) {
-            throw new DarBajaPeliculaException("Ocurrio un error durante la baja de la pelicula: " + e.getMessage());
+            throw new DarBajaPeliculaException("Error al dar de baja la película: " + e.getMessage());
         }
     }
 
+    /**
+     * Muestra una lista de películas aplicando filtros opcionales como
+     * clasificación, género, título y estado.
+     *
+     * @param activo si la película está activa o no
+     * @param clasificacion filtro de clasificación
+     * @param genero filtro de género
+     * @param titulo filtro de título
+     * @return lista filtrada de PeliculaDTO
+     * @throws ObtenerPeliculasFiltradasException si ocurre un error durante la
+     * consulta
+     */
     @Override
-    public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws ObtenerPeliculasFiltradasException {
+    public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo)
+            throws ObtenerPeliculasFiltradasException {
         try {
-            List<PeliculaDTO> peliculasFiltradas = peliculaBO.mostrarPeliculasFiltradas(activo, clasificacion, genero, titulo);
-            return peliculasFiltradas;
+            // devuelve la lista de peliculas filtradas
+            return peliculaBO.mostrarPeliculasFiltradas(activo, clasificacion, genero, titulo);
         } catch (MostrarPeliculasFiltradasException e) {
-            throw new ObtenerPeliculasFiltradasException("Ocurrio un error durante la obtencion de peliculas con filtros: " + e.getMessage());
+            throw new ObtenerPeliculasFiltradasException("Error al obtener películas filtradas: " + e.getMessage());
         }
     }
 
+    /**
+     * Muestra todas las películas activas o inactivas según el parámetro
+     * recibido.
+     *
+     * @param activo true para activas, false para inactivas
+     * @return lista de PeliculaDTO activas o inactivas
+     * @throws MostrarPeliculasException si ocurre un error o no hay películas
+     */
     @Override
     public List<PeliculaDTO> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException {
         try {
-            List<PeliculaDTO> peliculasActivasOInactivas = peliculaBO.mostrarPeliculasActivasOInactivas(activo);
+            List<PeliculaDTO> resultado = peliculaBO.mostrarPeliculasActivasOInactivas(activo);
 
-            if (peliculasActivasOInactivas.isEmpty()) {
-                throw new MostrarPeliculasException("No existen peliculas en cartelera o inactivas.");
+            // verifica si hay peliculas
+            if (resultado.isEmpty()) {
+                throw new MostrarPeliculasException("No existen películas activas o inactivas según el criterio.");
             }
 
-            return peliculasActivasOInactivas;
+            return resultado;
         } catch (PeliculasActivasInactivasException e) {
-            throw new MostrarPeliculasException("Ocurrio un error durante la obtencion de las peliculas: " + e.getMessage());
+            throw new MostrarPeliculasException("Error al obtener películas: " + e.getMessage());
         }
     }
 
+    /**
+     * Verifica que los campos de un objeto PeliculaDTO sean válidos.
+     *
+     * Realiza comprobaciones como: Título no nulo, no vacío y con un máximo de
+     * 100 caracteres. Duración no nula y menor o igual a 300 minutos. Género,
+     * clasificación y sinopsis no nulos ni vacíos. Sinopsis con máximo de 400
+     * caracteres.
+     *
+     * @param peliculaDTO el DTO que contiene los datos de la película.
+     * @throws VerificarCamposPeliculaException si algún campo es inválido.
+     */
     private void verificarCamposPelicula(PeliculaDTO peliculaDTO) throws VerificarCamposPeliculaException {
         if (peliculaDTO == null) {
             throw new VerificarCamposPeliculaException("Todos los campos son obligatorios.");
@@ -260,12 +367,26 @@ public class ManejoPeliculas implements IManejoPeliculas {
 
     }
 
+    /**
+     * Verifica que una imagen cumpla con tamaño, formato y validez.
+     *
+     * @param imagen los bytes de la imagen.
+     * @throws VerificarImagenException si la imagen es inválida, está corrupta
+     * o su formato no es permitido.
+     */
     private void verificarImagenCompleta(byte[] imagen) throws VerificarImagenException {
         verificarTamanioImagen(imagen);
         verificarFormatoImagen(imagen);
         verificarImagenValida(imagen);
     }
 
+    /**
+     * Verifica que el tamaño de la imagen no exceda los 5MB.
+     *
+     * @param imagen los bytes de la imagen.
+     * @throws VerificarImagenException si la imagen es nula o supera el tamaño
+     * permitido.
+     */
     private void verificarTamanioImagen(byte[] imagen) throws VerificarImagenException {
         if (imagen == null) {
             throw new VerificarImagenException("La imagen es obligatoria.");
@@ -276,6 +397,13 @@ public class ManejoPeliculas implements IManejoPeliculas {
         }
     }
 
+    /**
+     * Verifica que los bytes de la imagen representen una imagen válida (no
+     * corrupta).
+     *
+     * @param imagen los bytes de la imagen.
+     * @throws VerificarImagenException si la imagen es ilegible o inválida.
+     */
     private void verificarImagenValida(byte[] imagen) throws VerificarImagenException {
         try {
             BufferedImage img = ImageIO.read(new ByteArrayInputStream(imagen));
@@ -287,6 +415,13 @@ public class ManejoPeliculas implements IManejoPeliculas {
         }
     }
 
+    /**
+     * Verifica que el formato de la imagen sea JPG, JPEG o PNG.
+     *
+     * @param imagen los bytes de la imagen.
+     * @throws VerificarImagenException si el formato no está soportado o ocurre
+     * un error al leer la imagen.
+     */
     private void verificarFormatoImagen(byte[] imagen) throws VerificarImagenException {
         try (ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(imagen))) {
             Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);

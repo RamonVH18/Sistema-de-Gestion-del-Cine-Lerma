@@ -77,11 +77,9 @@ public class PeliculaDAO implements IPeliculaDAO {
             // Insertar la nueva película
             coleccionPeliculas.insertOne(pelicula);
             return pelicula;
-
         } catch (MongoException e) {
             throw new RegistrarPeliculaException("Ocurrio un problema al registrar la pelicula.");
         } finally {
-            // Cerrar la conexión
             conexion.cerrarConexion(clienteMongo);
         }
     }
@@ -112,16 +110,15 @@ public class PeliculaDAO implements IPeliculaDAO {
                 throw new ActualizarPeliculaException("No se encontró la película para actualizar.");
             }
 
-            // Reemplazar el documento
+            // Reemplazamos la pelicula con los nuevos datos
             UpdateResult resultado = coleccionPeliculas.replaceOne(filtro, pelicula);
 
-            // Validar que fue modificada
+            // Checamos que si fue modificada, si no lanza una excepcion
             if (resultado.getModifiedCount() == 0) {
                 throw new ActualizarPeliculaException("No se actualizó la película.");
             }
 
             return pelicula;
-
         } catch (MongoException e) {
             throw new ActualizarPeliculaException("Ocurrió un problema al actualizar la película.");
         } finally {
@@ -154,15 +151,15 @@ public class PeliculaDAO implements IPeliculaDAO {
                 throw new EliminarPeliculaException("No se encontró la película para eliminar.");
             }
 
-            // Eliminar el documento
+            // Si se encontro la eliminamos
             DeleteResult eliminar = coleccionPeliculas.deleteOne(filtro);
 
+            // Checamos que se haya eliminado, si no lanza una excepcion
             if (eliminar.getDeletedCount() == 0) {
                 throw new EliminarPeliculaException("No se eliminó ninguna película.");
             }
 
             return eliminar.getDeletedCount() > 0;
-
         } catch (MongoException e) {
             throw new EliminarPeliculaException("Ocurrió un problema al eliminar la película.");
         } finally {
@@ -213,7 +210,7 @@ public class PeliculaDAO implements IPeliculaDAO {
     }
 
     /**
-     * Desactiva una película (campo "activo" en false).
+     * Desactiva una película activada (campo "activo" en false).
      *
      * @param pelicula Película a desactivar
      * @return true si se desactivó correctamente, false si ya estaba inactiva
@@ -339,30 +336,67 @@ public class PeliculaDAO implements IPeliculaDAO {
         }
     }
 
+    /**
+     * Busca y retorna una lista de películas aplicando múltiples filtros
+     * opcionales: estado (activo/inactivo), clasificación, género y título.
+     *
+     * Cada filtro se añade a una lista de condiciones y se combinan con una
+     * operación lógica AND para ejecutar la consulta en la base de datos
+     * MongoDB.
+     *
+     * @param activo Estado de activación de la película: true para activas,
+     * false para inactivas, o null para ignorar este filtro.
+     * @param clasificacion Clasificación de la película (ej. "B15"). Se aplica
+     * de forma insensible a mayúsculas/minúsculas. Puede ser null o venir vacio
+     * para ignorar este filtro.
+     * @param genero Género de la película (ej. "Acción", "Drama"). Se aplica de
+     * forma insensible a mayúsculas/minúsculas. Puede ser null o vacio para
+     * ignorar este filtro.
+     * @param titulo Parte o totalidad del título de la película a buscar. Se
+     * busca de forma parcial e insensible a mayúsculas/minúsculas. Puede ser
+     * null o vacío para ignorar este filtro.
+     * @return Lista de películas que cumplen con los filtros proporcionados. Si
+     * no se especifica ningún filtro, retorna todas.
+     * @throws MostrarPeliculasException Si ocurre un error al realizar la
+     * consulta en la base de datos.
+     */
     @Override
     public List<Pelicula> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws MostrarPeliculasException {
         MongoClient clienteMongo = null;
         List<Pelicula> peliculas = new ArrayList<>();
         try {
+            // Hacemos conexion con la BD de Mongo
             clienteMongo = conexion.crearConexion();
             MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
             MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
 
-            List<Bson> filtros = new ArrayList<>(); // Lista para almacenar los filtros que se vayan aplicando.
+            // Se crea la lista para almacenar los filtros que se vayan aplicando.
+            List<Bson> filtros = new ArrayList<>();
 
+            // Llamar metodos para agregar los filtros (los que apliquen)
             filtroEstado(activo, filtros);
             filtroClasificacion(clasificacion, filtros);
             filtroGenero(genero, filtros);
             filtroTitulo(titulo, filtros);
 
             // Construir consulta final
-            Bson filtro = filtros.isEmpty() ? new Document() : Filters.and(filtros);
+            Bson filtro;
+            if (filtros.isEmpty()) {
+                // si la lista de filtros esta vacia (es decir, no aplico ningun filtro)
+                // se crea un documento, es decir, sin filtros, devolvera todas las peliculas
+                filtro = new Document();
+            } else {
+                // si a la lista si aplicaron filtros y contiene algunos, se combinaran todos 
+                // con AND
+                filtro = Filters.and(filtros);
+            }
 
             // Ejecuta la consulta y obtiene un cursor para iterar sobre los resultados.
             MongoCursor<Pelicula> cursor = coleccionPeliculas.find(filtro).iterator();
             while (cursor.hasNext()) {
-                Pelicula usuarioEncontrado = cursor.next();
-                peliculas.add(usuarioEncontrado);
+                Pelicula peliculaEncontrada = cursor.next();
+                // se agrega a la lista de peliculas creada anteriormente
+                peliculas.add(peliculaEncontrada);
             }
 
             return peliculas; // Devuelve la lista de peliculas filtradas
@@ -371,6 +405,16 @@ public class PeliculaDAO implements IPeliculaDAO {
         }
     }
 
+    /**
+     * Agrega un filtro por estado de activación de la película a la lista de
+     * filtros.
+     *
+     * @param activo Valor booleano que indica si se deben buscar películas
+     * activas (true) o inactivas (false). Si es null, no se añade ningún
+     * filtro.
+     * @param filtros Lista de filtros a la cual se agregará el filtro de estado
+     * si corresponde.
+     */
     private void filtroEstado(Boolean activo, List<Bson> filtros) {
         //filtrar por estado activo o inactivo
         if (activo != null) {
@@ -379,6 +423,16 @@ public class PeliculaDAO implements IPeliculaDAO {
         }
     }
 
+    /**
+     * Agrega un filtro por clasificación a la lista de filtros. La comparación
+     * se realiza con coincidencia exacta, pero insensible a
+     * mayúsculas/minúsculas.
+     *
+     * @param clasificacion Clasificación de la película (ej. "A", "B15"). Si es
+     * null o está en blanco, no se agrega el filtro.
+     * @param filtros Lista de filtros a la cual se agregará el filtro de
+     * clasificación si corresponde.
+     */
     private void filtroClasificacion(String clasificacion, List<Bson> filtros) {
         //filtrar por clasificacion
         if (clasificacion != null) {
@@ -386,6 +440,15 @@ public class PeliculaDAO implements IPeliculaDAO {
         }
     }
 
+    /**
+     * Agrega un filtro por género a la lista de filtros. La comparación se
+     * realiza con coincidencia exacta, pero insensible a mayúsculas/minúsculas.
+     *
+     * @param genero Género de la película (ej. "Acción", "Comedia"). Si es null
+     * o está en blanco, no se agrega el filtro.
+     * @param filtros Lista de filtros a la cual se agregará el filtro de género
+     * si corresponde.
+     */
     private void filtroGenero(String genero, List<Bson> filtros) {
         //filtrar por genero
         if (genero != null) {
@@ -393,6 +456,15 @@ public class PeliculaDAO implements IPeliculaDAO {
         }
     }
 
+    /**
+     * Agrega un filtro por título a la lista de filtros. El filtro permite
+     * coincidencias parciales e ignora mayúsculas y minúsculas.
+     *
+     * @param titulo Parte del título de la película a buscar. Si es null o está
+     * en blanco, no se agrega el filtro.
+     * @param filtros Lista de filtros a la cual se agregará el filtro de título
+     * si corresponde.
+     */
     private void filtroTitulo(String titulo, List<Bson> filtros) {
         // Filtro por titulo de la pelicula
         if (titulo != null && !titulo.isBlank()) {

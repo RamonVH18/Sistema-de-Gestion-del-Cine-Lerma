@@ -7,36 +7,34 @@ package pantallas.administracionPeliculas;
 import DTOs.PeliculaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import utilitades.RenderizadorImagenPelicula;
 
 /**
+ * Clase que representa la pantalla de Editar Pelicula.
+ *
+ * Accede a la clase de control de navegacion para navegar entre distintas
+ * pantallas del CU y darles funcionamiento.
  *
  * @author Daniel M
  */
 public class EditarPelicula extends javax.swing.JFrame {
 
     private final IControl control = ControlDeNavegacion.getInstancia();
-    private byte[] imagenSeleccionadaBytes;
     private PeliculaDTO peliculaDTO = new PeliculaDTO();
+    private byte[] imagenSeleccionadaBytes;
 
     /**
-     * Creates new form EditarPelicula
+     * Constructor de la clase. Inicializa la ventana y carga los detalles de la
+     * película.
      *
-     * @param peliculaDTO
+     * @param peliculaDTO Objeto que contiene los datos de la película a
+     * mostrar.
      */
     public EditarPelicula(PeliculaDTO peliculaDTO) {
         initComponents();
@@ -174,6 +172,14 @@ public class EditarPelicula extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Evento que se ejecuta al presionar el botón "Cambiar Imagen". Abre un
+     * selector de archivos para elegir una nueva imagen desde el sistema. Si se
+     * selecciona una imagen válida, se convierte a bytes y se renderiza en el
+     * panel.
+     *
+     * @param evt Evento de acción generado por el botón
+     */
     private void btnCambiarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarImagenActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("jpg", "jpeg", "png"));
@@ -184,18 +190,30 @@ public class EditarPelicula extends javax.swing.JFrame {
             File archivo = fileChooser.getSelectedFile();
             try {
                 imagenSeleccionadaBytes = Files.readAllBytes(archivo.toPath());
-                cargarImagen(imagenSeleccionadaBytes);
+                RenderizadorImagenPelicula.renderizarImagen(jPanelImagenPromocional, imagenSeleccionadaBytes);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error al leer la imagen.");
             }
         }
     }//GEN-LAST:event_btnCambiarImagenActionPerformed
 
+    /**
+     * Evento que se ejecuta al presionar el botón "Cancelar". Cierra la ventana
+     * actual y regresa a la vista de detalles de la película.
+     *
+     * @param evt Evento de acción generado por el botón
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         control.mostrarDetallesPelicula(peliculaDTO);
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    /**
+     * Evento que se ejecuta al presionar el botón "Guardar Cambios". Llama al
+     * método que intenta guardar los cambios realizados a la película.
+     *
+     * @param evt Evento de acción generado por el botón
+     */
     private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
         guardarCambios();
     }//GEN-LAST:event_btnGuardarCambiosActionPerformed
@@ -223,6 +241,11 @@ public class EditarPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel jlabelTituloPelicula;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Obtiene los datos ingresados en los campos del formulario, valida la
+     * duración, crea un nuevo DTO con los cambios y actualiza la película en el
+     * sistema. Muestra mensajes de éxito o error.
+     */
     private void guardarCambios() {
         String titulo = jTextFieldTitulo.getText().trim();
         String sinopsis = jTextFieldSinopsis.getText().trim();
@@ -267,6 +290,12 @@ public class EditarPelicula extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Carga los datos de una película en los campos del formulario. También
+     * renderiza la imagen promocional en el panel.
+     *
+     * @param peliculaDTO Objeto con la información de la película a cargar
+     */
     private void cargarCamposPelicula(PeliculaDTO peliculaDTO) {
         jTextFieldTitulo.setText(peliculaDTO.getTitulo());
         jTextFieldDuracion.setText(String.valueOf(peliculaDTO.getDuracion()));
@@ -275,50 +304,9 @@ public class EditarPelicula extends javax.swing.JFrame {
         jComboBoxGenero.setSelectedItem(peliculaDTO.getGenero());
         jComboBoxClasificacion.setSelectedItem(peliculaDTO.getClasificacion());
         try {
-            cargarImagen(peliculaDTO.getImagen());
+            RenderizadorImagenPelicula.renderizarImagen(jPanelImagenPromocional, peliculaDTO.getImagen());
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Error al leer la imagen.");
         }
-    }
-
-    private void cargarImagen(byte[] imagenBytes) throws IOException {
-        if (imagenBytes == null) {
-            return;
-        }
-        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imagenBytes));
-        mostrarImagen(bufferedImage);
-    }
-
-    private void mostrarImagen(BufferedImage imagen) {
-        // Escalar la imagen con aspect ratio al tamaño del panel
-        int panelWidth = jPanelImagenPromocional.getWidth();
-        int panelHeight = jPanelImagenPromocional.getHeight();
-
-        int imgWidth = imagen.getWidth();
-        int imgHeight = imagen.getHeight();
-
-        // Cálculo del aspect ratio
-        double panelRatio = (double) panelWidth / panelHeight;
-        double imgRatio = (double) imgWidth / imgHeight;
-
-        int drawWidth, drawHeight;
-        if (imgRatio > panelRatio) {
-            drawWidth = panelWidth;
-            drawHeight = (int) (panelWidth / imgRatio);
-        } else {
-            drawHeight = panelHeight;
-            drawWidth = (int) (panelHeight * imgRatio);
-        }
-
-        // Escalar la imagen
-        Image imagenEscalada = imagen.getScaledInstance(drawWidth, drawHeight, Image.SCALE_SMOOTH);
-        ImageIcon icono = new ImageIcon(imagenEscalada);
-
-        // Limpiar el panel y dibujar la imagen centrada
-        jPanelImagenPromocional.removeAll();
-        jPanelImagenPromocional.setLayout(new GridBagLayout()); // Para centrar
-        jPanelImagenPromocional.add(new JLabel(icono));
-        jPanelImagenPromocional.revalidate();
-        jPanelImagenPromocional.repaint();
     }
 }

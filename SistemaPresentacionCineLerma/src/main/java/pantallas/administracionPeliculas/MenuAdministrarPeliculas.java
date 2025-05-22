@@ -23,6 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.ScrollPaneConstants;
 
 /**
+ * Clase que representa la pantalla del Menu para Administrar Peliculas.
+ *
+ * Accede a la clase de control de navegacion para navegar entre distintas
+ * pantallas del CU y darles funcionamiento.
  *
  * @author Daniel M
  */
@@ -32,7 +36,8 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
     private AdministradorDTO administrador;
 
     /**
-     * Creates new form Cartelera
+     * Crea la interfaz del menú de administración de películas. Carga todas las
+     * películas disponibles sin filtros aplicados.
      */
     public MenuAdministrarPeliculas() {
         initComponents();
@@ -184,6 +189,10 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Muestra la pantalla para agregar una nueva película. Cierra la ventana
+     * actual.
+     */
     private void btnAgregarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarPeliculaActionPerformed
         control.mostrarAgregarPelicula(this);
         dispose();
@@ -193,6 +202,9 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jComboBoxFiltrarEstadoActionPerformed
 
+    /**
+     * Muestra el menú principal del administrador. Cierra la ventana actual.
+     */
     private void btnaVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaVolverActionPerformed
         control.mostrarMenuAdministrador(this);
         dispose();
@@ -206,6 +218,11 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxFiltrarClasificacionActionPerformed
 
+    /**
+     * Aplica los filtros seleccionados para mostrar las películas
+     * correspondientes. Los filtros incluyen estado, clasificación, género y
+     * título.
+     */
     private void btnConfirmarFiltradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarFiltradoActionPerformed
         String estadoString = (String) jComboBoxFiltrarEstado.getSelectedItem();
         Boolean estado = null;
@@ -219,6 +236,10 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
         cargarPeliculas(peliculasFiltradas);
     }//GEN-LAST:event_btnConfirmarFiltradoActionPerformed
 
+    /**
+     * Reinicia todos los filtros aplicados y recarga la lista completa de
+     * películas.
+     */
     private void btnReiniciarFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarFiltrosActionPerformed
         jComboBoxFiltrarEstado.setSelectedIndex(-1);
         jComboBoxFiltrarClasificacion.setSelectedIndex(-1);
@@ -246,51 +267,101 @@ public class MenuAdministrarPeliculas extends javax.swing.JFrame {
     private javax.swing.JLabel jlabelTituloCartelera;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Carga una lista de películas en la interfaz gráfica. Cada película se
+     * muestra en un panel con su imagen y título. Al hacer clic en alguna, se
+     * muestran sus detalles.
+     *
+     * @param peliculas Lista de películas que se desea mostrar en pantalla.
+     */
     private void cargarPeliculas(List<PeliculaDTO> peliculas) {
-        JPanel panelContenedor = new JPanel();
-        panelContenedor.setLayout(new BoxLayout(panelContenedor, BoxLayout.Y_AXIS));
-        panelContenedor.setBackground(Color.WHITE); // fondo blanco
+        JPanel panelContenedor = crearPanelContenedorPeliculas();
 
         for (PeliculaDTO pelicula : peliculas) {
-            JPanel panelPelicula = new JPanel();
-            panelPelicula.setLayout(new BorderLayout());
-            panelPelicula.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            panelPelicula.setBackground(new Color(245, 245, 245)); // Gris clarito
-
-            // Imagen
-            JLabel labelImagen = new JLabel();
-            try {
-                ImageIcon icono = new ImageIcon(pelicula.getImagen());
-                Image imagen = icono.getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH);
-                labelImagen.setIcon(new ImageIcon(imagen));
-            } catch (Exception e) {
-                labelImagen.setText("Imagen no encontrada");
-            }
-
-            // Título
-            JLabel labelTitulo = new JLabel(pelicula.getTitulo());
-            labelTitulo.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 20));
-
-            JPanel panelTexto = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            panelTexto.setOpaque(false);
-            panelTexto.add(labelTitulo);
-
-            panelPelicula.add(labelImagen, BorderLayout.WEST);
-            panelPelicula.add(panelTexto, BorderLayout.CENTER);
-
-            // Evento click
-            panelPelicula.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            panelPelicula.addMouseListener(new java.awt.event.MouseAdapter() {
-                @Override
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    control.mostrarDetallesPelicula(pelicula);
-                    dispose();
-                }
-            });
-
+            JPanel panelPelicula = crearPanelPelicula(pelicula);
             panelContenedor.add(panelPelicula);
         }
 
+        configurarScrollPane(panelContenedor);
+    }
+
+    /**
+     * Crea y configura el panel contenedor que alojará las películas.
+     *
+     * @return Un JPanel configurado con layout vertical y fondo blanco.
+     */
+    private JPanel crearPanelContenedorPeliculas() {
+        JPanel panelContenedor = new JPanel();
+        panelContenedor.setLayout(new BoxLayout(panelContenedor, BoxLayout.Y_AXIS));
+        panelContenedor.setBackground(Color.WHITE); // Fondo blanco
+        return panelContenedor;
+    }
+
+    /**
+     * Crea un panel para una película individual con su imagen, título y evento
+     * de clic.
+     *
+     * @param pelicula Película que se desea representar gráficamente.
+     * @return Un JPanel configurado con los datos de la película.
+     */
+    private JPanel crearPanelPelicula(PeliculaDTO pelicula) {
+        JPanel panelPelicula = new JPanel(new BorderLayout());
+        panelPelicula.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panelPelicula.setBackground(new Color(245, 245, 245)); // Gris clarito
+
+        // Imagen de la película
+        JLabel labelImagen = crearLabelImagen(pelicula);
+
+        // Título de la película
+        JLabel labelTitulo = new JLabel(pelicula.getTitulo());
+        labelTitulo.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 20));
+
+        // Panel de texto para el título
+        JPanel panelTexto = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelTexto.setOpaque(false); // Fondo transparente
+        panelTexto.add(labelTitulo);
+
+        // Agregamos imagen y título al panel de la película
+        panelPelicula.add(labelImagen, BorderLayout.WEST);
+        panelPelicula.add(panelTexto, BorderLayout.CENTER);
+
+        // Evento al hacer clic sobre la película
+        panelPelicula.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panelPelicula.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                control.mostrarDetallesPelicula(pelicula);
+                dispose();
+            }
+        });
+
+        return panelPelicula;
+    }
+
+    /**
+     * Crea un JLabel con la imagen de la película redimensionada.
+     *
+     * @param pelicula Película cuya imagen se desea cargar.
+     * @return JLabel con la imagen o un mensaje si no se pudo cargar.
+     */
+    private JLabel crearLabelImagen(PeliculaDTO pelicula) {
+        JLabel labelImagen = new JLabel();
+        try {
+            ImageIcon icono = new ImageIcon(pelicula.getImagen());
+            Image imagen = icono.getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH);
+            labelImagen.setIcon(new ImageIcon(imagen));
+        } catch (Exception e) {
+            labelImagen.setText("Imagen no encontrada");
+        }
+        return labelImagen;
+    }
+
+    /**
+     * Configura el JScrollPane con el panel contenedor de películas.
+     *
+     * @param panelContenedor Panel con las películas ya generadas.
+     */
+    private void configurarScrollPane(JPanel panelContenedor) {
         jScrollPanePeliculasFiltradas.setViewportView(panelContenedor);
         jScrollPanePeliculasFiltradas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPanePeliculasFiltradas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);

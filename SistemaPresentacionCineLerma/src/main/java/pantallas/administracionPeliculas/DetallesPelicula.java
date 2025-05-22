@@ -7,19 +7,16 @@ package pantallas.administracionPeliculas;
 import DTOs.PeliculaDTO;
 import control.ControlDeNavegacion;
 import control.IControl;
-import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import utilitades.RenderizadorImagenPelicula;
 
 /**
+ * Clase que representa la pantalla de Detalles Pelicula.
+ *
+ * Accede a la clase de control de navegacion para navegar entre distintas
+ * pantallas del CU y darles funcionamiento.
  *
  * @author Daniel M
  */
@@ -29,9 +26,11 @@ public class DetallesPelicula extends javax.swing.JFrame {
     private PeliculaDTO peliculaDTO = new PeliculaDTO();
 
     /**
-     * Creates new form DetallesPelicula
+     * Constructor de la clase. Inicializa la ventana y carga los detalles de la
+     * película.
      *
-     * @param peliculaDTO
+     * @param peliculaDTO Objeto que contiene los datos de la película a
+     * mostrar.
      */
     public DetallesPelicula(PeliculaDTO peliculaDTO) {
         initComponents();
@@ -189,19 +188,43 @@ public class DetallesPelicula extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Evento que se ejecuta al presionar el botón de "Editar". Abre la ventana
+     * para editar la película.
+     *
+     * @param evt Evento del botón.
+     */
     private void btnEditarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPeliculaActionPerformed
         control.mostrarEditarPelicula(peliculaDTO);
         dispose();
     }//GEN-LAST:event_btnEditarPeliculaActionPerformed
 
+    /**
+     * Evento que se ejecuta al presionar el botón de "Dar de Baja o Alta". Este
+     * método está vacío ya que el comportamiento es definido dinámicamente.
+     *
+     * @param evt Evento del botón.
+     */
     private void btnDarBajaOAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarBajaOAltaActionPerformed
 
     }//GEN-LAST:event_btnDarBajaOAltaActionPerformed
 
+    /**
+     * Evento que se ejecuta al presionar el botón de "Eliminar". Llama al
+     * método para eliminar la película.
+     *
+     * @param evt Evento del botón.
+     */
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         eliminarPelicula(peliculaDTO);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    /**
+     * Evento que se ejecuta al presionar el botón de "Volver". Regresa al menú
+     * anterior de administración de películas.
+     *
+     * @param evt Evento del botón.
+     */
     private void btnaVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaVolverActionPerformed
         control.mostrarMenuAdministrarPeliculas(this);
         dispose();
@@ -230,36 +253,58 @@ public class DetallesPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel jlabelTituloDetalles;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Carga todos los detalles de la película en la interfaz gráfica. También
+     * asigna dinámicamente el comportamiento del botón de alta/baja según el
+     * estado.
+     *
+     * @param peliculaDTO Objeto con los datos de la película.
+     */
     private void cargarDetallesPelicula(PeliculaDTO peliculaDTO) {
         jLabelMostrarTitulo.setText(peliculaDTO.getTitulo());
         jLabelMostrarGenero.setText(peliculaDTO.getGenero());
         jLabelMostrarDuracion.setText(peliculaDTO.getDuracion().toString() + " minutos");
         jLabelMostrarClasificacion.setText(peliculaDTO.getClasificacion());
 
+        // Verificar si la película está activa
         if (peliculaDTO.getActivo()) {
             jLabelMostrarEstado.setText("ACTIVA");
             btnDarBajaOAlta.setText("Dar de Baja");
 
-            // Eliminar listeners anteriores por si acaso
+            // Eliminar todos los ActionListeners anteriores para evitar duplicados
             for (ActionListener actionListeners : btnDarBajaOAlta.getActionListeners()) {
                 btnDarBajaOAlta.removeActionListener(actionListeners);
             }
+            // Agregar un nuevo listener que da de baja la película cuando se presiona el botón
             btnDarBajaOAlta.addActionListener(evt -> darDeBajaPelicula(peliculaDTO));
 
         } else {
             jLabelMostrarEstado.setText("INACTIVA");
             btnDarBajaOAlta.setText("Dar de Alta");
 
+            // Eliminar todos los ActionListeners anteriores (igual que arriba)
             for (ActionListener al : btnDarBajaOAlta.getActionListeners()) {
                 btnDarBajaOAlta.removeActionListener(al);
             }
+            // Agregar un nuevo listener que da de alta la película al presionar el botón
             btnDarBajaOAlta.addActionListener(evt -> darDeAltaPelicula(peliculaDTO));
         }
 
+        // Mostrar la sinopsis, usando HTML para que se ajuste al ancho de 250px y tenga saltos de línea
         jLabelMostrarSinopsis.setText("<html><body style='width:250px'>" + peliculaDTO.getSinopsis() + "</body></html>");
-        cargarImagenPromocional(peliculaDTO);
+        try {
+            RenderizadorImagenPelicula.renderizarImagen(jPanelImagenPelicula, peliculaDTO.getImagen());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error al leer la imagen.");
+        }
     }
 
+    /**
+     * Da de alta una película previamente inactiva. Se solicita confirmación
+     * antes de ejecutar la acción.
+     *
+     * @param peliculaDTO Película a dar de alta.
+     */
     private void darDeAltaPelicula(PeliculaDTO peliculaDTO) {
         int respuesta = JOptionPane.showConfirmDialog(
                 this,
@@ -281,6 +326,12 @@ public class DetallesPelicula extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Da de baja una película activa. Se solicita confirmación antes de
+     * ejecutar la acción.
+     *
+     * @param peliculaDTO Película a dar de baja.
+     */
     private void darDeBajaPelicula(PeliculaDTO peliculaDTO) {
         int respuesta = JOptionPane.showConfirmDialog(
                 this,
@@ -302,6 +353,12 @@ public class DetallesPelicula extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Elimina la película del sistema de forma permanente. Se solicita
+     * confirmación antes de proceder.
+     *
+     * @param peliculaDTO Película a eliminar.
+     */
     private void eliminarPelicula(PeliculaDTO peliculaDTO) {
         int respuesta = JOptionPane.showConfirmDialog(
                 this,
@@ -320,56 +377,4 @@ public class DetallesPelicula extends javax.swing.JFrame {
             }
         }
     }
-
-    private void cargarImagenPromocional(PeliculaDTO peliculaDTO) {
-        try {
-            byte[] bytesImagen = peliculaDTO.getImagen();
-            if (bytesImagen == null) {
-                System.out.println("No hay imagen en la película.");
-                return;
-            }
-
-            InputStream is = new ByteArrayInputStream(bytesImagen);
-            BufferedImage imagen = ImageIO.read(is);
-
-            if (imagen == null) {
-                System.out.println("No se pudo leer la imagen desde los bytes.");
-                return;
-            }
-
-            int panelWidth = jPanelImagenPelicula.getWidth();
-            int panelHeight = jPanelImagenPelicula.getHeight();
-
-            int imgWidth = imagen.getWidth();
-            int imgHeight = imagen.getHeight();
-
-            // Cálculo del aspect ratio
-            double panelRatio = (double) panelWidth / panelHeight;
-            double imgRatio = (double) imgWidth / imgHeight;
-
-            int drawWidth, drawHeight;
-            if (imgRatio > panelRatio) {
-                drawWidth = panelWidth;
-                drawHeight = (int) (panelWidth / imgRatio);
-            } else {
-                drawHeight = panelHeight;
-                drawWidth = (int) (panelHeight * imgRatio);
-            }
-
-            // Escalar la imagen
-            Image imagenEscalada = imagen.getScaledInstance(drawWidth, drawHeight, Image.SCALE_SMOOTH);
-            ImageIcon icono = new ImageIcon(imagenEscalada);
-
-            // Limpiar el panel y dibujar la imagen centrada
-            jPanelImagenPelicula.removeAll();
-            jPanelImagenPelicula.setLayout(new GridBagLayout()); // Centrado automático
-            jPanelImagenPelicula.add(new JLabel(icono));
-            jPanelImagenPelicula.revalidate();
-            jPanelImagenPelicula.repaint();
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar la imagen promocional.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
 }
