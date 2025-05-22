@@ -176,19 +176,14 @@ public class Usuario {
     public String getIdString() {
         return idUsuario.toString();
     }
+    
     @BsonIgnore
     public void setIdString(String idString) {
         this.idUsuario = new ObjectId(idString);
     }
-    
 
     @Override
     public String toString() {
         return "Usuario{" + "idUsuario=" + idUsuario + ", nombreDeUsuario=" + nombreDeUsuario + ", contrasenia=" + contrasenia + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", correoElectronico=" + correoElectronico + ", fechaNacimiento=" + fechaNacimiento + ", telefono=" + telefono + ", estado=" + estado + ", rol=" + rol + '}';
     }
-
-    
-    
-    
-
 }

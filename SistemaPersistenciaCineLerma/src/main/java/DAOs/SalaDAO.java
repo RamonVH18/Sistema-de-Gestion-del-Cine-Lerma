@@ -5,18 +5,14 @@
 package DAOs;
 
 import Conexion.MongoConexion;
-import DTOs.GananciaSalaDTO;
 import Excepciones.salas.BuscarSalaException;
 import Excepciones.salas.CreacionSalaException;
-import Excepciones.salas.ErrorCalculoEstadisticasSalaException;
 import Excepciones.salas.ModificarSalaException;
 import Interfaces.ISalaDAO;
 import com.mongodb.client.MongoClient;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Accumulators;
-import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Projections;
@@ -24,8 +20,6 @@ import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import entidades.Asiento;
-import entidades.AsientoFuncion;
-import entidades.Funcion;
 import entidades.Sala;
 import enums.EstadoSala;
 import static enums.EstadoSala.ACTIVA;
@@ -260,7 +254,5 @@ public class SalaDAO implements ISalaDAO {
             throw new BuscarSalaException("Error al realizar la conexion: " + e.getMessage());
         }
     }
-    
-    
 
 }

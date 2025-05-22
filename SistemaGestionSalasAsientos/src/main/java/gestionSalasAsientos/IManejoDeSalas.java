@@ -28,14 +28,6 @@ public interface IManejoDeSalas {
     public List<SalaViejaDTO> cargarSalas(String filtro, Boolean filtrarActivas) throws BuscarSalaException;
     
     public SalaViejaDTO cargarSalaUnica(String numSala) throws BuscarSalaException;
-    
-    public List<SalaViejaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException;
-    
-    public List<SalaViejaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException;
-    
-    public List<EstadisticaSalaDTO> obtenerGananciaSala(List<SalaViejaDTO> listaSalas) throws EstadisticasSalaException;
-    
-    public Boolean imprimirEstadisticasSala(EstadisticaSalaDTO gananciaSala) throws EstadisticasSalaException;
-    
+
     public Boolean modificarEstadoSala (String numeroSala, EstadoSala estado) throws ModificarSalaException;
 }
