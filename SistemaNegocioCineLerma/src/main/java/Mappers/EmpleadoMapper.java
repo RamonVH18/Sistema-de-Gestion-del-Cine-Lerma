@@ -15,8 +15,19 @@ public class EmpleadoMapper {
 
     public EmpleadoMapper() {
     }
-
-    // --- Mapeo DTO -> Entidad ---
+    
+    
+    
+    /**
+     * Convierte un objeto EmpleadoDTO a una entidad Empleado.
+     * El ID (String) del DTO se utiliza para establecer el ID (ObjectId) en la entidad
+     * a través del método {@code entidad.setIdString(String)}.
+     * Si el ID del DTO es nulo (por ejemplo, para un nuevo empleado), el ID de la entidad también será nulo
+     * y se espera que la capa DAO genere un ObjectId al persistir.
+     *
+     * @param dto El objeto EmpleadoDTO a convertir.
+     * @return La entidad Empleado correspondiente, o null si el DTO de entrada es null.
+     */
     public Empleado convertirDTOAEntidad(EmpleadoDTO dto) {
         if (dto == null) {
             return null;
@@ -43,6 +54,15 @@ public class EmpleadoMapper {
     }
 
     // Para actualizar una entidad existente con datos de un DTO
+    /**
+     * Actualiza los campos de una entidad Empleado existente con los datos de un EmpleadoDTO.
+     * Este método se enfoca en los campos que típicamente se modifican en una actualización de información general.
+     * Campos como ID, activo, fecha de registro, y a veces cargo y sueldo (que se actualizan
+     * por métodos específicos) no se modifican aquí o se manejan con cuidado.
+     *
+     * @param entidadExistente La entidad Empleado a actualizar (no debe ser null).
+     * @param dtoConNuevosDatos El EmpleadoDTO con los nuevos datos (no debe ser null).
+     */
     public void actualizarEntidadConDTO(Empleado entidadExistente, EmpleadoDTO dtoConNuevosDatos) {
         if (entidadExistente == null || dtoConNuevosDatos == null) {
             return;
@@ -64,6 +84,13 @@ public class EmpleadoMapper {
     }
 
     // --- Mapeo Entidad -> DTO ---
+    /**
+     * Convierte una entidad Empleado a un objeto EmpleadoDTO.
+     * El ID (ObjectId) de la entidad se convierte a String usando {@code entidad.getIdString()}.
+     *
+     * @param entidad La entidad Empleado a convertir.
+     * @return El EmpleadoDTO correspondiente, o null si la entidad de entrada es null.
+     */
     public EmpleadoDTO convertirEntidadADTO(Empleado entidad) {
         if (entidad == null) {
             return null;

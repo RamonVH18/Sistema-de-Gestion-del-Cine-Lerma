@@ -60,7 +60,19 @@ public class EmpleadoBO implements IEmpleadoBO {
         this.empleadoDAO = EmpleadoDAO.getInstance();
         this.empleadoMapper = new EmpleadoMapper();
     }
-
+    
+    
+    
+    
+    
+    /**
+     * Valida un ID de empleado en formato String (nulidad y vacío).
+     * La validación del formato específico de ObjectId la realiza el DAO.
+     *
+     * @param empleadoIdString El ID del empleado como String.
+     * @param contextoOperacion Descripción breve de la operación para mensajes de error.
+     * @throws ValidacionEmpleadoException Si el ID es nulo o está vacío.
+     */
     private void validarIdStringComoParametro(String empleadoIdString, String contextoOperacion) throws ValidacionEmpleadoException {
         if (empleadoIdString == null || empleadoIdString.trim().isEmpty()) {
             throw new ValidacionEmpleadoException("El ID del empleado para " + contextoOperacion + " no puede ser nulo o vacío.");
@@ -68,7 +80,15 @@ public class EmpleadoBO implements IEmpleadoBO {
         // La validación de si el string es un ObjectId válido ahora la hará el DAO
         // antes de intentar la conversión new ObjectId(empleadoIdString).
     }
-
+    
+    
+    /**
+     * Valida los datos contenidos en un EmpleadoDTO.
+     *
+     * @param dto El EmpleadoDTO a validar.
+     * @param esNuevo true si es para un nuevo empleado (afecta validación de ID y sueldo), false si es para actualización.
+     * @throws ValidacionEmpleadoException Si algún dato es inválido según las reglas de negocio.
+     */
     private void validarEmpleadoDTO(EmpleadoDTO dto, boolean esNuevo) throws ValidacionEmpleadoException {
         if (dto == null) {
             throw new ValidacionEmpleadoException("Los datos del empleado (DTO) no pueden ser nulos.");
@@ -148,15 +168,27 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new ValidacionEmpleadoException("El número exterior en la dirección es obligatorio.");
         }
     }
-
+    
+    
+    /**
+     * Valida el formato de una dirección de correo electrónico.
+     * @param correo El correo a validar.
+     * @return true si el formato es válido, false en caso contrario.
+     */
     private boolean esCorreoValido(String correo) {
         if (correo == null) {
             return false;
         }
         String regex = "^[\\w-\\.\\+]+@([\\w-]+\\.)+[\\w-]{2,4}$";
         return Pattern.matches(regex, correo);
-    }
-
+    }   
+    
+    
+    /**
+     * Valida el formato de un número de teléfono (10 dígitos numéricos).
+     * @param telefono El teléfono a validar.
+     * @return true si el formato es válido, false en caso contrario.
+     */
     private boolean esTelefonoValido(String telefono) {
         if (telefono == null) {
             return false;
@@ -164,7 +196,15 @@ public class EmpleadoBO implements IEmpleadoBO {
         String regex = "^\\d{10}$";
         return Pattern.matches(regex, telefono);
     }
-
+    
+    
+    
+    /**
+     * Obtiene el sueldo base para un cargo específico.
+     * @param cargo El cargo del empleado.
+     * @return El sueldo base correspondiente al cargo.
+     * @throws ObtenerSueldoEmpleadoException Si el cargo es nulo o no reconocido.
+     */
     private double obtenerSueldoParaCargo(Cargo cargo) throws ObtenerSueldoEmpleadoException {
         if (cargo == null) {
             throw new ObtenerSueldoEmpleadoException("El cargo no puede ser nulo para determinar el sueldo.");
@@ -198,7 +238,23 @@ public class EmpleadoBO implements IEmpleadoBO {
                 throw new ObtenerSueldoEmpleadoException("Cargo no reconocido para asignación de sueldo: " + cargo);
         }
     }
-
+    
+    
+    
+    /**
+     * Registra un nuevo empleado en el sistema después de realizar validaciones
+     * y asignar un sueldo basado en el cargo.
+     * El ID del empleado se genera automáticamente durante el proceso.
+     *
+     * @param empleadoDTO El objeto de transferencia de datos (DTO) con la información del empleado a registrar.
+     * Se espera que el campo ID de este DTO sea nulo o vacío.
+     * @return El EmpleadoDTO del empleado recién registrado, incluyendo su ID generado y el sueldo asignado.
+     * @throws ValidacionEmpleadoException Si los datos del empleado en el DTO no cumplen con las reglas de negocio
+     * (ej. campos vacíos, formato incorrecto, edad inválida, correo ya existente).
+     * @throws RegistrarEmpleadoException Si ocurre un error durante el proceso de persistencia del nuevo empleado.
+     * @throws BuscarEmpleadoException Si ocurre un error al consultar la base de datos para verificar la existencia
+     * previa del correo electrónico.
+     */
     @Override
     public EmpleadoDTO registrarNuevoEmpleado(EmpleadoDTO empleadoDTO)
             throws ValidacionEmpleadoException, RegistrarEmpleadoException, BuscarEmpleadoException {
@@ -244,7 +300,25 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new RegistrarEmpleadoException("Error de persistencia al registrar empleado: " + e.getMessage(), e);
         }
     }
-
+    
+    
+    /**
+     * Actualiza la información general de un empleado existente.
+     * No actualiza el cargo ni el sueldo, los cuales se manejan por métodos dedicados.
+     * El empleado debe existir y estar activo para ser actualizado.
+     * Si el correo electrónico se modifica, se verifica su unicidad.
+     *
+     * @param empleadoIdString El ID (como String) del empleado cuya información se va a actualizar.
+     * @param datosNuevosDTO El DTO con los nuevos datos para el empleado. El ID en este DTO
+     * se ignora o se usa para consistencia interna, el ID de operación es empleadoIdString.
+     * @return El EmpleadoDTO con la información actualizada del empleado.
+     * @throws ValidacionEmpleadoException Si el ID proporcionado es inválido, o si los datos en el DTO
+     * no cumplen con las reglas de negocio (ej. nuevo correo ya en uso).
+     * @throws ActualizarEmpleadoException Si el empleado está inactivo, o si ocurre un error durante el proceso
+     * de persistencia de la actualización.
+     * @throws BuscarEmpleadoException Si no se encuentra el empleado con el ID especificado, o si ocurre un
+     * error al consultar la base de datos durante las verificaciones.
+     */
     @Override
     public EmpleadoDTO actualizarInformacionEmpleado(String empleadoIdString, EmpleadoDTO datosNuevosDTO)
             throws ValidacionEmpleadoException, ActualizarEmpleadoException, BuscarEmpleadoException {
@@ -310,7 +384,21 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new ActualizarEmpleadoException("Error de persistencia al actualizar empleado: " + e.getMessage(), e);
         }
     }
-
+    
+    
+    
+    /**
+     * Realiza el despido lógico de un empleado, marcándolo como inactivo.
+     * El empleado debe existir y estar activo para ser despedido.
+     *
+     * @param empleadoIdString El ID (como String) del empleado a despedir.
+     * @return true si el empleado fue marcado como inactivo exitosamente.
+     * @throws DespedirEmpleadoException Si el empleado ya está inactivo, o si ocurre un error
+     * durante el proceso de persistencia del despido.
+     * @throws BuscarEmpleadoException Si no se encuentra el empleado con el ID especificado o si hay un
+     * error al consultar la base de datos.
+     * @throws ValidacionEmpleadoException Si el ID proporcionado es inválido.
+     */
     @Override
     public boolean despedirEmpleado(String empleadoIdString)
             throws DespedirEmpleadoException, BuscarEmpleadoException, ValidacionEmpleadoException {
@@ -347,7 +435,18 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new DespedirEmpleadoException("Error de persistencia al despedir: " + e.getMessage(), e);
         }
     }
-
+    
+    
+    
+    /**
+     * Busca un empleado activo por su ID.
+     *
+     * @param empleadoIdString El ID (como String) del empleado a buscar.
+     * @return El EmpleadoDTO del empleado si se encuentra y está activo.
+     * @throws BuscarEmpleadoException Si no se encuentra un empleado activo con el ID especificado,
+     * o si ocurre un error al consultar la base de datos.
+     * @throws ValidacionEmpleadoException Si el ID proporcionado es inválido.
+     */
     @Override
     public EmpleadoDTO buscarEmpleadoActivoPorId(String empleadoIdString)
             throws BuscarEmpleadoException, ValidacionEmpleadoException {
@@ -366,7 +465,18 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new ValidacionEmpleadoException("ID para buscar no válido según persistencia: " + e.getMessage(), e);
         }
     }
-
+    
+    
+    
+    /**
+     * Obtiene una lista de todos los empleados activos que pertenecen a un cargo específico.
+     *
+     * @param cargo El cargo por el cual filtrar los empleados.
+     * @return Una lista de EmpleadoDTO de los empleados activos con el cargo especificado.
+     * Devuelve una lista vacía si no se encuentran coincidencias.
+     * @throws ValidacionEmpleadoException Si el cargo proporcionado es nulo o inválido según la persistencia.
+     * @throws BuscarEmpleadoException Si ocurre un error al consultar la base de datos.
+     */
     @Override
     public List<EmpleadoDTO> obtenerEmpleadosActivosPorCargo(Cargo cargo) throws ValidacionEmpleadoException, BuscarEmpleadoException { 
 
@@ -392,7 +502,19 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new ValidacionEmpleadoException("Error de validación de datos en la capa de persistencia al buscar por cargo: " + e.getMessage(), e);
         }
     }
-
+    
+    /**
+     * Actualiza el cargo de un empleado existente y activo.
+     *
+     * @param empleadoIdString El ID (como String) del empleado cuyo cargo se actualizará.
+     * @param nuevoCargo El nuevo cargo a asignar.
+     * @return true si la actualización del cargo fue exitosa.
+     * @throws ValidacionEmpleadoException Si el ID o el nuevo cargo son inválidos, o si el empleado ya tiene ese cargo.
+     * @throws ActualizarEmpleadoException Si el empleado está inactivo, o si ocurre un error durante la
+     * persistencia de la actualización del cargo.
+     * @throws BuscarEmpleadoException Si no se encuentra el empleado con el ID especificado o si hay un error
+     * al consultar la base de datos.
+     */
     @Override
     public boolean actualizarCargoEmpleado(String empleadoIdString, Cargo nuevoCargo) throws ValidacionEmpleadoException, ActualizarEmpleadoException, BuscarEmpleadoException {
         validarIdStringComoParametro(empleadoIdString, "actualizar cargo");
@@ -425,7 +547,21 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new ActualizarEmpleadoException("Error de persistencia al actualizar cargo: " + e.getMessage(), e);
         }
     }
-
+    
+    
+    /**
+     * Actualiza el sueldo de un empleado individual existente y activo.
+     *
+     * @param empleadoIdString El ID (como String) del empleado cuyo sueldo se actualizará.
+     * @param nuevoSueldo El nuevo sueldo a asignar. Debe ser un valor positivo dentro de los rangos permitidos.
+     * @return true si la actualización del sueldo fue exitosa.
+     * @throws ValidacionEmpleadoException Si el ID es inválido, o si el nuevo sueldo no cumple con las
+     * reglas de negocio (ej. negativo, fuera de rango, igual al actual).
+     * @throws ActualizarEmpleadoException Si el empleado está inactivo, o si ocurre un error durante la
+     * persistencia de la actualización del sueldo.
+     * @throws BuscarEmpleadoException Si no se encuentra el empleado con el ID especificado o si hay un error
+     * al consultar la base de datos.
+     */
     @Override
     public boolean actualizarSueldoEmpleado(String empleadoIdString, double nuevoSueldo)
             throws ValidacionEmpleadoException, ActualizarEmpleadoException, BuscarEmpleadoException {
@@ -463,7 +599,18 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new ActualizarEmpleadoException("Error de persistencia al actualizar sueldo: " + eGen.getMessage(), eGen);
         }
     }
-
+    
+    
+    /**
+     * Actualiza el sueldo de todos los empleados activos que tienen un cargo específico.
+     *
+     * @param cargo El cargo de los empleados cuyo sueldo se actualizará.
+     * @param nuevoSueldo El nuevo sueldo a asignar. Debe ser un valor positivo dentro de los rangos permitidos.
+     * @return El número de empleados cuyos sueldos fueron actualizados.
+     * @throws ValidacionEmpleadoException Si el cargo es nulo, o si el nuevo sueldo no cumple con las
+     * reglas de negocio.
+     * @throws ActualizarEmpleadoException Si ocurre un error durante la persistencia de la actualización masiva de sueldos.
+     */
     @Override
     public long actualizarSueldoGeneralPorCargo(Cargo cargo, double nuevoSueldo)
             throws ValidacionEmpleadoException, ActualizarEmpleadoException {
@@ -487,7 +634,15 @@ public class EmpleadoBO implements IEmpleadoBO {
             throw new ActualizarEmpleadoException("Error de persistencia al actualizar sueldos por cargo: " + eGen.getMessage(), eGen);
         }
     }
-
+    
+    
+    /**
+     * Obtiene una lista de todos los empleados que se encuentran activos.
+     *
+     * @return Una lista de EmpleadoDTO de todos los empleados activos.
+     * Devuelve una lista vacía si no hay empleados activos.
+     * @throws BuscarEmpleadoException Si ocurre un error al consultar la base de datos.
+     */
     @Override
     public List<EmpleadoDTO> obtenerTodosLosEmpleadosActivos() throws BuscarEmpleadoException {
         try {

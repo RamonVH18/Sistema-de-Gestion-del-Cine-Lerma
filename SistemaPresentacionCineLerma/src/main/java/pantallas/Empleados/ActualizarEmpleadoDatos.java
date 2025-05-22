@@ -29,13 +29,12 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
     private IControl control = ControlDeNavegacion.getInstancia();
     private EmpleadoDTO empleadoActualDTO; // dto del empleado que se edita
     private String empleadoId; // id del empleado que se edita
-    
 
     /**
      * Creates new form ActualizarEmpleadoDatos
      */
     public ActualizarEmpleadoDatos(String empleadoIdParaEditar) throws ManejoValidarEmpleadoException, ManejoObtenerEmpleadoException, ManejoValidacionEmpleadoIdException {
-      
+
         this.empleadoId = empleadoIdParaEditar;
         initComponents();
         configurarFrame();
@@ -54,7 +53,7 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
             return;
         }
         try {
-           
+
             this.empleadoActualDTO = control.consultarEmpleadoActivoPorId(this.empleadoId);
 
             if (this.empleadoActualDTO == null) {
@@ -74,15 +73,11 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
             txtCorreoE.setText(empleadoActualDTO.getCorreoE());
             txtTelefono.setText(empleadoActualDTO.getTelefono());
 
-        }
-        
-         catch (Exception e) { // Otros errores inesperados
+        } catch (Exception e) { // Otros errores inesperados
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar los datos: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
             this.dispose();
         }
-        
-        
 
     }
 
@@ -414,10 +409,13 @@ public class ActualizarEmpleadoDatos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al actualizar: " + e.getMessage(), "Error General", JOptionPane.ERROR_MESSAGE);
         }
 
+        this.dispose();
+
+
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-       
+
         control.mostrarActualizarEmpleado(this);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
