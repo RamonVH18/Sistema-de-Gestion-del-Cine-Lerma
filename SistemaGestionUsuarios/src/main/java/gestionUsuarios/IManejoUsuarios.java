@@ -57,7 +57,7 @@ public interface IManejoUsuarios {
     
     public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena) throws EncontrarUsuarioException;
     
-//    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) throws CargarHistorialException;
+    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) throws CargarHistorialException;
     
     //Administrador:
     

@@ -162,24 +162,24 @@ public class ClienteBO implements IClienteBO {
      * @throws CargarHistorialExceptionBO si ocurre un error al cargar el
      * historial de compras
      */
-//    @Override
-//    public List<CompraDTO> cargarHistorialComprasBO(ClienteDTO cliente) throws CargarHistorialExceptionBO {
-//        try {
-//
-//            // Convierte el ClienteDTO a Cliente
-//            Cliente clienteEncontrado = mapper.toClienteEntidad(cliente);
-//
-//            // Obtiene el historial de compras del cliente en especifico llamando al metodo de clienteDAO
-//            List<Compra> comprasDelCliente = clienteDAO.cargarHistorialCompras(clienteEncontrado);
-//
-//            // Mapea la lista de compras a CompraDTO y la devuelve
-//            return comprasDelCliente.stream()
-//                    .map(mapperCompra::toCompraDTO)
-//                    .collect(Collectors.toList());
-//
-//        } catch (CargarHistorialException e) {
-//            throw new CargarHistorialExceptionBO("Error al eliminar usuario", e);
-//        }
-//    }
+    @Override
+    public List<CompraDTO> cargarHistorialComprasBO(ClienteDTO cliente) throws CargarHistorialExceptionBO {
+        try {
+
+            // Convierte el ClienteDTO a Cliente
+            Cliente clienteEncontrado = mapper.toClienteEntidad(cliente);
+
+            // Obtiene el historial de compras del cliente en especifico llamando al metodo de clienteDAO
+            List<Compra> comprasDelCliente = clienteDAO.cargarHistorialCompras(clienteEncontrado);
+
+            // Mapea la lista de compras a CompraDTO y la devuelve
+            return comprasDelCliente.stream()
+                    .map(mapperCompra::toCompraDTO)
+                    .collect(Collectors.toList());
+
+        } catch (CargarHistorialException e) {
+            throw new CargarHistorialExceptionBO("Error al eliminar usuario", e);
+        }
+    }
 
 }

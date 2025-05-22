@@ -62,7 +62,7 @@ public interface IClienteDAO {
      * @return una lista de objetos Compra que representan el historial de compras del cliente.
      * @throws CargarHistorialException si ocurre un error al cargar el historial de compras.
      */
-//    public List<Compra> cargarHistorialCompras(Cliente cliente) throws CargarHistorialException;
+    public List<Compra> cargarHistorialCompras(Cliente cliente) throws CargarHistorialException;
     
     
 }

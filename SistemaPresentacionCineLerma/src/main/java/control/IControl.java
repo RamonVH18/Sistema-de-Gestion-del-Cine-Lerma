@@ -210,7 +210,7 @@ public interface IControl {
 
     public ClienteDTO obtenerCliente(String nombreUsuario, String contrasena);
 
-//    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente);
+    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente);
 
     //Administrador:
     public AdministradorDTO registrarAdministrador(AdministradorDTO administrador);
