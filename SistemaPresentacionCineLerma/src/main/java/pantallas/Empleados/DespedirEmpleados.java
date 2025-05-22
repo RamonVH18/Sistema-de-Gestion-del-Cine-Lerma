@@ -187,7 +187,7 @@ public class DespedirEmpleados extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDetallesActionPerformed
 
     private void btnDespedirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDespedirActionPerformed
-        
+         
         EmpleadoDTO seleccionado = listaEmpleados.getEmpleadoSeleccionado();
         if (seleccionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un empleado de la lista.", "Selección Requerida", JOptionPane.WARNING_MESSAGE);

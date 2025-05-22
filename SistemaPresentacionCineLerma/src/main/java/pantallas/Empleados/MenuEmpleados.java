@@ -143,7 +143,6 @@ public class MenuEmpleados extends javax.swing.JFrame {
         // primero vamos a abrir el Dialog DialogSeleccionarEmpleado para seleccionar el empleado a actualizar su cargo
        control.iniciarFlujoActualizarCargo(this);
         
-        
     }//GEN-LAST:event_btnGestionCargoActionPerformed
 
     private void btnGestionarSueldosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarSueldosActionPerformed
