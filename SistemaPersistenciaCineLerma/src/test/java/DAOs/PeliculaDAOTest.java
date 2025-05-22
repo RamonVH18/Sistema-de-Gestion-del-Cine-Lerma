@@ -38,7 +38,7 @@ public class PeliculaDAOTest {
                 idPelicula,
                 imagen,
                 "PeliculaPrueba",
-                "Accion",
+                "Terror",
                 120,
                 "B15",
                 "Sinopsis de prueba",
@@ -360,7 +360,7 @@ public class PeliculaDAOTest {
 
             // Prueba 1: Filtrar por género
             List<Pelicula> porGenero = peliculaDAO.mostrarPeliculasFiltradas(null, null, "Accion", null);
-            assertEquals(2, porGenero.size(), "Debe encontrar 1 película de acción");
+            assertEquals(1, porGenero.size(), "Debe encontrar 1 película de acción");
             assertEquals("Accion", porGenero.get(0).getGenero(), "El género debe ser Accion");
 
             // Prueba 2: Filtrar por clasificación
