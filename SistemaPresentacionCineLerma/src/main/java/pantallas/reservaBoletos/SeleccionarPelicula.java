@@ -385,6 +385,8 @@ public final class SeleccionarPelicula extends javax.swing.JFrame {
         UsuarioDTO usuario = control.obtenerUsuarioActual();
         if (usuario != null && usuario.getRol() == Rol.CLIENTE) {
             control.mostrarMenuCliente(this);
+        } else if (usuario != null && usuario.getRol() == Rol.ADMINISTRADOR) {
+            control.mostrarMenuAdministrador(this);
         }
         dispose();
     }
