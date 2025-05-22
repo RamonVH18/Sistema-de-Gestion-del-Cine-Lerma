@@ -85,5 +85,5 @@ public interface IClienteBO {
      * @throws CargarHistorialExceptionBO Si ocurre un error durante la carga del historial de compras,
      *                                     como el cliente no encontrado o problemas de conexión a la base de datos.
      */
-    public List<CompraDTO> cargarHistorialComprasBO(ClienteDTO cliente) throws CargarHistorialExceptionBO;
+//    public List<CompraDTO> cargarHistorialComprasBO(ClienteDTO cliente) throws CargarHistorialExceptionBO;
 }

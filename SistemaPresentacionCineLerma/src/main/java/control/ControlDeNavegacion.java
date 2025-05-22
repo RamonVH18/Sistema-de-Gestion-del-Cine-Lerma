@@ -1078,15 +1078,15 @@ public class ControlDeNavegacion implements IControl {
         }
     }
 
-    @Override
-    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) {
-        try {
-            return gestionUsuarios.cargarHistorialCompras(cliente);
-        } catch (CargarHistorialException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
+//    @Override
+//    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) {
+//        try {
+//            return gestionUsuarios.cargarHistorialCompras(cliente);
+//        } catch (CargarHistorialException e) {
+//            JOptionPane.showMessageDialog(null, e.getMessage(), titulo, JOptionPane.ERROR_MESSAGE);
+//            return null;
+//        }
+//    }
 
     @Override
     public AdministradorDTO registrarAdministrador(AdministradorDTO administrador) {

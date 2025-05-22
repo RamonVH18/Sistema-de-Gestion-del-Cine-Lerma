@@ -595,15 +595,15 @@ public class ManejoUsuarios implements IManejoUsuarios {
      * excepción generada en la capa de negocio. El mensaje de la excepción y su
      * causa proporcionan detalles sobre el error específico.
      */
-    @Override
-    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) throws CargarHistorialException {
-        try {
-            return clienteBO.cargarHistorialComprasBO(cliente);
-
-        } catch (CargarHistorialExceptionBO e) {
-            throw new CargarHistorialException("No se pudo obtener el cliente: " + e.getMessage(), e);
-        }
-    }
+//    @Override
+//    public List<CompraDTO> cargarHistorialCompras(ClienteDTO cliente) throws CargarHistorialException {
+//        try {
+//            return clienteBO.cargarHistorialComprasBO(cliente);
+//
+//        } catch (CargarHistorialExceptionBO e) {
+//            throw new CargarHistorialException("No se pudo obtener el cliente: " + e.getMessage(), e);
+//        }
+//    }
 
     //////////////////////////////////////////////
     //-------------------------------------------------METODOS DE ADMINISTRADOR ---------------------------------------------------------------------------------------

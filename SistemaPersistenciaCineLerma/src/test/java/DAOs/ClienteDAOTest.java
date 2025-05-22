@@ -388,55 +388,55 @@ public class ClienteDAOTest {
         }
     }
 
-    /**
-     * Test of cargarHistorialCompras method, of class ClienteDAO.
-     */
-    @Test
-    public void testCargarHistorialComprasExito() {
-        try {
-            Cliente cliente = new Cliente();
-            cliente.setNombreDeUsuario("jaime");
-
-            Pago pago = new Pago();
-            pago.setEstado(Boolean.TRUE);
-            pago.setFechaHora(LocalDateTime.now());
-            pago.setMonto(150.0);
-
-            Compra compra = new Compra();
-            compra.setUsuarioCliente("jaime");
-            compra.setFecha(LocalDateTime.now());
-            compra.setPago(pago);
-
-            // Insertar la compra manualmente en la coleccion de compras
-            MongoClient clienteMongo = conexion.crearConexion();
-            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Compra> coleccion = base.getCollection("Compras", Compra.class);
-            coleccion.insertOne(compra);
-            conexion.cerrarConexion(clienteMongo);
-
-            List<Compra> historial = clienteDAO.cargarHistorialCompras(cliente);
-
-            assertNotNull(historial);
-            assertFalse(historial.isEmpty());
-            assertEquals("jaime", historial.get(0).getUsuarioCliente());
-
-        } catch (CargarHistorialException e) {
-            fail("No se esperaba excepción al cargar el historial: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testCargarHistorialComprasFallido() {
-        try {
-            Cliente cliente = new Cliente();
-            cliente.setNombreDeUsuario("clienteConCompras");
-
-            List<Compra> listaCompras = clienteDAO.cargarHistorialCompras(cliente);
-            
-            assertTrue(listaCompras.isEmpty());
-
-        } catch (CargarHistorialException e) {
-            fail("No se esperaba excepción al cargar el historial: " + e.getMessage());
-        }
-    }
+//    /**
+//     * Test of cargarHistorialCompras method, of class ClienteDAO.
+//     */
+//    @Test
+//    public void testCargarHistorialComprasExito() {
+//        try {
+//            Cliente cliente = new Cliente();
+//            cliente.setNombreDeUsuario("jaime");
+//
+//            Pago pago = new Pago();
+//            pago.setEstado(Boolean.TRUE);
+//            pago.setFechaHora(LocalDateTime.now());
+//            pago.setMonto(150.0);
+//
+//            Compra compra = new Compra();
+//            compra.setUsuarioCliente("jaime");
+//            compra.setFecha(LocalDateTime.now());
+//            compra.setPago(pago);
+//
+//            // Insertar la compra manualmente en la coleccion de compras
+//            MongoClient clienteMongo = conexion.crearConexion();
+//            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+//            MongoCollection<Compra> coleccion = base.getCollection("Compras", Compra.class);
+//            coleccion.insertOne(compra);
+//            conexion.cerrarConexion(clienteMongo);
+//
+//            List<Compra> historial = clienteDAO.cargarHistorialCompras(cliente);
+//
+//            assertNotNull(historial);
+//            assertFalse(historial.isEmpty());
+//            assertEquals("jaime", historial.get(0).getUsuarioCliente());
+//
+//        } catch (CargarHistorialException e) {
+//            fail("No se esperaba excepción al cargar el historial: " + e.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testCargarHistorialComprasFallido() {
+//        try {
+//            Cliente cliente = new Cliente();
+//            cliente.setNombreDeUsuario("clienteConCompras");
+//
+//            List<Compra> listaCompras = clienteDAO.cargarHistorialCompras(cliente);
+//            
+//            assertTrue(listaCompras.isEmpty());
+//
+//        } catch (CargarHistorialException e) {
+//            fail("No se esperaba excepción al cargar el historial: " + e.getMessage());
+//        }
+//    }
 }

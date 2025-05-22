@@ -191,27 +191,27 @@ public class ClienteDAO implements IClienteDAO {
         }
     }
 
-    @Override
-    public List<Compra> cargarHistorialCompras(Cliente cliente) throws CargarHistorialException {
-        MongoClient clienteMongo = null;
-        try {
-            clienteMongo = conexion.crearConexion();
-            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
-
-            MongoCollection<Compra> coleccion = base.getCollection("Compras", Compra.class);
-
-            Bson filtro = Filters.eq("nombreDeUsuario", cliente.getNombreDeUsuario());
-
-            return coleccion.find(filtro).into(new ArrayList<>());
-
-        } catch (MongoException e) {
-            throw new CargarHistorialException("Error al cargar historial de compras: " + e.getMessage());
-        } finally {
-            if (clienteMongo != null) {
-                conexion.cerrarConexion(clienteMongo);
-            }
-        }
-    }
+//    @Override
+//    public List<Compra> cargarHistorialCompras(Cliente cliente) throws CargarHistorialException {
+//        MongoClient clienteMongo = null;
+//        try {
+//            clienteMongo = conexion.crearConexion();
+//            MongoDatabase base = conexion.obtenerBaseDatos(clienteMongo);
+//
+//            MongoCollection<Compra> coleccion = base.getCollection("Compras", Compra.class);
+//
+//            Bson filtro = Filters.eq("nombreDeUsuario", cliente.getNombreDeUsuario());
+//
+//            return coleccion.find(filtro).into(new ArrayList<>());
+//
+//        } catch (MongoException e) {
+//            throw new CargarHistorialException("Error al cargar historial de compras: " + e.getMessage());
+//        } finally {
+//            if (clienteMongo != null) {
+//                conexion.cerrarConexion(clienteMongo);
+//            }
+//        }
+//    }
 
     //Metodos auxiliares para validar el registro de un cliente y la actualizacion. Si alguna de las validaciones falla
     //se lanza un ValidarUsuarioException, hay validaciones para el nombre de usuysario, correo electronico y telefono
