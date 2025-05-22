@@ -107,10 +107,6 @@ public class ManejoDeSalas implements IManejoDeSalas {
             throw new ValidacionSalaException("El estado que se le quiere asignar a la sala es el mismo que tenia anteriormente.");
         }
     }
-    
-    private void validarSalaSinFuncionesActivas() throws ValidacionSalaException {
-        
-    }
 
     @Override
     public List<SalaViejaDTO> cargarSalas(String filtro, Boolean filtrarActivas) throws BuscarSalaException {
@@ -142,26 +138,6 @@ public class ManejoDeSalas implements IManejoDeSalas {
     }
 
     @Override
-    public List<SalaViejaDTO> cargarSalasFiltro(String filtro) throws BuscarSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<SalaViejaDTO> cargarSalaPorNumero(String numero) throws BuscarSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<EstadisticaSalaDTO> obtenerGananciaSala(List<SalaViejaDTO> listaSalas) throws EstadisticasSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Boolean imprimirEstadisticasSala(EstadisticaSalaDTO gananciaSala) throws EstadisticasSalaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
     public Boolean modificarEstadoSala(String numeroSala, EstadoSala estadoNuevo) throws ModificarSalaException {
         try {
             
@@ -180,5 +156,6 @@ public class ManejoDeSalas implements IManejoDeSalas {
             throw new ModificarSalaException(e.getMessage());
         }
     }
+
 
 }
