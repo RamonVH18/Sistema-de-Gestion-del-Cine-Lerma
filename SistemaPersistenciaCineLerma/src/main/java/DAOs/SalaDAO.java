@@ -50,7 +50,7 @@ public class SalaDAO implements ISalaDAO {
     /**
      * Constructor vacio y privado para la ejeccucion del Singleton
      */
-    private SalaDAO() {
+    SalaDAO() {
     }
 
     /**
