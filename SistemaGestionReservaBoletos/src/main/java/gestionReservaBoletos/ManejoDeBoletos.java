@@ -22,18 +22,12 @@ import Excepciones.ReservarAsientoFuncionException;
 import Excepciones.ValidarCampoAsientoException;
 import Excepciones.asientoFuncion.AsientoFuncionBusquedaException;
 import Excepciones.asientoFuncion.AsientoFuncionReservaException;
-import Excepciones.funciones.FuncionPeliculaNoEncontradaException;
-import Excepciones.peliculas.PeliculasActivasInactivasException;
+import Excepciones.peliculas.MostrarPeliculasFiltradasException;
 import Interfaces.IAsientoFuncionBO;
 import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
-import Interfaces.mappers.IClienteMapper;
-import Mappers.ClienteMapper;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -87,13 +81,13 @@ public class ManejoDeBoletos implements IManejoDeBoletos {
     public List<PeliculaDTO> cargarPeliculasActivas() throws PeliculasCargaException {
         try {
             // aqui se llamaria a un metodo que de una listapeliculas, sin embargo como aun no tenemos la BO, voy hardcodearlas
-            List<PeliculaDTO> peliculas = peliculaBO.mostrarPeliculasActivasOInactivas(true);
+            List<PeliculaDTO> peliculas = peliculaBO.mostrarPeliculasFiltradas(true, null, null, null);
             if (peliculas == null || peliculas.isEmpty()) {
                 throw new PeliculasCargaException("Hubo un error al cargar las peliculas, favor de ingresar mas al rato.");
             }
             return peliculas;
 
-        } catch (PeliculasActivasInactivasException e) {
+        } catch (MostrarPeliculasFiltradasException e) {
             throw new PeliculasCargaException("ERROR: " + e.getMessage());
         }
     }
