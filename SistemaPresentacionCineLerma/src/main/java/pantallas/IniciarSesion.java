@@ -14,7 +14,6 @@ import enums.Rol;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JOptionPane;
-import wep.ifuknow;
 
 /**
  *
@@ -62,12 +61,6 @@ public class IniciarSesion extends javax.swing.JFrame {
                 addMouseListener(new java.awt.event.MouseAdapter() {
                     public void mouseClicked(java.awt.event.MouseEvent evt) {
                         javax.swing.JFrame parentFrame = (javax.swing.JFrame) javax.swing.SwingUtilities.getWindowAncestor(jPanel2);
-                        ifuknow.showSplash(
-                            parentFrame,
-                            "/burro.png",
-                            "/sonido.wav",
-                            2000
-                        );
                         jPanel2.setVisible(false);
                     }
                 });
