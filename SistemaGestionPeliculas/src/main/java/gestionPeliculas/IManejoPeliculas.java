@@ -99,14 +99,4 @@ public interface IManejoPeliculas {
      * la lista.
      */
     public List<PeliculaDTO> mostrarPeliculasFiltradas(Boolean activo, String clasificacion, String genero, String titulo) throws ObtenerPeliculasFiltradasException;
-
-    /**
-     * Muestra todas las películas según su estado (activas o inactivas).
-     *
-     * @param activo true para activas, false para inactivas.
-     * @return Lista de películas filtradas por estado.
-     * @throws MostrarPeliculasException Si ocurre un error al obtener las
-     * películas.
-     */
-    public List<PeliculaDTO> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException;
 }

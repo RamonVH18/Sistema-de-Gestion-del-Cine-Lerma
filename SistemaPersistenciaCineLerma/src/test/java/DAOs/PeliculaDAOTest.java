@@ -299,50 +299,7 @@ public class PeliculaDAOTest {
             fail("Excepción inesperada: " + e.getMessage());
         }
     }
-
-    /**
-     * Prueba la obtención de películas activas.
-     */
-    @Test
-    public void testMostrarPeliculasActivas() {
-        try {
-            List<Pelicula> activas = peliculaDAO.mostrarPeliculasActivasOInactivas(true);
-            assertFalse(activas.isEmpty(), "Debe haber al menos una película activa");
-            activas.forEach(p -> assertTrue(p.getActivo(), "Todas deben estar activas"));
-        } catch (MostrarPeliculasException e) {
-            fail("Excepción inesperada: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Prueba la obtención de películas inactivas.
-     */
-    @Test
-    public void testMostrarPeliculasInactivas() {
-        try {
-            // Asegurarse de que hay al menos una inactiva
-            Pelicula inactiva = new Pelicula(
-                    null,
-                    null,
-                    "InactivaTest",
-                    "Genero",
-                    100,
-                    "B",
-                    "Sinopsis",
-                    false
-            );
-            peliculaDAO.registrarPelicula(inactiva);
-
-            List<Pelicula> inactivas = peliculaDAO.mostrarPeliculasActivasOInactivas(false);
-            assertFalse(inactivas.isEmpty(), "Debe haber al menos una película inactiva");
-            inactivas.forEach(p -> assertFalse(p.getActivo(), "Todas deben estar inactivas"));
-
-            peliculaDAO.eliminarPelicula(inactiva);
-        } catch (RegistrarPeliculaException | MostrarPeliculasException | EliminarPeliculaException e) {
-            fail("Excepción inesperada: " + e.getMessage());
-        }
-    }
-
+    
     /**
      * Prueba la búsqueda de películas con múltiples filtros.
      */

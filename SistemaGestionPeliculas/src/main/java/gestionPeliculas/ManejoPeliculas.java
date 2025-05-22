@@ -24,7 +24,6 @@ import Excepciones.peliculas.PeliculaDarAltaException;
 import Excepciones.peliculas.PeliculaDarBajaException;
 import Excepciones.peliculas.PeliculaEliminarException;
 import Excepciones.peliculas.PeliculaRegistroException;
-import Excepciones.peliculas.PeliculasActivasInactivasException;
 import Interfaces.IFuncionBO;
 import Interfaces.IPeliculaBO;
 import java.awt.image.BufferedImage;
@@ -290,30 +289,6 @@ public class ManejoPeliculas implements IManejoPeliculas {
             return peliculaBO.mostrarPeliculasFiltradas(activo, clasificacion, genero, titulo);
         } catch (MostrarPeliculasFiltradasException e) {
             throw new ObtenerPeliculasFiltradasException("Error al obtener películas filtradas: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Muestra todas las películas activas o inactivas según el parámetro
-     * recibido.
-     *
-     * @param activo true para activas, false para inactivas
-     * @return lista de PeliculaDTO activas o inactivas
-     * @throws MostrarPeliculasException si ocurre un error o no hay películas
-     */
-    @Override
-    public List<PeliculaDTO> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException {
-        try {
-            List<PeliculaDTO> resultado = peliculaBO.mostrarPeliculasActivasOInactivas(activo);
-
-            // verifica si hay peliculas
-            if (resultado.isEmpty()) {
-                throw new MostrarPeliculasException("No existen películas activas o inactivas según el criterio.");
-            }
-
-            return resultado;
-        } catch (PeliculasActivasInactivasException e) {
-            throw new MostrarPeliculasException("Error al obtener películas: " + e.getMessage());
         }
     }
 

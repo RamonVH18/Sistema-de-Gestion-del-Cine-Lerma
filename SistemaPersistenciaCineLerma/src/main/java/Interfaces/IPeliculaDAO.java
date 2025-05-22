@@ -82,16 +82,6 @@ public interface IPeliculaDAO {
     public Pelicula buscarPeliculaPorId(String idPelicula) throws BuscarPeliculaException;
 
     /**
-     * Muestra una lista de películas según su estado (activas o inactivas).
-     *
-     * @param activo true para películas activas, false para inactivas.
-     * @return Lista de películas según el estado indicado.
-     * @throws MostrarPeliculasException Si ocurre un error al obtener las
-     * películas.
-     */
-    public List<Pelicula> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException;
-
-    /**
      * Muestra una lista de películas aplicando filtros opcionales.
      *
      * @param activo Estado de la película true = activas, false = inactivas.

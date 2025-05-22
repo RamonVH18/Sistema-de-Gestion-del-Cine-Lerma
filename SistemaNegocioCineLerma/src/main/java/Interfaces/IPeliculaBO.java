@@ -108,15 +108,4 @@ public interface IPeliculaBO {
      * error en la búsqueda.
      */
     public PeliculaDTO buscarPeliculaPorId(String idPelicula) throws PeliculaBusquedaException;
-
-    /**
-     * Muestra todas las películas activas o inactivas dependiendo del valor
-     * indicado.
-     *
-     * @param activo true para obtener películas activas, false para inactivas.
-     * @return Lista de películas activas o inactivas.
-     * @throws PeliculasActivasInactivasException Si ocurre un error al obtener
-     * las películas.
-     */
-    public List<PeliculaDTO> mostrarPeliculasActivasOInactivas(boolean activo) throws PeliculasActivasInactivasException;
 }

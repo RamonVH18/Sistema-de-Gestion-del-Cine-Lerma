@@ -306,37 +306,6 @@ public class PeliculaDAO implements IPeliculaDAO {
     }
 
     /**
-     * Obtiene una lista de películas activas o inactivas dependiendo del
-     * parametro recibido
-     *
-     * @param activo true para filtrar por peliculas activas, false para filtrar
-     * por inactivas
-     * @return Lista de películas activas/inactivas.
-     * @throws MostrarPeliculasException si ocurre un error al obtener las
-     * películas.
-     */
-    @Override
-    public List<Pelicula> mostrarPeliculasActivasOInactivas(boolean activo) throws MostrarPeliculasException {
-        MongoClient clienteMongo = null;
-        try {
-            // Se establece la conexión con la base de datos y se accede a la colección
-            clienteMongo = conexion.crearConexion();
-            MongoDatabase baseDatos = conexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Pelicula> coleccionPeliculas = baseDatos.getCollection(nombreColeccion, Pelicula.class);
-
-            // Se filtran las películas dependiendo el filtro recibido
-            Bson filtro = Filters.eq("activo", activo);
-            List<Pelicula> peliculasFiltradas = coleccionPeliculas.find(filtro).into(new ArrayList<>());
-
-            return peliculasFiltradas;
-        } catch (MongoException e) {
-            throw new MostrarPeliculasException("Error al mostrar las películas.");
-        } finally {
-            conexion.cerrarConexion(clienteMongo);
-        }
-    }
-
-    /**
      * Busca y retorna una lista de películas aplicando múltiples filtros
      * opcionales: estado (activo/inactivo), clasificación, género y título.
      *
