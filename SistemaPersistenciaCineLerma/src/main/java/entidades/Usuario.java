@@ -9,6 +9,7 @@ import enums.Rol;
 import java.time.LocalDateTime;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
@@ -171,14 +172,14 @@ public class Usuario {
         this.rol = rol;
     }
     
-    
-//    public String getIdString() {
-//        return idUsuario.toString();
-//    }
-//    
-//    public void setIdString(String idString) {
-//        this.idUsuario = new ObjectId(idString);
-//    }
+    @BsonIgnore
+    public String getIdString() {
+        return idUsuario.toString();
+    }
+    @BsonIgnore
+    public void setIdString(String idString) {
+        this.idUsuario = new ObjectId(idString);
+    }
     
 
     @Override

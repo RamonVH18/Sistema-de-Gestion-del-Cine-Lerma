@@ -9,6 +9,7 @@ import DTOs.PaypalDTO;
 import Excepciones.PagoException;
 import Excepciones.ValidarCuentaException;
 import gestionPagos.IEstrategiaPago;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -28,8 +29,8 @@ public class PaypalEstrategia implements IEstrategiaPago {
         if (pago.getMonto() <= 0) {
             throw new PagoException("Error: El monto es menor o igual a 0");
         }
-        LocalDateTime fechaHoy = LocalDateTime.now();
-        if (!pago.getFechaHora().isEqual(fechaHoy)) { // Usando LocalDateTime
+        LocalDate fechaHoy = LocalDate.now();
+        if (!pago.getFechaHora().toLocalDate().isEqual(fechaHoy)) { // Usando LocalDateTime
             throw new PagoException("La fecha debe ser la actual");
         }
         if (pago.getMonto() > paypal.getSaldo()) {

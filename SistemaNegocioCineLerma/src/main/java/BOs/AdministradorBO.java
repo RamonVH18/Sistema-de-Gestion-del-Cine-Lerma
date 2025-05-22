@@ -6,7 +6,6 @@ package BOs;
 
 import DAOs.AdministradorDAO;
 import DTOs.AdministradorDTO;
-import Excepciones.Usuarios.EliminarUsuarioExceptionBO;
 import Excepciones.Usuarios.EncontrarAdminExceptionBO;
 import Excepciones.Usuarios.RegistrarAdminExceptionBO;
 import Excepciones.usuarios.EncontrarAdministradorException;

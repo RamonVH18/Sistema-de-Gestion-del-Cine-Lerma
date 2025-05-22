@@ -66,7 +66,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
 
             if (empleado.getId() == null) { // El ObjectId de la entidad
                 empleado.setId(new ObjectId());
@@ -91,7 +91,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             coleccion.find(Filters.eq("activo", true)).into(empleados);
             return empleados;
         } catch (MongoException e) {
@@ -110,7 +110,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             Bson filtro = Filters.and(
                     Filters.eq("_id", empleadoId),
                     Filters.eq("activo", true)
@@ -132,7 +132,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             return coleccion.find(Filters.eq("_id", empleadoId)).first();
         } catch (MongoException e) {
             throw new DAOObtenerEmpleadoException("Error al obtener empleado (interno) por ID " + empleadoIdString + ": " + e.getMessage(), e);
@@ -152,7 +152,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             UpdateResult result = coleccion.replaceOne(Filters.eq("_id", empleado.getId()), empleado);
             return result.getModifiedCount() > 0;
         } catch (MongoException e) {
@@ -171,7 +171,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             Bson filtro = Filters.and(
                     Filters.eq("_id", empleadoId),
                     Filters.eq("activo", true)
@@ -198,7 +198,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             Bson filtro = Filters.and(
                     Filters.eq("cargo", cargo.name()), // Guardar el nombre del enum
                     Filters.eq("activo", true)
@@ -224,7 +224,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             Bson filtro = Filters.and(
                     Filters.eq("_id", empleadoId),
                     Filters.eq("activo", true)
@@ -249,7 +249,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             Bson filtro = Filters.and(
                     Filters.eq("_id", empleadoId),
                     Filters.eq("activo", true)
@@ -276,7 +276,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             Bson filtro = Filters.and(
                     Filters.eq("cargo", cargo.name()),
                     Filters.eq("activo", true)
@@ -303,7 +303,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             Bson filtro = Filters.eq("correoE", correoE);
             return coleccion.countDocuments(filtro) > 0; // Más eficiente que traer el documento
         } catch (MongoException e) {
@@ -325,7 +325,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         try {
             clienteMongo = mongoConexion.crearConexion();
             MongoDatabase database = mongoConexion.obtenerBaseDatos(clienteMongo);
-            MongoCollection<Empleado> coleccion = database.getCollection("empleados", Empleado.class);
+            MongoCollection<Empleado> coleccion = database.getCollection("Empleados", Empleado.class);
             Bson filtro = Filters.and(
                     Filters.eq("correoE", correoE.trim()),
                     Filters.eq("activo", true),

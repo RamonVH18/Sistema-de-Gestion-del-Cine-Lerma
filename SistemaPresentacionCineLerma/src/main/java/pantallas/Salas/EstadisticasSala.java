@@ -250,6 +250,7 @@ public class EstadisticasSala extends javax.swing.JFrame {
         try {
             if (estadisticas.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "ERROR: La tabla no contiene ningun dato que se pueda imprimir", "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+                return;
             }
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Guardar reporte estadisticas de las salas PDF");
