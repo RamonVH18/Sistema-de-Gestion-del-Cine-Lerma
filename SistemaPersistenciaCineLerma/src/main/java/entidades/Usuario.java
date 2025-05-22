@@ -172,13 +172,13 @@ public class Usuario {
     }
     
     
-    public String getIdString() {
-        return idUsuario.toString();
-    }
-    
-    public void setIdString(String idString) {
-        this.idUsuario = new ObjectId(idString);
-    }
+//    public String getIdString() {
+//        return idUsuario.toString();
+//    }
+//    
+//    public void setIdString(String idString) {
+//        this.idUsuario = new ObjectId(idString);
+//    }
     
 
     @Override
