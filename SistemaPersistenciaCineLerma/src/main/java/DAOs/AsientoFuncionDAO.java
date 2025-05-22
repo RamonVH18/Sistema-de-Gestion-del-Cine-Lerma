@@ -143,13 +143,18 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             throw new FalloMostrarAsientosFuncionException("Hubo un error al mostrar los asientos de la funcion: " + e.getMessage());
         }
     }
-
+    /**
+     * Metodo para ocupar asientos o mejor dicho reservarlos
+     * @param asientosReservados
+     * @return
+     * @throws FalloOcuparAsientosFuncionException 
+     */
     @Override
     public Boolean ocuparAsientos(List<AsientoFuncion> asientosReservados) throws FalloOcuparAsientosFuncionException {
         MongoClient clienteMongo = null;
         try {
             MongoCollection<AsientoFuncion> coleccionAF = obtenerColeccionAsientoFuncion(clienteMongo);
-
+            //Filtro que se encarga de buscar los asientos de una funcion
             Bson filtroFuncion = filtroFuncion(
                     asientosReservados.get(0).getIdFuncion(),
                     Boolean.FALSE
@@ -166,18 +171,22 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             throw new FalloOcuparAsientosFuncionException("Hubo un error al ocupar los asientos: " + e.getMessage());
         }
     }
-
+    /**
+     * Metodo para obtener las estadisticas de la sala
+     * @return
+     * @throws ErrorCalculoEstadisticasSalaException 
+     */
     @Override
     public List<GananciaSalaDTO> obtenerEstadisticasDeSalas() throws ErrorCalculoEstadisticasSalaException {
         MongoClient clienteMongo = null;
         try {
             MongoCollection<Document> coleccionAsientoFuncion = obtenerColeccionDocument(clienteMongo);
-
+            //Tuberia par poder obtener los datos que quiero, tal y como los quiero
             List<Bson> pipeline = Arrays.asList(
-                    lookup("Salas", "numSala", "numSala", "infoSala"),
+                    lookup("Salas", "numSala", "numSala", "infoSala"), // Union de la coleccion de salas y asientofuncion
                     addFields(new Field<>("idFuncionObjId",
                             new Document("$toObjectId", "$idFuncion"))),
-                    lookup("Funciones", "idFuncionObjId", "_id", "infoFuncion"),
+                    lookup("Funciones", "idFuncionObjId", "_id", "infoFuncion"), // Union de la coleccion de funcion y asientoFuncion
                     group("$numSala",
                             first("numeroSala", "$numSala"),
                             first("infoSala", "$infoSala"),
@@ -185,7 +194,7 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
                             sum("asientosVendidos", new Document("$cond",
                                     Arrays.asList(new Document("$eq", Arrays.asList("$disponibilidad", false)), 1, 0))),
                             sum("funcionesRealizadas", 1)
-                    ),
+                    ), // Se agrupan por el num de la sala y en base a eso se obtiene la mayoria de datos
                     new Document("$sort", new Document("numeroSala", -1)),
                     projeccionGanancia
             );
@@ -198,7 +207,12 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
             throw new ErrorCalculoEstadisticasSalaException("Hubo un erro al calcular las estadisticas de la base de datos: " + e.getMessage());
         }
     }
-
+    /**
+     * Metodo para crear la lista de ganancias
+     * Resive un iterable y en base a eso crea los demas datos
+     * @param iterable
+     * @return 
+     */
     private List<GananciaSalaDTO> crearListaGanancias(AggregateIterable<Document> iterable) {
         List<GananciaSalaDTO> lista = new ArrayList<>();
         for (Document doc : iterable) {
@@ -220,10 +234,15 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         }
         return lista;
     }
-
+    /**
+     * Metodo para crear el filtro necesario para buscar los asientos de una funcion en especifico
+     * @param idFuncion
+     * @param mostrarDisponibles
+     * @return 
+     */
     private Bson filtroFuncion(String idFuncion, Boolean mostrarDisponibles) {
         Bson filtro = Filters.eq("idFuncion", idFuncion);
-        if (mostrarDisponibles) {
+        if (mostrarDisponibles) { // En caso de que mostrarDisponibles sea true entonces al filtro tambien se le añadira el hecho que los asientos esten disponibles
             List<Bson> filtradores = Arrays.asList(
                     Filters.eq("disponibilidad", mostrarDisponibles),
                     filtro
@@ -232,7 +251,12 @@ public class AsientoFuncionDAO implements IAsientoFuncionDAO {
         }
         return filtro;
     }
-
+    /**
+     * 
+     * @param filtroAF
+     * @param asientosFuncion
+     * @return 
+     */
     private Bson filtroAsientoFuncion(Bson filtroAF, List<AsientoFuncion> asientosFuncion) {
         List<Bson> filtradores = new ArrayList();
         for (AsientoFuncion asiento : asientosFuncion) {
