@@ -68,8 +68,6 @@ public interface IControl {
 
     public void mostrarMenuAdministrador(JFrame frameAnterior);
 
-    public void mostrarMenuReportes(JFrame frameAnterior);
-
     public List<PeliculaDTO> obtenerPeliculas();
 
     public PeliculaDTO consultarPelicula();

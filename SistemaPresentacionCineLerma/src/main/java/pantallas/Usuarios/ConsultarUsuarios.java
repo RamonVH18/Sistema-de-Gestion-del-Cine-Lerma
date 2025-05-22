@@ -12,6 +12,7 @@ import control.ControlDeNavegacion;
 import control.IControl;
 import enums.EstadoUsuario;
 import enums.Rol;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,8 +22,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import utilitades.CreacionReportes;
 import utilitades.ModeladoTablas;
 
 /**
@@ -127,6 +130,8 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         btnFiltrar = new javax.swing.JButton();
         usuarioField = new javax.swing.JTextField();
         botonBloquear = new javax.swing.JButton();
+        btnReporteAdministradores = new javax.swing.JButton();
+        btnReporteClientes1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1515, 820));
@@ -316,6 +321,22 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
             }
         });
 
+        btnReporteAdministradores.setBackground(new java.awt.Color(162, 132, 94));
+        btnReporteAdministradores.setText("Reporte Administradores PDF");
+        btnReporteAdministradores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteAdministradoresActionPerformed(evt);
+            }
+        });
+
+        btnReporteClientes1.setBackground(new java.awt.Color(162, 132, 94));
+        btnReporteClientes1.setText("Reporte de clientes PDF");
+        btnReporteClientes1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteClientes1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -362,69 +383,72 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
                                     .addComponent(lblSubtitulo)
                                     .addComponent(panelTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 1169, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(panelSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
+                        .addGap(24, 24, 24)
+                        .addComponent(panelSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnReporteClientes1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(79, 79, 79)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(botonDesBloquear)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(botonBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(58, 58, 58))))))
+                                .addComponent(botonDesBloquear)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(botonBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(botonEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                            .addComponent(btnReporteAdministradores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(58, 58, 58))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblTitulo)
+                .addGap(14, 14, 14)
+                .addComponent(lblSubtitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblTitulo)
-                        .addGap(14, 14, 14)
-                        .addComponent(lblSubtitulo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(lblEstadoCuenta)
-                                            .addComponent(lblRol))
-                                        .addGap(4, 4, 4)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(comboRol, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(comboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblUsuarioOCorreo))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblFechaNacimiento)
-                                        .addGap(4, 4, 4)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblDesde)
-                                            .addComponent(fechaInicioChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblEstadoCuenta)
+                                    .addComponent(lblRol))
                                 .addGap(4, 4, 4)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(fechaFinChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(usuarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(lblHasta)
-                            .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                        .addComponent(panelTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(panelSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(botonDesBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(botonBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(comboRol, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(comboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblUsuarioOCorreo))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblFechaNacimiento)
+                                .addGap(4, 4, 4)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblDesde)
+                                    .addComponent(fechaInicioChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(fechaFinChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(usuarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblHasta)
+                    .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(panelTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReporteAdministradores, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReporteClientes1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(7, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonDesBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonBloquear, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(botonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -519,6 +543,16 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
         List<UsuarioDTO> listaUsuarios = control.mostrarListaUsuarios();
         cargarListaUsuarios(listaUsuarios);
     }//GEN-LAST:event_botonBloquearActionPerformed
+
+    private void btnReporteAdministradoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteAdministradoresActionPerformed
+        // TODO add your handling code here:
+        generarReporteAdministradores();
+    }//GEN-LAST:event_btnReporteAdministradoresActionPerformed
+
+    private void btnReporteClientes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteClientes1ActionPerformed
+        // TODO add your handling code here:
+        generarReporteClientes();
+    }//GEN-LAST:event_btnReporteClientes1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -714,6 +748,8 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
     private javax.swing.JButton botonDesBloquear;
     private javax.swing.JButton botonEditar;
     private javax.swing.JButton btnFiltrar;
+    private javax.swing.JButton btnReporteAdministradores;
+    private javax.swing.JButton btnReporteClientes1;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<EstadoUsuario> comboEstado;
     private javax.swing.JComboBox<Rol> comboRol;
@@ -750,4 +786,79 @@ public class ConsultarUsuarios extends javax.swing.JFrame {
     private javax.swing.JTextField usuarioField;
     // End of variables declaration//GEN-END:variables
 
+    private void generarReporteClientes() {
+
+        try {
+            List<UsuarioDTO> usuarios = control.mostrarListaUsuarios();
+
+            if (usuarios.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontro ningun usuario registrado en el sistema", "Info", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            List<ClienteDTO> clientes = new ArrayList<>();
+
+            for (UsuarioDTO usuario : usuarios) {
+                if (usuario.getRol() == Rol.CLIENTE) {
+                    ClienteDTO ClienteEncontrado = control.obtenerCliente(usuario.getNombreUsuario(), usuario.getContraseña());
+                    clientes.add(ClienteEncontrado);
+                }
+            }
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar reporte PDF");
+            fileChooser.setSelectedFile(new File("reporte_clientes.pdf"));
+
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".pdf")) {
+                    filePath += ".pdf";
+                }
+
+                CreacionReportes.generarReporteClientesPDF(clientes, filePath);
+                JOptionPane.showMessageDialog(this, "Reporte generado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    private void generarReporteAdministradores() {
+
+        try {
+            List<UsuarioDTO> usuarios = control.mostrarListaUsuarios();
+
+            if (usuarios.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontro ningun usuario registrado en el sistema", "Info", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            List<AdministradorDTO> administradores = new ArrayList<>();
+
+            for (UsuarioDTO usuario : usuarios) {
+                if (usuario.getRol() == Rol.ADMINISTRADOR) {
+                    AdministradorDTO adminEncontrado = control.obtenerAdministrador(usuario.getNombreUsuario(), usuario.getContraseña());
+                    administradores.add(adminEncontrado);
+                }
+            }
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar reporte PDF");
+            fileChooser.setSelectedFile(new File("reporte_administradores.pdf"));
+
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!filePath.toLowerCase().endsWith(".pdf")) {
+                    filePath += ".pdf";
+                }
+
+                CreacionReportes.generarReporteAdministradoresPDF(administradores, filePath);
+                JOptionPane.showMessageDialog(this, "Reporte generado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
 }

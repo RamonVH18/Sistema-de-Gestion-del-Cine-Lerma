@@ -117,7 +117,6 @@ import pantallas.reservaBoletos.DetalleDelBoleto;
 import pantallas.MenuPrincipalCliente;
 import pantallas.Pagos.PantallaPago;
 import pantallas.Pagos.PantallaPagoRechazado;
-import pantallas.Reportes.Reportes;
 import pantallas.Salas.AgregarSala;
 import pantallas.Salas.ConsultarAsientosReservados;
 import pantallas.Salas.ConsultarFuncionesSalas;
@@ -973,16 +972,6 @@ public class ControlDeNavegacion implements IControl {
             EditarUsuario pantallaEditarUsuario = new EditarUsuario(frameAnterior, cliente, clienteAlMando);
             pantallaEditarUsuario.setLocationRelativeTo(null);
             pantallaEditarUsuario.setVisible(true);
-            frameAnterior.dispose();
-        });
-    }
-
-    @Override
-    public void mostrarMenuReportes(JFrame frameAnterior) {
-        SwingUtilities.invokeLater(() -> {
-            Reportes pantallaReportes = new Reportes();
-            pantallaReportes.setLocationRelativeTo(null);
-            pantallaReportes.setVisible(true);
             frameAnterior.dispose();
         });
     }
