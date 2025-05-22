@@ -249,11 +249,13 @@ public class MenuPrincipalAdmin extends javax.swing.JFrame {
 
     private void btnFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncionActionPerformed
         control.mostrarSeleccionarPelicula();
+        dispose();
     }//GEN-LAST:event_btnFuncionActionPerformed
 
     private void btnEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpleadosActionPerformed
         
         control.mostrarMenuAdministrarEmpleados(this);
+        dispose();
     }//GEN-LAST:event_btnEmpleadosActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed

@@ -85,12 +85,8 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
 
         btnRegresoMenu1 = new javax.swing.JButton();
         labelTitulo = new javax.swing.JLabel();
-        btnCuentaMenu = new javax.swing.JButton();
         btnCarteleraMenu = new javax.swing.JButton();
         btnHistorialMenu = new javax.swing.JButton();
-        btnSalirMenu = new javax.swing.JButton();
-        btnAlimentosMenu = new javax.swing.JButton();
-        btnOpcionesMenu1 = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
         btnEditarUsuario = new javax.swing.JButton();
 
@@ -111,17 +107,6 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
 
         labelTitulo.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 48)); // NOI18N
         labelTitulo.setText("CINEMA LERMA");
-
-        btnCuentaMenu.setBackground(new java.awt.Color(162, 132, 94));
-        btnCuentaMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
-        btnCuentaMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnCuentaMenu.setText("Cuenta");
-        btnCuentaMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnCuentaMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCuentaMenuActionPerformed(evt);
-            }
-        });
 
         btnCarteleraMenu.setBackground(new java.awt.Color(162, 132, 94));
         btnCarteleraMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
@@ -147,44 +132,6 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         btnHistorialMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHistorialMenuActionPerformed(evt);
-            }
-        });
-
-        btnSalirMenu.setBackground(new java.awt.Color(162, 132, 94));
-        btnSalirMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
-        btnSalirMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnSalirMenu.setText("Salir");
-        btnSalirMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnSalirMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnSalirMenuMouseClicked(evt);
-            }
-        });
-        btnSalirMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirMenuActionPerformed(evt);
-            }
-        });
-
-        btnAlimentosMenu.setBackground(new java.awt.Color(162, 132, 94));
-        btnAlimentosMenu.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
-        btnAlimentosMenu.setForeground(new java.awt.Color(255, 255, 255));
-        btnAlimentosMenu.setText("Alimentos");
-        btnAlimentosMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnAlimentosMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlimentosMenuActionPerformed(evt);
-            }
-        });
-
-        btnOpcionesMenu1.setBackground(new java.awt.Color(162, 132, 94));
-        btnOpcionesMenu1.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
-        btnOpcionesMenu1.setForeground(new java.awt.Color(255, 255, 255));
-        btnOpcionesMenu1.setText("Opciones");
-        btnOpcionesMenu1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnOpcionesMenu1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpcionesMenu1ActionPerformed(evt);
             }
         });
 
@@ -221,34 +168,20 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnAlimentosMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCarteleraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCuentaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnCarteleraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(200, 200, 200))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnEditarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(147, 147, 147)
+                        .addComponent(labelTitulo))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(147, 147, 147)
-                                .addComponent(labelTitulo))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnOpcionesMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnCerrarSesion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEditarUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnHistorialMenu, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,29 +190,17 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
                 .addComponent(labelTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCarteleraMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnAlimentosMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCuentaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnOpcionesMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(222, 222, 222)
                 .addComponent(btnHistorialMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnSalirMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(149, 149, 149)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCerrarSesion)
-                    .addComponent(btnEditarUsuario))
+                .addGap(183, 183, 183)
+                .addComponent(btnEditarUsuario)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCerrarSesion)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnCuentaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCuentaMenuActionPerformed
 
     private void btnRegresoMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoMenu1ActionPerformed
         // TODO add your handling code here:
@@ -295,30 +216,12 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnHistorialMenuActionPerformed
 
-    private void btnSalirMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalirMenuActionPerformed
-
-    private void btnAlimentosMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlimentosMenuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAlimentosMenuActionPerformed
-
     private void btnCarteleraMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCarteleraMenuMouseClicked
         // TODO add your handling code here:
         control.mostrarSeleccionarPelicula();
         dispose();
 
     }//GEN-LAST:event_btnCarteleraMenuMouseClicked
-
-    private void btnSalirMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMenuMouseClicked
-        // TODO add your handling code here:
-        this.dispose();
-
-    }//GEN-LAST:event_btnSalirMenuMouseClicked
-
-    private void btnOpcionesMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpcionesMenu1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnOpcionesMenu1ActionPerformed
 
     private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
         // TODO add your handling code here:
@@ -340,15 +243,11 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAlimentosMenu;
     private javax.swing.JButton btnCarteleraMenu;
     private javax.swing.JButton btnCerrarSesion;
-    private javax.swing.JButton btnCuentaMenu;
     private javax.swing.JButton btnEditarUsuario;
     private javax.swing.JButton btnHistorialMenu;
-    private javax.swing.JButton btnOpcionesMenu1;
     private javax.swing.JButton btnRegresoMenu1;
-    private javax.swing.JButton btnSalirMenu;
     private javax.swing.JLabel labelTitulo;
     // End of variables declaration//GEN-END:variables
 
@@ -380,11 +279,7 @@ public class MenuPrincipalCliente extends javax.swing.JFrame {
 
         //Agregar cada boton al panel de botones utilizando boxLayout
         agregarBotonEnBox(btnCarteleraMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        agregarBotonEnBox(btnAlimentosMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        agregarBotonEnBox(btnCuentaMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
         agregarBotonEnBox(btnHistorialMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        agregarBotonEnBox(btnOpcionesMenu1, tamañoBoton, tamSeparacionbBtns, panelBotones);
-        agregarBotonEnBox(btnSalirMenu, tamañoBoton, tamSeparacionbBtns, panelBotones);
 
         panelBotones.setVisible(true);
         panelBotones.revalidate();

@@ -45,7 +45,6 @@ public class Reportes extends javax.swing.JFrame {
     private void initComponents() {
 
         btnAdminstradores = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         titulolbl = new javax.swing.JLabel();
         btnClientes = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
@@ -59,9 +58,6 @@ public class Reportes extends javax.swing.JFrame {
                 btnAdminstradoresActionPerformed(evt);
             }
         });
-
-        jButton2.setBackground(new java.awt.Color(162, 132, 94));
-        jButton2.setText("jButton2");
 
         titulolbl.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         titulolbl.setText("Selecciona un tipo de reporte:");
@@ -94,7 +90,6 @@ public class Reportes extends javax.swing.JFrame {
                 .addGap(185, 185, 185)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAdminstradores, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
@@ -111,9 +106,7 @@ public class Reportes extends javax.swing.JFrame {
                 .addComponent(btnAdminstradores, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 316, Short.MAX_VALUE)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
@@ -143,7 +136,6 @@ public class Reportes extends javax.swing.JFrame {
     private javax.swing.JButton btnAdminstradores;
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel titulolbl;
     // End of variables declaration//GEN-END:variables
     private void generarReporteClientes() {

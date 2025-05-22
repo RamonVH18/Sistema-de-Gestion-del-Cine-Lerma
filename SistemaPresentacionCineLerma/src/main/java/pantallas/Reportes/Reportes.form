@@ -32,7 +32,6 @@
               <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="btnClientes" min="-2" pref="165" max="-2" attributes="0"/>
-                  <Component id="jButton2" min="-2" pref="165" max="-2" attributes="0"/>
                   <Component id="btnAdminstradores" min="-2" pref="165" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -53,9 +52,7 @@
               <Component id="btnAdminstradores" min="-2" pref="45" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnClientes" min="-2" pref="45" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jButton2" min="-2" pref="45" max="-2" attributes="0"/>
-              <EmptySpace pref="253" max="32767" attributes="0"/>
+              <EmptySpace pref="316" max="32767" attributes="0"/>
               <Component id="btnVolver" min="-2" pref="37" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
           </Group>
@@ -73,14 +70,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdminstradoresActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="5e" green="84" red="a2" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="jButton2"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="titulolbl">
       <Properties>

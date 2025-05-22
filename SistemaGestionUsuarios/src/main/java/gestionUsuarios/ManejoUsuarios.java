@@ -408,6 +408,11 @@ public class ManejoUsuarios implements IManejoUsuarios {
         if (admin.getRFC() == null || admin.getRFC().trim().isEmpty()) {
             throw new ValidarUsuarioException("El RFC del administrador es obligatorio");
         }
+        
+        //validar que la fecha de nacimiento corresponda a un usuario con una edad de minimo 18 años o mayor
+        if (admin.getFechaNacimiento().isAfter(LocalDateTime.now().minusYears(18))) {
+            throw new ValidarUsuarioException("El usuario debe tener al menos 18 años");
+        }
 
         //valida que el RFC tenga un formato valido: 
         //4 letras 
