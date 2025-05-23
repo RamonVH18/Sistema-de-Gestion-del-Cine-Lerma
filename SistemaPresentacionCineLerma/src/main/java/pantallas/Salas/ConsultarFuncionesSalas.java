@@ -152,12 +152,16 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
     private javax.swing.JLabel labelBuscador;
     private javax.swing.JTextField textFieldBuscador;
     // End of variables declaration//GEN-END:variables
-
+    /**
+     * Metodo para configurar el JFrame
+     */
     private void configurarConsultarFuncionesSalas() {
         configurarBotonVolver();
         configurarPanelCentral();
     }
-
+    /**
+     * Configuracion del panel central, donde va toda la informacion
+     */
     private void configurarPanelCentral() {
         JPanel panelCentral = new JPanel();
 
@@ -179,7 +183,10 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
 
         this.add(panelCentral, BorderLayout.CENTER);
     }
-
+    /**
+     * Metodo para configurar el panel donde va el buscador
+     * @param panelBuscador 
+     */
     private void configurarPanelBuscador(JPanel panelBuscador) {
         labelBuscador = new JLabel("BUSCAR: ");
         textFieldBuscador = new JTextField();
@@ -188,7 +195,10 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
         panelBuscador.add(textFieldBuscador);
 
     }
-
+    /**
+     * Metodo para configurar el TextField y añadirle la funcionalidad
+     * @param textField 
+     */
     private void configurarTextField(JTextField textField) {
         textField.setPreferredSize(tamañoBuscador);
         textField.getDocument().addDocumentListener(new DocumentListener() {
@@ -210,7 +220,9 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
 
         });
     }
-
+    /**
+     * Metodo que se encarga de configurar la tabla donde van todas las funciones
+     */
     private void configurarPanelTabla() {
         // Arreglo de Strings de una dimension para guardar todas las columnas de la tabla
         String[] columnas = {
@@ -252,7 +264,10 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
         revalidate();
         repaint();
     }
-
+    /**
+     * Metodo que se encarga de obtener un arreglo de objetos que viene siendo la informacion de los datos
+     * @return 
+     */
     private Object[][] obtenerSalas() {
         funcionesCargadas = control.consultarFuncionesFiltradas(textFieldBuscador.getText());
 
@@ -286,7 +301,9 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
 
         return datos;
     }
-
+    /**
+     * Metodo que se encarga de la configuracion del temporizador
+     */
     private void efectoTemporizador() {
         if (temporizador != null) {
             temporizador.stop();
@@ -297,7 +314,9 @@ public class ConsultarFuncionesSalas extends javax.swing.JFrame {
         });
         temporizador.start();
     }
-
+    /**
+     * Metodo que se encarga de configurar el boton de informacion
+     */
     private void configurarBotonInformacion() {
         btnInfo = new JButton("MAS INFO...");
         btnInfo.setPreferredSize(tamañoBoton);

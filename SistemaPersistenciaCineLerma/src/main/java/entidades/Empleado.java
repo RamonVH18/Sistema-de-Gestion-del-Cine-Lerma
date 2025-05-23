@@ -8,6 +8,7 @@ import enums.Cargo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
 
 /**
@@ -95,11 +96,12 @@ public class Empleado {
     public void setId(ObjectId id) {
         this.id = id;
     }
-
+    
+    @BsonIgnore
     public String getIdString() {
         return id.toString();
     }
-
+    @BsonIgnore
     public void setIdString(String idString) {
         if (idString != null && ObjectId.isValid(idString)) { // PARA QUE NO TRUENE ACA
             this.id = new ObjectId(idString);

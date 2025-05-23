@@ -25,24 +25,36 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- *
+ * Clase para poder gestionar los asientos
  * @author Ramon Valencia
  */
 public class ManejoDeAsientos implements IManejoDeAsientos {
 
     private static ManejoDeAsientos instancia;
     private final IAsientoFuncionBO asientoBO = AsientoFuncionBO.getInstance();
-
+    /**
+     * Constructor vacio
+     */
     private ManejoDeAsientos() {
 
     }
-
+    /**
+     * Metodo para obtener la instancia de esta clase
+     * @return 
+     */
     public static ManejoDeAsientos getInstanceAsientos() {
         if (instancia == null) {
             instancia = new ManejoDeAsientos();
         }
         return instancia;
     }
+    /**
+     * Metodo para registrar los asientos de una funcion
+     * @param funcion
+     * @param sala
+     * @return
+     * @throws ErrorGeneracionAsientoFuncionException 
+     */
     @Override
     public List<AsientoFuncionDTO> registrarAsientoFuncion(FuncionDTO funcion, SalaViejaDTO sala) throws ErrorGeneracionAsientoFuncionException {
         try {
@@ -61,7 +73,12 @@ public class ManejoDeAsientos implements IManejoDeAsientos {
             throw new ErrorGeneracionAsientoFuncionException("No se pudieron generar los asientos de la funcion correctamente: " + e.getMessage());
         }
     }
-    
+    /**
+     * Metodo para eliminar asientosFuncion
+     * @param idFuncion
+     * @return
+     * @throws ErrorEliminacionAsientosException 
+     */
     @Override
     public Boolean eliminarAsientos(String idFuncion) throws ErrorEliminacionAsientosException {
         
@@ -75,7 +92,11 @@ public class ManejoDeAsientos implements IManejoDeAsientos {
         }
         
     }
-
+    /**
+     * Metodo para validar la existencia de asientos en una funcion
+     * @param funcion
+     * @throws ValidacionAsientosException 
+     */
     private void validarExistenciaAsientos(FuncionDTO funcion) throws ValidacionAsientosException {
         try {
             List<AsientoFuncionDTO> asientos = asientoBO.obtenerAsientosFuncion(funcion);
@@ -86,8 +107,13 @@ public class ManejoDeAsientos implements IManejoDeAsientos {
             throw new ValidacionAsientosException("Ya existen asientos para esta funcion");
         }
     }
-
-    
+    /**
+     * Metodo para cargar la lista de aisentos de una funcion
+     * @param funcion
+     * @param mostrarDisponibles
+     * @return
+     * @throws ErrorCargarAsientoException 
+     */
     @Override
     public List<AsientoFuncionDTO> cargarListaAsientos(FuncionDTO funcion, Boolean mostrarDisponibles) throws ErrorCargarAsientoException {
         try {
@@ -100,7 +126,11 @@ public class ManejoDeAsientos implements IManejoDeAsientos {
             throw new ErrorCargarAsientoException("Hubo un problema al cargar la lista de asientos de la funcion.");
         }
     }
-    
+    /**
+     * Metodo para obtener las estadisticas de las salas
+     * @return
+     * @throws ErrorObtencionEstadisticasException 
+     */
     @Override
     public List<EstadisticaSalaDTO> obtenerEstadisticasSalas() throws ErrorObtencionEstadisticasException {
         try {

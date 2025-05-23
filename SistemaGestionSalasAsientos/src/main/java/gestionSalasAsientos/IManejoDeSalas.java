@@ -4,19 +4,18 @@
  */
 package gestionSalasAsientos;
 
-import DTOs.EstadisticaSalaDTO;
+
 import DTOs.SalaNuevaDTO;
 import DTOs.SalaViejaDTO;
 import Excepciones.AgregarSalaException;
 import Excepciones.BuscarSalaException;
-import Excepciones.EstadisticasSalaException;
 import Excepciones.ModificarSalaException;
 import Excepciones.ValidacionSalaException;
 import enums.EstadoSala;
 import java.util.List;
 
 /**
- *
+ * Interfaz del manejo de salas
  * @author Ramon Valencia
  */
 public interface IManejoDeSalas {

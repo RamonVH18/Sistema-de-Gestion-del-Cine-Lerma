@@ -17,8 +17,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,7 +25,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.Timer;
 import utilitades.CreacionReportes;
 import utilitades.ModeladoTablas;
 import utilitades.Utilerias;
@@ -159,7 +156,7 @@ public class EstadisticasSala extends javax.swing.JFrame {
     }
 
     /**
-     * Metodo para configurar la tabla con los datos
+     * Metodo para configurar la tabla con los datos de las estadisticas
      *
      * @param panelTabla
      */
@@ -202,7 +199,10 @@ public class EstadisticasSala extends javax.swing.JFrame {
         panelTabla.add(scrollPane);
 
     }
-
+    /**
+     * Metodo que se encarga de obtener un arreglo de objetos que viene siendo la informacion de las estadisticas
+     * @return 
+     */
     private Object[][] obtenerDatos() {
         estadisticas = control.consultarEstadisticasSala();
         Object[][] datos = new Object[estadisticas.size()][5];
@@ -217,7 +217,9 @@ public class EstadisticasSala extends javax.swing.JFrame {
 
         return datos;
     }
-    
+    /**
+     * Metodo para configurar el Boton de Imprimir PDF
+     */
     private void configurarBtnPdf() {
         botonPDF = new JButton("IMPRIMIR PDF");
         botonPDF.setPreferredSize(tamañoBoton);
@@ -245,7 +247,9 @@ public class EstadisticasSala extends javax.swing.JFrame {
         });
 
     }
-
+    /**
+     * Metodo para la generacion del reporte de estadisticas
+     */
     private void generarReporteEstadisticas() {
         try {
             if (estadisticas.isEmpty()) {

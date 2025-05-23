@@ -11,11 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Clase mapeadora de asientos
  * @author Ramon Valencia
  */
 public class AsientoMapper implements IAsientoMapper{
-
+    /**
+     * Mapeador de una lista de asientos a una lista de asientoDTO
+     * @param asientos
+     * @return 
+     */
     @Override
     public List<AsientoDTO> toAsientoDTO(List<Asiento> asientos) {
         List<AsientoDTO> asientosDTO = new ArrayList<>();
@@ -29,7 +33,11 @@ public class AsientoMapper implements IAsientoMapper{
         
         return asientosDTO;
     }
-
+    /**
+     * Mapeador de una lista de asientosDTO a una lista de asientos
+     * @param asientosDTO
+     * @return 
+     */
     @Override
     public List<Asiento> toAsientoEntidad(List<AsientoDTO> asientosDTO) {
         List<Asiento> asientos = new ArrayList<>();

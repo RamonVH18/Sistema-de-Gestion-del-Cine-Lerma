@@ -6,6 +6,7 @@ package entidades;
 
 import java.time.LocalDateTime;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
 
 /**
@@ -147,6 +148,7 @@ public class Funcion {
     /**
      * @return ID de la función en formato String (útil para APIs y UI).
      */
+    @BsonIgnore
     public String getIdString() {
         return idFuncion.toString();
     }
@@ -156,6 +158,7 @@ public class Funcion {
      *
      * @param idImportado ID en formato String (ej: "507f1f77bcf86cd799439011").
      */
+    @BsonIgnore
     public void setIdString(String idImportado) {
         if (idImportado != null && !idImportado.isEmpty()) {
             this.idFuncion = new ObjectId(idImportado);

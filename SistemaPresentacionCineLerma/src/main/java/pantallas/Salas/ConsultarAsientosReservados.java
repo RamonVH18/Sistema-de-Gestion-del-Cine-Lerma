@@ -160,16 +160,15 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    /**
+     * Metodo para configurar el JFrame completo, se llaman a todos los metodos necesarios para la configuracion
+     */
     private void configurarConsultarAsientosReservados() {
         JPanel panelCentral = new JPanel();
         configurarPanelImagen(panelCentral);
-
         configurarPanelDatos(panelCentral);
-
         configurarBotonVolver();
-
         add(panelCentral, BorderLayout.CENTER);
-
         revalidate();
         repaint();
     }
@@ -187,13 +186,15 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
     private javax.swing.JLabel labelTotalAsientos1;
     private javax.swing.JLabel labelTotalAsientos2;
     // End of variables declaration//GEN-END:variables
-
+    /**
+     * Metodo para configurar el panel de la imagen
+     * @param panelCentral 
+     */
     private void configurarPanelImagen(JPanel panelCentral) {
         try {
             JPanel panelImagen = new JPanel();
             ImageIcon imagenPelicula = utilerias.crearImagen(peliculaFuncion.getImagen(), anchoImagen, alturaImagen);
             labelImagen = new JLabel(imagenPelicula);
-
             panelImagen.add(labelImagen);
             panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.X_AXIS));
             panelCentral.add(panelImagen);
@@ -203,7 +204,10 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
             dispose();
         }
     }
-
+    /**
+     * Metodo para configurar el panel donde van los datos de la funcion elegida
+     * @param panelCentral 
+     */
     private void configurarPanelDatos(JPanel panelCentral) {
         JPanel panelDatos = new JPanel();
         panelDatos.setLayout(new BoxLayout(panelDatos, BoxLayout.Y_AXIS));
@@ -240,14 +244,22 @@ public class ConsultarAsientosReservados extends javax.swing.JFrame {
         panelCentral.add(panelDatos);
 
     }
-
+    /**
+     * Metodo para la configuracion de los diferentes label
+     * @param panelDatos
+     * @param label1
+     * @param label2 
+     */
     private void configuracionLabel(JPanel panelDatos, JLabel label1, JLabel label2) {
         panelDatos.add(label1);
         panelDatos.add(label2);
         label1.setFont(fuenteLabel1);
         label2.setFont(fuenteLabel2);
     }
-
+    /**
+     * Metodo para configurar la hora de funcion
+     * @return 
+     */
     private String configurarHoraFuncion() {
         LocalDateTime fecha = funcionSelecionada.getFechaHora();
         String minutosFormateados = fecha.getMinute() < 10
