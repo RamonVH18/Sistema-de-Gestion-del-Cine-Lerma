@@ -196,10 +196,6 @@ public class ManejoFunciones implements IManejoFunciones {
             throw new FuncionDuracionException("El ID de la funcion es requerido.");
         }
 
-        if (!org.bson.types.ObjectId.isValid(idFuncion)) {
-            throw new FuncionDuracionException("El ID de la funcion no tiene un formato valido.");
-        }
-
         try {
             return funcionBO.calcularHoraTerminoFuncion(idFuncion);
 
